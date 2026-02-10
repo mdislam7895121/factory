@@ -1,0 +1,35 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.cursor/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env
+.env
+.env.*
+*.local
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Expo / RN
+.expo/
+.expo-shared/
+
+# Logs & artifacts
+logs/
+output/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
