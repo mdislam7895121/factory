@@ -1,0 +1,25 @@
+ mobile/App.js                                      |   5 +
+ mobile/src/features/inventory/api/inventory.api.js | 108 ++++++
+ mobile/src/features/inventory/index.js             |   8 +
+ .../features/inventory/mocks/inventory.mocks.js    |  62 ++++
+ .../features/inventory/screens/InventoryDetails.js | 150 ++++++++
+ .../features/inventory/screens/InventoryForm.js    | 166 +++++++++
+ .../features/inventory/screens/InventoryList.js    | 142 +++++++
+ mobile/src/lib/mockMode.js                         |  67 ++++
+ mobile/src/routes/routeRegistry.js                 |  93 +++++
+ mobile/src/screens/DemoHubScreen.js                | 297 +++++++++++++++
+ mobile/src/screens/HomeScreen.js                   |  16 +
+ scripts/doctor.ps1                                 | 300 +++++++++++++++
+ scripts/proof-platform-kit.ps1                     | 409 +++++++++++++++++++++
+ specs/README.md                                    | 277 ++++++++++++++
+ specs/examples/feature-sample.json                 | 211 +++++++++++
+ specs/mobile.feature.v1.schema.json                | 232 ++++++++++++
+ tools/generate-mobile-feature.mjs                  | 295 +++++++++++++++
+ tools/lib/fs-helpers.mjs                           | 106 ++++++
+ tools/lib/template-helpers.mjs                     |  41 +++
+ tools/templates/mobile/api.client.js.tpl           |  85 +++++
+ tools/templates/mobile/route.entry.js.tpl          |   7 +
+ tools/templates/mobile/screen.details.js.tpl       | 150 ++++++++
+ tools/templates/mobile/screen.form.js.tpl          | 166 +++++++++
+ tools/templates/mobile/screen.list.js.tpl          | 142 +++++++
+ 24 files changed, 3535 insertions(+)
