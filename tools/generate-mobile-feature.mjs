@@ -28,24 +28,60 @@ import {
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
+const VERSION = '1.0.0';
+
+function printHelp() {
+  console.log(`
+Factory Mobile Feature Generator v${VERSION}
+Spec-driven code generation for mobile features
+
+USAGE:
+  node generate-mobile-feature.mjs --spec <spec-file> [options]
+
+OPTIONS:
+  --spec <path>      Path to feature specification JSON file (required)
+  --dry-run          Preview changes without writing files
+  --help, -h         Show this help message
+  --version, -v      Show version
+
+EXAMPLES:
+  node generate-mobile-feature.mjs --spec ./tools/specs/feature-sample.json
+  node generate-mobile-feature.mjs --spec ./tools/specs/feature-sample.json --dry-run
+  node generate-mobile-feature.mjs --help
+`);
+}
+
 // Parse CLI args
 const args = process.argv.slice(2);
+
+// Check for help or version
+if (args.includes('--help') || args.includes('-h')) {
+  printHelp();
+  process.exit(0);
+}
+
+if (args.includes('--version') || args.includes('-v')) {
+  console.log(`Factory Mobile Feature Generator v${VERSION}`);
+  process.exit(0);
+}
+
 const specPath = args[args.indexOf('--spec') + 1];
 const dryRun = args.includes('--dry-run');
 
 if (!specPath) {
-  console.error('❌ Missing required argument: --spec <path>');
-  console.error('Usage: node generate-mobile-feature.mjs --spec specs/examples/feature-sample.json');
+  console.error('[FAIL] Missing required argument: --spec <path>');
+  console.error('Usage: node generate-mobile-feature.mjs --spec <path> [--dry-run]');
+  console.error('Run with --help for full options');
   process.exit(1);
 }
 
 const fullSpecPath = path.resolve(ROOT, specPath);
 if (!fs.existsSync(fullSpecPath)) {
-  console.error(`❌ Spec file not found: ${fullSpecPath}`);
+  console.error(`[FAIL] Spec file not found: ${fullSpecPath}`);
   process.exit(1);
 }
 
-console.log(`\n📖 Generating from spec: ${specPath}`);
+console.log(`\n[GEN] Generating from spec: ${specPath}`);
 if (dryRun) {
   console.log('   [DRY-RUN] - No files will be written');
 }
@@ -56,7 +92,7 @@ try {
   const specContent = readFile(fullSpecPath);
   spec = JSON.parse(specContent);
 } catch (err) {
-  console.error(`❌ Failed to parse spec: ${err.message}`);
+  console.error(`[FAIL] Failed to parse spec: ${err.message}`);
   process.exit(1);
 }
 
@@ -74,10 +110,10 @@ const {
 const camelFeature = toCamelCase(featureId);
 const pascalFeature = toPascalCase(featureId);
 
-console.log(`✓ Feature: ${title} (${featureId})`);
-console.log(`✓ Screens: ${screens.length}`);
-console.log(`✓ Routes: ${routes.length}`);
-console.log(`✓ API Clients: ${apiClients.length}`);
+console.log(`[OK] Feature: ${title} (${featureId})`);
+console.log(`[OK] Screens: ${screens.length}`);
+console.log(`[OK] Routes: ${routes.length}`);
+console.log(`[OK] API Clients: ${apiClients.length}`);
 console.log('');
 
 // Create feature directory
@@ -248,22 +284,22 @@ const routeEntries = routes
   .join('\n');
 
 // Write files
-console.log('📝 Generated files:');
+console.log('[GEN] Generated files:');
 console.log('');
 
 if (!dryRun) {
   for (const file of filesToCreate) {
     ensureDir(path.dirname(file.path));
     writeFile(file.path, file.content);
-    console.log(`  ✓ ${file.path.replace(ROOT + '/', '')}`);
-    console.log(`    └─ ${file.description}`);
+    console.log(`  [OK] ${file.path.replace(ROOT + '/', '')}`);
+    console.log(`       └─ ${file.description}`);
   }
 }
 
 // Update route registry
 const routeRegistryPath = path.resolve(ROOT, 'mobile', 'src', 'routes', 'routeRegistry.js');
 console.log('');
-console.log('🔗 Updating route registry:');
+console.log('[UPD] Updating route registry:');
 console.log(`  ${routeRegistryPath.replace(ROOT + '/', '')}`);
 
 if (!dryRun) {
@@ -288,7 +324,7 @@ if (!dryRun) {
 }
 
 console.log('');
-console.log('✅ Generation complete!');
+console.log('[OK] Generation complete!');
 if (dryRun) {
   console.log('   [DRY-RUN] No files were actually written');
 }

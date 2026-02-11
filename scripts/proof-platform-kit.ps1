@@ -24,7 +24,8 @@
 
 param(
   [switch]$NoCleanup = $false,
-  [switch]$Verbose = $false
+  [switch]$Verbose = $false,
+  [switch]$RealGenerate = $false
 )
 
 $ErrorActionPreference = "Continue"
@@ -101,19 +102,24 @@ if (Test-Path $generatorScript) {
     Write-Status "Dry-run failed: $_" "Fail"
   }
   
-  # Test 2: Real execution with example spec
-  Write-Host "`n[TEST2] Real generation`n"
-  try {
-    $realOutput = & node $generatorScript --spec $exampleSpec 2>&1
-    Write-Output $realOutput
-    Write-Status "Real generation completed" "Pass"
-    
-    # Verify generated files
-    if (Test-Path "./mobile/src/features/inventory-management") {
-      Write-Status "Generated feature directory created" "Pass"
+  # Test 2: Real execution with example spec (only if -RealGenerate flag)
+  if ($RealGenerate) {
+    Write-Host "`n[TEST2] Real generation`n"
+    try {
+      $realOutput = & node $generatorScript --spec $exampleSpec 2>&1
+      Write-Output $realOutput
+      Write-Status "Real generation completed" "Pass"
+      
+      # Verify generated files
+      if (Test-Path "./mobile/src/features/inventory-management") {
+        Write-Status "Generated feature directory created" "Pass"
+      }
+    } catch {
+      Write-Status "Real generation failed: $_" "Fail"
     }
-  } catch {
-    Write-Status "Real generation failed: $_" "Fail"
+  } else {
+    Write-Host "`n[TEST2] Real generation - SKIPPED (use -RealGenerate flag for actual file creation)`n"
+    Write-Status "Dry-run only (no files will be created)" "Info"
   }
 } else {
   Write-Status "Generator script not found at $generatorScript" "Fail"
@@ -183,20 +189,31 @@ if (Test-Path $demoHubScreen) {
 # ============================================================================
 Write-Section "Part 6: Version Control"
 
+Write-Host "[SCM] Current git status:`n"
 try {
-  Write-Host "📋 Current git status:`n"
   git status
-  
-  Write-Host "`n📊 Changes to stage:`n"
-  $gitDiff = git diff --stat 2>&1
-  Write-Output $gitDiff
+  Write-Status "Git status retrieved" "Pass"
+} catch {
+  Write-Status "Could not retrieve git status" "Warn"
+}
+
+Write-Host "`n[SCM] Changes to stage:`n"
+try {
+  $gitDiffLines = @()
+  $gitDiffProcess = git diff --stat
+  if ($gitDiffProcess) {
+    Write-Output $gitDiffProcess
+    $gitDiffLines = $gitDiffProcess
+  } else {
+    Write-Host "(no changes)" -ForegroundColor Gray
+  }
   
   # Save git diff to file
   $gitDiffFile = "$proofDir/serial-step-mobile-D-platform-kit-git.diff"
-  git diff --stat > $gitDiffFile 2>&1
+  git diff --stat | Out-File -FilePath $gitDiffFile -Encoding UTF8 -ErrorAction SilentlyContinue
   Write-Status "Git diff saved to $gitDiffFile" "Pass"
 } catch {
-  Write-Status "Could not retrieve git status" "Warn"
+  Write-Status "Could not retrieve git diff" "Warn"
 }
 
 # ============================================================================
