@@ -1,6 +1,6 @@
 # Serial B2-5 Proof Report
 
-**Date/Time:** 2026-02-11 01:52:54
+**Date/Time:** 2026-02-11 02:02:46
 
 ## Commands Run
 - web: npm run dev (already running)
@@ -26,14 +26,14 @@
 Γû▓ Next.js 16.1.6 (Turbopack)
 
   Creating an optimized production build ...
-Γ£ô Compiled successfully in 2.6s
+Γ£ô Compiled successfully in 2.5s
   Running TypeScript ...
   Collecting page data using 7 workers ...
   Generating static pages using 7 workers (0/4) ...
   Generating static pages using 7 workers (1/4) 
   Generating static pages using 7 workers (2/4) 
   Generating static pages using 7 workers (3/4) 
-Γ£ô Generating static pages using 7 workers (4/4) in 569.7ms
+Γ£ô Generating static pages using 7 workers (4/4) in 556.3ms
   Finalizing page optimization ...
 
 Route (app)
@@ -55,8 +55,8 @@ Hello World!
 ~~~
 {
   "ok": true,
-  "insertedId": "24db5a5f-654e-4333-842e-f7bd33ecf4ca",
-  "count": 8
+  "insertedId": "db35f7b9-7996-4cd1-851b-def8e5f3539c",
+  "count": 16
 }
 ~~~
 
@@ -64,13 +64,13 @@ Hello World!
 ~~~
 {
   "ok": true,
-  "insertedId": "0ee0e6bd-542a-4b0f-ad60-46a98a30631b",
-  "count": 9
+  "insertedId": "d011bddb-62a1-4d45-859b-a01430afa310",
+  "count": 17
 }
 ~~~
 
 ## Raw Log
-- C:\Users\vitor\Dev\factory\logs\proof-b2-5-20260211-015238.log
+- C:\Users\vitor\Dev\factory\logs\proof-b2-5-20260211-020231.log
 
 ## Definition of Done
 - [x] Web dev server starts on port 3000 and GET / returns 200
