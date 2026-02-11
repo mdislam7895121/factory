@@ -1,0 +1,217 @@
+{
+  "featureId": "inventory-management",
+  "title": "Inventory Management",
+  "version": "2.0",
+  "description": "Complete inventory management system with mock scenarios for testing",
+  "auth": {
+    "requiresAuth": true,
+    "roles": ["admin", "manager"]
+  },
+  "permissions": {
+    "network": true,
+    "storage": false,
+    "camera": false,
+    "location": false
+  },
+  "mocks": {
+    "enabledByDefault": false,
+    "scenarios": [
+      {
+        "id": "empty-inventory",
+        "title": "Empty Inventory",
+        "description": "Test UI when no items exist yet",
+        "steps": [
+          "Open Inventory list",
+          "Observe empty state message"
+        ],
+        "mockData": {
+          "items": [],
+          "total": 0
+        },
+        "expectedResults": [
+          "Empty state text displayed",
+          "Add button visible",
+          "No items listed"
+        ]
+      },
+      {
+        "id": "populated-inventory",
+        "title": "Populated Inventory",
+        "description": "Test UI with sample data",
+        "steps": [
+          "Open Inventory list",
+          "Observe items loaded from mock",
+          "Tap item to view details"
+        ],
+        "mockData": {
+          "items": [
+            {
+              "id": "item-001",
+              "name": "Widget A",
+              "quantity": 42,
+              "sku": "WIDGET-A-001",
+              "status": "in-stock"
+            },
+            {
+              "id": "item-002",
+              "name": "Widget B",
+              "quantity": 5,
+              "sku": "WIDGET-B-001",
+              "status": "low-stock"
+            },
+            {
+              "id": "item-003",
+              "name": "Widget C",
+              "quantity": 0,
+              "sku": "WIDGET-C-001",
+              "status": "out-of-stock"
+            }
+          ],
+          "total": 3
+        },
+        "expectedResults": [
+          "3 items displayed",
+          "Items show name, SKU, quantity",
+          "Status indicators visible",
+          "Details view opens without error"
+        ]
+      }
+    ]
+  },
+  "uiHints": {
+    "primaryColor": "#0070f3",
+    "emptyStateText": "No items in inventory. Tap 'Add Item' to create your first item.",
+    "icon": "box"
+  },
+  "routes": [
+    {
+      "name": "inventoryList",
+      "path": "/inventory/list",
+      "screenId": "InventoryList",
+      "title": "Inventory"
+    },
+    {
+      "name": "inventoryDetails",
+      "path": "/inventory/details/:id",
+      "screenId": "InventoryDetails",
+      "title": "Item Details"
+    },
+    {
+      "name": "inventoryCreate",
+      "path": "/inventory/create",
+      "screenId": "InventoryForm",
+      "title": "Add Item"
+    }
+  ],
+  "screens": [
+    {
+      "id": "InventoryList",
+      "type": "list",
+      "title": "Inventory Items",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "sku",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "quantity",
+          "type": "number",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "InventoryDetails",
+      "type": "details",
+      "title": "Item Details",
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "sku",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "quantity",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "InventoryForm",
+      "type": "form",
+      "title": "Create/Edit Item",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "sku",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "quantity",
+          "type": "number",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "apiClients": [
+    {
+      "id": "inventoryApi",
+      "baseUrl": "http://localhost:4000/api/inventory",
+      "methods": [
+        {
+          "name": "list",
+          "path": "/items",
+          "method": "GET"
+        },
+        {
+          "name": "getItem",
+          "path": "/items/:id",
+          "method": "GET"
+        },
+        {
+          "name": "createItem",
+          "path": "/items",
+          "method": "POST"
+        },
+        {
+          "name": "updateItem",
+          "path": "/items/:id",
+          "method": "PUT"
+        },
+        {
+          "name": "deleteItem",
+          "path": "/items/:id",
+          "method": "DELETE"
+        }
+      ]
+    }
+  ]
+}

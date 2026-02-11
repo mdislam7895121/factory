@@ -25,6 +25,8 @@ import { getMockMode, setMockMode } from '../lib/mockMode';
 export default function DemoHubScreen({ navigation, onNavigate }) {
   const [mockMode, setMockModeLocal] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [selectedScenario, setSelectedScenario] = useState(null);
+  const [selectedRoute, setSelectedRoute] = useState(null);
 
   useEffect(() => {
     loadMockMode();
@@ -52,6 +54,21 @@ export default function DemoHubScreen({ navigation, onNavigate }) {
     } else if (navigation?.navigate) {
       navigation.navigate(route.screenId);
     }
+    setSelectedScenario(null);
+    setSelectedRoute(null);
+  };
+
+  const showScenarios = (route) => {
+    // Check if the route has scenarios
+    // For now, this is a placeholder for v2 spec integration
+    setSelectedRoute(route);
+    Alert.alert(
+      `Scenarios for ${route.title}`,
+      'Scenario support coming with v2 specs\n\nScenarios can be loaded from:\nmobile/src/features/<feature>/mocks/<feature>.scenarios.js',
+      [
+        { text: 'Dismiss', onPress: () => setSelectedRoute(null) }
+      ]
+    );
   };
 
   return (
@@ -99,22 +116,31 @@ export default function DemoHubScreen({ navigation, onNavigate }) {
             Routes ({manualRoutes.length})
           </Text>
           {manualRoutes.map((route) => (
-            <TouchableOpacity
-              key={route.name}
-              style={styles.routeCard}
-              onPress={() => handleNavigateToRoute(route)}
-            >
-              <View style={styles.routeInfo}>
-                <Text style={styles.routeName}>{route.title}</Text>
-                <Text style={styles.routePath}>{route.path}</Text>
-                {route.requiresAuth && (
-                  <View style={styles.authBadge}>
-                    <Text style={styles.authBadgeText}>🔒 Auth</Text>
-                  </View>
-                )}
-              </View>
-              <Text style={styles.routeArrow}>→</Text>
-            </TouchableOpacity>
+            <View key={route.name}>
+              <TouchableOpacity
+                style={styles.routeCard}
+                onPress={() => handleNavigateToRoute(route)}
+              >
+                <View style={styles.routeInfo}>
+                  <Text style={styles.routeName}>{route.title}</Text>
+                  <Text style={styles.routePath}>{route.path}</Text>
+                  {route.requiresAuth && (
+                    <View style={styles.authBadge}>
+                      <Text style={styles.authBadgeText}>Auth Required</Text>
+                    </View>
+                  )}
+                </View>
+                <Text style={styles.routeArrow}>→</Text>
+              </TouchableOpacity>
+              {route.source === 'generated' && (
+                <TouchableOpacity
+                  style={styles.scenarioButton}
+                  onPress={() => showScenarios(route)}
+                >
+                  <Text style={styles.scenarioButtonText}>Scenarios</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           ))}
         </View>
 
@@ -258,6 +284,21 @@ const styles = StyleSheet.create({
   routeArrow: {
     fontSize: 18,
     color: '#999',
+  },
+  scenarioButton: {
+    backgroundColor: '#f0f0f0',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginHorizontal: 12,
+    marginBottom: 8,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  scenarioButtonText: {
+    fontSize: 12,
+    color: '#0070f3',
+    fontWeight: '600',
   },
   infoCard: {
     backgroundColor: '#fff',

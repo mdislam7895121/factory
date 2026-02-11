@@ -4,7 +4,8 @@
  * Generates a JSON index of mobile routes and specs for web preview page
  * 
  * Usage:
- *   node tools/build-preview-index.mjs
+ *   node tools/build-preview-index.mjs           # Write index.json
+ *   node tools/build-preview-index.mjs --dry-run # Display index without writing
  */
 
 import fs from 'fs';
@@ -13,6 +14,9 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
+
+// Check for --dry-run flag
+const DRY_RUN = process.argv.includes('--dry-run');
 
 // Configuration
 const ROUTE_REGISTRY_PATH = path.resolve(ROOT, 'mobile/src/routes/routeRegistry.js');
@@ -168,20 +172,28 @@ async function main() {
   try {
     console.log('[GEN] Building preview index...\n');
 
-    // Ensure output directory exists
-    if (!fs.existsSync(OUTPUT_DIR)) {
+    // Ensure output directory exists (only if not in dry-run)
+    if (!DRY_RUN && !fs.existsSync(OUTPUT_DIR)) {
       fs.mkdirSync(OUTPUT_DIR, { recursive: true });
     }
 
     // Build index
     const index = buildIndex();
 
-    // Write output
-    fs.writeFileSync(OUTPUT_FILE, JSON.stringify(index, null, 2), 'utf8');
+    // Write output (skip in dry-run)
+    if (!DRY_RUN) {
+      fs.writeFileSync(OUTPUT_FILE, JSON.stringify(index, null, 2), 'utf8');
+    }
+
+    if (DRY_RUN) {
+      console.log('[DRY-RUN] Index will be written to: ${OUTPUT_FILE}\n');
+    } else {
+      console.log(`[OK] Index written to: ${OUTPUT_FILE}\n`);
+    }
 
     console.log(`[OK] Routes found: ${index.routes.length}`);
     console.log(`[OK] Specs found: ${index.specs.length}`);
-    console.log(`[OK] Index written to: ${OUTPUT_FILE}\n`);
+    console.log();
 
     // Display summary
     if (index.routes.length > 0) {

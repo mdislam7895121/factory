@@ -105,6 +105,9 @@ const {
   apiClients = [],
   mocks = [],
   flags = [],
+  auth = {}, // v2+
+  permissions = {}, // v2+
+  scenarios = [], // v2+
 } = spec;
 
 const camelFeature = toCamelCase(featureId);
@@ -169,7 +172,10 @@ for (const screen of screens) {
 if (apiClients.length > 0) {
   const apiClient = apiClients[0]; // Take first for now
   
-  const clientMethods = apiClient.endpoints
+  // Safe access to endpoints - use empty array if not defined
+  const endpoints_arr = Array.isArray(apiClient.endpoints) ? apiClient.endpoints : [];
+  
+  const clientMethods = endpoints_arr
     .map((ep) => {
       const params = ep.path.includes(':') 
         ? ep.path.split('/').filter(p => p.startsWith(':')).map(p => p.slice(1))
@@ -184,7 +190,7 @@ if (apiClients.length > 0) {
     })
     .join('\n');
 
-  const endpoints = apiClient.endpoints
+  const endpoints = endpoints_arr
     .map((ep) => ` * - ${ep.name}: ${ep.method} ${ep.path}`)
     .join('\n');
 
@@ -243,6 +249,41 @@ export default {{camelCaseFeature}}Mocks;
     path: mocksPath,
     content: JSON.stringify(mocks, null, 2),
     description: `Mocks: ${mocks.length} entries`,
+  });
+}
+
+// Generate v2 scenarios (if spec has scenarios)
+if (version === '2.0' && spec.mocks && spec.mocks.scenarios && spec.mocks.scenarios.length > 0) {
+  const scenariosContent = `/**
+ * Testing Scenarios for ${title}
+ * Generated from spec: ${featureId}/v2
+ * These scenarios demonstrate feature usage and expected outcomes
+ */
+
+export const scenarios = [
+${spec.mocks.scenarios
+  .map(
+    (scenario) => `
+  {
+    id: '${scenario.id}',
+    title: '${scenario.title}',
+    description: '${scenario.description || ''}',
+    steps: ${JSON.stringify(scenario.steps || [])},
+    mockData: ${JSON.stringify(scenario.mockData || {})},
+    expectedResults: ${JSON.stringify(scenario.expectedResults || [])},
+  },`
+  )
+  .join('\n')}
+];
+
+export default scenarios;
+`;
+
+  const scenariosPath = path.resolve(featurePath, 'mocks', `${featureId}.scenarios.js`);
+  filesToCreate.push({
+    path: scenariosPath,
+    content: scenariosContent,
+    description: `Scenarios: ${spec.mocks.scenarios.length} testing scenarios`,
   });
 }
 

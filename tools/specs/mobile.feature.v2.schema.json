@@ -1,0 +1,230 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Factory Mobile Feature Specification v2",
+  "description": "JSON Schema for defining mobile features with v2 enhancements (scenarios, auth, mocks, UI hints)",
+  "type": "object",
+  "required": ["featureId", "title", "version", "routes", "screens"],
+  "properties": {
+    "featureId": {
+      "type": "string",
+      "pattern": "^[a-z-]+$",
+      "description": "Unique feature identifier (kebab-case)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable feature name"
+    },
+    "version": {
+      "type": "string",
+      "enum": ["1.0", "2.0"],
+      "description": "Feature spec version"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed feature description"
+    },
+    "auth": {
+      "type": "object",
+      "description": "Authentication and role-based access (v2+)",
+      "properties": {
+        "requiresAuth": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether this feature requires authentication"
+        },
+        "roles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Allowed user roles (empty = all authenticated users)"
+        }
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "description": "Runtime permissions required (v2+)",
+      "properties": {
+        "network": {
+          "type": "boolean",
+          "default": true,
+          "description": "Requires network access"
+        },
+        "storage": {
+          "type": "boolean",
+          "default": false,
+          "description": "Requires file/device storage access"
+        },
+        "camera": {
+          "type": "boolean",
+          "default": false,
+          "description": "Requires camera access"
+        },
+        "location": {
+          "type": "boolean",
+          "default": false,
+          "description": "Requires location/GPS access"
+        }
+      }
+    },
+    "mocks": {
+      "type": "object",
+      "description": "Mock mode configuration and scenarios (v2+)",
+      "properties": {
+        "enabledByDefault": {
+          "type": "boolean",
+          "default": false,
+          "description": "Start with mock mode enabled"
+        },
+        "scenarios": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "title"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Scenario identifier"
+              },
+              "title": {
+                "type": "string",
+                "description": "Scenario display name"
+              },
+              "description": {
+                "type": "string",
+                "description": "What this scenario demonstrates"
+              },
+              "steps": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "User action steps"
+              },
+              "mockData": {
+                "type": "object",
+                "description": "Mock API response data"
+              },
+              "expectedResults": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "What should happen after steps"
+              }
+            }
+          },
+          "description": "Testing scenarios with mock data"
+        }
+      }
+    },
+    "uiHints": {
+      "type": "object",
+      "description": "UI customization hints (v2+)",
+      "properties": {
+        "primaryColor": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "description": "Primary theme color (hex)"
+        },
+        "emptyStateText": {
+          "type": "string",
+          "description": "Text to show when list is empty"
+        },
+        "icon": {
+          "type": "string",
+          "description": "Icon name or emoji"
+        }
+      }
+    },
+    "routes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "path", "screenId", "title"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9]*$",
+            "description": "Route identifier (camelCase)"
+          },
+          "path": {
+            "type": "string",
+            "description": "Route path (can include :id parameters)"
+          },
+          "screenId": {
+            "type": "string",
+            "pattern": "^[A-Z][a-zA-Z]*$",
+            "description": "Screen component name (PascalCase)"
+          },
+          "title": {
+            "type": "string",
+            "description": "Route display title"
+          }
+        }
+      },
+      "description": "Navigation routes for this feature"
+    },
+    "screens": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "title"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Z][a-zA-Z]*$",
+            "description": "Screen component name (PascalCase)"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["list", "details", "form", "custom"],
+            "description": "Screen template type"
+          },
+          "title": {
+            "type": "string",
+            "description": "Screen display title"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "type": { "type": "string" },
+                "required": { "type": "boolean" }
+              }
+            },
+            "description": "Form fields for form screens"
+          }
+        }
+      },
+      "description": "Screen definitions for this feature"
+    },
+    "apiClients": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "baseUrl"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "API client identifier"
+          },
+          "baseUrl": {
+            "type": "string",
+            "description": "Base API endpoint URL"
+          },
+          "methods": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "path": { "type": "string" },
+                "method": { "enum": ["GET", "POST", "PUT", "DELETE", "PATCH"] }
+              }
+            }
+          }
+        }
+      },
+      "description": "API client definitions"
+    }
+  }
+}

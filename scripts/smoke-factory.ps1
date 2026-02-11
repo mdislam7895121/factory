@@ -153,8 +153,57 @@ if (-not (Test-Path $generatorScript)) {
   }
 }
 
-# Check 4: Preview Index Build
-Write-Section "4. Preview Index Build"
+# Check 3b: V2 Spec Support
+Write-Section "3b. V2 Spec Support (Step F)"
+
+$v2Schema = "./tools/specs/mobile.feature.v2.schema.json"
+$v2Sample = "./tools/specs/feature-sample.v2.json"
+
+if (Test-Path $v2Schema) {
+  Write-Status "V2 schema found: $v2Schema" "Pass"
+} else {
+  Write-Status "V2 schema not found" "Warn"
+}
+
+if (Test-Path $v2Sample) {
+  Write-Status "V2 sample spec found: $v2Sample" "Pass"
+  
+  # Try to run generator with v2 spec (dry-run)
+  Write-Host "`n[TEST] Generator with v2 spec (dry-run)..." -ForegroundColor Cyan
+  try {
+    $genV2Output = & node $generatorScript --spec $v2Sample --dry-run 2>&1
+    if ($LASTEXITCODE -eq 0) {
+      Write-Status "V2 spec dry-run successful" "Pass"
+      if ($Verbose) {
+        Write-Host $genV2Output -ForegroundColor Gray
+      }
+    } else {
+      Write-Status "V2 spec dry-run failed (exit code: $LASTEXITCODE)" "Warn"
+    }
+  } catch {
+    Write-Status "V2 spec dry-run error: $_" "Warn"
+  }
+} else {
+  Write-Status "V2 sample spec not found" "Warn"
+}
+
+# Check 4: Screen Registry
+Write-Section "4. Mobile Screen Registry"
+
+$screenRegistry = "./mobile/src/screens/screenRegistry.js"
+
+if (Test-Path $screenRegistry) {
+  Write-Status "Screen registry found: $screenRegistry" "Pass"
+  $regContent = Get-Content $screenRegistry -Raw
+  if ($regContent -like "*registerScreen*" -and $regContent -like "*getScreen*") {
+    Write-Status "Screen registry functions implemented" "Pass"
+  }
+} else {
+  Write-Status "Screen registry not found" "Warn"
+}
+
+# Check 5: Preview Index Build
+Write-Section "5. Preview Index Build"
 
 $buildIndexScript = "./tools/build-preview-index.mjs"
 $outputFile = "./web/public/factory-preview/index.json"
@@ -164,26 +213,12 @@ if (-not (Test-Path $buildIndexScript)) {
 } else {
   Write-Status "Build-preview-index script found" "Pass"
   
-  Write-Host "`n[TEST] Building preview index..." -ForegroundColor Cyan
+  Write-Host "`n[TEST] Building preview index (dry-run)..." -ForegroundColor Cyan
   try {
-    $indexOutput = & node $buildIndexScript 2>&1
+    # Use --dry-run to avoid modifying tracked files
+    $indexOutput = & node $buildIndexScript --dry-run 2>&1
     if ($LASTEXITCODE -eq 0) {
-      Write-Status "Preview index build successful" "Pass"
-      
-      if (Test-Path $outputFile) {
-        $indexSize = (Get-Item $outputFile).Length
-        Write-Status "Index file created: $outputFile ($indexSize bytes)" "Pass"
-        
-        # Display preview content
-        if ($Verbose) {
-          Write-Host "`n[INDEX_CONTENT]" -ForegroundColor Gray
-          $content = Get-Content $outputFile | ConvertFrom-Json
-          Write-Host "  Routes: $($content.summary.totalRoutes)" -ForegroundColor Gray
-          Write-Host "  Specs: $($content.summary.totalSpecs)" -ForegroundColor Gray
-        }
-      } else {
-        Write-Status "Index file not created" "Warn"
-      }
+      Write-Status "Preview index build successful (dry-run)" "Pass"
       
       if ($Verbose) {
         Write-Host "`n[OUTPUT]" -ForegroundColor Gray
@@ -199,7 +234,7 @@ if (-not (Test-Path $buildIndexScript)) {
 }
 
 # Check 5: Web Setup
-Write-Section "5. Web Configuration"
+Write-Section "6. Web Configuration"
 
 $webDir = "./web"
 $webPackage = "./web/package.json"
@@ -232,7 +267,7 @@ if (Test-Path $webDir) {
 }
 
 # Check 6: Mobile Setup
-Write-Section "6. Mobile Configuration"
+Write-Section "7. Mobile Configuration"
 
 $mobileDir = "./mobile"
 $mobilePackage = "./mobile/package.json"
