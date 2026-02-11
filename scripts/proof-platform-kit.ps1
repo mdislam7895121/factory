@@ -43,7 +43,7 @@ if (-not (Test-Path $proofDir -PathType Container)) {
 function Write-Section {
   param([string]$Title)
   Write-Host "`n" + ("=" * 70) -ForegroundColor Cyan
-  Write-Host "📝 $Title" -ForegroundColor Cyan
+  Write-Host "[PROOF] $Title" -ForegroundColor Cyan
   Write-Host ("=" * 70) + "`n" -ForegroundColor Cyan
 }
 
@@ -55,10 +55,10 @@ function Write-Status {
   )
   
   $symbol = @{
-    Pass = "✅"
-    Fail = "❌"
-    Warn = "⚠️"
-    Info = "ℹ️"
+    Pass = "[OK]"
+    Fail = "[FAIL]"
+    Warn = "[WARN]"
+    Info = "[INFO]"
   }
   
   Write-Host "$($symbol[$Status]) $Message" -ForegroundColor $(
@@ -80,13 +80,19 @@ Write-Output $doctorOutput
 Write-Section "Part 2: Generator Validation"
 
 $generatorScript = "./tools/generate-mobile-feature.mjs"
-$exampleSpec = "./specs/examples/feature-sample.json"
+$exampleSpec = "./tools/specs/feature-sample.json"
+
+if (Test-Path $exampleSpec) {
+  Write-Status "Example spec found at $exampleSpec" "Pass"
+} else {
+  Write-Status "Example spec not found at $exampleSpec" "Warn"
+}
 
 if (Test-Path $generatorScript) {
   Write-Status "Generator script found at $generatorScript" "Pass"
   
   # Test 1: Dry-run with example spec
-  Write-Host "`n🔍 Test 1: Dry-run validation`n"
+  Write-Host "`n[TEST1] Dry-run validation`n"
   try {
     $dryRunOutput = & node $generatorScript --spec $exampleSpec --dry-run 2>&1
     Write-Output $dryRunOutput
@@ -96,7 +102,7 @@ if (Test-Path $generatorScript) {
   }
   
   # Test 2: Real execution with example spec
-  Write-Host "`n🔧 Test 2: Real generation`n"
+  Write-Host "`n[TEST2] Real generation`n"
   try {
     $realOutput = & node $generatorScript --spec $exampleSpec 2>&1
     Write-Output $realOutput
@@ -121,7 +127,7 @@ Write-Section "Part 3: Route Registry Verification"
 $routeRegistry = "./mobile/src/routes/routeRegistry.js"
 if (Test-Path $routeRegistry) {
   Write-Status "Route registry found" "Pass"
-  Write-Host "`n📋 Route Registry Content:`n"
+  Write-Host "`n[ROUTE] Route Registry Content:`n"
   Get-Content $routeRegistry
   
   # Check for marker system
@@ -143,7 +149,7 @@ Write-Section "Part 4: Mock Mode Configuration"
 $mockModeFile = "./mobile/src/lib/mockMode.js"
 if (Test-Path $mockModeFile) {
   Write-Status "Mock mode library found" "Pass"
-  Write-Host "`n📝 Mock Mode Content:`n"
+  Write-Host "`n[MOCK] Mock Mode Content:`n"
   Get-Content $mockModeFile
   
   Write-Status "Mock mode functions available for clients" "Pass"
@@ -202,8 +208,8 @@ Write-Status "Checking spec infrastructure..." "Info"
 
 $specsChecks = @(
   @{ path = "./specs/README.md"; name = "Specification documentation" }
-  @{ path = "./specs/mobile.feature.v1.schema.json"; name = "JSON Schema v1" }
-  @{ path = "./specs/examples/feature-sample.json"; name = "Example feature" }
+  @{ path = "./tools/specs/mobile.feature.v1.schema.json"; name = "JSON Schema v1" }
+  @{ path = "./tools/specs/feature-sample.json"; name = "Example feature" }
 )
 
 foreach ($check in $specsChecks) {
@@ -222,7 +228,7 @@ Write-Section "Part 8: Proof Summary"
 $endTime = Get-Date
 $duration = ($endTime - $startTime).TotalSeconds
 
-Write-Host "⏱️  Proof collection completed in $([Math]::Round($duration, 2))s`n"
+Write-Host "[PROF] Proof collection completed in $([Math]::Round($duration, 2))s`n"
 
 # Create human-readable proof document
 $proofMarkdown = @"
@@ -230,7 +236,7 @@ $proofMarkdown = @"
 
 **Date:** $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")`n
 **Duration:** $([Math]::Round($duration, 2))s`n
-**Status:** ✅ COMPLETED
+**Status:** [OK] COMPLETED
 
 ## Summary
 

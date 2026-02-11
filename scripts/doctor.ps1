@@ -38,10 +38,10 @@ function Write-Status {
   )
   
   $symbol = @{
-    Pass = "✅"
-    Fail = "❌"
-    Warn = "⚠️"
-    Info = "ℹ️"
+    Pass = "[OK]"
+    Fail = "[FAIL]"
+    Warn = "[WARN]"
+    Info = "[INFO]"
   }
   
   Write-Host "$($symbol[$Status]) $Message" -ForegroundColor $colors[$Status]
@@ -67,7 +67,7 @@ function Get-CommandVersion {
   }
 }
 
-Write-Host "`n🏥 Factory Environment Doctor`n" -ForegroundColor Cyan -BackgroundColor Black
+Write-Host "`n[DOCTOR] Factory Environment Doctor`n" -ForegroundColor Cyan
 Write-Host "Checking dependencies and configurations...`n"
 
 $allPass = $true
@@ -75,7 +75,7 @@ $allPass = $true
 # ============================================================================
 # Node.js & NPM
 # ============================================================================
-Write-Host "📦 Node.js & NPM" -ForegroundColor Cyan
+Write-Host "[NODE] Node.js & NPM" -ForegroundColor Cyan
 Write-Host "-" * 50
 
 if (Test-Command "node") {
@@ -97,7 +97,7 @@ if (Test-Command "npm") {
 # ============================================================================
 # Git
 # ============================================================================
-Write-Host "`n🔗 Version Control (Git)" -ForegroundColor Cyan
+Write-Host "`n[GIT] Version Control (Git)" -ForegroundColor Cyan
 Write-Host "-" * 50
 
 if (Test-Command "git") {
@@ -123,7 +123,7 @@ if (Test-Command "git") {
 # ============================================================================
 # API Health
 # ============================================================================
-Write-Host "`n🚀 API Server" -ForegroundColor Cyan
+Write-Host "`n[API] API Server" -ForegroundColor Cyan
 Write-Host "-" * 50
 
 $apiEndpoints = @(
@@ -147,7 +147,7 @@ foreach ($endpoint in $apiEndpoints) {
 # ============================================================================
 # Mobile Environment
 # ============================================================================
-Write-Host "`n📱 Mobile (React Native / Expo)" -ForegroundColor Cyan
+Write-Host "`n[MOBILE] Mobile (React Native / Expo)" -ForegroundColor Cyan
 Write-Host "-" * 50
 
 $mobileDir = "./mobile"
@@ -181,7 +181,7 @@ if (Test-Command "expo") {
 # ============================================================================
 # Web Environment
 # ============================================================================
-Write-Host "`n🌐 Web (Next.js)" -ForegroundColor Cyan
+Write-Host "`n[WEB] Web (Next.js)" -ForegroundColor Cyan
 Write-Host "-" * 50
 
 $webDir = "./web"
@@ -208,7 +208,7 @@ if (Test-Path $webDir -PathType Container) {
 # ============================================================================
 # API Environment
 # ============================================================================
-Write-Host "`n⚙️  API (NestJS)" -ForegroundColor Cyan
+Write-Host "`n[NEST] API (NestJS)" -ForegroundColor Cyan
 Write-Host "-" * 50
 
 $apiDir = "./api"
@@ -241,7 +241,7 @@ if (Test-Path $apiDir -PathType Container) {
 # ============================================================================
 # Ports Availability
 # ============================================================================
-Write-Host "`n🔌 Port Availability" -ForegroundColor Cyan
+Write-Host "`n[PORTS] Port Availability" -ForegroundColor Cyan
 Write-Host "-" * 50
 
 $ports = @(3000, 4000, 8081, 8082)
@@ -265,7 +265,7 @@ foreach ($port in $ports) {
 # ============================================================================
 # Factory Kit Infrastructure
 # ============================================================================
-Write-Host "`n🏭 Factory Platform Kit" -ForegroundColor Cyan
+Write-Host "`n[KIT] Factory Platform Kit" -ForegroundColor Cyan
 Write-Host "-" * 50
 
 $kitFiles = @(
@@ -291,10 +291,10 @@ foreach ($file in $kitFiles) {
 # ============================================================================
 Write-Host "`n" + ("=" * 50)
 if ($allPass) {
-  Write-Status "✨ All critical checks passed!" "Pass"
+  Write-Status "All critical checks passed!" "Pass"
   exit 0
 } else {
-  Write-Status "⚠️  Some critical checks failed. Please review above." "Warn"
+  Write-Status "Some critical checks failed. Please review above." "Warn"
   exit 1
 }
 Write-Host ("=" * 50) + "`n"
