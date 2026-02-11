@@ -1,4 +1,5 @@
 import { Platform } from 'react-native';
+import Constants from 'expo-constants';
 
 /**
  * Environment Configuration for Factory Mobile App
@@ -120,10 +121,9 @@ function isLikelyPhysicalDevice() {
     return false;
   }
   
-  // Heuristic detection (not fully reliable, hence the manual toggle option)
-  // For now, default to false (use emulator/simulator URLs)
-  // Users can enable "Use LAN IP" toggle in Diagnostics screen for physical devices
-  return false;
+  // Use Expo's device signal when available
+  // Constants.isDevice is false for simulators/emulators
+  return Boolean(Constants?.isDevice);
 }
 
 /**

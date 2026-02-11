@@ -1,14 +1,17 @@
 import { getApiBaseUrl } from '../config/env';
+import { getToken } from '../auth/tokenStore';
 
 /**
  * API Client for Factory Mobile App
  * Serial Step A: Production-ready API Networking Baseline
+ * Serial Step B: Added Authorization header support
  * 
  * Features:
  * - Configurable timeout (default: 10s)
  * - Retry logic for transient network errors
  * - Consistent error mapping
  * - Latency measurement
+ * - Automatic Authorization header injection (Step B)
  */
 
 const DEFAULT_TIMEOUT_MS = 10000; // 10 seconds
@@ -123,6 +126,8 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = DEFAULT_TIMEOUT_M
 /**
  * Main API request function with retry logic
  * 
+ * Serial Step B: Automatically injects Authorization header if token exists
+ * 
  * @param {string} endpoint - API endpoint path (e.g., '/', '/db/health')
  * @param {object} options - Fetch options (method, headers, body, etc.)
  * @param {number} timeoutMs - Request timeout in milliseconds
@@ -139,9 +144,22 @@ async function apiRequest(
   const url = `${baseUrl}${endpoint}`;
   const startTime = Date.now();
   
+  // Get auth token and inject Authorization header if it exists (Step B)
+  const token = await getToken();
+  const headers = { ...(options.headers || {}) };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  
+  // Merge headers back into options
+  const requestOptions = {
+    ...options,
+    headers,
+  };
+  
   try {
     // Make request with timeout
-    const response = await fetchWithTimeout(url, options, timeoutMs);
+    const response = await fetchWithTimeout(url, requestOptions, timeoutMs);
     const latencyMs = Date.now() - startTime;
     
     // Check if response is OK (status 200-299)
