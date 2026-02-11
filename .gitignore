@@ -13,6 +13,7 @@ pnpm-debug.log*
 # Env
 .env
 .env.*
+!.env.example
 *.local
 
 # Build outputs
@@ -28,8 +29,19 @@ out/
 # Logs & artifacts
 logs/
 output/
+*.log
 
 # Python
 __pycache__/
 *.pyc
 .venv/
+
+# Backup folders
+backup/
+
+# Docker
+.docker/
+
+# Test coverage
+coverage/
+.nyc_output/
