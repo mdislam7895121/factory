@@ -1,0 +1,75 @@
+{
+  "timestamp": "2026-02-11T21:18:19.233Z",
+  "routes": [
+    {
+      "name": "home",
+      "path": "home",
+      "title": "Home",
+      "screenId": "Home",
+      "requiresAuth": true,
+      "source": "manual"
+    },
+    {
+      "name": "profile",
+      "path": "profile",
+      "title": "Profile",
+      "screenId": "Profile",
+      "requiresAuth": true,
+      "source": "manual"
+    },
+    {
+      "name": "diagnostics",
+      "path": "diagnostics",
+      "title": "Diagnostics",
+      "screenId": "Diagnostics",
+      "requiresAuth": true,
+      "source": "manual"
+    },
+    {
+      "name": "demoHub",
+      "path": "demo-hub",
+      "title": "Demo Hub",
+      "screenId": "DemoHub",
+      "requiresAuth": true,
+      "source": "manual"
+    },
+    {
+      "name": "inventoryList",
+      "path": "inventory/list",
+      "title": "Inventory",
+      "screenId": "InventoryList",
+      "requiresAuth": true,
+      "source": "generated"
+    },
+    {
+      "name": "inventoryDetails",
+      "path": "inventory/details/:id",
+      "title": "Item Details",
+      "screenId": "InventoryDetails",
+      "requiresAuth": true,
+      "source": "generated"
+    },
+    {
+      "name": "inventoryCreate",
+      "path": "inventory/create",
+      "title": "Add Item",
+      "screenId": "InventoryForm",
+      "requiresAuth": true,
+      "source": "generated"
+    }
+  ],
+  "specs": [
+    {
+      "filename": "feature-sample.json",
+      "path": "/tools/specs/feature-sample.json"
+    }
+  ],
+  "summary": {
+    "totalRoutes": 7,
+    "manualRoutes": 4,
+    "generatedRoutes": 3,
+    "totalSpecs": 1,
+    "routesUpdated": true,
+    "specsFound": true
+  }
+}
