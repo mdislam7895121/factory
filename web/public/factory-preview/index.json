@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-02-11T21:18:19.233Z",
+  "timestamp": "2026-02-11T22:08:12.586Z",
   "routes": [
     {
       "name": "home",
@@ -62,13 +62,17 @@
     {
       "filename": "feature-sample.json",
       "path": "/tools/specs/feature-sample.json"
+    },
+    {
+      "filename": "feature-sample.v2.json",
+      "path": "/tools/specs/feature-sample.v2.json"
     }
   ],
   "summary": {
     "totalRoutes": 7,
     "manualRoutes": 4,
     "generatedRoutes": 3,
-    "totalSpecs": 1,
+    "totalSpecs": 2,
     "routesUpdated": true,
     "specsFound": true
   }

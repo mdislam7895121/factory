@@ -54,12 +54,35 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
-      - name: Generate Prisma Client
-        run: npx prisma generate
-      
       - name: Lint
         run: npm run lint
         continue-on-error: true
       
       - name: Build
         run: npm run build
+
+  factory:
+    name: Factory Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      
+      - name: Validate v1 spec
+        run: node tools/validate-spec.mjs tools/specs/feature-sample.json
+      
+      - name: Validate v2 spec
+        run: node tools/validate-spec.mjs tools/specs/feature-sample.v2.json
+      
+      - name: Generator v1 dry-run
+        run: node tools/generate-mobile-feature.mjs --spec tools/specs/feature-sample.json --out mobile --dry-run
+      
+      - name: Generator v2 dry-run
+        run: node tools/generate-mobile-feature.mjs --spec tools/specs/feature-sample.v2.json --out mobile --dry-run
+      
+      - name: Smoke test (non-mutating)
+        run: pwsh -File scripts/smoke-factory.ps1
