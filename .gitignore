@@ -28,6 +28,7 @@ out/
 
 # Logs & artifacts
 logs/
+api/logs/
 output/
 *.log
 
@@ -38,6 +39,7 @@ __pycache__/
 
 # Backup folders
 backup/
+api/backup/
 
 # Docker
 .docker/
