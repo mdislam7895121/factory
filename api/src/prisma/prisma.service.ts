@@ -1,7 +1,7 @@
-import { Injectable, OnModuleInit } from "@nestjs/common";
-import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
-import { Pool } from "pg";
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { PrismaClient } from '../generated/prisma';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
@@ -9,7 +9,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     // Validate DATABASE_URL is set
     if (!process.env.DATABASE_URL) {
       throw new Error(
-        "DATABASE_URL environment variable is not set. Please check your .env file."
+        'DATABASE_URL environment variable is not set. Please check your .env file.',
       );
     }
 
