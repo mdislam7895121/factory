@@ -47,3 +47,6 @@ api/backup/
 # Test coverage
 coverage/
 .nyc_output/
+
+# Proof run artifacts (untracked, timestamped)
+proof/runs/
