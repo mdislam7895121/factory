@@ -8,6 +8,7 @@ import LoginScreen from './src/screens/LoginScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import DiagnosticsScreen from './src/screens/DiagnosticsScreen';
 import HomeScreen from './src/screens/HomeScreen';
+import DemoHubScreen from './src/screens/DemoHubScreen';
 
 /**
  * Main App Component with Auth
@@ -40,6 +41,10 @@ function AppContent() {
 
   if (currentScreen === 'profile') {
     return <ProfileScreen onNavigate={(screen) => setCurrentScreen(screen)} />;
+  }
+
+  if (currentScreen === 'demoHub') {
+    return <DemoHubScreen onNavigate={(screen) => setCurrentScreen(screen)} />;
   }
 
   // Home screen (authenticated)

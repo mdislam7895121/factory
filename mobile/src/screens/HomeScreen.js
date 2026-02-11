@@ -52,6 +52,12 @@ export default function HomeScreen({ onNavigate }) {
     }
   };
 
+  const handleNavigateToDemoHub = () => {
+    if (onNavigate) {
+      onNavigate('demoHub');
+    }
+  };
+
   if (!user) {
     return (
       <View style={styles.container}>
@@ -103,6 +109,16 @@ export default function HomeScreen({ onNavigate }) {
         {/* Action Cards */}
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Actions</Text>
+          
+          <View style={styles.buttonGroup}>
+            <Button 
+              title="🎮 Demo Hub" 
+              onPress={handleNavigateToDemoHub}
+              color="#9333ea"
+            />
+          </View>
+
+          <View style={styles.buttonSpacer} />
           
           <View style={styles.buttonGroup}>
             <Button 

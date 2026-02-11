@@ -1,0 +1,232 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Factory Mobile Feature Specification v1.0",
+  "description": "Spec-driven mobile feature generation schema",
+  "type": "object",
+  "required": ["featureId", "title", "version", "routes", "screens", "apiClients"],
+  "properties": {
+    "featureId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Unique feature identifier (lowercase, kebab-case)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Feature display title"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version"
+    },
+    "description": {
+      "type": "string",
+      "description": "Feature description"
+    },
+    "routes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "path", "screenId", "title"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z][a-zA-Z0-9]*$",
+            "description": "Route identifier"
+          },
+          "path": {
+            "type": "string",
+            "description": "Navigation path"
+          },
+          "screenId": {
+            "type": "string",
+            "description": "Screen ID to render"
+          },
+          "requiresAuth": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether route requires authentication"
+          },
+          "title": {
+            "type": "string",
+            "description": "Route display name"
+          }
+        }
+      },
+      "description": "Navigation routes"
+    },
+    "screens": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "title"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Screen identifier"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["list", "details", "form", "dashboard"],
+            "description": "Screen type/template"
+          },
+          "title": {
+            "type": "string",
+            "description": "Screen display title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Screen purpose"
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Component name"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Component purpose"
+                }
+              }
+            },
+            "description": "Sub-components to scaffold"
+          }
+        }
+      },
+      "description": "UI screens to generate"
+    },
+    "apiClients": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "base", "endpoints"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*$",
+            "description": "API client identifier"
+          },
+          "base": {
+            "type": "string",
+            "description": "Base API path"
+          },
+          "description": {
+            "type": "string",
+            "description": "Client purpose"
+          },
+          "endpoints": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["name", "method", "path"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-zA-Z0-9]*$",
+                  "description": "Endpoint function name"
+                },
+                "method": {
+                  "type": "string",
+                  "enum": ["GET", "POST", "PUT", "DELETE", "PATCH"],
+                  "description": "HTTP method"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Endpoint path (relative to base)"
+                },
+                "auth": {
+                  "type": "string",
+                  "enum": ["none", "bearer"],
+                  "default": "bearer",
+                  "description": "Auth requirement"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Endpoint purpose"
+                }
+              }
+            },
+            "description": "API endpoints"
+          }
+        }
+      },
+      "description": "API clients"
+    },
+    "mocks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["endpoint", "response"],
+        "properties": {
+          "endpoint": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+\\.[a-z][a-zA-Z0-9]*$",
+            "description": "Format: {clientId}.{endpointName}"
+          },
+          "response": {
+            "type": "object",
+            "description": "Mock response data"
+          },
+          "status": {
+            "type": "integer",
+            "minimum": 200,
+            "maximum": 599,
+            "default": 200,
+            "description": "HTTP status code"
+          }
+        }
+      },
+      "description": "Mock responses per endpoint"
+    },
+    "flags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Flag identifier"
+          },
+          "label": {
+            "type": "string",
+            "description": "Flag display label"
+          },
+          "default": {
+            "type": "boolean",
+            "default": false,
+            "description": "Default flag state"
+          },
+          "description": {
+            "type": "string",
+            "description": "Flag purpose"
+          }
+        }
+      },
+      "description": "Feature flags"
+    },
+    "demo": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable demo mode"
+        },
+        "seedData": {
+          "type": "object",
+          "description": "Demo seed data"
+        }
+      },
+      "description": "Demo configuration"
+    }
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "featureId": "inventory",
+  "title": "Inventory Management",
+  "version": "1.0.0",
+  "description": "Basic inventory management feature with product list, details, and creation",
+  "routes": [
+    {
+      "name": "inventoryList",
+      "path": "inventory/list",
+      "screenId": "InventoryList",
+      "requiresAuth": true,
+      "title": "Inventory"
+    },
+    {
+      "name": "inventoryDetails",
+      "path": "inventory/details/:id",
+      "screenId": "InventoryDetails",
+      "requiresAuth": true,
+      "title": "Item Details"
+    },
+    {
+      "name": "inventoryCreate",
+      "path": "inventory/create",
+      "screenId": "InventoryForm",
+      "requiresAuth": true,
+      "title": "Add Item"
+    }
+  ],
+  "screens": [
+    {
+      "id": "InventoryList",
+      "type": "list",
+      "title": "Inventory Items",
+      "description": "List all inventory items with pagination",
+      "components": [
+        {
+          "name": "InventoryItem",
+          "description": "Single inventory item in list"
+        },
+        {
+          "name": "InventoryFilter",
+          "description": "Filter by status or category"
+        }
+      ]
+    },
+    {
+      "id": "InventoryDetails",
+      "type": "details",
+      "title": "Item Details",
+      "description": "Show detailed information about an inventory item",
+      "components": [
+        {
+          "name": "ItemHeader",
+          "description": "Item name and image"
+        },
+        {
+          "name": "ItemStats",
+          "description": "Quantity, location, last updated"
+        }
+      ]
+    },
+    {
+      "id": "InventoryForm",
+      "type": "form",
+      "title": "Add Inventory Item",
+      "description": "Form to create or edit inventory item",
+      "components": [
+        {
+          "name": "ItemInput",
+          "description": "Name, SKU, category inputs"
+        },
+        {
+          "name": "LocationPicker",
+          "description": "Select storage location"
+        }
+      ]
+    }
+  ],
+  "apiClients": [
+    {
+      "id": "inventoryApi",
+      "base": "/inventory",
+      "description": "Inventory CRUD operations",
+      "endpoints": [
+        {
+          "name": "listItems",
+          "method": "GET",
+          "path": "/items",
+          "auth": "bearer",
+          "description": "Fetch all inventory items"
+        },
+        {
+          "name": "getItem",
+          "method": "GET",
+          "path": "/items/:id",
+          "auth": "bearer",
+          "description": "Fetch a single inventory item"
+        },
+        {
+          "name": "createItem",
+          "method": "POST",
+          "path": "/items",
+          "auth": "bearer",
+          "description": "Create a new inventory item"
+        },
+        {
+          "name": "updateItem",
+          "method": "PUT",
+          "path": "/items/:id",
+          "auth": "bearer",
+          "description": "Update an inventory item"
+        },
+        {
+          "name": "deleteItem",
+          "method": "DELETE",
+          "path": "/items/:id",
+          "auth": "bearer",
+          "description": "Delete an inventory item"
+        }
+      ]
+    }
+  ],
+  "mocks": [
+    {
+      "endpoint": "inventoryApi.listItems",
+      "status": 200,
+      "response": {
+        "ok": true,
+        "data": [
+          {
+            "id": "item-001",
+            "name": "Widget A",
+            "sku": "WGT-001",
+            "quantity": 42,
+            "location": "Shelf 1A",
+            "category": "Widgets",
+            "lastUpdated": "2026-02-11T15:30:00Z"
+          },
+          {
+            "id": "item-002",
+            "name": "Gadget B",
+            "sku": "GDG-002",
+            "quantity": 15,
+            "location": "Bin 2",
+            "category": "Gadgets",
+            "lastUpdated": "2026-02-10T10:15:00Z"
+          }
+        ]
+      }
+    },
+    {
+      "endpoint": "inventoryApi.getItem",
+      "status": 200,
+      "response": {
+        "ok": true,
+        "data": {
+          "id": "item-001",
+          "name": "Widget A",
+          "sku": "WGT-001",
+          "quantity": 42,
+          "location": "Shelf 1A",
+          "category": "Widgets",
+          "lastUpdated": "2026-02-11T15:30:00Z",
+          "description": "High-quality industrial widget"
+        }
+      }
+    },
+    {
+      "endpoint": "inventoryApi.createItem",
+      "status": 201,
+      "response": {
+        "ok": true,
+        "data": {
+          "id": "item-new-123",
+          "name": "New Item",
+          "sku": "NEW-123",
+          "quantity": 0,
+          "location": "Staging",
+          "category": "Uncategorized",
+          "lastUpdated": "2026-02-11T15:45:00Z"
+        }
+      }
+    }
+  ],
+  "flags": [
+    {
+      "id": "enableMockMode",
+      "label": "Use Mock Data",
+      "default": true,
+      "description": "Return mock responses instead of calling API"
+    },
+    {
+      "id": "enableAdvancedFilters",
+      "label": "Advanced Filters",
+      "default": false,
+      "description": "Show advanced filter options on list screen"
+    }
+  ],
+  "demo": {
+    "enabled": true,
+    "seedData": {
+      "items": [
+        {
+          "id": "demo-1",
+          "name": "Sample Widget",
+          "quantity": 50
+        }
+      ]
+    }
+  }
+}
