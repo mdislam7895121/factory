@@ -9,6 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import { useAuth } from '../auth/AuthProvider';
+import { getApiBaseUrl } from '../config/env';
 
 /**
  * Profile Screen (Protected)
@@ -114,6 +115,20 @@ export default function ProfileScreen({ onNavigate }) {
               ⚠️ Dev mock token - not from backend
             </Text>
           </View>
+        </View>
+
+        {/* API Configuration Card */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>API Configuration</Text>
+          
+          <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Base URL:</Text>
+            <Text style={styles.infoValue}>{getApiBaseUrl()}</Text>
+          </View>
+
+          <Text style={styles.configNote}>
+            This shows the resolved API endpoint based on your device platform and network configuration.
+          </Text>
         </View>
 
         {/* Actions */}
@@ -223,6 +238,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#856404',
     marginBottom: 4,
+  },
+  configNote: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 8,
+    fontStyle: 'italic',
   },
   actionsCard: {
     backgroundColor: '#fff',

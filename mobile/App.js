@@ -1,22 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, ScrollView, ActivityIndicator, Platform } from 'react-native';
 import { useState } from 'react';
-import { API_BASE_URL } from './config';
+import { getApiBaseUrl } from './src/config/env';
 import { AuthProvider, useAuth } from './src/auth/AuthProvider';
 import { AUTH_STATUS } from './src/auth/authTypes';
 import LoginScreen from './src/screens/LoginScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import DiagnosticsScreen from './src/screens/DiagnosticsScreen';
+import HomeScreen from './src/screens/HomeScreen';
 
 /**
  * Main App Component with Auth
  * Serial Step B: Added authentication with AuthProvider
+ * Serial Step B: Uses getApiBaseUrl() from env.js for proper configuration
  */
 function AppContent() {
-  const { isAuthenticated, status, user } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState('');
-  const [currentScreen, setCurrentScreen] = useState('home'); // home, profile, diagnostics
+  const { isAuthenticated, status } = useAuth();
+  const [currentScreen, setCurrentScreen] = useState('home');
 
   // Show loading during bootstrap
   if (status === AUTH_STATUS.BOOTSTRAPPING) {
@@ -43,114 +43,7 @@ function AppContent() {
   }
 
   // Home screen (authenticated)
-
-  const testEndpoint = async (path, name) => {
-    setLoading(true);
-    setResult(`Testing ${name}...\n`);
-    
-    try {
-      const url = `${API_BASE_URL}${path}`;
-      setResult(prev => prev + `\nFetching: ${url}\n`);
-      
-      const response = await fetch(url);
-      const data = await response.json();
-      
-      setResult(prev => prev + `\n✅ ${name} SUCCESS\n` + 
-        `Status: ${response.status}\n` +
-        `Response: ${JSON.stringify(data, null, 2)}\n`);
-    } catch (error) {
-      setResult(prev => prev + `\n❌ ${name} FAILED\n` + 
-        `Error: ${error.message}\n`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const testAll = async () => {
-    setLoading(true);
-    setResult('Testing all endpoints...\n');
-    
-    try {
-      // Test root endpoint
-      const rootUrl = `${API_BASE_URL}/`;
-      setResult(prev => prev + `\nFetching: ${rootUrl}\n`);
-      const rootResponse = await fetch(rootUrl);
-      const rootData = await rootResponse.json();
-      setResult(prev => prev + `✅ Root endpoint SUCCESS\n` +
-        `Status: ${rootResponse.status}\n` +
-        `Response: ${JSON.stringify(rootData, null, 2)}\n\n`);
-      
-      // Test health endpoint
-      const healthUrl = `${API_BASE_URL}/db/health`;
-      setResult(prev => prev + `Fetching: ${healthUrl}\n`);
-      const healthResponse = await fetch(healthUrl);
-      const healthData = await healthResponse.json();
-      setResult(prev => prev + `✅ Health endpoint SUCCESS\n` +
-        `Status: ${healthResponse.status}\n` +
-        `Response: ${JSON.stringify(healthData, null, 2)}\n`);
-    } catch (error) {
-      setResult(prev => prev + `\n❌ FAILED\nError: ${error.message}\n`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <View style={styles.container}>
-      {/* Header with navigation */}
-      <View style={styles.headerRow}>
-        <Text style={styles.title}>Factory Mobile</Text>
-        <View style={styles.headerButtons}>
-          <Button 
-            title="👤" 
-            onPress={() => setCurrentScreen('profile')} 
-            color={currentScreen === 'profile' ? '#007bff' : '#6c757d'}
-          />
-          <View style={{ width: 5 }} />
-          <Button 
-            title="🔧" 
-            onPress={() => setCurrentScreen('diagnostics')} 
-            color={currentScreen === 'diagnostics' ? '#007bff' : '#6c757d'}
-          />
-        </View>
-      </View>
-      
-      {/* User info */}
-      <Text style={styles.userInfo}>
-        Logged in as: {user?.email || 'Unknown'}
-      </Text>
-      
-      <Text style={styles.subtitle}>API: {API_BASE_URL}</Text>
-      
-      <View style={styles.buttonContainer}>
-        <Button 
-          title="Test Root (/)" 
-          onPress={() => testEndpoint('/', 'Root')}
-          disabled={loading}
-        />
-        <View style={styles.buttonSpacer} />
-        <Button 
-          title="Test Health (/db/health)" 
-          onPress={() => testEndpoint('/db/health', 'Health')}
-          disabled={loading}
-        />
-        <View style={styles.buttonSpacer} />
-        <Button 
-          title="Test All Endpoints" 
-          onPress={testAll}
-          disabled={loading}
-        />
-      </View>
-
-      {loading && <ActivityIndicator size="large" color="#0000ff" />}
-      
-      <ScrollView style={styles.resultContainer}>
-        <Text style={styles.resultText}>{result}</Text>
-      </ScrollView>
-      
-      <StatusBar style="auto" />
-    </View>
-  );
+  return <HomeScreen onNavigate={(screen) => setCurrentScreen(screen)} />;
 }
 
 /**
