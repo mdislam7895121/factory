@@ -1,11 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView, ActivityIndicator, Platform } from 'react-native';
 import { useState } from 'react';
 import { API_BASE_URL } from './config';
+import DiagnosticsScreen from './src/screens/DiagnosticsScreen';
 
 export default function App() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState('');
+  const [showDiagnostics, setShowDiagnostics] = useState(false);
+
+  // If diagnostics screen is active, show it
+  if (showDiagnostics) {
+    return <DiagnosticsScreen onBack={() => setShowDiagnostics(false)} />;
+  }
 
   const testEndpoint = async (path, name) => {
     setLoading(true);
@@ -60,7 +67,10 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Factory Mobile App</Text>
+      <View style={styles.headerRow}>
+        <Text style={styles.title}>Factory Mobile App</Text>
+        <Button title="🔧 Diagnostics" onPress={() => setShowDiagnostics(true)} />
+      </View>
       <Text style={styles.subtitle}>API: {API_BASE_URL}</Text>
       
       <View style={styles.buttonContainer}>
@@ -101,11 +111,16 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 20,
   },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 10,
+    flex: 1,
   },
   subtitle: {
     fontSize: 12,
