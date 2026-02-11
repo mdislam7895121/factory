@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:16
+    container_name: factory_postgres
+    environment:
+      POSTGRES_USER: factory
+      POSTGRES_PASSWORD: factorypass
+      POSTGRES_DB: factorydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - factory_pgdata:/var/lib/postgresql/data
+volumes:
+  factory_pgdata:
