@@ -11,6 +11,10 @@ export class AppController {
 
   @Get()
   getHello(): string {
+    if (process.env.FACTORY_KILL_SWITCH === '1') {
+      return 'Service temporarily limited';
+    }
+
     return this.appService.getHello();
   }
 
