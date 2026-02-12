@@ -106,3 +106,17 @@ jobs:
       
       - name: Mobile Production Validation
         run: pwsh -File scripts/validate-mobile-prod.ps1
+
+  security:
+    name: Security Hardening
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      
+      - name: Security baseline scan (CI strict)
+        run: pwsh -File scripts/security-scan.ps1 -CiStrict
