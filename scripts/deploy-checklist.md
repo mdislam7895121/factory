@@ -2,6 +2,11 @@
 
 Comprehensive guide for deploying Factory Platform to production.
 
+## Production URLs (current)
+
+- API (Railway): https://factory-production-production.up.railway.app
+- WEB (Netlify): https://factory-production-web.netlify.app
+
 ## Railway Deployment (API)
 
 ### Prerequisites
