@@ -86,3 +86,23 @@ jobs:
       
       - name: Smoke test (non-mutating)
         run: pwsh -File scripts/smoke-factory.ps1
+
+  production-build:
+    name: Production Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      
+      - name: API Production Build
+        run: pwsh -File scripts/build-api-prod.ps1
+      
+      - name: Web Production Build
+        run: pwsh -File scripts/build-web-prod.ps1
+      
+      - name: Mobile Production Validation
+        run: pwsh -File scripts/validate-mobile-prod.ps1
