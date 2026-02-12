@@ -53,5 +53,29 @@ if (!(Test-Path $nextDir)) {
     throw "Web .next directory not found at $nextDir"
 }
 
-Write-Host "✓ Web production build completed successfully" -ForegroundColor Green
+# Write build info
+Write-Host "Writing build information..." -ForegroundColor Gray
+$factoryRoot = Split-Path -Parent $webRoot
+$versionFile = Join-Path $factoryRoot 'VERSION'
+$version = (Get-Content $versionFile -Raw).Trim()
+
+Push-Location $factoryRoot
+try {
+    $gitCommit = git rev-parse HEAD
+}
+finally {
+    Pop-Location
+}
+
+$buildInfo = @{
+    version = $version
+    commit = $gitCommit
+    timestamp = (Get-Date -Format 'o')
+}
+
+$buildInfoPath = Join-Path $nextDir 'build-info.json'
+$buildInfo | ConvertTo-Json | Out-File -FilePath $buildInfoPath -Encoding UTF8
+
+Write-Host "X Web production build completed successfully" -ForegroundColor Green
 Write-Host "  .next directory: $nextDir" -ForegroundColor Green
+Write-Host "  Build info: $buildInfoPath" -ForegroundColor Green

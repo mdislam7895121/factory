@@ -120,3 +120,18 @@ jobs:
       
       - name: Security baseline scan (CI strict)
         run: pwsh -File scripts/security-scan.ps1 -CiStrict
+
+  release:
+    name: Release Packaging
+    needs: [production-build, security]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      
+      - name: Release gate checks
+        run: pwsh -File scripts/release-check.ps1
