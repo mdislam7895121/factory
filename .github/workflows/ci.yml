@@ -159,3 +159,15 @@ jobs:
 
       - name: Step M proof harness (LocalOnly)
         run: pwsh -File scripts/proof-step-m.ps1 -LocalOnly
+
+  ops-incident:
+    name: Ops Incident Drill
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PowerShell
+        uses: PowerShell/setup-powershell@v2
+
+      - name: Step N proof harness (LocalOnly)
+        run: pwsh -File scripts/proof-step-n.ps1 -LocalOnly

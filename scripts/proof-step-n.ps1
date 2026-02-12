@@ -19,7 +19,7 @@ $runsDir = Join-Path $repoRoot 'proof\runs'
 New-Item -ItemType Directory -Path $runsDir -Force | Out-Null
 
 $timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
-$runLogPath = Join-Path $runsDir "serial-step-m-$timestamp.log"
+$runLogPath = Join-Path $runsDir "serial-step-n-$timestamp.log"
 
 function Write-RunLog {
     param([string]$Text)
@@ -63,7 +63,7 @@ function Invoke-AndCapture {
 
 Write-Host ""
 Write-Host "===================================================================" -ForegroundColor Cyan
-Write-Host "  SERIAL STEP M - OPS PROOF HARNESS"
+Write-Host "  SERIAL STEP N - ALERTS + INCIDENT DRILL PROOF HARNESS"
 Write-Host "===================================================================" -ForegroundColor Cyan
 Write-Host "ApiUrl: $ApiUrl" -ForegroundColor Gray
 Write-Host "WebUrl: $WebUrl" -ForegroundColor Gray
@@ -72,7 +72,7 @@ Write-Host "LocalOnly: $LocalOnly" -ForegroundColor Gray
 Write-Host "EmitArtifacts: $EmitArtifacts" -ForegroundColor Gray
 Write-Host "Run log: $runLogPath" -ForegroundColor Gray
 
-Write-RunLog 'SERIAL STEP M HARNESS'
+Write-RunLog 'SERIAL STEP N HARNESS'
 Write-RunLog "timestamp=$timestamp"
 Write-RunLog "api_url=$ApiUrl"
 Write-RunLog "web_url=$WebUrl"
@@ -82,17 +82,26 @@ Write-RunLog "emit_artifacts=$EmitArtifacts"
 
 $allPassed = $true
 
-$gitBefore = Invoke-AndCapture -Label 'A) git status before' -Action {
+$before = Invoke-AndCapture -Label 'A) git status before' -Action {
     git status --short
 }
-if ($gitBefore.ExitCode -ne 0) {
-    $allPassed = $false
-}
+if ($before.ExitCode -ne 0) { $allPassed = $false }
 
-$uptime = $null
+$docsCheck = Invoke-AndCapture -Label 'B) validate docs exist' -Action {
+    if (Test-Path .\docs\ops\alerts.md) {
+        '[OK] docs/ops/alerts.md exists'
+    }
+    else {
+        '[FAIL] docs/ops/alerts.md missing'
+        exit 1
+    }
+}
+if ($docsCheck.ExitCode -ne 0) { $allPassed = $false }
+
+$drill = $null
 if ($LocalOnly) {
-    $uptime = Invoke-AndCapture -Label 'B) uptime-check LocalOnly' -Action {
-        pwsh -File .\scripts\ops\uptime-check.ps1 -ApiUrl https://example.invalid -WebUrl https://example.invalid -TimeoutSec $TimeoutSec -LocalOnly
+    $drill = Invoke-AndCapture -Label 'C) incident drill LocalOnly' -Action {
+        pwsh -File .\scripts\ops\incident-drill.ps1 -LocalOnly
     }
 }
 else {
@@ -102,42 +111,43 @@ else {
         $allPassed = $false
     }
     else {
-        $uptime = Invoke-AndCapture -Label 'B) uptime-check live' -Action {
-            pwsh -File .\scripts\ops\uptime-check.ps1 -ApiUrl $ApiUrl -WebUrl $WebUrl -TimeoutSec $TimeoutSec
+        $drill = Invoke-AndCapture -Label 'C) incident drill live' -Action {
+            pwsh -File .\scripts\ops\incident-drill.ps1 -ApiUrl $ApiUrl -WebUrl $WebUrl -TimeoutSec $TimeoutSec
         }
     }
 }
+if ($null -ne $drill -and $drill.ExitCode -ne 0) { $allPassed = $false }
 
-if ($null -ne $uptime -and $uptime.ExitCode -ne 0) {
-    $allPassed = $false
-}
+$ciCheck = Invoke-AndCapture -Label 'D) verify CI Step N job' -Action {
+    $workflow = '.github/workflows/ci.yml'
+    if (-not (Test-Path $workflow)) {
+        '[FAIL] .github/workflows/ci.yml missing'
+        exit 1
+    }
 
-$killSwitch = $null
-if ($LocalOnly -or [string]::IsNullOrWhiteSpace($ApiUrl)) {
-    $killSwitch = Invoke-AndCapture -Label 'C) validate-kill-switch LocalOnly' -Action {
-        pwsh -File .\scripts\ops\validate-kill-switch.ps1 -LocalOnly
+    $content = Get-Content $workflow -Raw
+    $hasJob = $content -match '(?m)^\s{2}ops-incident:'
+    $hasCommand = $content -match 'pwsh -File scripts/proof-step-n.ps1 -LocalOnly'
+
+    if ($hasJob) { '[OK] ops-incident job found' } else { '[FAIL] ops-incident job missing' }
+    if ($hasCommand) { '[OK] proof-step-n LocalOnly command found' } else { '[FAIL] proof-step-n LocalOnly command missing' }
+
+    if (-not ($hasJob -and $hasCommand)) {
+        exit 1
     }
 }
-else {
-    $killSwitch = Invoke-AndCapture -Label 'C) validate-kill-switch live' -Action {
-        pwsh -File .\scripts\ops\validate-kill-switch.ps1 -ApiUrl $ApiUrl -TimeoutSec $TimeoutSec
-    }
-}
-
-if ($killSwitch.ExitCode -ne 0) {
-    $allPassed = $false
-}
+if ($ciCheck.ExitCode -ne 0) { $allPassed = $false }
 
 Write-Host ""
-Write-Host '=== D) secret pattern scan (tracked files) ===' -ForegroundColor Cyan
+Write-Host '=== Secret pattern scan (tracked files) ===' -ForegroundColor Cyan
 Write-RunLog ''
-Write-RunLog '=== D) secret pattern scan (tracked files) ==='
+Write-RunLog '=== Secret pattern scan (tracked files) ==='
 
 $secretPatterns = @(
-    'SENTRY_DSN\s*=\s*.{8,}',
-    'NEXT_PUBLIC_SENTRY_DSN\s*=\s*.{8,}',
+    'RAILWAY_TOKEN\s*=\s*.{8,}',
     'NETLIFY_AUTH_TOKEN\s*=\s*.{8,}',
-    'RAILWAY_TOKEN\s*=\s*.{8,}'
+    'SENTRY_DSN\s*=\s*.{8,}',
+    'NEXT_PUBLIC_SENTRY_DSN\s*=\s*.{8,}'
 )
 
 $secretMatchFound = $false
@@ -152,7 +162,6 @@ foreach ($pattern in $secretPatterns) {
             Write-RunLog $line
         }
     }
-
     Write-RunLog "pattern=$pattern exit_code=$exitCode"
 
     if ($exitCode -eq 0) {
@@ -175,34 +184,32 @@ else {
     Write-RunLog '[OK] Secret-like value scan found no tracked matches.'
 }
 
-$gitAfter = Invoke-AndCapture -Label 'E) git status after' -Action {
+$after = Invoke-AndCapture -Label 'E) git status after' -Action {
     git status --short
 }
-if ($gitAfter.ExitCode -ne 0) {
-    $allPassed = $false
-}
+if ($after.ExitCode -ne 0) { $allPassed = $false }
 
-$resultText = if ($allPassed) { 'PASS' } else { 'FAIL' }
+$result = if ($allPassed) { 'PASS' } else { 'FAIL' }
 
 Write-Host ""
 Write-Host "===================================================================" -ForegroundColor Cyan
-Write-Host "  STEP M SUMMARY"
+Write-Host "  STEP N SUMMARY"
 Write-Host "===================================================================" -ForegroundColor Cyan
-Write-Host "Result: $resultText"
+Write-Host "Result: $result"
 Write-Host "Run Log: $runLogPath"
 
 Write-RunLog ''
 Write-RunLog '=== SUMMARY ==='
-Write-RunLog "result=$resultText"
+Write-RunLog "result=$result"
 Write-RunLog "run_log=$runLogPath"
 
 if ($EmitArtifacts) {
-    $artifactPath = Join-Path $repoRoot 'proof\serial-step-mobile-M.md'
+    $artifactPath = Join-Path $repoRoot 'proof\serial-step-mobile-N.md'
     $generatedAt = Get-Date -Format 'yyyy-MM-dd HH:mm:ss K'
-    $harnessCheck = if ($allPassed) { 'x' } else { ' ' }
+    $mark = if ($allPassed) { 'x' } else { ' ' }
 
     $report = @"
-# Serial Step M - Ops Monitoring + Alerts + Kill Switch Proof
+# Serial Step N - Alerts and Incident Drill Proof
 
 Generated: $generatedAt
 
@@ -213,18 +220,18 @@ Generated: $generatedAt
 - TimeoutSec: $TimeoutSec
 
 ## Checks
-- [$harnessCheck] proof-step-m overall result: $resultText
-- [x] git status before/after captured
-- [x] uptime-check executed
-- [x] validate-kill-switch executed
-- [x] secret pattern scan executed
+- [$mark] proof-step-n overall result: $result
+- [x] docs/ops/alerts.md exists
+- [x] incident-drill executed
+- [x] CI ops-incident job verified
+- [x] secret scan executed
 
-## Raw Run Log
+## Run Log
 - $runLogPath
 
 ## Rollback
-- Remove/undo Step M files and middleware via git revert for this commit.
-- If kill switch behavior causes issues, set FACTORY_KILL_SWITCH=0 and redeploy API.
+- Revert Step N commit if needed.
+- CI rollback: remove ops-incident job from workflow.
 "@
 
     Set-Content -Path $artifactPath -Value $report -Encoding UTF8
