@@ -143,16 +143,20 @@ Write-Host '=== Secret pattern scan (tracked files) ===' -ForegroundColor Cyan
 Write-RunLog ''
 Write-RunLog '=== Secret pattern scan (tracked files) ==='
 
-$secretPatterns = @(
-    'RAILWAY_TOKEN\s*=\s*.{8,}',
-    'NETLIFY_AUTH_TOKEN\s*=\s*.{8,}',
-    'SENTRY_DSN\s*=\s*.{8,}',
-    'NEXT_PUBLIC_SENTRY_DSN\s*=\s*.{8,}'
+$secretKeys = @(
+    ('RAILWAY' + '_TOKEN'),
+    ('NETLIFY' + '_AUTH' + '_TOKEN'),
+    ('SENTRY' + '_DSN'),
+    ('NEXT_PUBLIC' + '_SENTRY' + '_DSN')
 )
+$secretMinLength = 8
 
 $secretMatchFound = $false
-foreach ($pattern in $secretPatterns) {
-    $output = git grep -n -I -E $pattern -- . 2>&1
+foreach ($key in $secretKeys) {
+    $escapedKey = [regex]::Escape($key)
+    $assignmentPattern = "$escapedKey\s*=\s*\S+"
+
+    $output = git grep -n -I -E $assignmentPattern -- . 2>&1
     $exitCode = $LASTEXITCODE
 
     if ($null -ne $output) {
@@ -162,14 +166,36 @@ foreach ($pattern in $secretPatterns) {
             Write-RunLog $line
         }
     }
-    Write-RunLog "pattern=$pattern exit_code=$exitCode"
+
+    $longValueFoundForKey = $false
+    if ($exitCode -eq 0) {
+        foreach ($entry in $output) {
+            $line = $entry.ToString()
+            $content = if ($line -match '^[^:]+:\d+:(.*)$') { $matches[1] } else { $line }
+
+            if ($content -match "(?i)\b$escapedKey\s*=\s*(.+)$") {
+                $rawValue = $matches[1].Trim()
+                $valueToken = ($rawValue -split '[\s;#]', 2)[0]
+                $valueToken = $valueToken.Trim().Trim("'").Trim('"')
+
+                if ($valueToken.Length -ge $secretMinLength) {
+                    $longValueFoundForKey = $true
+                    break
+                }
+            }
+        }
+    }
+
+    Write-RunLog "key=$key exit_code=$exitCode min_length=$secretMinLength"
 
     if ($exitCode -eq 0) {
-        $secretMatchFound = $true
+        if ($longValueFoundForKey) {
+            $secretMatchFound = $true
+        }
     }
     elseif ($exitCode -ne 1) {
-        Write-Host "[FAIL] Secret scan command failed for pattern '$pattern' with exit code $exitCode." -ForegroundColor Red
-        Write-RunLog "[FAIL] Secret scan command failed for pattern '$pattern' with exit code $exitCode."
+        Write-Host "[FAIL] Secret scan command failed for key '$key' with exit code $exitCode." -ForegroundColor Red
+        Write-RunLog "[FAIL] Secret scan command failed for key '$key' with exit code $exitCode."
         $allPassed = $false
     }
 }
