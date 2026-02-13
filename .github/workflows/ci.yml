@@ -171,3 +171,10 @@ jobs:
 
       - name: Step N proof harness (LocalOnly)
         run: pwsh -File scripts/proof-step-n.ps1 -LocalOnly
+
+  ops-live-proof-localonly:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-powershell@v2
+      - run: pwsh -File scripts/proof-step-o.ps1 -LocalOnly
