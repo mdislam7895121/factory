@@ -26,11 +26,15 @@ const DEV_LAN_IP = '192.168.12.179';
 const DEV_LAN_BASE = `http://${DEV_LAN_IP}:4000`;
 
 // Staging and Production endpoints (placeholders)
-const STAGING_BASE = 'https://api-staging.factory.example.com';
-const PROD_BASE = 'https://api.factory.example.com';
+const STAGING_BASE =
+  process.env.EXPO_PUBLIC_API_BASE_URL_STAGING ||
+  'https://api-staging.factory.example.com';
+const PROD_BASE =
+  process.env.EXPO_PUBLIC_API_BASE_URL ||
+  'https://api.factory.example.com';
 
-// Current active profile (default: DEV)
-let currentProfile = ENV_PROFILES.DEV;
+// Current active profile (default: DEV in development, PROD otherwise)
+let currentProfile = __DEV__ ? ENV_PROFILES.DEV : ENV_PROFILES.PROD;
 
 // Manual override for LAN IP mode (for physical devices)
 let useLanIpOverride = false;
@@ -126,6 +130,24 @@ function isLikelyPhysicalDevice() {
   return Boolean(Constants?.isDevice);
 }
 
+function assertValidPublicBaseUrl(url, label) {
+  const normalized = (url || '').trim().replace(/\/+$/, '');
+
+  if (!normalized) {
+    throw new Error(`${label} is required and cannot be empty.`);
+  }
+
+  if (!/^https?:\/\//.test(normalized)) {
+    throw new Error(`${label} must start with http:// or https://.`);
+  }
+
+  if (!__DEV__ && /example\.com|factory\.example\.com/.test(normalized)) {
+    throw new Error(`${label} cannot use placeholder domains in production builds.`);
+  }
+
+  return normalized;
+}
+
 /**
  * Get the API base URL for the current environment and platform
  * 
@@ -140,11 +162,17 @@ function isLikelyPhysicalDevice() {
 export function getApiBaseUrl() {
   // Production and Staging environments use their respective URLs
   if (currentProfile === ENV_PROFILES.PROD) {
-    return PROD_BASE;
+    return assertValidPublicBaseUrl(
+      PROD_BASE,
+      'PROD_BASE / EXPO_PUBLIC_API_BASE_URL',
+    );
   }
   
   if (currentProfile === ENV_PROFILES.STAGING) {
-    return STAGING_BASE;
+    return assertValidPublicBaseUrl(
+      STAGING_BASE,
+      'STAGING_BASE / EXPO_PUBLIC_API_BASE_URL_STAGING',
+    );
   }
   
   // DEV environment: platform-aware routing
