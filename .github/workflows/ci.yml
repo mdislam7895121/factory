@@ -99,6 +99,8 @@ jobs:
           node-version: 'lts/*'
       
       - name: API Production Build
+        env:
+          DATABASE_URL: "postgresql://ci:ci@localhost:5432/ci"
         run: pwsh -File scripts/build-api-prod.ps1
       
       - name: Web Production Build
