@@ -14,6 +14,8 @@ pnpm-debug.log*
 .env
 .env.*
 !.env.example
+!/api/.env.production.example
+!/web/.env.production.example
 *.local
 
 # Build outputs
