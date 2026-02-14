@@ -171,9 +171,14 @@ for (const screen of screens) {
 // Generate API client
 if (apiClients.length > 0) {
   const apiClient = apiClients[0]; // Take first for now
+  const apiBase = apiClient.base ?? apiClient.baseUrl ?? '';
   
-  // Safe access to endpoints - use empty array if not defined
-  const endpoints_arr = Array.isArray(apiClient.endpoints) ? apiClient.endpoints : [];
+  // Safe access to endpoints - support v1 (endpoints) and v2 (methods)
+  const endpoints_arr = Array.isArray(apiClient.endpoints)
+    ? apiClient.endpoints
+    : Array.isArray(apiClient.methods)
+      ? apiClient.methods
+      : [];
   
   const clientMethods = endpoints_arr
     .map((ep) => {
@@ -200,7 +205,7 @@ if (apiClients.length > 0) {
     featureId,
     camelCaseFeature: camelFeature,
     version,
-    apiBase: apiClient.base,
+    apiBase,
     endpoints,
     clientMethods,
   });
