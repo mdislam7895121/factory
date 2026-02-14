@@ -3,6 +3,8 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 
+type PoolConstructor = new (config: { connectionString: string }) => unknown;
+
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
   constructor() {
@@ -14,8 +16,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     }
 
     // Create PostgreSQL connection pool
-    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-    const adapter = new PrismaPg(pool);
+    const PgPool = Pool as unknown as PoolConstructor;
+    const pool = new PgPool({ connectionString: process.env.DATABASE_URL });
+    const adapter = new PrismaPg(pool as never);
 
     // Initialize PrismaClient with adapter
     super({ adapter });
