@@ -144,10 +144,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Setup PowerShell
-        uses: PowerShell/setup-powershell@v2
-      
       - name: Post-deploy smoke test (LocalOnly)
+        shell: pwsh
         run: pwsh -File scripts/post-deploy-smoke.ps1 -ApiUrl https://example.invalid -WebUrl https://example.invalid -LocalOnly
 
   ops-monitoring:
@@ -156,10 +154,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup PowerShell
-        uses: PowerShell/setup-powershell@v2
-
       - name: Step M proof harness (LocalOnly)
+        shell: pwsh
         run: pwsh -File scripts/proof-step-m.ps1 -LocalOnly
 
   ops-incident:
@@ -168,15 +164,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup PowerShell
-        uses: PowerShell/setup-powershell@v2
-
       - name: Step N proof harness (LocalOnly)
+        shell: pwsh
         run: pwsh -File scripts/proof-step-n.ps1 -LocalOnly
 
   ops-live-proof-localonly:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-powershell@v2
-      - run: pwsh -File scripts/proof-step-o.ps1 -LocalOnly
+      - shell: pwsh
+        run: ./scripts/proof-step-o.ps1 -LocalOnly
