@@ -104,7 +104,7 @@ async function initApiSentry(app: INestApplication): Promise<void> {
     res.on('finish', () => {
       if (res.statusCode >= 500) {
         sentry.captureMessage(
-          `HTTP ${res.statusCode} ${req.method} ${req.originalUrl || req.url}`,
+          `HTTP ${res.statusCode.toString()} ${req.method} ${req.originalUrl || req.url}`,
           'error',
         );
       }
@@ -167,6 +167,6 @@ async function bootstrap() {
   const port = Number(process.env.PORT || 4000);
 
   await app.listen(port, '0.0.0.0');
-  console.log(`API listening on http://0.0.0.0:${port}`);
+  console.log(`API listening on http://0.0.0.0:${port.toString()}`);
 }
 void bootstrap();
