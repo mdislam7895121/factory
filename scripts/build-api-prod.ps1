@@ -16,6 +16,11 @@
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 
+if (-not $env:DATABASE_URL) {
+    Write-Host "CI fallback DATABASE_URL applied"
+    $env:DATABASE_URL = "postgresql://ci:ci@localhost:5432/ci"
+}
+
 $apiRoot = Join-Path $PSScriptRoot '..' 'api'
 $distDir = Join-Path $apiRoot 'dist'
 
