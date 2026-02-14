@@ -20,6 +20,7 @@ $ProgressPreference = 'SilentlyContinue'
 $factoryRoot = Split-Path -Parent $PSScriptRoot
 $apiEnvExample = Join-Path $factoryRoot 'api' '.env.production.example'
 $webEnvExample = Join-Path $factoryRoot 'web' '.env.production.example'
+$placeholderDomainPattern = '(?i)example\.com|factory\.example\.com'
 
 Write-Host "Validating Production Environment Configuration..." -ForegroundColor Cyan
 
@@ -34,6 +35,14 @@ if ($apiEnvContent -notmatch 'DATABASE_URL') {
     throw "DATABASE_URL key not documented in api/.env.production.example"
 }
 
+if ($apiEnvContent -notmatch 'FACTORY_KILL_SWITCH') {
+    throw "FACTORY_KILL_SWITCH key not documented in api/.env.production.example"
+}
+
+if ($apiEnvContent -match $placeholderDomainPattern) {
+    throw "Placeholder domain detected in api/.env.production.example"
+}
+
 Write-Host "✓ API .env.production.example found with required keys" -ForegroundColor Green
 
 # Check Web env example
@@ -45,6 +54,10 @@ if (!(Test-Path $webEnvExample)) {
 $webEnvContent = Get-Content $webEnvExample -Raw
 if ($webEnvContent -notmatch 'NEXT_PUBLIC_API_URL') {
     throw "NEXT_PUBLIC_API_URL key not documented in web/.env.production.example"
+}
+
+if ($webEnvContent -match $placeholderDomainPattern) {
+    throw "Placeholder domain detected in web/.env.production.example"
 }
 
 Write-Host "✓ Web .env.production.example found with required keys" -ForegroundColor Green

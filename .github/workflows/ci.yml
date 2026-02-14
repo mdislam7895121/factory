@@ -123,6 +123,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
+
+      - name: Validate Production Env Docs
+        run: pwsh ./scripts/validate-env-prod.ps1
       
       - name: API Production Build
         env:
