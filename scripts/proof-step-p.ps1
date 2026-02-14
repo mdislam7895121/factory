@@ -32,6 +32,45 @@ function Run {
     return $result
 }
 
+function Get-GitStatusLines {
+    $lines = @(git status --short)
+    return @($lines | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+}
+
+function Assert-GitCleanlinessPolicy {
+    param(
+        [Parameter(Mandatory = $true)][AllowEmptyCollection()][string[]]$StatusLines
+    )
+
+    if ($null -eq $StatusLines) {
+        $StatusLines = @()
+    }
+
+    $scriptTracked = $true
+    try {
+        git ls-files --error-unmatch scripts/proof-step-p.ps1 *> $null
+    } catch {
+        $scriptTracked = $false
+    }
+
+    if ($scriptTracked) {
+        if ($StatusLines.Count -gt 0) {
+            throw 'git status contains changes after commit; expected empty status only'
+        }
+        return 'post-commit-empty'
+    }
+
+    $allowedPreCommitStatus = @('?? scripts/proof-step-p.ps1')
+    $unexpected = @($StatusLines | Where-Object { $_ -notin $allowedPreCommitStatus })
+    if ($unexpected.Count -gt 0) {
+        throw 'git status contains unexpected changes in pre-commit mode'
+    }
+    if ($StatusLines.Count -gt $allowedPreCommitStatus.Count) {
+        throw 'git status contains duplicate or unexpected pre-commit entries'
+    }
+    return 'pre-commit-allowlist'
+}
+
 try {
     Write-Host "SERIAL P - PRODUCTION SMOKE PROOF (NON-MUTATING)"
     Write-Host "Timestamp: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss K')"
@@ -108,16 +147,12 @@ try {
         throw 'Unexpected web\.netlify created'
     }
 
-    $finalStatus = @(git status --short)
-    $allowedPreCommitStatus = @('?? scripts/proof-step-p.ps1')
-    $disallowedStatus = @($finalStatus | Where-Object { $_ -and ($_ -notin $allowedPreCommitStatus) })
+    $finalStatus = Get-GitStatusLines
+    $cleanPolicyMode = Assert-GitCleanlinessPolicy -StatusLines @($finalStatus)
     Write-Host ""
     Write-Host '=== Final: git status --short ==='
     if ($finalStatus) {
         $finalStatus | ForEach-Object { Write-Host $_ }
-        if ($disallowedStatus.Count -gt 0) {
-            throw 'git status contains unexpected changes after run'
-        }
     } else {
         Write-Host '(clean)'
     }
@@ -128,7 +163,11 @@ try {
     Write-Host '[x] WEB_URL returns 200'
     Write-Host '[x] Netlify NEXT_PUBLIC_API_URL equals API_BASE (verified)'
     Write-Host '[x] No web\.netlify created'
-    Write-Host '[x] git status clean after run'
+    if ($cleanPolicyMode -eq 'post-commit-empty') {
+        Write-Host '[x] git status clean after run (post-commit strict)'
+    } else {
+        Write-Host '[x] git status policy passed (pre-commit allowlist: only ?? scripts/proof-step-p.ps1)'
+    }
     Write-Host "[x] Raw proof saved to $proofFile"
 } finally {
     Stop-Transcript | Out-Null
