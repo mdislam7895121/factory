@@ -1,19 +1,64 @@
 import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import type { INestApplication } from '@nestjs/common';
+import {
+  BadRequestException,
+  ValidationPipe,
+  type ExceptionFilter,
+  type INestApplication,
+} from '@nestjs/common';
 import type {
   ErrorRequestHandler,
   NextFunction,
   Request,
   Response,
 } from 'express';
+import type { ArgumentsHost } from '@nestjs/common';
 
 type SentryClient = {
   init: (options: { dsn: string; tracesSampleRate: number }) => void;
   captureException: (error: Error) => void;
   captureMessage: (message: string, level: 'error') => void;
 };
+
+type ValidationErrorResponse = {
+  ok: false;
+  error: 'VALIDATION_ERROR';
+  message: string;
+  details: unknown;
+};
+
+function getValidationDetails(value: unknown): unknown {
+  if (typeof value === 'string') {
+    return [value];
+  }
+
+  if (Array.isArray(value)) {
+    return value;
+  }
+
+  if (typeof value === 'object' && value !== null) {
+    const maybeObject = value as Record<string, unknown>;
+    if (Array.isArray(maybeObject.message)) {
+      return maybeObject.message;
+    }
+  }
+
+  return [];
+}
+
+function buildValidationErrorBody(
+  exception: BadRequestException,
+): ValidationErrorResponse {
+  const response = exception.getResponse();
+
+  return {
+    ok: false,
+    error: 'VALIDATION_ERROR',
+    message: 'Request validation failed',
+    details: getValidationDetails(response),
+  };
+}
 
 function isKillSwitchEnabled(): boolean {
   return process.env.FACTORY_KILL_SWITCH === '1';
@@ -132,6 +177,31 @@ async function initApiSentry(app: INestApplication): Promise<void> {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      forbidUnknownValues: true,
+      transform: true,
+      stopAtFirstError: false,
+    }),
+  );
+
+  const badRequestValidationFilter: ExceptionFilter = {
+    catch(exception: unknown, host: ArgumentsHost) {
+      if (!(exception instanceof BadRequestException)) {
+        throw exception;
+      }
+
+      const context = host.switchToHttp();
+      const response = context.getResponse<Response>();
+
+      response.status(400).json(buildValidationErrorBody(exception));
+    },
+  };
+
+  app.useGlobalFilters(badRequestValidationFilter);
 
   await initApiSentry(app);
 
