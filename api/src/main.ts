@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as Sentry from '@sentry/node';
 import {
   BadRequestException,
   ValidationPipe,
@@ -116,24 +117,20 @@ function isSentryClient(value: unknown): value is SentryClient {
 }
 
 async function loadOptionalSentryClient(): Promise<SentryClient | null> {
-  try {
-    const sentryModuleName = '@sentry/node';
-    const loaded: unknown = await import(sentryModuleName);
+  if (isSentryClient(Sentry)) {
+    return Sentry;
+  }
 
+  try {
+    const loaded: unknown = await import('@sentry/node');
     if (typeof loaded !== 'object' || loaded === null) {
       return null;
     }
-
-    const maybeModule = loaded as { default?: unknown } & Record<
-      string,
-      unknown
-    >;
+    const maybeModule = loaded as { default?: unknown } & Record<string, unknown>;
     const candidate = maybeModule.default ?? maybeModule;
-
     if (!isSentryClient(candidate)) {
       return null;
     }
-
     return candidate;
   } catch {
     return null;
@@ -157,7 +154,7 @@ async function initApiSentry(app: INestApplication): Promise<void> {
 
   sentry.init({
     dsn,
-    tracesSampleRate: Number(process.env.SENTRY_TRACES_SAMPLE_RATE || 0),
+    tracesSampleRate: 1.0,
   });
 
   process.on('unhandledRejection', (reason: unknown) => {
@@ -206,7 +203,16 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   applyGlobalValidationBoundary(app);
 
+  const expressApp = app.getHttpAdapter().getInstance();
+  expressApp.get('/debug-sentry', function (_req: Request, _res: Response) {
+    throw new Error('Sentry test error');
+  });
+
   await initApiSentry(app);
+
+  if (process.env.SENTRY_DSN) {
+    Sentry.setupExpressErrorHandler(expressApp);
+  }
 
   // Security: Add basic security headers via middleware
   app.use((req: Request, res: Response, next: NextFunction) => {
