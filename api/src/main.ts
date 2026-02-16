@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as Sentry from '@sentry/node';
+import helmet from 'helmet';
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import {
@@ -13,10 +14,12 @@ import {
 import type {
   ErrorRequestHandler,
   Express,
+  RequestHandler,
   NextFunction,
   Request,
   Response,
 } from 'express';
+import { json, urlencoded } from 'express';
 import type { ArgumentsHost } from '@nestjs/common';
 
 type SentryClient = {
@@ -285,12 +288,171 @@ function resolveSentryRelease(): string | undefined {
   return undefined;
 }
 
+function parsePositiveInteger(
+  value: string | undefined,
+  fallback: number,
+): number {
+  const parsed = Number.parseInt((value || '').trim(), 10);
+  if (Number.isNaN(parsed) || parsed <= 0) {
+    return fallback;
+  }
+  return parsed;
+}
+
+function validateEnvironmentOrThrow(): string {
+  const normalized = (process.env.NODE_ENV || 'development')
+    .trim()
+    .toLowerCase();
+  const allowed = new Set(['development', 'test', 'production']);
+
+  if (!allowed.has(normalized)) {
+    throw new Error(`Invalid NODE_ENV: ${normalized}`);
+  }
+
+  process.env.NODE_ENV = normalized;
+
+  if (
+    normalized === 'production' &&
+    [process.env.DATABASE_URL, process.env.DATABASE_PUBLIC_URL].every((value) =>
+      [undefined, ''].includes((value || '').trim()),
+    )
+  ) {
+    throw new Error(
+      'Production requires DATABASE_URL or DATABASE_PUBLIC_URL to be configured.',
+    );
+  }
+
+  return normalized;
+}
+
+function resolveAllowedOrigins(nodeEnvironment: string): Set<string> {
+  const configured = (process.env.CORS_ORIGINS || '')
+    .split(',')
+    .map((value) => value.trim())
+    .filter((value) => value.length > 0);
+
+  if (configured.length > 0) {
+    return new Set(configured);
+  }
+
+  const defaults = new Set<string>([
+    'https://factory-production-web.netlify.app',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+  ]);
+
+  const webUrl = (process.env.WEB_URL || '').trim();
+  if (webUrl) {
+    defaults.add(webUrl);
+  }
+
+  if (nodeEnvironment !== 'production') {
+    defaults.add('http://localhost:5173');
+    defaults.add('http://127.0.0.1:5173');
+  }
+
+  return defaults;
+}
+
+function createRateLimitMiddleware(): RequestHandler {
+  const windowMs = parsePositiveInteger(
+    process.env.RATE_LIMIT_WINDOW_MS,
+    60000,
+  );
+  const defaultMax = parsePositiveInteger(process.env.RATE_LIMIT_MAX, 120);
+  const healthMax = parsePositiveInteger(
+    process.env.RATE_LIMIT_HEALTH_MAX,
+    defaultMax * 2,
+  );
+
+  const buckets = new Map<string, { count: number; resetAt: number }>();
+
+  return (req: Request, res: Response, next: NextFunction) => {
+    const now = Date.now();
+    const route = normalizePath(req.path || req.url || '/');
+    const routeKey = route === '/db/health' ? 'health' : 'default';
+    const max = routeKey === 'health' ? healthMax : defaultMax;
+    const client = (req.ip || req.socket.remoteAddress || 'unknown').trim();
+    const key = `${client}:${routeKey}`;
+
+    const existing = buckets.get(key);
+    const bucket =
+      !existing || now >= existing.resetAt
+        ? { count: 0, resetAt: now + windowMs }
+        : existing;
+
+    bucket.count += 1;
+    buckets.set(key, bucket);
+
+    res.setHeader('X-RateLimit-Limit', String(max));
+    res.setHeader(
+      'X-RateLimit-Remaining',
+      String(Math.max(max - bucket.count, 0)),
+    );
+    res.setHeader(
+      'X-RateLimit-Reset',
+      String(Math.ceil(bucket.resetAt / 1000)),
+    );
+
+    if (bucket.count > max) {
+      res.status(429).json({
+        ok: false,
+        error: 'TOO_MANY_REQUESTS',
+      });
+      return;
+    }
+
+    if (buckets.size > 5000) {
+      for (const [bucketKey, value] of buckets) {
+        if (now >= value.resetAt) {
+          buckets.delete(bucketKey);
+        }
+      }
+    }
+
+    next();
+  };
+}
+
 async function bootstrap() {
+  const nodeEnvironment = validateEnvironmentOrThrow();
   const app = await NestFactory.create(AppModule);
   applyGlobalValidationBoundary(app);
 
+  const bodyLimit = (process.env.BODY_LIMIT || '1mb').trim() || '1mb';
+  const allowedOrigins = resolveAllowedOrigins(nodeEnvironment);
+
+  app.use(helmet());
+  app.use(json({ limit: bodyLimit }));
+  app.use(urlencoded({ extended: true, limit: bodyLimit }));
+  app.enableCors({
+    origin: Array.from(allowedOrigins),
+  });
+
+  app.use(createRateLimitMiddleware());
+
   const expressApp = app.getHttpAdapter().getInstance() as unknown as Express;
-  expressApp.get('/debug-sentry', function () {
+  expressApp.get('/debug-sentry', function (req: Request, res: Response) {
+    if (nodeEnvironment === 'production') {
+      const debugToken = (process.env.DEBUG_TOKEN || '').trim();
+      if (!debugToken) {
+        res.status(404).json({ ok: false, error: 'NOT_FOUND' });
+        return;
+      }
+
+      const headerValue = req.headers['x-debug-token'];
+      const providedToken =
+        typeof headerValue === 'string'
+          ? headerValue.trim()
+          : Array.isArray(headerValue)
+            ? (headerValue[0] || '').trim()
+            : '';
+      if (providedToken !== debugToken) {
+        res.status(403).json({ ok: false, error: 'FORBIDDEN' });
+        return;
+      }
+    }
+
     throw new Error('Sentry test error');
   });
 
