@@ -175,6 +175,8 @@ async function initApiSentry(app: INestApplication): Promise<void> {
   });
 
   sentry.setTag?.('service', 'api');
+  sentry.setTag?.('runtime', process.version);
+  sentry.setTag?.('platform', 'railway');
 
   process.on('unhandledRejection', (reason: unknown) => {
     if (reason instanceof Error) {
@@ -216,7 +218,7 @@ async function initApiSentry(app: INestApplication): Promise<void> {
   app.use(sentryErrorHandler);
 
   console.log(
-    `[OK] API Sentry monitoring enabled (environment=${sentryEnvironment}, release=${sentryRelease || 'unknown'}, service=api)`,
+    `[OK] API Sentry monitoring enabled (environment=${sentryEnvironment}, release=${sentryRelease || 'unknown'}, service=api, runtime=${process.version}, platform=railway)`,
   );
 }
 
@@ -232,19 +234,6 @@ function resolveSentryEnvironment(): string {
   }
 
   return 'development';
-}
-
-function readTextFileIfExists(filePath: string): string | null {
-  try {
-    if (!existsSync(filePath)) {
-      return null;
-    }
-
-    const value = readFileSync(filePath, 'utf8').trim();
-    return value.length > 0 ? value : null;
-  } catch {
-    return null;
-  }
 }
 
 function readPackageVersion(filePath: string): string | null {
@@ -276,18 +265,9 @@ function resolveSentryRelease(): string | undefined {
     return explicitRelease;
   }
 
-  const versionCandidates = [
-    resolve(process.cwd(), 'VERSION'),
-    resolve(process.cwd(), '..', 'VERSION'),
-    resolve(__dirname, '../../VERSION'),
-    resolve(__dirname, '../../../VERSION'),
-  ];
-
-  for (const candidatePath of versionCandidates) {
-    const value = readTextFileIfExists(candidatePath);
-    if (value) {
-      return value;
-    }
+  const npmRelease = process.env.npm_package_version?.trim();
+  if (npmRelease) {
+    return npmRelease;
   }
 
   const packageCandidates = [
