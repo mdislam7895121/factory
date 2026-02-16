@@ -7,9 +7,55 @@ on:
     branches: [main]
 
 jobs:
+  proof-runner-gate:
+    name: Proof Runner Gate
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+          cache-dependency-path: api/package-lock.json
+
+      - name: Prepare expected repo path
+        run: |
+          New-Item -ItemType Directory -Path 'C:\Users\vitor\Dev' -Force | Out-Null
+          if (-not (Test-Path 'C:\Users\vitor\Dev\factory')) {
+            New-Item -ItemType Junction -Path 'C:\Users\vitor\Dev\factory' -Target $env:GITHUB_WORKSPACE | Out-Null
+          }
+
+      - name: Install API dependencies
+        working-directory: C:\Users\vitor\Dev\factory
+        run: npm -C api ci
+
+      - name: Verify repo guard
+        working-directory: C:\Users\vitor\Dev\factory
+        run: pwsh -File .\scripts\ensure-repo.ps1
+
+      - name: Run proof runner
+        working-directory: C:\Users\vitor\Dev\factory
+        run: pwsh -File .\scripts\proof-runner.ps1
+
+      - name: Assert proof artifact exists
+        working-directory: C:\Users\vitor\Dev\factory
+        run: |
+          $latest = Get-ChildItem -Path .\proof\runs -Filter 'proof-*.txt' -File | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          if (-not $latest) {
+            Write-Error 'No proof transcript found under proof/runs.'
+            exit 1
+          }
+          Write-Host "PROOF_FILE=$($latest.FullName)"
+
   web:
     name: Web
     runs-on: ubuntu-latest
+    needs: [proof-runner-gate]
     defaults:
       run:
         working-directory: web
@@ -35,6 +81,7 @@ jobs:
   api:
     name: API
     runs-on: ubuntu-latest
+    needs: [proof-runner-gate]
     defaults:
       run:
         working-directory: api
@@ -90,6 +137,7 @@ jobs:
   factory:
     name: Factory Checks
     runs-on: ubuntu-latest
+    needs: [proof-runner-gate]
     steps:
       - uses: actions/checkout@v4
       
@@ -116,6 +164,7 @@ jobs:
   production-build:
     name: Production Build
     runs-on: ubuntu-latest
+    needs: [proof-runner-gate]
     steps:
       - uses: actions/checkout@v4
       
@@ -141,6 +190,7 @@ jobs:
   security:
     name: Security Hardening
     runs-on: ubuntu-latest
+    needs: [proof-runner-gate]
     steps:
       - uses: actions/checkout@v4
       
@@ -170,6 +220,7 @@ jobs:
   deploy-readiness:
     name: Deployment Readiness
     runs-on: ubuntu-latest
+    needs: [proof-runner-gate]
     steps:
       - uses: actions/checkout@v4
       
@@ -180,6 +231,7 @@ jobs:
   ops-monitoring:
     name: Ops Monitoring
     runs-on: ubuntu-latest
+    needs: [proof-runner-gate]
     steps:
       - uses: actions/checkout@v4
 
@@ -190,6 +242,7 @@ jobs:
   ops-incident:
     name: Ops Incident Drill
     runs-on: ubuntu-latest
+    needs: [proof-runner-gate]
     steps:
       - uses: actions/checkout@v4
 
@@ -199,6 +252,7 @@ jobs:
 
   ops-live-proof-localonly:
     runs-on: windows-latest
+    needs: [proof-runner-gate]
     steps:
       - uses: actions/checkout@v4
       - shell: pwsh
