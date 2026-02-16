@@ -60,6 +60,33 @@ function buildValidationErrorBody(
   };
 }
 
+export function applyGlobalValidationBoundary(app: INestApplication): void {
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      forbidUnknownValues: true,
+      transform: true,
+      stopAtFirstError: false,
+    }),
+  );
+
+  const badRequestValidationFilter: ExceptionFilter = {
+    catch(exception: unknown, host: ArgumentsHost) {
+      if (!(exception instanceof BadRequestException)) {
+        throw exception;
+      }
+
+      const context = host.switchToHttp();
+      const response = context.getResponse<Response>();
+
+      response.status(400).json(buildValidationErrorBody(exception));
+    },
+  };
+
+  app.useGlobalFilters(badRequestValidationFilter);
+}
+
 function isKillSwitchEnabled(): boolean {
   return process.env.FACTORY_KILL_SWITCH === '1';
 }
@@ -177,31 +204,7 @@ async function initApiSentry(app: INestApplication): Promise<void> {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      forbidUnknownValues: true,
-      transform: true,
-      stopAtFirstError: false,
-    }),
-  );
-
-  const badRequestValidationFilter: ExceptionFilter = {
-    catch(exception: unknown, host: ArgumentsHost) {
-      if (!(exception instanceof BadRequestException)) {
-        throw exception;
-      }
-
-      const context = host.switchToHttp();
-      const response = context.getResponse<Response>();
-
-      response.status(400).json(buildValidationErrorBody(exception));
-    },
-  };
-
-  app.useGlobalFilters(badRequestValidationFilter);
+  applyGlobalValidationBoundary(app);
 
   await initApiSentry(app);
 
@@ -239,4 +242,7 @@ async function bootstrap() {
   await app.listen(port, '0.0.0.0');
   console.log(`API listening on http://0.0.0.0:${port}`);
 }
-void bootstrap();
+
+if (require.main === module) {
+  void bootstrap();
+}
