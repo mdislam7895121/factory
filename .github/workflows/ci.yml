@@ -26,9 +26,12 @@ jobs:
       - name: Prepare expected repo path
         run: |
           New-Item -ItemType Directory -Path 'C:\Users\vitor\Dev' -Force | Out-Null
-          if (-not (Test-Path 'C:\Users\vitor\Dev\factory')) {
-            New-Item -ItemType Junction -Path 'C:\Users\vitor\Dev\factory' -Target $env:GITHUB_WORKSPACE | Out-Null
+          if (Test-Path 'C:\Users\vitor\Dev\factory') {
+            Remove-Item -Path 'C:\Users\vitor\Dev\factory' -Recurse -Force
           }
+          git clone --no-hardlinks --depth 1 "$env:GITHUB_WORKSPACE" 'C:\Users\vitor\Dev\factory'
+          Set-Location 'C:\Users\vitor\Dev\factory'
+          git checkout "$env:GITHUB_SHA"
 
       - name: Install API dependencies
         working-directory: C:\Users\vitor\Dev\factory
