@@ -1,0 +1,39 @@
+name: Uptime Prod
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
+
+jobs:
+  uptime-check:
+    name: uptime-check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check production API endpoints
+        run: |
+          set -euo pipefail
+
+          check_endpoint() {
+            local endpoint="$1"
+            local expected_status="$2"
+
+            status_code=$(curl -s -o response.txt -w "%{http_code}" "$endpoint")
+            body_snippet=$(head -c 200 response.txt | tr '\n' ' ')
+
+            echo "Endpoint: $endpoint"
+            echo "Status: $status_code"
+            echo "Body (first 200 chars): $body_snippet"
+
+            if [ "$status_code" != "$expected_status" ]; then
+              echo "Expected HTTP $expected_status but got $status_code"
+              exit 1
+            fi
+          }
+
+          check_endpoint "https://factory-production-production.up.railway.app/db/health" "200"
+          check_endpoint "https://factory-production-production.up.railway.app/" "200"
+          check_endpoint "https://factory-production-production.up.railway.app/debug-sentry" "500"
