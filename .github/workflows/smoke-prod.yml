@@ -39,3 +39,10 @@ jobs:
             echo "Expected /debug-sentry without header status 403 but got $debug_no_header_status"
             exit 1
           fi
+
+      - name: Print runbook reference
+        if: always()
+        run: |
+          echo "RUNBOOK: docs/ops/RUNBOOK.md"
+          echo "If this workflow failed, see Alert Triage Map section."
+          echo "Check docs/ops/ALERTS_ESCALATION.md for severity classification."

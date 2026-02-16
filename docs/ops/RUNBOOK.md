@@ -1,3 +1,123 @@
+# Alert Triage Map
+
+## uptime-prod-failing
+
+1) What it means:
+- `Uptime Prod` detected endpoint status drift in production (`/db/health`, `/`, or `/debug-sentry`).
+
+2) Immediate verification commands (PowerShell):
+
+```powershell
+$base="https://factory-production-production.up.railway.app"
+Invoke-WebRequest "$base/db/health" -UseBasicParsing
+Invoke-WebRequest "$base/" -UseBasicParsing
+try { Invoke-WebRequest "$base/debug-sentry" -UseBasicParsing } catch { $_.Exception.Response.StatusCode.value__ }
+railway deployment list -s factory-production -e production --limit 5
+gh run list --workflow "Uptime Prod" --limit 3
+```
+
+3) If last deploy caused issue:
+
+```powershell
+git log -n 3 --oneline
+git revert <sha> --no-edit
+git push origin main
+```
+
+## smoke-prod-failing
+
+1) What it means:
+- `Smoke Prod` failed on `SMOKE_DB_HEALTH`, `SMOKE_ROOT`, or `SMOKE_DEBUG_NOHEADER` checks.
+
+2) Immediate verification commands (PowerShell):
+
+```powershell
+$base="https://factory-production-production.up.railway.app"
+Invoke-WebRequest "$base/db/health" -UseBasicParsing
+Invoke-WebRequest "$base/" -UseBasicParsing
+try { Invoke-WebRequest "$base/debug-sentry" -UseBasicParsing } catch { $_.Exception.Response.StatusCode.value__ }
+gh run list --workflow "Smoke Prod" --limit 3
+railway deployment list -s factory-production -e production --limit 5
+```
+
+3) If last deploy caused issue:
+
+```powershell
+git log -n 3 --oneline
+git revert <sha> --no-edit
+git push origin main
+```
+
+## ci-failing
+
+1) What it means:
+- CI build/lint/test/proof checks failed; production may still be healthy but release gate is blocked.
+
+2) Immediate verification commands (PowerShell):
+
+```powershell
+gh run list --workflow CI --limit 3
+$base="https://factory-production-production.up.railway.app"
+Invoke-WebRequest "$base/db/health" -UseBasicParsing
+railway deployment list -s factory-production -e production --limit 5
+```
+
+3) If last deploy caused issue:
+
+```powershell
+git log -n 3 --oneline
+git revert <sha> --no-edit
+git push origin main
+```
+
+## db-health-not-200
+
+1) What it means:
+- Production database health path is degraded or inaccessible.
+
+2) Immediate verification commands (PowerShell):
+
+```powershell
+$base="https://factory-production-production.up.railway.app"
+Invoke-WebRequest "$base/db/health" -UseBasicParsing
+railway deployment list -s factory-production -e production --limit 5
+gh run list --workflow "Uptime Prod" --limit 3
+gh run list --workflow "Smoke Prod" --limit 3
+```
+
+3) If last deploy caused issue:
+
+```powershell
+git log -n 3 --oneline
+git revert <sha> --no-edit
+git push origin main
+```
+
+## debug-sentry-unexpected
+
+1) What it means:
+- `/debug-sentry` behavior changed unexpectedly (for example no-header request is not guarded as expected).
+
+2) Immediate verification commands (PowerShell):
+
+```powershell
+$base="https://factory-production-production.up.railway.app"
+try { Invoke-WebRequest "$base/debug-sentry" -UseBasicParsing } catch { $_.Exception.Response.StatusCode.value__ }
+gh run list --workflow "Uptime Prod" --limit 3
+gh run list --workflow "Smoke Prod" --limit 3
+gh run list --workflow CI --limit 3
+```
+
+3) If last deploy caused issue:
+
+```powershell
+git log -n 3 --oneline
+git revert <sha> --no-edit
+git push origin main
+```
+
+---
+
 # Factory Production Incident Runbook
 
 ## 1. Severity Classification

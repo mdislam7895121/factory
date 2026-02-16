@@ -38,6 +38,13 @@ jobs:
           check_endpoint "https://factory-production-production.up.railway.app/" "200"
           check_endpoint "https://factory-production-production.up.railway.app/debug-sentry" "500"
 
+      - name: Print runbook reference
+        if: always()
+        run: |
+          echo "RUNBOOK: docs/ops/RUNBOOK.md"
+          echo "If this workflow failed, see Alert Triage Map section."
+          echo "Check docs/ops/ALERTS_ESCALATION.md for severity classification."
+
   notify-on-failure:
     name: notify-on-failure
     runs-on: ubuntu-latest
