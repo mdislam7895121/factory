@@ -2,6 +2,8 @@ import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as Sentry from '@sentry/node';
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import {
   BadRequestException,
   ValidationPipe,
@@ -18,9 +20,15 @@ import type {
 import type { ArgumentsHost } from '@nestjs/common';
 
 type SentryClient = {
-  init: (options: { dsn: string; tracesSampleRate: number }) => void;
+  init: (options: {
+    dsn: string;
+    tracesSampleRate: number;
+    environment?: string;
+    release?: string;
+  }) => void;
   captureException: (error: Error) => void;
   captureMessage: (message: string, level: 'error') => void;
+  setTag?: (key: string, value: string) => void;
 };
 
 type ValidationErrorResponse = {
@@ -156,10 +164,17 @@ async function initApiSentry(app: INestApplication): Promise<void> {
     return;
   }
 
+  const sentryEnvironment = resolveSentryEnvironment();
+  const sentryRelease = resolveSentryRelease();
+
   sentry.init({
     dsn,
     tracesSampleRate: 1.0,
+    environment: sentryEnvironment,
+    release: sentryRelease,
   });
+
+  sentry.setTag?.('service', 'api');
 
   process.on('unhandledRejection', (reason: unknown) => {
     if (reason instanceof Error) {
@@ -200,7 +215,94 @@ async function initApiSentry(app: INestApplication): Promise<void> {
   };
   app.use(sentryErrorHandler);
 
-  console.log('[OK] API Sentry monitoring enabled');
+  console.log(
+    `[OK] API Sentry monitoring enabled (environment=${sentryEnvironment}, release=${sentryRelease || 'unknown'}, service=api)`,
+  );
+}
+
+function resolveSentryEnvironment(): string {
+  const explicitEnvironment = process.env.SENTRY_ENVIRONMENT?.trim();
+  if (explicitEnvironment) {
+    return explicitEnvironment;
+  }
+
+  const nodeEnvironment = process.env.NODE_ENV?.trim();
+  if (nodeEnvironment) {
+    return nodeEnvironment;
+  }
+
+  return 'development';
+}
+
+function readTextFileIfExists(filePath: string): string | null {
+  try {
+    if (!existsSync(filePath)) {
+      return null;
+    }
+
+    const value = readFileSync(filePath, 'utf8').trim();
+    return value.length > 0 ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function readPackageVersion(filePath: string): string | null {
+  try {
+    if (!existsSync(filePath)) {
+      return null;
+    }
+
+    const parsed: unknown = JSON.parse(readFileSync(filePath, 'utf8'));
+    if (typeof parsed !== 'object' || parsed === null) {
+      return null;
+    }
+
+    const maybePackage = parsed as { version?: unknown };
+    if (typeof maybePackage.version !== 'string') {
+      return null;
+    }
+
+    const value = maybePackage.version.trim();
+    return value.length > 0 ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function resolveSentryRelease(): string | undefined {
+  const explicitRelease = process.env.SENTRY_RELEASE?.trim();
+  if (explicitRelease) {
+    return explicitRelease;
+  }
+
+  const versionCandidates = [
+    resolve(process.cwd(), 'VERSION'),
+    resolve(process.cwd(), '..', 'VERSION'),
+    resolve(__dirname, '../../VERSION'),
+    resolve(__dirname, '../../../VERSION'),
+  ];
+
+  for (const candidatePath of versionCandidates) {
+    const value = readTextFileIfExists(candidatePath);
+    if (value) {
+      return value;
+    }
+  }
+
+  const packageCandidates = [
+    resolve(process.cwd(), 'package.json'),
+    resolve(__dirname, '../../package.json'),
+  ];
+
+  for (const candidatePath of packageCandidates) {
+    const value = readPackageVersion(candidatePath);
+    if (value) {
+      return value;
+    }
+  }
+
+  return undefined;
 }
 
 async function bootstrap() {
