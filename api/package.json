@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "prisma:generate": "prisma generate",
-    "build": "npm run prisma:generate && nest build",
+    "build": "npm run prisma:generate && nest build && node scripts/copy-generated-prisma.cjs",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "npm run prisma:generate && nest start --watch",
