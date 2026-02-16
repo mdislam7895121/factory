@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import type {
   ErrorRequestHandler,
+  Express,
   NextFunction,
   Request,
   Response,
@@ -126,7 +127,10 @@ async function loadOptionalSentryClient(): Promise<SentryClient | null> {
     if (typeof loaded !== 'object' || loaded === null) {
       return null;
     }
-    const maybeModule = loaded as { default?: unknown } & Record<string, unknown>;
+    const maybeModule = loaded as { default?: unknown } & Record<
+      string,
+      unknown
+    >;
     const candidate = maybeModule.default ?? maybeModule;
     if (!isSentryClient(candidate)) {
       return null;
@@ -203,15 +207,19 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   applyGlobalValidationBoundary(app);
 
-  const expressApp = app.getHttpAdapter().getInstance();
-  expressApp.get('/debug-sentry', function (_req: Request, _res: Response) {
+  const expressApp = app.getHttpAdapter().getInstance() as unknown as Express;
+  expressApp.get('/debug-sentry', function () {
     throw new Error('Sentry test error');
   });
 
   await initApiSentry(app);
 
   if (process.env.SENTRY_DSN) {
-    Sentry.setupExpressErrorHandler(expressApp);
+    Sentry.setupExpressErrorHandler(
+      expressApp as unknown as {
+        use: (...args: unknown[]) => unknown;
+      },
+    );
   }
 
   // Security: Add basic security headers via middleware
