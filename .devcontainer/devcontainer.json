@@ -1,0 +1,23 @@
+{
+  "name": "Factory Dev Sandbox",
+  "dockerComposeFile": [
+    "../docker/docker-compose.dev.yml"
+  ],
+  "service": "api",
+  "workspaceFolder": "/workspaces/factory",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/factory,type=bind,consistency=cached",
+  "postCreateCommand": "bash -lc \"cd /workspaces/factory/web && (npm ci || npm install) && cd /workspaces/factory/api && (npm ci || npm install)\"",
+  "forwardPorts": [3000, 4000, 5432],
+  "remoteUser": "node",
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker",
+        "github.copilot"
+      ]
+    }
+  }
+}

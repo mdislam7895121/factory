@@ -1,0 +1,78 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: factory-dev-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: factory_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d factory_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - factory-dev
+
+  api:
+    image: node:20-bookworm-slim
+    container_name: factory-dev-api
+    working_dir: /workspace/api
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/factory_dev
+    volumes:
+      - ../api:/workspace/api
+    command: sh -lc "npm ci || npm install; npm run start:dev"
+    ports:
+      - "4000:4000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:4000/db/health').then(r=>process.exit(r.status===200?0:1)).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    networks:
+      - factory-dev
+
+  web:
+    image: node:20-bookworm-slim
+    container_name: factory-dev-web
+    working_dir: /workspace/web
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      NEXT_PUBLIC_API_BASE_URL: http://api:4000
+    volumes:
+      - ../web:/workspace/web
+    command: sh -lc "npm ci || npm install; npm run dev"
+    ports:
+      - "3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:3000').then(r=>process.exit(r.status<500?0:1)).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    networks:
+      - factory-dev
+
+volumes:
+  pgdata:
+
+networks:
+  factory-dev:
+    driver: bridge
