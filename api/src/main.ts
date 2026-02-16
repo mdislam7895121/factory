@@ -426,7 +426,26 @@ async function bootstrap() {
   app.use(json({ limit: bodyLimit }));
   app.use(urlencoded({ extended: true, limit: bodyLimit }));
   app.enableCors({
-    origin: Array.from(allowedOrigins),
+    origin: (
+      origin: string | undefined,
+      callback: (error: Error | null, allow?: boolean) => void,
+    ) => {
+      if (!origin) {
+        callback(null, false);
+        return;
+      }
+
+      const normalized = String(origin).trim();
+      if (allowedOrigins.has(normalized)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(null, false);
+    },
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    optionsSuccessStatus: 204,
   });
 
   app.use(createRateLimitMiddleware());
