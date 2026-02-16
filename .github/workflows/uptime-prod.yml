@@ -37,3 +37,19 @@ jobs:
           check_endpoint "https://factory-production-production.up.railway.app/db/health" "200"
           check_endpoint "https://factory-production-production.up.railway.app/" "200"
           check_endpoint "https://factory-production-production.up.railway.app/debug-sentry" "500"
+
+      - name: Annotate uptime failure
+        if: ${{ failure() }}
+        run: |
+          echo "::error::Uptime check failed. Review endpoint status/body output above."
+
+  notify-on-failure:
+    name: notify-on-failure
+    runs-on: ubuntu-latest
+    needs: uptime-check
+    if: ${{ failure() }}
+    steps:
+      - name: Force failure and annotate
+        run: |
+          echo "::error::Uptime Prod workflow failed. Check endpoint status above."
+          exit 1
