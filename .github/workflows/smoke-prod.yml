@@ -1,0 +1,41 @@
+name: Smoke Prod
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  smoke-prod:
+    name: Smoke Prod Gate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Run production smoke checks
+        run: |
+          set -euo pipefail
+
+          BASE="https://factory-production-production.up.railway.app"
+
+          db_health_status=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/db/health")
+          echo "SMOKE_DB_HEALTH=$db_health_status"
+          if [ "$db_health_status" != "200" ]; then
+            echo "Expected /db/health status 200 but got $db_health_status"
+            exit 1
+          fi
+
+          root_status=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/")
+          echo "SMOKE_ROOT=$root_status"
+          if [ "$root_status" != "200" ]; then
+            echo "Expected / status 200 but got $root_status"
+            exit 1
+          fi
+
+          debug_no_header_status=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/debug-sentry")
+          echo "SMOKE_DEBUG_NOHEADER=$debug_no_header_status"
+          if [ "$debug_no_header_status" != "403" ]; then
+            echo "Expected /debug-sentry without header status 403 but got $debug_no_header_status"
+            exit 1
+          fi
