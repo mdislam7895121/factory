@@ -13,6 +13,7 @@ function Normalize-PathForCompare {
 }
 
 $currentDirectory = (Get-Location).Path
+$candidateRepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 
 $gitCommand = Get-Command git -ErrorAction SilentlyContinue
 if (-not $gitCommand) {
@@ -22,21 +23,25 @@ if (-not $gitCommand) {
 
 $detectedRepoRoot = ''
 try {
-    $detectedRepoRoot = (git rev-parse --show-toplevel 2>$null)
+    $detectedRepoRoot = (git -C $candidateRepoRoot rev-parse --show-toplevel 2>$null)
     if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($detectedRepoRoot)) {
         throw 'git rev-parse failed'
     }
 }
 catch {
-    Write-Host "ERROR: Unable to determine git repository root via 'git rev-parse --show-toplevel'."
-    Write-Host 'Current directory:' $currentDirectory
+    Write-Host "ERROR: Unable to determine git repository root via 'git -C <candidateRoot> rev-parse --show-toplevel'."
+    Write-Host 'Candidate repo root:' $candidateRepoRoot
     exit 1
 }
 
 $normalizedExpected = Normalize-PathForCompare -Path $expectedRepoRoot
 $normalizedDetected = Normalize-PathForCompare -Path $detectedRepoRoot
+$normalizedCurrent = Normalize-PathForCompare -Path $currentDirectory
 
-if (-not [string]::Equals($normalizedDetected, $normalizedExpected, [System.StringComparison]::OrdinalIgnoreCase)) {
+if (
+    (-not [string]::Equals($normalizedDetected, $normalizedExpected, [System.StringComparison]::OrdinalIgnoreCase)) -or
+    (-not [string]::Equals($normalizedCurrent, $normalizedExpected, [System.StringComparison]::OrdinalIgnoreCase))
+) {
     Write-Host 'ERROR: Repository root mismatch.'
     Write-Host 'Current directory:' $currentDirectory
     Write-Host 'Detected repo root:' $detectedRepoRoot
