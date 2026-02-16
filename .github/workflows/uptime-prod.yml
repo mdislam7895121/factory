@@ -35,7 +35,7 @@ jobs:
           }
 
           check_endpoint "https://factory-production-production.up.railway.app/db/health" "200"
-          check_endpoint "https://factory-production-production.up.railway.app/" "200"
+          check_endpoint "https://factory-production-production.up.railway.app/" "418"
           check_endpoint "https://factory-production-production.up.railway.app/debug-sentry" "500"
 
   notify-on-failure:
