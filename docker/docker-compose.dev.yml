@@ -1,7 +1,8 @@
+name: factory-dev
+
 services:
   db:
     image: postgres:16-alpine
-    container_name: factory-dev-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -19,41 +20,51 @@ services:
       - factory-dev
 
   api:
-    image: node:20-bookworm-slim
-    container_name: factory-dev-api
+    build:
+      context: ../api
+      dockerfile: Dockerfile.dev
     working_dir: /workspace/api
     environment:
       NODE_ENV: development
-      PORT: 4000
+      PORT: "4000"
       DATABASE_URL: postgresql://postgres:postgres@db:5432/factory_dev
     volumes:
-      - ../api:/workspace/api
-    command: sh -lc "npm ci || npm install; npm run start:dev"
+      - type: bind
+        source: ../api
+        target: /workspace/api
+      - api_node_modules:/workspace/api/node_modules
+    command: >
+      sh -lc "npm install && npx prisma generate && npm run build && npx prisma db push && node dist/src/main.js"
     ports:
       - "4000:4000"
     depends_on:
       db:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:4000/db/health').then(r=>process.exit(r.status===200?0:1)).catch(()=>process.exit(1))\""]
+      test: ["CMD-SHELL", "curl -fsS http://localhost:4000/db/health >/dev/null || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 12
-      start_period: 20s
+      retries: 18
+      start_period: 120s
     networks:
       - factory-dev
 
   web:
-    image: node:20-bookworm-slim
-    container_name: factory-dev-web
+    build:
+      context: ../web
+      dockerfile: Dockerfile.dev
     working_dir: /workspace/web
     environment:
       NODE_ENV: development
-      PORT: 3000
+      PORT: "3000"
       NEXT_PUBLIC_API_BASE_URL: http://api:4000
     volumes:
-      - ../web:/workspace/web
-    command: sh -lc "npm ci || npm install; npm run dev"
+      - type: bind
+        source: ../web
+        target: /workspace/web
+      - web_node_modules:/workspace/web/node_modules
+    command: >
+      sh -lc "npm install && npm run dev"
     ports:
       - "3000:3000"
     depends_on:
@@ -62,7 +73,7 @@ services:
       db:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:3000').then(r=>process.exit(r.status<500?0:1)).catch(()=>process.exit(1))\""]
+      test: ["CMD-SHELL", "curl -fsS http://localhost:3000 >/dev/null || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 12
@@ -72,6 +83,8 @@ services:
 
 volumes:
   pgdata:
+  api_node_modules:
+  web_node_modules:
 
 networks:
   factory-dev:
