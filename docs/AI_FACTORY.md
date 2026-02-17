@@ -73,6 +73,8 @@ docker compose -f docker/docker-compose.dev.yml down -v
 docker compose -f docker/docker-compose.dev.yml up -d --build
 ```
 
+If preview returns `502` or `404` right after start, wait `10-30` seconds and use the dashboard `Retry Preview Check` button before concluding failure.
+
 ## One command proof pack
 
 ```powershell
