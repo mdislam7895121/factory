@@ -1,0 +1,54 @@
+name: CI/Proof Runner Gate (pull_request)
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  proof-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: npm
+          cache-dependency-path: |
+            api/package-lock.json
+            web/package-lock.json
+
+      - name: Install API deps
+        run: npm -C api ci
+
+      - name: Install Web deps
+        run: npm -C web ci
+
+      - name: Lint/Build/Test API (if present)
+        run: |
+          npm -C api run lint --if-present
+          npm -C api run build --if-present
+          npm -C api test --if-present
+
+      - name: Lint/Build/Test Web (if present)
+        run: |
+          npm -C web run lint --if-present
+          npm -C web run build --if-present
+          npm -C web test --if-present
+
+      - name: Run proof-l2 (compose + smoke + report)
+        run: pwsh -File scripts/proof-l2.ps1 -DownWithVolumes -Ci
+
+      - name: Upload proof artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: proof-l2-${{ github.run_id }}
+          path: proof/*
+          if-no-files-found: warn

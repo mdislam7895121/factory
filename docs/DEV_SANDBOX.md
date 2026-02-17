@@ -66,3 +66,21 @@ git clean -f docker/docker-compose.dev.yml .devcontainer/devcontainer.json .devc
 - If API cannot connect to DB:
   - Confirm db service is healthy in `docker compose ... ps`.
   - Confirm DATABASE_URL points to host `db`.
+
+## AI Factory Shortcuts
+
+Use the unified entrypoint for common actions:
+
+```powershell
+pwsh -File scripts/factory.ps1 dev:up
+pwsh -File scripts/factory.ps1 dev:status
+pwsh -File scripts/factory.ps1 dev:logs
+pwsh -File scripts/factory.ps1 dev:smoke
+pwsh -File scripts/factory.ps1 proof:l2
+pwsh -File scripts/factory.ps1 dev:down
+```
+
+Preview URLs:
+
+- Web: http://localhost:3000
+- API health: http://localhost:4000/db/health

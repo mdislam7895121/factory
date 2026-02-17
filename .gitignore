@@ -52,3 +52,5 @@ coverage/
 
 # Proof run artifacts (untracked, timestamped)
 proof/runs/
+proof/*/
+
