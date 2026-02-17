@@ -74,10 +74,10 @@ services:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:3000 >/dev/null || exit 1"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
-      retries: 12
-      start_period: 30s
+      retries: 30
+      start_period: 90s
     networks:
       - factory-dev
 
