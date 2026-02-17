@@ -14,6 +14,10 @@ type Project = {
   createdAt: string;
 };
 
+const PROJECTS_REFRESH_MS = 5000;
+const LOGS_REFRESH_MS = 2000;
+const MAX_LOG_LINES = 400;
+
 const orchestratorHttpBase =
   process.env.NEXT_PUBLIC_ORCHESTRATOR_BASE_URL ?? 'http://localhost:4100';
 const orchestratorWsBase =
@@ -34,12 +38,48 @@ export default function Home() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedId, setSelectedId] = useState<string>('');
   const [logs, setLogs] = useState<string>('');
+  const [logsError, setLogsError] = useState<string>('');
   const [name, setName] = useState<string>('My Project');
   const [loadingAction, setLoadingAction] = useState<'create' | 'start' | 'stop' | null>(null);
   const [webReady, setWebReady] = useState<boolean>(false);
   const [warmupMessage, setWarmupMessage] = useState<string>('Initializing dashboard...');
   const [error, setError] = useState<string>('');
+  const [previewHttpStatus, setPreviewHttpStatus] = useState<number | null>(null);
+  const [previewMessage, setPreviewMessage] = useState<string>('Preview not checked');
+  const [previewChecking, setPreviewChecking] = useState<boolean>(false);
   const wsRef = useRef<WebSocket | null>(null);
+
+  const appendLogs = (value: string) => {
+    setLogs((current) => {
+      const merged = `${current}${value}`;
+      const lines = merged.split('\n');
+      if (lines.length <= MAX_LOG_LINES) {
+        return merged;
+      }
+      return lines.slice(lines.length - MAX_LOG_LINES).join('\n');
+    });
+  };
+
+  const refreshProjectStatus = async (projectId: string) => {
+    const statusData = await api<{ ok: boolean; status: Project }>(`/v1/projects/${encodeURIComponent(projectId)}/status`);
+    setProjects((current) => current.map((project) => (
+      project.id === projectId ? statusData.status : project
+    )));
+  };
+
+  const refreshLogs = async (projectId: string) => {
+    try {
+      const response = await fetch(`${orchestratorHttpBase}/v1/projects/${encodeURIComponent(projectId)}/logs`);
+      if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+      const text = await response.text();
+      appendLogs(`${text}\n`);
+      setLogsError('');
+    } catch (err) {
+      setLogsError(`logs unavailable: ${String(err)}`);
+    }
+  };
 
   const selected = useMemo(
     () => projects.find((project) => project.id === selectedId) ?? null,
@@ -94,7 +134,7 @@ export default function Home() {
       refresh().catch((err) => {
         setError(`[refresh] ${String(err)}`);
       });
-    }, 5000);
+    }, PROJECTS_REFRESH_MS);
 
     return () => {
       mounted = false;
@@ -109,21 +149,61 @@ export default function Home() {
 
     wsRef.current?.close();
     setLogs('');
+    setLogsError('');
+    setPreviewHttpStatus(null);
+    setPreviewMessage('Preview not checked');
 
     const ws = new WebSocket(
       `${orchestratorWsBase}/v1/ws/projects/${encodeURIComponent(selectedId)}/logs`,
     );
 
     ws.onmessage = (event) => {
-      setLogs((current) => `${current}${event.data}`);
+      appendLogs(event.data);
+      setLogsError('');
     };
-    ws.onerror = () => {
-      setLogs((current) => `${current}\n[dashboard] log stream connection error\n`);
+    ws.onerror = (event) => {
+      const message = event instanceof Event ? 'log stream connection error' : String(event);
+      setLogsError(`logs unavailable: ${message}`);
+      appendLogs('\n[dashboard] log stream connection error\n');
     };
 
+    const pollInterval = setInterval(() => {
+      refreshLogs(selectedId).catch(() => {
+      });
+    }, LOGS_REFRESH_MS);
+
     wsRef.current = ws;
-    return () => ws.close();
+    return () => {
+      clearInterval(pollInterval);
+      ws.close();
+    };
   }, [selectedId]);
+
+  const checkPreview = async (project: Project) => {
+    if (!project.running) {
+      setPreviewHttpStatus(null);
+      setPreviewMessage('Project is stopped; start it to open preview');
+      return;
+    }
+
+    setPreviewChecking(true);
+    setPreviewMessage('Checking preview...');
+
+    try {
+      const response = await fetch(project.previewPath, { method: 'GET' });
+      setPreviewHttpStatus(response.status);
+      if (response.status === 200) {
+        setPreviewMessage('Preview ready');
+      } else {
+        setPreviewMessage(`Preview warming up (HTTP ${response.status})`);
+      }
+    } catch (err) {
+      setPreviewHttpStatus(null);
+      setPreviewMessage(`Preview check failed: ${String(err)}`);
+    } finally {
+      setPreviewChecking(false);
+    }
+  };
 
   const createProject = async () => {
     setLoadingAction('create');
@@ -151,6 +231,7 @@ export default function Home() {
       await api(`/v1/projects/${encodeURIComponent(selectedId)}/start`, {
         method: 'POST',
       });
+      await refreshProjectStatus(selectedId);
       await refresh();
     } catch (err) {
       setError(String(err));
@@ -169,6 +250,7 @@ export default function Home() {
       await api(`/v1/projects/${encodeURIComponent(selectedId)}/stop`, {
         method: 'POST',
       });
+      await refreshProjectStatus(selectedId);
       await refresh();
     } catch (err) {
       setError(String(err));
@@ -214,7 +296,10 @@ export default function Home() {
         <button onClick={stopProject} disabled={loadingAction !== null || !selectedId} style={{ padding: '8px 12px' }}>
           {loadingAction === 'stop' ? 'Stopping...' : 'Stop'}
         </button>
-        <button onClick={() => refresh().catch((err) => setError(String(err)))} style={{ padding: '8px 12px' }}>
+        <button
+          onClick={() => refresh().catch((err) => setError(String(err)))}
+          style={{ padding: '8px 12px' }}
+        >
           Refresh
         </button>
       </section>
@@ -263,9 +348,15 @@ export default function Home() {
                   <td style={{ padding: '6px 4px', borderBottom: '1px solid #f0f0f0' }}>{project.port}</td>
                   <td style={{ padding: '6px 4px', borderBottom: '1px solid #f0f0f0' }}>{new Date(project.createdAt).toLocaleString()}</td>
                   <td style={{ padding: '6px 4px', borderBottom: '1px solid #f0f0f0' }}>
-                    <a href={project.previewPath} target="_blank" rel="noreferrer" style={{ marginRight: '8px' }}>
-                      Open Preview
-                    </a>
+                    {project.running ? (
+                      <a href={project.previewPath} target="_blank" rel="noreferrer" style={{ marginRight: '8px' }}>
+                        Open Preview
+                      </a>
+                    ) : (
+                      <button disabled title="Project is stopped" style={{ marginRight: '8px' }}>
+                        Preview unavailable
+                      </button>
+                    )}
                     <button
                       onClick={(event) => {
                         event.stopPropagation();
@@ -288,9 +379,26 @@ export default function Home() {
               <div><strong>Port:</strong> {selected.port}</div>
               <div><strong>Created:</strong> {selectedCreatedAt}</div>
               <div>
-                <a href={selected.previewPath} target="_blank" rel="noreferrer">
-                  Open Preview
-                </a>
+                {selected.running ? (
+                  <a href={selected.previewPath} target="_blank" rel="noreferrer">
+                    Open Preview
+                  </a>
+                ) : (
+                  <span>Preview unavailable: project is stopped</span>
+                )}
+              </div>
+              <div style={{ marginTop: '8px' }}>
+                <button
+                  onClick={() => checkPreview(selected).catch((err) => setError(String(err)))}
+                  disabled={previewChecking}
+                  style={{ padding: '4px 8px' }}
+                >
+                  {previewChecking ? 'Checking preview...' : 'Retry Preview Check'}
+                </button>
+                <span style={{ marginLeft: '8px' }}>{previewMessage}</span>
+                {previewHttpStatus !== null ? (
+                  <span style={{ marginLeft: '8px' }}><strong>HTTP:</strong> {previewHttpStatus}</span>
+                ) : null}
               </div>
             </div>
           )}
@@ -298,6 +406,28 @@ export default function Home() {
 
         <div>
           <h2 style={{ marginTop: 0 }}>Live Logs</h2>
+          {logsError ? (
+            <div style={{ background: '#fff4db', border: '1px solid #f1d08a', padding: '8px', marginBottom: '8px' }}>
+              {logsError}
+            </div>
+          ) : null}
+          <div style={{ marginBottom: '8px', display: 'flex', gap: '8px' }}>
+            <button
+              onClick={() => {
+                if (!logs) {
+                  return;
+                }
+                navigator.clipboard.writeText(logs).catch((err) => setError(`copy logs failed: ${String(err)}`));
+              }}
+              disabled={!logs}
+              style={{ padding: '4px 8px' }}
+            >
+              Copy logs
+            </button>
+            <button onClick={() => setLogs('')} style={{ padding: '4px 8px' }}>
+              Clear view
+            </button>
+          </div>
           <pre
             style={{
               background: '#0f172a',
