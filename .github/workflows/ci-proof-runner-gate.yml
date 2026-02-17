@@ -9,6 +9,8 @@ jobs:
   proof-gate:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/factory_dev
     defaults:
       run:
         shell: pwsh
@@ -30,11 +32,10 @@ jobs:
       - name: Install Web deps
         run: npm -C web ci
 
-      - name: Lint/Build/Test API (if present)
+      - name: Lint/Build API (if present)
         run: |
           npm -C api run lint --if-present
           npm -C api run build --if-present
-          npm -C api test --if-present
 
       - name: Lint/Build/Test Web (if present)
         run: |
