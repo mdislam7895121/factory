@@ -1,0 +1,91 @@
+name: factory-dev
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: factory_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d factory_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - factory-dev
+
+  api:
+    build:
+      context: ../api
+      dockerfile: Dockerfile.dev
+    working_dir: /workspace/api
+    environment:
+      NODE_ENV: development
+      PORT: "4000"
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/factory_dev
+    volumes:
+      - type: bind
+        source: ../api
+        target: /workspace/api
+      - api_node_modules:/workspace/api/node_modules
+    command: >
+      sh -lc "npm install && npx prisma generate && npm run build && npx prisma db push && node dist/src/main.js"
+    ports:
+      - "4000:4000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:4000/db/health >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 120s
+    networks:
+      - factory-dev
+
+  web:
+    build:
+      context: ../web
+      dockerfile: Dockerfile.dev
+    working_dir: /workspace/web
+    environment:
+      NODE_ENV: development
+      PORT: "3000"
+      NEXT_PUBLIC_API_BASE_URL: http://api:4000
+    volumes:
+      - type: bind
+        source: ../web
+        target: /workspace/web
+      - web_node_modules:/workspace/web/node_modules
+    command: >
+      sh -lc "npm install && npm run dev"
+    ports:
+      - "3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:3000 >/dev/null || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 90s
+    networks:
+      - factory-dev
+
+volumes:
+  pgdata:
+  api_node_modules:
+  web_node_modules:
+
+networks:
+  factory-dev:
+    driver: bridge
