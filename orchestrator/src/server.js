@@ -5,6 +5,15 @@ import { spawn } from 'node:child_process';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
+import {
+  loadRegistry,
+  saveRegistry,
+  getAllProjects,
+  addProject,
+  updateProject,
+  getProjectById,
+  getUsedPorts,
+} from './registry.js';
 
 const require = createRequire(import.meta.url);
 const packageJson = require('../package.json');
@@ -18,7 +27,6 @@ const ROOT_DIR = path.resolve(process.cwd());
 const DATA_DIR = path.join(ROOT_DIR, 'data');
 const WORKSPACES_DIR = path.join(ROOT_DIR, 'workspaces');
 const TEMPLATES_DIR = path.join(ROOT_DIR, 'templates');
-const PROJECTS_FILE = path.join(DATA_DIR, 'projects.json');
 const CONTAINER_PREFIX = 'factory_proj_';
 
 app.use(express.json({ limit: '1mb' }));
@@ -37,21 +45,11 @@ async function ensureStateDirs() {
   await fs.mkdir(DATA_DIR, { recursive: true });
   await fs.mkdir(WORKSPACES_DIR, { recursive: true });
   await fs.mkdir(TEMPLATES_DIR, { recursive: true });
-  try {
-    await fs.access(PROJECTS_FILE);
-  } catch {
-    await fs.writeFile(PROJECTS_FILE, '[]', 'utf8');
-  }
 }
 
 async function readProjects() {
-  const raw = await fs.readFile(PROJECTS_FILE, 'utf8');
-  const parsed = JSON.parse(raw);
-  return Array.isArray(parsed) ? parsed : [];
-}
-
-async function writeProjects(projects) {
-  await fs.writeFile(PROJECTS_FILE, JSON.stringify(projects, null, 2), 'utf8');
+  const registry = await loadRegistry();
+  return getAllProjects(registry);
 }
 
 function runCommand(command, args, options = {}) {
@@ -86,12 +84,73 @@ function findProject(projects, id) {
   return projects.find((item) => item.id === id);
 }
 
-function pickPort(projects, start = 4300, end = 4399) {
+function parseHostPorts(text) {
+  const ports = new Set();
+  const value = String(text || '');
+  const matches = value.matchAll(/(?:0\.0\.0\.0|\[::\]|\*):(\d+)->/g);
+  for (const match of matches) {
+    const port = Number(match[1]);
+    if (Number.isFinite(port) && port > 0) {
+      ports.add(port);
+    }
+  }
+  return ports;
+}
+
+async function getDockerPublishedHostPorts() {
+  const all = new Set();
+
+  try {
+    const output = await runCommand('docker', ['ps', '--format', '{{.Ports}}']);
+    for (const line of output.split('\n')) {
+      for (const port of parseHostPorts(line)) {
+        all.add(port);
+      }
+    }
+
+    if (all.size > 0 || !output.trim()) {
+      return all;
+    }
+  } catch {
+  }
+
+  try {
+    const output = await runCommand('docker', ['ps', '--format', 'JSON']);
+    for (const line of output.split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        continue;
+      }
+      try {
+        const parsed = JSON.parse(trimmed);
+        for (const port of parseHostPorts(parsed?.Ports)) {
+          all.add(port);
+        }
+      } catch {
+        for (const port of parseHostPorts(trimmed)) {
+          all.add(port);
+        }
+      }
+    }
+  } catch {
+  }
+
+  return all;
+}
+
+async function pickPort(registry, start = 4300, end = 4399) {
   const used = new Set(
-    projects
-      .map((project) => Number(project.port))
+    getUsedPorts(registry)
+      .map((port) => Number(port))
       .filter((port) => Number.isFinite(port) && port >= start && port <= end),
   );
+
+  const publishedPorts = await getDockerPublishedHostPorts();
+  for (const port of publishedPorts) {
+    if (port >= start && port <= end) {
+      used.add(port);
+    }
+  }
 
   for (let port = start; port <= end; port++) {
     if (!used.has(port)) {
@@ -112,7 +171,7 @@ async function getContainerRunning(containerName) {
 
 async function collectStatus(project) {
   const running = await getContainerRunning(project.containerName);
-  let healthy = false;
+  let healthy = Boolean(project.healthy);
 
   if (running) {
     try {
@@ -121,6 +180,10 @@ async function collectStatus(project) {
     } catch {
       healthy = false;
     }
+  }
+
+  if (!running) {
+    healthy = false;
   }
 
   return {
@@ -134,6 +197,22 @@ async function collectStatus(project) {
     containerName: project.containerName,
     createdAt: project.createdAt,
   };
+}
+
+async function reconcileRegistryState() {
+  const registry = await loadRegistry();
+  const projects = getAllProjects(registry);
+
+  for (const project of projects) {
+    const status = await collectStatus(project);
+    updateProject(registry, project.id, {
+      running: status.running,
+      healthy: status.healthy,
+      previewPath: status.previewPath,
+    });
+  }
+
+  await saveRegistry(registry);
 }
 
 app.get('/health', (_req, res) => {
@@ -162,8 +241,11 @@ app.post('/v1/projects', async (req, res) => {
   const workspacePath = path.join(WORKSPACES_DIR, id);
   await fs.cp(templatePath, workspacePath, { recursive: true });
 
-  const projects = await readProjects();
-  const port = Number(req.body?.port) || pickPort(projects);
+  const registry = await loadRegistry();
+  const requestedPort = Number(req.body?.port);
+  const port = Number.isFinite(requestedPort) && requestedPort > 0
+    ? requestedPort
+    : await pickPort(registry);
   const project = {
     id,
     name,
@@ -172,17 +254,20 @@ app.post('/v1/projects', async (req, res) => {
     port,
     containerName: `${CONTAINER_PREFIX}${id}`,
     createdAt: new Date().toISOString(),
+    running: false,
+    healthy: false,
+    previewPath: `/p/${id}/`,
   };
 
-  projects.push(project);
-  await writeProjects(projects);
+  addProject(registry, project);
+  await saveRegistry(registry);
 
   res.status(201).json({ ok: true, project: await collectStatus(project) });
 });
 
 app.post('/v1/projects/:id/start', async (req, res) => {
-  const projects = await readProjects();
-  const project = findProject(projects, req.params.id);
+  const registry = await loadRegistry();
+  const project = getProjectById(registry, req.params.id);
   if (!project) {
     res.status(404).json({ ok: false, error: 'Project not found' });
     return;
@@ -215,12 +300,20 @@ app.post('/v1/projects/:id/start', async (req, res) => {
     }
   }
 
-  res.json({ ok: true, status: await collectStatus(project) });
+  const status = await collectStatus(project);
+  updateProject(registry, project.id, {
+    running: status.running,
+    healthy: status.healthy,
+    previewPath: status.previewPath,
+  });
+  await saveRegistry(registry);
+
+  res.json({ ok: true, status });
 });
 
 app.post('/v1/projects/:id/stop', async (req, res) => {
-  const projects = await readProjects();
-  const project = findProject(projects, req.params.id);
+  const registry = await loadRegistry();
+  const project = getProjectById(registry, req.params.id);
   if (!project) {
     res.status(404).json({ ok: false, error: 'Project not found' });
     return;
@@ -231,7 +324,15 @@ app.post('/v1/projects/:id/stop', async (req, res) => {
   } catch {
   }
 
-  res.json({ ok: true, status: await collectStatus(project) });
+  updateProject(registry, project.id, {
+    running: false,
+    healthy: false,
+    previewPath: `/p/${project.id}/`,
+  });
+  await saveRegistry(registry);
+
+  const stopped = await collectStatus({ ...project, running: false, healthy: false });
+  res.json({ ok: true, status: stopped });
 });
 
 app.get('/v1/projects/:id/status', async (req, res) => {
@@ -344,6 +445,8 @@ server.on('upgrade', async (request, socket, head) => {
 });
 
 await ensureStateDirs();
+await loadRegistry();
+await reconcileRegistryState();
 server.listen(PORT, () => {
   console.log(`[orchestrator] listening on http://0.0.0.0:${PORT}`);
 });
