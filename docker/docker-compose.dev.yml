@@ -81,10 +81,32 @@ services:
     networks:
       - factory-dev
 
+  orchestrator:
+    build:
+      context: ../orchestrator
+      dockerfile: Dockerfile.dev
+    working_dir: /workspace/orchestrator
+    environment:
+      PORT: "4100"
+      DOCKER_API_VERSION: "1.44"
+    volumes:
+      - type: bind
+        source: ../orchestrator
+        target: /workspace/orchestrator
+      - orchestrator_node_modules:/workspace/orchestrator/node_modules
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: >
+      sh -lc "npm install && npm run start"
+    ports:
+      - "4100:4100"
+    networks:
+      - factory-dev
+
 volumes:
   pgdata:
   api_node_modules:
   web_node_modules:
+  orchestrator_node_modules:
 
 networks:
   factory-dev:
