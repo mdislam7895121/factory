@@ -8,8 +8,8 @@ $ErrorActionPreference = 'Stop'
 function Invoke-Gh {
     param([string[]]$Args)
 
-    & gh @Args
-    return $LASTEXITCODE
+    & gh @Args | Out-Host
+    return [int]$LASTEXITCODE
 }
 
 Write-Output "=== PR VIEW ==="
