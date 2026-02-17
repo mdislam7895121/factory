@@ -42,6 +42,37 @@ From the dashboard you can:
 - Stream live project logs (WebSocket)
 - Open stable preview route `/p/<projectId>/`
 
+### What you should see
+
+When opening `http://localhost:3000`, you should see:
+
+- A top readiness banner (`Web Ready` or warmup retry progress)
+- A clear `Create Project` primary action
+- A projects table with running/healthy/port/created state
+- Per-project actions for `Open Preview` and `Open Logs`
+- In-page error messages when orchestrator requests fail
+
+### If web warmup fails
+
+1. Verify compose services are up:
+
+```powershell
+docker compose -f docker/docker-compose.dev.yml ps
+```
+
+2. Verify orchestrator is healthy:
+
+```powershell
+Invoke-RestMethod http://localhost:4100/health | ConvertTo-Json -Depth 6
+```
+
+3. Retry with clean rebuild:
+
+```powershell
+docker compose -f docker/docker-compose.dev.yml down -v
+docker compose -f docker/docker-compose.dev.yml up -d --build
+```
+
 ## One command proof pack
 
 ```powershell
