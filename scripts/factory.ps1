@@ -73,7 +73,30 @@ switch ($Command.ToLowerInvariant()) {
         exit 0
     }
     'dev:smoke' {
-        $web = Invoke-WebRequest -Uri 'http://localhost:3000' -UseBasicParsing -TimeoutSec 20
+        $web = $null
+        for ($attempt = 1; $attempt -le 40; $attempt++) {
+            try {
+                $candidate = Invoke-WebRequest -Uri 'http://localhost:3000' -UseBasicParsing -TimeoutSec 5
+                if ($candidate.StatusCode -eq 200) {
+                    $web = $candidate
+                    break
+                }
+            }
+            catch {
+            }
+
+            if ($attempt -lt 40) {
+                if ($attempt -eq 1 -or $attempt % 5 -eq 0) {
+                    Write-Host "web.warmup attempt=$attempt waiting"
+                }
+                Start-Sleep -Seconds 2
+            }
+        }
+
+        if (-not $web) {
+            throw 'Web smoke failed: http://localhost:3000 did not return HTTP 200 within 80 seconds.'
+        }
+
         $api = Invoke-RestMethod -Uri 'http://localhost:4000/db/health' -TimeoutSec 20
         Write-Host "web.status=$($web.StatusCode)"
         $api | ConvertTo-Json -Depth 8 | Write-Host
