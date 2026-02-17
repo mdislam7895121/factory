@@ -38,11 +38,13 @@ docker compose -f docker/docker-compose.dev.yml up -d --build
 docker compose -f docker/docker-compose.dev.yml ps
 Invoke-WebRequest http://localhost:3000 -UseBasicParsing | Select-Object StatusCode
 Invoke-RestMethod http://localhost:4000/db/health | ConvertTo-Json -Depth 6
+Invoke-RestMethod http://localhost:4100/health | ConvertTo-Json -Depth 6
 ```
 
 Expected:
 - Web returns StatusCode 200.
 - API health returns JSON with ok=true.
+- Orchestrator health returns JSON with ok=true.
 
 ## Stop Sandbox
 
@@ -84,3 +86,14 @@ Preview URLs:
 
 - Web: http://localhost:3000
 - API health: http://localhost:4000/db/health
+- Orchestrator health: http://localhost:4100/health
+- Stable project preview route: http://localhost:3000/p/<projectId>/
+
+## Dashboard Demo (Project Create/Start/Logs/Preview)
+
+1. Start sandbox: `docker compose -f docker/docker-compose.dev.yml up -d --build`
+2. Open dashboard: `http://localhost:3000`
+3. Create a project from template.
+4. Click Start and wait for running status.
+5. Observe live logs panel updates.
+6. Open preview link `/p/<projectId>/` in browser.
