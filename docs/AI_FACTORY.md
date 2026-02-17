@@ -18,6 +18,8 @@ pwsh -File scripts/factory.ps1 dev:up
 
 - Web preview: http://localhost:3000
 - API health: http://localhost:4000/db/health
+- Orchestrator health: http://localhost:4100/health
+- Dashboard preview route: http://localhost:3000/p/<projectId>/
 
 ## Daily commands
 
@@ -27,6 +29,18 @@ pwsh -File scripts/factory.ps1 dev:logs
 pwsh -File scripts/factory.ps1 dev:smoke
 pwsh -File scripts/factory.ps1 dev:down
 ```
+
+## Dashboard (Replit-like local control)
+
+Open `http://localhost:3000`.
+
+From the dashboard you can:
+
+- Create a project from `orchestrator/templates/basic-web`
+- Start and stop project containers
+- See status (running/healthy/port)
+- Stream live project logs (WebSocket)
+- Open stable preview route `/p/<projectId>/`
 
 ## One command proof pack
 
