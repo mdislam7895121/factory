@@ -54,3 +54,7 @@ coverage/
 proof/runs/
 proof/*/
 
+# Orchestrator runtime state
+orchestrator/workspaces/
+orchestrator/data/
+
