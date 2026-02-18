@@ -259,3 +259,56 @@ Selected orchestrator project: `proj-mlrm213x`
 - No route changes, no auth changes, no API/provisioning logic changes.
 - DS v1 is implemented through tokens + wrapper + small className-based primitives.
 - Permanent preview and dashboard routes remained reachable (`STATUS=200`).
+
+## SERIAL 11 PATCH-04 — Marketing-grade SaaS landing polish + hydration warning guard
+
+### Scope
+- Branch: `feature/serial-11-marketing-landing-patch04`
+- Updated files (allowed scope only):
+  - `web/src/app/page.tsx`
+  - `web/src/app/globals.css`
+  - `web/src/app/layout.tsx`
+  - `docs/VERIFICATION_PROOF_REPORT.md`
+
+### Landing updates (public `/` only)
+- Added structured marketing sections in order:
+  1. Top nav (brand, links, CTA)
+  2. Hero with primary/secondary CTA
+  3. Trust row
+  4. Product screenshot mock window (monospace preview/log lines)
+  5. How it works (3 steps)
+  6. Core capabilities cards
+  7. Pricing teaser (Starter/Pro/Enterprise-Contact)
+  8. Security + reliability list
+  9. FAQ (4 items)
+  10. Footer links
+- `/dashboard` remains app area; no route or behavior changes.
+
+### Hydration guard (minimal)
+- File: `web/src/app/layout.tsx`
+- Exact change: added `suppressHydrationWarning` on root `<html>` and `<body>` only.
+
+### Baseline probes (BEFORE)
+- `BEFORE_ROUTE http://localhost:3000/ STATUS=200 LEN=36292`
+- `BEFORE_ROUTE http://localhost:3000/dashboard STATUS=200 LEN=21867`
+- `BEFORE_ROUTE http://localhost:3000/factory-preview STATUS=200 LEN=20073`
+
+### Verification probes (AFTER)
+- `AFTER_ROUTE http://localhost:3000/ STATUS=200 LEN=36283`
+- `AFTER_ROUTE http://localhost:3000/dashboard STATUS=200 LEN=21866`
+- `AFTER_ROUTE http://localhost:3000/factory-preview STATUS=200 LEN=20074`
+
+### Screenshots (local proof artifacts)
+- `proof/serial11-patch04/before-root.png`
+- `proof/serial11-patch04/before-dashboard.png`
+- `proof/serial11-patch04/after-root.png`
+- `proof/serial11-patch04/after-dashboard.png`
+
+### Quality checks
+- `npm run lint` → pass with existing warnings only (no errors)
+- `npm run build` → pass
+
+### Non-breaking note
+- No API/orchestrator changes.
+- No dashboard flow logic changes.
+- Styling/content polish limited to root landing + minimal global marketing classes.
