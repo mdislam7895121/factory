@@ -1,5 +1,6 @@
 param(
-    [switch]$OpenBrowser
+    [switch]$OpenBrowser,
+    [int]$MaxAttempts = 40
 )
 
 $ErrorActionPreference = 'Stop'
@@ -7,6 +8,60 @@ $ErrorActionPreference = 'Stop'
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $ComposeFile = Join-Path $RepoRoot 'docker\docker-compose.dev.yml'
 . (Join-Path $PSScriptRoot 'readiness-retry.ps1')
+
+function Assert-DockerDesktopRunning {
+    try {
+        docker info | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+            throw 'docker info failed'
+        }
+    }
+    catch {
+        throw 'Docker Desktop is not reachable. Start Docker Desktop, wait until it is fully running, then rerun scripts/preview-up.ps1.'
+    }
+}
+
+function Test-HttpReadyWithBackoff {
+    param(
+        [Parameter(Mandatory = $true)][string]$Name,
+        [Parameter(Mandatory = $true)][string]$Url,
+        [int]$ExpectedStatus = 200,
+        [int]$Attempts = 40,
+        [int]$BaseDelaySec = 2,
+        [int]$MaxDelaySec = 12
+    )
+
+    for ($attempt = 1; $attempt -le $Attempts; $attempt++) {
+        try {
+            $statusText = curl.exe -sS -o NUL -w "%{http_code}" $Url
+            $status = 0
+            [void][int]::TryParse(($statusText | Out-String).Trim(), [ref]$status)
+            Write-Output ("{0}_attempt={1} status={2}" -f $Name, $attempt, $status)
+            if ($status -eq $ExpectedStatus) {
+                return [pscustomobject]@{ Ready = $true; Attempt = $attempt; StatusCode = $status }
+            }
+        }
+        catch {
+            Write-Output ("{0}_attempt={1} error={2}" -f $Name, $attempt, $_.Exception.Message)
+        }
+
+        if ($attempt -lt $Attempts) {
+            $delay = [Math]::Min($BaseDelaySec * [Math]::Pow(1.4, $attempt - 1), $MaxDelaySec)
+            Start-Sleep -Seconds ([int][Math]::Ceiling($delay))
+        }
+    }
+
+    return [pscustomobject]@{ Ready = $false; Attempt = $Attempts; StatusCode = 0 }
+}
+
+function Assert-PortListening {
+    param([Parameter(Mandatory = $true)][int]$Port)
+
+    $listening = netstat -ano | Select-String -Pattern (":{0}\s" -f $Port) | Select-String -Pattern 'LISTENING'
+    if (-not $listening) {
+        throw "Port $Port is not listening on host."
+    }
+}
 
 function Show-Diagnostics {
     Write-Output '=== DIAGNOSTICS: docker compose ps ==='
@@ -25,6 +80,7 @@ function Show-Diagnostics {
 }
 
 Write-Output '=== STEP 1: compose up -d --build ==='
+Assert-DockerDesktopRunning
 docker compose -f $ComposeFile up -d --build
 if ($LASTEXITCODE -ne 0) {
     Write-Output 'compose_up_result=failed'
@@ -33,7 +89,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Write-Output '=== STEP 2: wait web http://localhost:3000 ==='
-$webReady = Wait-HttpReady -Name 'web' -Url 'http://localhost:3000' -Attempts 60 -DelaySec 2 -TimeoutSec 10 -ExpectedStatus 200
+$webReady = Test-HttpReadyWithBackoff -Name 'web' -Url 'http://localhost:3000/' -Attempts $MaxAttempts -BaseDelaySec 2 -ExpectedStatus 200
 Write-Output ("web_ready=" + $webReady.Ready + " attempt=" + $webReady.Attempt + " status=" + $webReady.StatusCode)
 
 $dockerPsText = docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | Out-String
@@ -47,17 +103,36 @@ if (-not $webReady.Ready -or -not $has3000Mapping) {
     throw 'dashboard preview is not reachable on localhost:3000'
 }
 
-Write-Output 'DASHBOARD_URL=http://localhost:3000'
+try {
+    Assert-PortListening -Port 3000
+    Assert-PortListening -Port 4100
+    Write-Output 'port_3000=LISTENING'
+    Write-Output 'port_4100=LISTENING'
+}
+catch {
+    Write-Output ("port_check_error=" + $_.Exception.Message)
+    Show-Diagnostics
+    throw
+}
+
+Write-Output 'DASHBOARD_URL=http://localhost:3000/'
+Write-Output 'LANDING_URL=http://localhost:3000/landing'
+Write-Output 'ORCHESTRATOR_HEALTH_URL=http://localhost:4100/health'
 
 Write-Output '=== STEP 3: orchestrator health ==='
-$health = Invoke-RestMethodWithRetry -Name 'orchestrator_health' -Method Get -Uri 'http://localhost:4100/health' -Attempts 20 -DelaySec 2 -TimeoutSec 20
+$health = Invoke-RestMethodWithRetry -Name 'orchestrator_health' -Method Get -Uri 'http://localhost:4100/health' -Attempts $MaxAttempts -DelaySec 2 -TimeoutSec 20
 $health | ConvertTo-Json -Depth 6 | Write-Output
+
+if ($health.ok -ne $true) {
+    Show-Diagnostics
+    throw 'orchestrator health did not return ok=true'
+}
 
 Write-Output '=== STEP 4: published ports summary ==='
 $dockerPsText.TrimEnd() | Write-Output
 
 if ($OpenBrowser) {
-    Start-Process 'http://localhost:3000' | Out-Null
+    Start-Process 'http://localhost:3000/' | Out-Null
     Write-Output 'open_browser=launched'
 } else {
     Write-Output 'open_browser=skipped'
