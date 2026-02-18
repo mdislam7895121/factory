@@ -40,6 +40,23 @@
   --foreground: var(--fg);
 }
 
+[data-theme="light"] {
+  --bg: #F8FAFC;
+  --bg2: #EEF2FF;
+  --card: #FFFFFF;
+  --card2: #F8FAFC;
+  --border: #D1D5DB;
+  --fg: #0F172A;
+  --fg2: #334155;
+  --muted: #64748B;
+  --disabled: #94A3B8;
+  --primary: #4F46E5;
+  --primaryHover: #4338CA;
+  --success: #059669;
+  --warning: #D97706;
+  --danger: #DC2626;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -456,4 +473,114 @@ small,
 
 .landing-footer a:hover {
   color: var(--fg2) !important;
+}
+
+.builder-shell {
+  padding: 28px 24px 64px;
+}
+
+.builder-container {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  gap: 16px;
+}
+
+.builder-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.builder-brand {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.builder-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-toggle {
+  min-width: 82px;
+}
+
+.builder-hero {
+  padding: 28px !important;
+}
+
+.builder-hero h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3.6vw, 2.5rem);
+}
+
+.builder-hero p {
+  margin: 10px 0 0;
+  max-width: 740px;
+}
+
+.builder-prompt-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1.2fr 1fr;
+}
+
+.builder-prompt textarea {
+  min-height: 120px;
+  width: 100%;
+  resize: vertical;
+}
+
+.builder-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.builder-template-list,
+.builder-recent-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.builder-template-item,
+.builder-recent-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  background: var(--card2);
+}
+
+.builder-template-name,
+.builder-recent-name {
+  margin: 0;
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.builder-template-meta,
+.builder-recent-meta {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .builder-prompt-grid {
+    grid-template-columns: 1fr;
+  }
 }
