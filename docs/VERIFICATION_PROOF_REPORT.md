@@ -148,3 +148,41 @@ Selected orchestrator project: `proj-mlrm213x`
 - No API, data, state, route, or provisioning behavior changed.
 - Changes are CSS variable and class-based presentation updates only.
 - Permanent Preview routes remained reachable (`STATUS=200`) before and after.
+
+## SERIAL 11 PATCH-02 — Root Landing Professionalization
+
+### Scope
+- Branch: `feature/serial-11-root-landing-patch02`
+- Updated route: `/` only (`web/src/app/page.tsx`)
+- Purpose: replace root builder UI with a professional public SaaS landing while keeping `/dashboard` as app area.
+
+### Before/After Screenshot
+- BEFORE: `proof/serial11-patch02/before-root.png`
+- AFTER: `proof/serial11-patch02/after-root.png`
+
+### Baseline Route Probes (BEFORE)
+- `BEFORE_ROUTE http://localhost:3000/ STATUS=200 LEN=21304`
+- `BEFORE_ROUTE http://localhost:3000/dashboard STATUS=200 LEN=21583`
+- `BEFORE_ROUTE http://localhost:3000/factory-preview STATUS=200 LEN=20075`
+
+### Verification Route Probes (AFTER)
+- `AFTER_ROUTE http://localhost:3000/ STATUS=200 LEN=21300`
+- `AFTER_ROUTE http://localhost:3000/dashboard STATUS=200 LEN=21586`
+- `AFTER_ROUTE http://localhost:3000/factory-preview STATUS=200 LEN=20073`
+
+### Landing Content Implemented
+- Headline: **Build and ship apps with the Factory**
+- Subtext: templates → provision → preview → logs flow
+- Primary CTA: **Get started — Open dashboard** (`/dashboard`)
+- Secondary CTA: **View preview** (`/factory-preview`)
+- 3 feature cards: Templates, Live preview, Live logs
+- 3-step "How it works" list
+
+### Quality Checks
+- `npm run lint` → pass with existing warnings only (no errors)
+- `npm run build` → pass
+
+### Non-Breaking Rationale
+- No API, auth, provisioning, or route behavior changes.
+- Only root page presentation (`web/src/app/page.tsx`) changed.
+- `/dashboard` and `/factory-preview` remain reachable with `STATUS=200`.
