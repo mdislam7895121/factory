@@ -10,6 +10,7 @@ $ErrorActionPreference = 'Stop'
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $ComposeFile = Join-Path $RepoRoot 'docker\docker-compose.dev.yml'
 $ProofRoot = Join-Path $RepoRoot 'proof'
+. (Join-Path $PSScriptRoot 'readiness-retry.ps1')
 
 if (-not (Test-Path $ComposeFile)) {
     Write-Error "Compose file not found: $ComposeFile"
@@ -30,6 +31,27 @@ $failureMessage = ''
 $rawOutputs = [System.Collections.Generic.List[string]]::new()
 $rerunOutputs = [System.Collections.Generic.List[string]]::new()
 $composeBase = @('compose', '-f', $ComposeFile)
+
+function Invoke-ComposeUpWithRetry {
+    param(
+        [int]$Attempts = 3,
+        [int]$DelaySec = 5
+    )
+
+    for ($attempt = 1; $attempt -le $Attempts; $attempt++) {
+        Write-Output "compose_up_attempt=$attempt"
+        & docker @($composeBase + @('up', '-d', '--build'))
+        if ($LASTEXITCODE -eq 0) {
+            return
+        }
+
+        Write-Output "compose_up_attempt=$attempt exit_code=$LASTEXITCODE"
+        if ($attempt -ge $Attempts) {
+            throw "docker compose up failed after $Attempts attempts"
+        }
+        Start-Sleep -Seconds $DelaySec
+    }
+}
 
 function Invoke-Captured {
     param(
@@ -54,30 +76,6 @@ function Invoke-Captured {
     }
     $script:rawOutputs.Add([IO.Path]::GetFileName($path))
     return $path
-}
-
-function Wait-UntilHealthy {
-    param(
-        [Parameter(Mandatory = $true)][string]$Url,
-        [int]$TimeoutSec = 180,
-        [int]$IntervalSec = 5
-    )
-
-    $deadline = (Get-Date).AddSeconds($TimeoutSec)
-    while ((Get-Date) -lt $deadline) {
-        try {
-            $response = Invoke-WebRequest -Uri $Url -UseBasicParsing -TimeoutSec 10 -ErrorAction Stop
-            if ($response.StatusCode -eq 200) {
-                return $true
-            }
-        }
-        catch {
-            Start-Sleep -Seconds $IntervalSec
-            continue
-        }
-        Start-Sleep -Seconds $IntervalSec
-    }
-    return $false
 }
 
 function Write-Report {
@@ -145,7 +143,7 @@ try {
     } -AllowFailure
 
     $failedStep = 'docker compose up -d --build'
-    Invoke-Captured -Name '12-compose-up' -Action { & docker @($composeBase + @('up', '-d', '--build')) }
+    Invoke-Captured -Name '12-compose-up' -Action { Invoke-ComposeUpWithRetry -Attempts 3 -DelaySec 5 }
 
     $failedStep = 'docker compose ps'
     Invoke-Captured -Name '13-compose-ps' -Action { & docker @($composeBase + @('ps')) }
@@ -156,7 +154,8 @@ try {
     }
 
     $failedStep = 'smoke web'
-    if (-not (Wait-UntilHealthy -Url 'http://localhost:3000' -TimeoutSec 180 -IntervalSec 5)) {
+    $webReady = Wait-HttpReady -Name 'web' -Url 'http://localhost:3000' -Attempts 36 -DelaySec 5 -TimeoutSec 10 -ExpectedStatus 200
+    if (-not $webReady.Ready) {
         throw 'Web endpoint http://localhost:3000 did not return HTTP 200 in time.'
     }
     Invoke-Captured -Name '15-smoke-web' -Action {
@@ -165,7 +164,8 @@ try {
     }
 
     $failedStep = 'smoke api'
-    if (-not (Wait-UntilHealthy -Url 'http://localhost:4000/db/health' -TimeoutSec 180 -IntervalSec 5)) {
+    $apiReady = Wait-HttpReady -Name 'api_db_health' -Url 'http://localhost:4000/db/health' -Attempts 36 -DelaySec 5 -TimeoutSec 10 -ExpectedStatus 200
+    if (-not $apiReady.Ready) {
         throw 'API endpoint http://localhost:4000/db/health did not return HTTP 200 in time.'
     }
     Invoke-Captured -Name '16-smoke-api' -Action {
