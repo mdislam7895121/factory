@@ -386,6 +386,47 @@ NAME                IMAGE             COMMAND                  SERVICE   CREATED
 - proof/serial11-patch04-option2/postmerge-root.png
 - proof/serial11-patch04-option2/postmerge-dashboard.png
 
+## SERIAL 11 — CI/Security Hardening failure analysis (PR #32)
+
+### Failed run details
+- PR run ID: `22161828160`
+- PR run URL: `https://github.com/mdislam7895121/factory/actions/runs/22161828160`
+- Failed job: `Security Hardening` (job ID `64080794693`)
+- Main push run ID (same SHA): `22162093240`
+- Main run URL: `https://github.com/mdislam7895121/factory/actions/runs/22162093240`
+
+### Key log excerpt (Security baseline scan, CI strict)
+```
+Mode: CI STRICT
+PHASE 1: Dependency Audits
+Scanning api...
+  [WARN] Found HIGH/CRITICAL vulnerabilities
+Scanning web...
+  [OK] No HIGH/CRITICAL vulnerabilities
+Scanning mobile...
+  [WARN] Found HIGH/CRITICAL vulnerabilities
+RESULT: FAIL (HIGH/CRITICAL vulnerabilities in CI mode)
+##[error]Process completed with exit code 1.
+```
+
+### Classification
+- **Real policy failure (not transient).**
+- Evidence: both PR run `22161828160` and main push run `22162093240` fail in the same `Security Hardening` step with the same CI-strict result.
+
+### Resolution applied (minimal)
+- Added targeted dependency override for `minimatch >=10.2.1` in:
+  - `api/package.json`
+  - `mobile/package.json`
+- Updated lockfiles via `npm install` in `api/` and `mobile/`.
+- Local strict gate re-run:
+  - `pwsh -File scripts/security-scan.ps1 -CiStrict` → `RESULT: PASS (No security issues in CI mode)`.
+
+### Proof links (fix PR)
+- Fix PR: _to be filled after PR creation_
+- Merge SHA: _to be filled after merge_
+- Main check-runs URL pattern:
+  - `https://api.github.com/repos/mdislam7895121/factory/commits/<MAIN_SHA>/check-runs`
+
 ### Notes
 - This addendum exists because PR checks continued running after admin squash merge.
 - No code changes in this finalization; report-only update.
