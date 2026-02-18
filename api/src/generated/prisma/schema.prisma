@@ -12,3 +12,55 @@ model HealthCheck {
   message   String
   createdAt DateTime @default(now())
 }
+
+enum ProjectStatus {
+  QUEUED
+  RUNNING
+  READY
+  FAILED
+}
+
+enum ProvisioningRunStatus {
+  RUNNING
+  READY
+  FAILED
+}
+
+model Workspace {
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  projects  Project[]
+}
+
+model Project {
+  id                    String            @id @default(uuid())
+  workspaceId           String
+  name                  String
+  templateId            String
+  orchestratorProjectId String?
+  status                ProjectStatus     @default(QUEUED)
+  previewUrl            String?
+  logsRef               String?
+  provisionError        String?
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+  workspace             Workspace         @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  provisioningRuns      ProvisioningRun[]
+
+  @@index([workspaceId])
+}
+
+model ProvisioningRun {
+  id         String                @id @default(uuid())
+  projectId  String
+  status     ProvisioningRunStatus
+  error      String?
+  createdAt  DateTime              @default(now())
+  startedAt  DateTime              @default(now())
+  finishedAt DateTime?
+  project    Project               @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
