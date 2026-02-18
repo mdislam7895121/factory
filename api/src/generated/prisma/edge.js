@@ -98,6 +98,37 @@ exports.Prisma.HealthCheckScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.WorkspaceScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProjectScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  name: 'name',
+  templateId: 'templateId',
+  orchestratorProjectId: 'orchestratorProjectId',
+  status: 'status',
+  previewUrl: 'previewUrl',
+  logsRef: 'logsRef',
+  provisionError: 'provisionError',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProvisioningRunScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  status: 'status',
+  error: 'error',
+  createdAt: 'createdAt',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -108,9 +139,28 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+exports.ProjectStatus = exports.$Enums.ProjectStatus = {
+  QUEUED: 'QUEUED',
+  RUNNING: 'RUNNING',
+  READY: 'READY',
+  FAILED: 'FAILED'
+};
+
+exports.ProvisioningRunStatus = exports.$Enums.ProvisioningRunStatus = {
+  RUNNING: 'RUNNING',
+  READY: 'READY',
+  FAILED: 'FAILED'
+};
 
 exports.Prisma.ModelName = {
-  HealthCheck: 'HealthCheck'
+  HealthCheck: 'HealthCheck',
+  Workspace: 'Workspace',
+  Project: 'Project',
+  ProvisioningRun: 'ProvisioningRun'
 };
 /**
  * Create the Client
@@ -120,10 +170,10 @@ const config = {
   "clientVersion": "7.3.0",
   "engineVersion": "9d6ad21cbbceab97458517b147a6a09ff43aa735",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel HealthCheck {\n  id        String   @id @default(uuid())\n  message   String\n  createdAt DateTime @default(now())\n}\n"
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel HealthCheck {\n  id        String   @id @default(uuid())\n  message   String\n  createdAt DateTime @default(now())\n}\n\nenum ProjectStatus {\n  QUEUED\n  RUNNING\n  READY\n  FAILED\n}\n\nenum ProvisioningRunStatus {\n  RUNNING\n  READY\n  FAILED\n}\n\nmodel Workspace {\n  id        String    @id @default(uuid())\n  name      String\n  createdAt DateTime  @default(now())\n  updatedAt DateTime  @updatedAt\n  projects  Project[]\n}\n\nmodel Project {\n  id                    String            @id @default(uuid())\n  workspaceId           String\n  name                  String\n  templateId            String\n  orchestratorProjectId String?\n  status                ProjectStatus     @default(QUEUED)\n  previewUrl            String?\n  logsRef               String?\n  provisionError        String?\n  createdAt             DateTime          @default(now())\n  updatedAt             DateTime          @updatedAt\n  workspace             Workspace         @relation(fields: [workspaceId], references: [id], onDelete: Cascade)\n  provisioningRuns      ProvisioningRun[]\n\n  @@index([workspaceId])\n}\n\nmodel ProvisioningRun {\n  id         String                @id @default(uuid())\n  projectId  String\n  status     ProvisioningRunStatus\n  error      String?\n  createdAt  DateTime              @default(now())\n  startedAt  DateTime              @default(now())\n  finishedAt DateTime?\n  project    Project               @relation(fields: [projectId], references: [id], onDelete: Cascade)\n\n  @@index([projectId])\n}\n"
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"HealthCheck\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"HealthCheck\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Workspace\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"projects\",\"kind\":\"object\",\"type\":\"Project\",\"relationName\":\"ProjectToWorkspace\"}],\"dbName\":null},\"Project\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"workspaceId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"templateId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"orchestratorProjectId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"ProjectStatus\"},{\"name\":\"previewUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"logsRef\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"provisionError\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"workspace\",\"kind\":\"object\",\"type\":\"Workspace\",\"relationName\":\"ProjectToWorkspace\"},{\"name\":\"provisioningRuns\",\"kind\":\"object\",\"type\":\"ProvisioningRun\",\"relationName\":\"ProjectToProvisioningRun\"}],\"dbName\":null},\"ProvisioningRun\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"projectId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"ProvisioningRunStatus\"},{\"name\":\"error\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"startedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"finishedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"project\",\"kind\":\"object\",\"type\":\"Project\",\"relationName\":\"ProjectToProvisioningRun\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.compilerWasm = {
   getRuntime: async () => require('./query_compiler_fast_bg.js'),

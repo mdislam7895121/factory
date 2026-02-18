@@ -126,6 +126,37 @@ exports.Prisma.HealthCheckScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.WorkspaceScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProjectScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  name: 'name',
+  templateId: 'templateId',
+  orchestratorProjectId: 'orchestratorProjectId',
+  status: 'status',
+  previewUrl: 'previewUrl',
+  logsRef: 'logsRef',
+  provisionError: 'provisionError',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProvisioningRunScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  status: 'status',
+  error: 'error',
+  createdAt: 'createdAt',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -136,9 +167,28 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+exports.ProjectStatus = exports.$Enums.ProjectStatus = {
+  QUEUED: 'QUEUED',
+  RUNNING: 'RUNNING',
+  READY: 'READY',
+  FAILED: 'FAILED'
+};
+
+exports.ProvisioningRunStatus = exports.$Enums.ProvisioningRunStatus = {
+  RUNNING: 'RUNNING',
+  READY: 'READY',
+  FAILED: 'FAILED'
+};
 
 exports.Prisma.ModelName = {
-  HealthCheck: 'HealthCheck'
+  HealthCheck: 'HealthCheck',
+  Workspace: 'Workspace',
+  Project: 'Project',
+  ProvisioningRun: 'ProvisioningRun'
 };
 
 /**
