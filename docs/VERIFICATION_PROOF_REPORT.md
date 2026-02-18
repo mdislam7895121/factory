@@ -186,3 +186,76 @@ Selected orchestrator project: `proj-mlrm213x`
 - No API, auth, provisioning, or route behavior changes.
 - Only root page presentation (`web/src/app/page.tsx`) changed.
 - `/dashboard` and `/factory-preview` remain reachable with `STATUS=200`.
+
+## SERIAL 11 PATCH-03 — Design System v1 Lock (Serious Professional SaaS)
+
+### Scope
+- Branch: `feature/serial-11-design-system-v1`
+- Web-only additive styling and UI primitives; no API/behavior changes
+- In-scope pages updated:
+  - `web/src/app/page.tsx`
+  - `web/src/app/dashboard/page.tsx`
+  - `web/src/app/dashboard/workspaces/page.tsx`
+  - `web/src/app/dashboard/projects/[projectId]/page.tsx`
+
+### Design System v1 Tokens (exact)
+- `--bg: #0F172A`
+- `--bg2: #111827`
+- `--card: #1F2937`
+- `--card2: #243045`
+- `--border: #2E3A4F`
+- `--fg: #F9FAFB`
+- `--fg2: #CBD5E1`
+- `--muted: #94A3B8`
+- `--disabled: #64748B`
+- `--primary: #6366F1`
+- `--primaryHover: #4F46E5`
+- `--success: #10B981`
+- `--warning: #F59E0B`
+- `--danger: #EF4444`
+
+### Typography / Spacing / Interaction
+- Base font: `Inter, system-ui, ...`
+- Body: `16px`, line-height `1.6`
+- Headings: weight `600`, line-height `1.2`
+- Small text utility: `13px` muted
+- Card standard: `padding 24px`, `radius 12px`, `border 1px solid var(--border)`
+- Focus ring: `2px solid var(--primary)`
+- Hover: subtle card/button lighten
+
+### New UI Primitives (additive, no deps)
+- `web/src/components/ui/Button.tsx`
+- `web/src/components/ui/Card.tsx`
+- `web/src/components/ui/Input.tsx`
+- `web/src/components/ui/Badge.tsx`
+
+### Before/After Screenshots
+- BEFORE
+  - `proof/serial11-patch03/before-root.png`
+  - `proof/serial11-patch03/before-dashboard.png`
+  - `proof/serial11-patch03/before-workspaces.png`
+- AFTER
+  - `proof/serial11-patch03/after-root.png`
+  - `proof/serial11-patch03/after-dashboard.png`
+  - `proof/serial11-patch03/after-workspaces.png`
+
+### Baseline Probes (BEFORE)
+- `BEFORE_ROUTE http://localhost:3000/ STATUS=200 LEN=21296`
+- `BEFORE_ROUTE http://localhost:3000/dashboard STATUS=200 LEN=21577`
+- `BEFORE_ROUTE http://localhost:3000/dashboard/workspaces STATUS=200 LEN=22093`
+- `BEFORE_ROUTE http://localhost:3000/factory-preview STATUS=200 LEN=20076`
+
+### Verification Probes (AFTER)
+- `AFTER_ROUTE http://localhost:3000/ STATUS=200 LEN=21293`
+- `AFTER_ROUTE http://localhost:3000/dashboard STATUS=200 LEN=21586`
+- `AFTER_ROUTE http://localhost:3000/dashboard/workspaces STATUS=200 LEN=22094`
+- `AFTER_ROUTE http://localhost:3000/factory-preview STATUS=200 LEN=20075`
+
+### Quality
+- `npm run lint` → pass with existing warnings only (no errors)
+- `npm run build` → pass
+
+### Non-Breaking Rationale
+- No route changes, no auth changes, no API/provisioning logic changes.
+- DS v1 is implemented through tokens + wrapper + small className-based primitives.
+- Permanent preview and dashboard routes remained reachable (`STATUS=200`).

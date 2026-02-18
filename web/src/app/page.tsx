@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { Badge } from '../components/ui/Badge';
+import { Card } from '../components/ui/Card';
 
 const features = [
   {
@@ -25,20 +27,10 @@ export default function Home() {
   const isAuthenticated = false;
 
   return (
-    <main className="factory-ui" style={{ padding: '48px 24px 64px' }}>
+    <main className="factory" style={{ padding: '48px 24px 64px' }}>
       <div style={{ maxWidth: '1040px', margin: '0 auto' }}>
-        <section
-          style={{
-            border: '1px solid var(--border)',
-            background: 'var(--card-bg)',
-            borderRadius: '18px',
-            padding: '40px 32px',
-            marginBottom: '24px',
-          }}
-        >
-          <p style={{ margin: '0 0 12px', fontSize: '14px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-            Public SaaS Preview
-          </p>
+        <Card className="ds-card" style={{ marginBottom: '24px', padding: '40px 32px' }}>
+          <Badge className="text-small" style={{ marginBottom: '12px' }}>Public SaaS Preview</Badge>
           <h1 style={{ margin: '0 0 14px', fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.1 }}>
             Build and ship apps with the Factory
           </h1>
@@ -49,63 +41,41 @@ export default function Home() {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '22px' }}>
             <Link
               href="/dashboard"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minWidth: '220px',
-                padding: '12px 18px',
-                borderRadius: '10px',
-                textDecoration: 'none',
-                border: '1px solid #3f5a82',
-                background: '#2a4266',
-                color: 'var(--fg)',
-                fontWeight: 600,
-              }}
+              className="ds-btn ds-btn-primary ds-btn-md"
+              style={{ minWidth: '220px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
             >
               {isAuthenticated ? 'Open dashboard' : 'Get started — Open dashboard'}
             </Link>
             <Link
               href="/factory-preview"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minWidth: '180px',
-                padding: '12px 18px',
-                borderRadius: '10px',
-                textDecoration: 'none',
-                border: '1px solid var(--border)',
-                background: '#1d2838',
-                color: 'var(--fg)',
-                fontWeight: 600,
-              }}
+              className="ds-btn ds-btn-secondary ds-btn-md"
+              style={{ minWidth: '180px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
             >
               View preview
             </Link>
           </div>
-        </section>
+        </Card>
 
-        <section style={{ marginBottom: '24px' }}>
+        <section style={{ marginBottom: '24px', background: 'transparent', border: 'none', padding: 0 }}>
           <h2 style={{ margin: '0 0 12px', fontSize: '1.5rem' }}>Core capabilities</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
             {features.map((feature) => (
-              <article key={feature.title} style={{ padding: '18px' }}>
+              <Card key={feature.title} style={{ padding: '18px' }}>
                 <h3 style={{ margin: '0 0 8px', fontSize: '1.1rem' }}>{feature.title}</h3>
                 <p style={{ margin: 0, lineHeight: 1.55 }}>{feature.description}</p>
-              </article>
+              </Card>
             ))}
           </div>
         </section>
 
-        <section style={{ padding: '20px' }}>
+        <Card style={{ padding: '20px' }}>
           <h2 style={{ margin: '0 0 10px', fontSize: '1.4rem' }}>How it works</h2>
           <ol style={{ margin: 0, paddingLeft: '22px', display: 'grid', gap: '8px' }}>
             {steps.map((step) => (
               <li key={step} style={{ lineHeight: 1.55 }}>{step}</li>
             ))}
           </ol>
-        </section>
+        </Card>
       </div>
     </main>
   );
