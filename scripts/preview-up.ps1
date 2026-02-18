@@ -1,5 +1,6 @@
 param(
-    [switch]$OpenBrowser
+    [switch]$OpenBrowser,
+    [int]$Attempts = 60
 )
 
 $ErrorActionPreference = 'Stop'
@@ -7,6 +8,20 @@ $ErrorActionPreference = 'Stop'
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $ComposeFile = Join-Path $RepoRoot 'docker\docker-compose.dev.yml'
 . (Join-Path $PSScriptRoot 'readiness-retry.ps1')
+
+function Assert-PortListening {
+    param(
+        [int]$Port,
+        [string]$Name
+    )
+
+    $listening = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue
+    if ($null -eq $listening) {
+        Write-Output ("port_" + $Port + "=NOT_LISTENING")
+        throw ($Name + ' is not listening on port ' + $Port)
+    }
+    Write-Output ("port_" + $Port + "=LISTENING")
+}
 
 function Show-Diagnostics {
     Write-Output '=== DIAGNOSTICS: docker compose ps ==='
@@ -33,8 +48,13 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Write-Output '=== STEP 2: wait web http://localhost:3000 ==='
-$webReady = Wait-HttpReady -Name 'web' -Url 'http://localhost:3000' -Attempts 60 -DelaySec 2 -TimeoutSec 10 -ExpectedStatus 200
+$webReady = Wait-HttpReady -Name 'web' -Url 'http://localhost:3000' -Attempts $Attempts -DelaySec 2 -TimeoutSec 10 -ExpectedStatus 200
 Write-Output ("web_ready=" + $webReady.Ready + " attempt=" + $webReady.Attempt + " status=" + $webReady.StatusCode)
+
+Write-Output '=== STEP 3: verify published/listening ports ==='
+Assert-PortListening -Port 3000 -Name 'web'
+Assert-PortListening -Port 4100 -Name 'orchestrator'
+Assert-PortListening -Port 4000 -Name 'api'
 
 $dockerPsText = docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | Out-String
 $has3000Mapping = $dockerPsText -match '(:|\[::\]:)3000->3000/tcp'
@@ -47,13 +67,19 @@ if (-not $webReady.Ready -or -not $has3000Mapping) {
     throw 'dashboard preview is not reachable on localhost:3000'
 }
 
-Write-Output 'DASHBOARD_URL=http://localhost:3000'
+Write-Output 'CUSTOMER_LANDING_URL=http://localhost:3000/'
+Write-Output 'ADMIN_DASHBOARD_URL=http://localhost:3000/dashboard'
 
-Write-Output '=== STEP 3: orchestrator health ==='
+$landingStatus = (Invoke-WebRequest -UseBasicParsing -Uri 'http://localhost:3000/' -TimeoutSec 15).StatusCode
+$dashboardStatus = (Invoke-WebRequest -UseBasicParsing -Uri 'http://localhost:3000/dashboard' -TimeoutSec 15).StatusCode
+Write-Output ("landing_status=" + $landingStatus)
+Write-Output ("dashboard_status=" + $dashboardStatus)
+
+Write-Output '=== STEP 4: orchestrator health ==='
 $health = Invoke-RestMethodWithRetry -Name 'orchestrator_health' -Method Get -Uri 'http://localhost:4100/health' -Attempts 20 -DelaySec 2 -TimeoutSec 20
 $health | ConvertTo-Json -Depth 6 | Write-Output
 
-Write-Output '=== STEP 4: published ports summary ==='
+Write-Output '=== STEP 5: published ports summary ==='
 $dockerPsText.TrimEnd() | Write-Output
 
 if ($OpenBrowser) {
