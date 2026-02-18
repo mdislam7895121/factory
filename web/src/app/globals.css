@@ -1,15 +1,43 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0f141d;
-  --foreground: #eef4ff;
-  --bg: #0f141d;
-  --fg: #eef4ff;
-  --muted: #a8b3c7;
-  --card-bg: #171f2d;
-  --border: #2b3648;
-  --placeholder: #8d9ab2;
-  --focus-ring: #7aa2ff;
+  --bg: #0F172A;
+  --bg2: #111827;
+  --card: #1F2937;
+  --card2: #243045;
+  --border: #2E3A4F;
+  --fg: #F9FAFB;
+  --fg2: #CBD5E1;
+  --muted: #94A3B8;
+  --disabled: #64748B;
+  --primary: #6366F1;
+  --primaryHover: #4F46E5;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+}
+
+.dark {
+  --bg: #0F172A;
+  --bg2: #111827;
+  --card: #1F2937;
+  --card2: #243045;
+  --border: #2E3A4F;
+  --fg: #F9FAFB;
+  --fg2: #CBD5E1;
+  --muted: #94A3B8;
+  --disabled: #64748B;
+  --primary: #6366F1;
+  --primaryHover: #4F46E5;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+}
+
+:root,
+.dark {
+  --background: var(--bg);
+  --foreground: var(--fg);
 }
 
 @theme inline {
@@ -19,91 +47,223 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f141d;
-    --foreground: #eef4ff;
-    --bg: #0f141d;
-    --fg: #eef4ff;
-    --muted: #a8b3c7;
-    --card-bg: #171f2d;
-    --border: #2b3648;
-    --placeholder: #8d9ab2;
-    --focus-ring: #7aa2ff;
-  }
-}
-
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+small,
+.text-small {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.factory {
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+  color: var(--fg);
 }
 
 .factory-ui {
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
   color: var(--fg);
 }
 
-.factory-ui h1,
-.factory-ui h2,
-.factory-ui h3,
-.factory-ui th,
-.factory-ui td,
-.factory-ui div,
-.factory-ui span,
-.factory-ui strong {
-  color: var(--fg);
+.factory a,
+.factory-ui a {
+  color: var(--fg2);
 }
 
+.factory p,
 .factory-ui p {
-  color: var(--muted) !important;
+  color: var(--fg2);
 }
 
-.factory-ui section {
-  background: var(--card-bg) !important;
-  border: 1px solid var(--border) !important;
+.factory section,
+.factory-ui section,
+.ds-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 24px;
   border-radius: 12px;
+  transition: background-color 160ms ease, border-color 160ms ease;
 }
 
+.factory section:hover,
+.factory-ui section:hover,
+.ds-card:hover {
+  background: var(--card2);
+}
+
+.factory table th,
+.factory table td,
 .factory-ui table th,
 .factory-ui table td {
   border-bottom-color: var(--border) !important;
 }
 
-.factory-ui a {
-  color: #93b3ff;
-}
-
+.factory input,
+.factory select,
+.factory textarea,
 .factory-ui input,
 .factory-ui select,
-.factory-ui textarea {
-  background: #121b29;
+.factory-ui textarea,
+.ds-input {
+  background: var(--bg2);
   border: 1px solid var(--border);
   color: var(--fg);
   caret-color: var(--fg);
+  border-radius: 12px;
+  padding: 10px 12px;
 }
 
+.factory input::placeholder,
+.factory textarea::placeholder,
 .factory-ui input::placeholder,
-.factory-ui textarea::placeholder {
-  color: var(--placeholder);
+.factory-ui textarea::placeholder,
+.ds-input::placeholder {
+  color: var(--muted);
   opacity: 1;
 }
 
+.factory input:focus,
+.factory select:focus,
+.factory textarea:focus,
+.factory button:focus,
 .factory-ui input:focus,
 .factory-ui select:focus,
 .factory-ui textarea:focus,
-.factory-ui button:focus {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 1px;
+.factory-ui button:focus,
+.ds-input:focus,
+.ds-btn:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
-.factory-ui button {
-  background: #22314a;
-  border: 1px solid #334868;
-  color: var(--fg);
-  border-radius: 8px;
+.factory button:disabled,
+.factory-ui button:disabled,
+.ds-btn:disabled {
+  opacity: 0.65;
+  color: var(--disabled);
+  cursor: not-allowed;
 }
 
+.factory pre,
 .factory-ui pre {
   border: 1px solid var(--border);
   border-radius: 10px;
+}
+
+.ds-btn {
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  font-weight: 600;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.ds-btn-md {
+  padding: 10px 14px;
+}
+
+.ds-btn-sm {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.ds-btn-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--fg);
+}
+
+.ds-btn-primary:hover:not(:disabled) {
+  background: var(--primaryHover);
+  border-color: var(--primaryHover);
+}
+
+.ds-btn-secondary {
+  background: var(--card2);
+  color: var(--fg);
+}
+
+.ds-btn-secondary:hover:not(:disabled) {
+  background: #2b3a54;
+}
+
+.ds-btn-ghost {
+  background: transparent;
+  color: var(--fg2);
+}
+
+.ds-btn-ghost:hover:not(:disabled) {
+  background: rgba(148, 163, 184, 0.12);
+}
+
+.ds-btn-danger {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: var(--fg);
+}
+
+.ds-btn-danger:hover:not(:disabled) {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.ds-card-title {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+  color: var(--fg);
+}
+
+.ds-card-subtitle {
+  margin: 0 0 12px;
+  color: var(--fg2);
+}
+
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+}
+
+.ds-badge-default {
+  background: rgba(148, 163, 184, 0.14);
+  color: var(--fg2);
+}
+
+.ds-badge-success {
+  background: rgba(16, 185, 129, 0.14);
+  color: #6ee7b7;
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+.ds-badge-warning {
+  background: rgba(245, 158, 11, 0.14);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.ds-badge-danger {
+  background: rgba(239, 68, 68, 0.14);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.35);
 }

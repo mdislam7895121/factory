@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { Badge } from '../../components/ui/Badge';
+import { Button } from '../../components/ui/Button';
+import { Input } from '../../components/ui/Input';
 
 type Project = {
   id: string;
@@ -265,7 +268,7 @@ export default function Home() {
     : '-';
 
   return (
-    <main className="factory-ui" style={{ padding: '24px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+    <main className="factory" style={{ padding: '24px' }}>
       <h1 style={{ margin: 0, marginBottom: '8px' }}>AI Factory Dashboard</h1>
       <div style={{ marginBottom: '10px' }}>
         <Link href="/">Back to Home</Link>
@@ -275,37 +278,41 @@ export default function Home() {
       </p>
       <div
         style={{
-          background: webReady ? '#e7f7ee' : '#fff8e7',
-          border: webReady ? '1px solid #8fd1ac' : '1px solid #f3d288',
+          background: webReady ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.12)',
+          border: webReady ? '1px solid rgba(16, 185, 129, 0.36)' : '1px solid rgba(245, 158, 11, 0.36)',
           padding: '8px',
           marginBottom: '12px',
+          borderRadius: '12px',
         }}
       >
-        <strong>{webReady ? 'Web Ready' : 'Web Warming Up'}</strong> — {warmupMessage}
+        <Badge variant={webReady ? 'success' : 'warning'} style={{ marginRight: '8px' }}>
+          {webReady ? 'Web Ready' : 'Web Warming Up'}
+        </Badge>
+        {warmupMessage}
       </div>
 
       <section style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-        <input
+        <Input
           value={name}
           onChange={(event) => setName(event.target.value)}
           placeholder="Project name"
-          style={{ padding: '8px', minWidth: '260px' }}
+          style={{ minWidth: '260px' }}
         />
-        <button onClick={createProject} disabled={loadingAction !== null} style={{ padding: '8px 12px' }}>
+        <Button onClick={createProject} disabled={loadingAction !== null} variant="primary">
           {loadingAction === 'create' ? 'Creating...' : 'Create Project'}
-        </button>
-        <button onClick={startProject} disabled={loadingAction !== null || !selectedId} style={{ padding: '8px 12px' }}>
+        </Button>
+        <Button onClick={startProject} disabled={loadingAction !== null || !selectedId} variant="secondary">
           {loadingAction === 'start' ? 'Starting...' : 'Start'}
-        </button>
-        <button onClick={stopProject} disabled={loadingAction !== null || !selectedId} style={{ padding: '8px 12px' }}>
+        </Button>
+        <Button onClick={stopProject} disabled={loadingAction !== null || !selectedId} variant="ghost">
           {loadingAction === 'stop' ? 'Stopping...' : 'Stop'}
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => refresh().catch((err) => setError(String(err)))}
-          style={{ padding: '8px 12px' }}
+          variant="ghost"
         >
           Refresh
-        </button>
+        </Button>
       </section>
 
       {error && (
@@ -320,9 +327,9 @@ export default function Home() {
           {projects.length === 0 ? (
             <div style={{ border: '1px dashed #bbb', padding: '12px', marginBottom: '12px' }}>
               <p style={{ marginTop: 0 }}>No projects yet.</p>
-              <button onClick={createProject} disabled={loadingAction !== null} style={{ padding: '8px 12px' }}>
+              <Button onClick={createProject} disabled={loadingAction !== null} variant="primary">
                 {loadingAction === 'create' ? 'Creating...' : 'Create Project'}
-              </button>
+              </Button>
             </div>
           ) : null}
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -342,7 +349,7 @@ export default function Home() {
                   key={project.id}
                   style={{
                     cursor: 'pointer',
-                    background: selectedId === project.id ? '#eef6ff' : 'transparent',
+                    background: selectedId === project.id ? 'rgba(79, 70, 229, 0.14)' : 'transparent',
                   }}
                   onClick={() => setSelectedId(project.id)}
                 >
@@ -357,19 +364,20 @@ export default function Home() {
                         Open Preview
                       </a>
                     ) : (
-                      <button disabled title="Project is stopped" style={{ marginRight: '8px' }}>
+                      <Button disabled title="Project is stopped" size="sm" variant="ghost" className="text-small" style={{ marginRight: '8px' }}>
                         Preview unavailable
-                      </button>
+                      </Button>
                     )}
-                    <button
+                    <Button
                       onClick={(event) => {
                         event.stopPropagation();
                         setSelectedId(project.id);
                       }}
-                      style={{ padding: '4px 8px' }}
+                      size="sm"
+                      variant="secondary"
                     >
                       Open Logs
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))}
@@ -392,13 +400,14 @@ export default function Home() {
                 )}
               </div>
               <div style={{ marginTop: '8px' }}>
-                <button
+                <Button
                   onClick={() => checkPreview(selected).catch((err) => setError(String(err)))}
                   disabled={previewChecking}
-                  style={{ padding: '4px 8px' }}
+                  size="sm"
+                  variant="secondary"
                 >
                   {previewChecking ? 'Checking preview...' : 'Retry Preview Check'}
-                </button>
+                </Button>
                 <span style={{ marginLeft: '8px' }}>{previewMessage}</span>
                 {previewHttpStatus !== null ? (
                   <span style={{ marginLeft: '8px' }}><strong>HTTP:</strong> {previewHttpStatus}</span>
@@ -416,7 +425,7 @@ export default function Home() {
             </div>
           ) : null}
           <div style={{ marginBottom: '8px', display: 'flex', gap: '8px' }}>
-            <button
+            <Button
               onClick={() => {
                 if (!logs) {
                   return;
@@ -424,13 +433,14 @@ export default function Home() {
                 navigator.clipboard.writeText(logs).catch((err) => setError(`copy logs failed: ${String(err)}`));
               }}
               disabled={!logs}
-              style={{ padding: '4px 8px' }}
+              size="sm"
+              variant="secondary"
             >
               Copy logs
-            </button>
-            <button onClick={() => setLogs('')} style={{ padding: '4px 8px' }}>
+            </Button>
+            <Button onClick={() => setLogs('')} size="sm" variant="ghost">
               Clear view
-            </button>
+            </Button>
           </div>
           <pre
             style={{

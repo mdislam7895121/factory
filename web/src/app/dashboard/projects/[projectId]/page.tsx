@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { Badge } from '../../../../components/ui/Badge';
+import { Button } from '../../../../components/ui/Button';
 
 type ProvisioningRun = {
   id: string;
@@ -141,19 +143,21 @@ export default function ProjectDetailPage() {
   };
 
   return (
-    <main className="factory-ui" style={{ padding: '24px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+    <main className="factory" style={{ padding: '24px' }}>
       <h1 style={{ marginTop: 0 }}>Project Provisioning</h1>
       <div style={{ marginBottom: '10px' }}>
         <Link href="/dashboard/workspaces">Back to Workspaces</Link>
       </div>
 
       {error && (
-        <div style={{ background: '#ffe7e7', border: '1px solid #ffb9b9', padding: '8px', marginBottom: '12px' }}>
+        <div style={{ background: 'rgba(239, 68, 68, 0.14)', border: '1px solid rgba(239, 68, 68, 0.35)', padding: '8px', marginBottom: '12px', borderRadius: '12px' }}>
+          <Badge variant="danger" style={{ marginRight: '8px' }}>Error</Badge>
           {error}
         </div>
       )}
       {message && (
-        <div style={{ background: '#e7f7ee', border: '1px solid #8fd1ac', padding: '8px', marginBottom: '12px' }}>
+        <div style={{ background: 'rgba(16, 185, 129, 0.14)', border: '1px solid rgba(16, 185, 129, 0.35)', padding: '8px', marginBottom: '12px', borderRadius: '12px' }}>
+          <Badge variant="success" style={{ marginRight: '8px' }}>Success</Badge>
           {message}
         </div>
       )}
@@ -166,14 +170,29 @@ export default function ProjectDetailPage() {
             <h2 style={{ marginTop: 0 }}>{project.name}</h2>
             <div><strong>Workspace:</strong> {project.workspace.name}</div>
             <div><strong>Template:</strong> {project.templateId}</div>
-            <div><strong>Status:</strong> {project.status}</div>
+            <div>
+              <strong>Status:</strong>{' '}
+              <Badge
+                variant={
+                  project.status === 'READY'
+                    ? 'success'
+                    : project.status === 'FAILED'
+                      ? 'danger'
+                      : project.status === 'RUNNING'
+                        ? 'warning'
+                        : 'default'
+                }
+              >
+                {project.status}
+              </Badge>
+            </div>
             <div><strong>Preview URL:</strong> {project.previewUrl ? <a href={project.previewUrl} target="_blank" rel="noreferrer">{project.previewUrl}</a> : 'pending'}</div>
             <div><strong>Logs Ref:</strong> {project.logsRef ?? 'pending'}</div>
             <div><strong>Provision Error:</strong> {project.provisionError ?? 'none'}</div>
             <div style={{ marginTop: '10px' }}>
-              <button onClick={provision} disabled={!canProvision || provisioning} style={{ padding: '8px 12px' }}>
+              <Button onClick={provision} disabled={!canProvision || provisioning} variant="primary">
                 {provisioning ? 'Provisioning...' : 'Provision Project'}
-              </button>
+              </Button>
             </div>
           </section>
 

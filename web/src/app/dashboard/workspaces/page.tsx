@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
+import { Badge } from '../../../components/ui/Badge';
+import { Button } from '../../../components/ui/Button';
+import { Input } from '../../../components/ui/Input';
 
 type Workspace = {
   id: string;
@@ -150,7 +153,7 @@ export default function WorkspaceDashboardPage() {
   };
 
   return (
-    <main className="factory-ui" style={{ padding: '24px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+    <main className="factory" style={{ padding: '24px' }}>
       <h1 style={{ marginTop: 0 }}>Workspace + Project Provisioning (SERIAL 11)</h1>
       <p style={{ color: '#555' }}>
         Tenant boundary MVP: create workspace, create project from template, provision, open preview/logs.
@@ -160,12 +163,14 @@ export default function WorkspaceDashboardPage() {
       </div>
 
       {error && (
-        <div style={{ background: '#ffe7e7', border: '1px solid #ffb9b9', padding: '8px', marginBottom: '12px' }}>
+        <div style={{ background: 'rgba(239, 68, 68, 0.14)', border: '1px solid rgba(239, 68, 68, 0.35)', padding: '8px', marginBottom: '12px', borderRadius: '12px' }}>
+          <Badge variant="danger" style={{ marginRight: '8px' }}>Error</Badge>
           {error}
         </div>
       )}
       {message && (
-        <div style={{ background: '#e7f7ee', border: '1px solid #8fd1ac', padding: '8px', marginBottom: '12px' }}>
+        <div style={{ background: 'rgba(16, 185, 129, 0.14)', border: '1px solid rgba(16, 185, 129, 0.35)', padding: '8px', marginBottom: '12px', borderRadius: '12px' }}>
+          <Badge variant="success" style={{ marginRight: '8px' }}>Success</Badge>
           {message}
         </div>
       )}
@@ -173,15 +178,15 @@ export default function WorkspaceDashboardPage() {
       <section style={{ border: '1px solid #ddd', padding: '12px', marginBottom: '14px' }}>
         <h2 style={{ marginTop: 0 }}>1) Create Workspace</h2>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <input
+          <Input
             value={workspaceName}
             onChange={(event) => setWorkspaceName(event.target.value)}
             placeholder="Workspace name"
-            style={{ padding: '8px', minWidth: '280px' }}
+            style={{ minWidth: '280px' }}
           />
-          <button onClick={createWorkspace} disabled={loading !== null} style={{ padding: '8px 12px' }}>
+          <Button onClick={createWorkspace} disabled={loading !== null} variant="primary">
             {loading === 'workspace' ? 'Creating...' : 'Create Workspace'}
-          </button>
+          </Button>
         </div>
       </section>
 
@@ -207,24 +212,24 @@ export default function WorkspaceDashboardPage() {
       <section style={{ border: '1px solid #ddd', padding: '12px', marginBottom: '14px' }}>
         <h2 style={{ marginTop: 0 }}>3) Create Project from Template</h2>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-          <input
+          <Input
             value={projectName}
             onChange={(event) => setProjectName(event.target.value)}
             placeholder="Project name"
-            style={{ padding: '8px', minWidth: '220px' }}
+            style={{ minWidth: '220px' }}
           />
           <select value={templateId} onChange={(event) => setTemplateId(event.target.value)} style={{ padding: '8px' }}>
             {templates.map((template) => (
               <option key={template.id} value={template.id}>{template.id}</option>
             ))}
           </select>
-          <button
+          <Button
             onClick={createProject}
             disabled={loading !== null || !selectedWorkspaceId}
-            style={{ padding: '8px 12px' }}
+            variant="secondary"
           >
             {loading === 'project' ? 'Creating...' : 'Create Project'}
-          </button>
+          </Button>
         </div>
       </section>
 
