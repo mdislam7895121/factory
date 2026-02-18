@@ -90,3 +90,15 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/preview-up.ps1
 3. Open the forwarded URL shown by VS Code (for example `https://<forwarded-host>/`).
 
 Use URL preview for this project. VS Code Live Preview extension is for static/simple servers; this app runs in Docker with Next.js and should be accessed through `http://localhost:3000` (or the forwarded URL).
+
+## Web UI Live Note
+
+- Use your browser at `http://localhost:3000` for live UI updates while developing.
+- VS Code Live Preview extension is not required for this Docker + Next.js setup.
+- If `localhost:3000` is refused, run:
+
+```powershell
+docker compose -f docker/docker-compose.dev.yml up -d --build
+```
+
+Then wait for warmup and retry the URL.

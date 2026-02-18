@@ -1,27 +1,61 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
 
-type Project = {
-  id: string;
-  name: string;
-  template: string;
-  running: boolean;
-  healthy: boolean;
-  port: number;
-  previewPath: string;
-  containerName: string;
-  createdAt: string;
+type CreateProjectResponse = {
+  ok: boolean;
+  project: {
+    id: string;
+    name: string;
+    template: string;
+  };
 };
 
-const PROJECTS_REFRESH_MS = 5000;
-const LOGS_REFRESH_MS = 2000;
-const MAX_LOG_LINES = 400;
+type StartPhase = 'idle' | 'creating' | 'starting' | 'opening' | 'error';
+type BuildMode = 'app' | 'design';
 
 const orchestratorHttpBase =
   process.env.NEXT_PUBLIC_ORCHESTRATOR_BASE_URL ?? 'http://localhost:4100';
-const orchestratorWsBase =
-  process.env.NEXT_PUBLIC_ORCHESTRATOR_WS_BASE_URL ?? 'ws://localhost:4100';
+
+const ideaChips = [
+  'AI Apps',
+  'Websites',
+  'Business Apps',
+  'Personal Software',
+];
+
+const templates: Array<{ key: string; title: string; template: string; prompt: string; description: string }> = [
+  {
+    key: 'basic-web',
+    title: 'Web Starter',
+    template: 'basic-web',
+    prompt: 'Build a clean landing page with a hero, pricing cards, and contact form.',
+    description: 'Simple site starter for quick MVPs.',
+  },
+  {
+    key: 'saas-dashboard',
+    title: 'SaaS Dashboard',
+    template: 'basic-web',
+    prompt: 'Create a SaaS dashboard with sidebar navigation and usage analytics cards.',
+    description: 'Admin-like layout with key metrics.',
+  },
+  {
+    key: 'ecommerce',
+    title: 'E-commerce',
+    template: 'basic-web',
+    prompt: 'Generate an e-commerce storefront with product grid and cart summary.',
+    description: 'Shopping-focused starter app.',
+  },
+  {
+    key: 'internal-tool',
+    title: 'Internal Tool',
+    template: 'basic-web',
+    prompt: 'Build an internal operations tool with filters, table views, and quick actions.',
+    description: 'Workflow-oriented business app.',
+  },
+];
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${orchestratorHttpBase}${path}`, {
@@ -29,419 +63,197 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
     ...init,
   });
   if (!response.ok) {
-    throw new Error(`${response.status} ${response.statusText}`);
+    let details = '';
+    try {
+      details = await response.text();
+    } catch {
+      details = '';
+    }
+    throw new Error(`${response.status} ${response.statusText}${details ? ` - ${details}` : ''}`);
   }
   return response.json();
 }
 
 export default function Home() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [selectedId, setSelectedId] = useState<string>('');
-  const [logs, setLogs] = useState<string>('');
-  const [logsError, setLogsError] = useState<string>('');
-  const [name, setName] = useState<string>('My Project');
-  const [loadingAction, setLoadingAction] = useState<'create' | 'start' | 'stop' | null>(null);
-  const [webReady, setWebReady] = useState<boolean>(false);
-  const [warmupMessage, setWarmupMessage] = useState<string>('Initializing dashboard...');
+  const router = useRouter();
+  const [buildMode, setBuildMode] = useState<BuildMode>('app');
+  const [prompt, setPrompt] = useState<string>('');
+  const [selectedTemplate, setSelectedTemplate] = useState<string>('basic-web');
+  const [phase, setPhase] = useState<StartPhase>('idle');
+  const [phaseText, setPhaseText] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [previewHttpStatus, setPreviewHttpStatus] = useState<number | null>(null);
-  const [previewMessage, setPreviewMessage] = useState<string>('Preview not checked');
-  const [previewChecking, setPreviewChecking] = useState<boolean>(false);
-  const wsRef = useRef<WebSocket | null>(null);
+  const [lastAttempt, setLastAttempt] = useState<{ prompt: string; template: string } | null>(null);
 
-  const appendLogs = (value: string) => {
-    setLogs((current) => {
-      const merged = `${current}${value}`;
-      const lines = merged.split('\n');
-      if (lines.length <= MAX_LOG_LINES) {
-        return merged;
-      }
-      return lines.slice(lines.length - MAX_LOG_LINES).join('\n');
-    });
-  };
+  const promptLength = prompt.trim().length;
+  const canStart = promptLength >= 10 && phase !== 'creating' && phase !== 'starting' && phase !== 'opening';
 
-  const refreshProjectStatus = async (projectId: string) => {
-    const statusData = await api<{ ok: boolean; status: Project }>(`/v1/projects/${encodeURIComponent(projectId)}/status`);
-    setProjects((current) => current.map((project) => (
-      project.id === projectId ? statusData.status : project
-    )));
-  };
-
-  const refreshLogs = async (projectId: string) => {
-    try {
-      const response = await fetch(`${orchestratorHttpBase}/v1/projects/${encodeURIComponent(projectId)}/logs`);
-      if (!response.ok) {
-        throw new Error(`${response.status} ${response.statusText}`);
-      }
-      const text = await response.text();
-      appendLogs(`${text}\n`);
-      setLogsError('');
-    } catch (err) {
-      setLogsError(`logs unavailable: ${String(err)}`);
+  const startLabel = useMemo(() => {
+    if (phase === 'creating') {
+      return 'Creating...';
     }
-  };
-
-  const selected = useMemo(
-    () => projects.find((project) => project.id === selectedId) ?? null,
-    [projects, selectedId],
-  );
-
-  const refresh = async () => {
-    const data = await api<{ ok: boolean; projects: Project[] }>('/v1/projects');
-    setProjects(data.projects);
-    if (!selectedId && data.projects.length > 0) {
-      setSelectedId(data.projects[0].id);
+    if (phase === 'starting') {
+      return 'Starting...';
     }
-  };
+    if (phase === 'opening') {
+      return 'Opening preview...';
+    }
+    return 'Start';
+  }, [phase]);
 
-  useEffect(() => {
-    let mounted = true;
-
-    const warmup = async () => {
-      let delayMs = 1000;
-      for (let attempt = 1; attempt <= 6; attempt += 1) {
-        try {
-          setWarmupMessage(`Connecting to orchestrator... attempt ${attempt}/6`);
-          await refresh();
-          if (!mounted) {
-            return;
-          }
-          setWebReady(true);
-          setWarmupMessage('Web Ready');
-          setError('');
-          return;
-        } catch (err) {
-          if (!mounted) {
-            return;
-          }
-          if (attempt === 6) {
-            setError(`[warmup] ${String(err)}`);
-            setWarmupMessage('Web warmup failed');
-            return;
-          }
-          await new Promise((resolve) => setTimeout(resolve, delayMs));
-          delayMs *= 2;
-        }
-      }
-    };
-
-    warmup().catch((err) => {
-      setError(`[warmup] ${String(err)}`);
-      setWarmupMessage('Web warmup failed');
-    });
-
-    const interval = setInterval(() => {
-      refresh().catch((err) => {
-        setError(`[refresh] ${String(err)}`);
-      });
-    }, PROJECTS_REFRESH_MS);
-
-    return () => {
-      mounted = false;
-      clearInterval(interval);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!selectedId) {
+  const startBuild = async (promptText: string, template: string) => {
+    const trimmedPrompt = promptText.trim();
+    if (trimmedPrompt.length < 10) {
       return;
     }
 
-    wsRef.current?.close();
-    setLogs('');
-    setLogsError('');
-    setPreviewHttpStatus(null);
-    setPreviewMessage('Preview not checked');
-
-    const ws = new WebSocket(
-      `${orchestratorWsBase}/v1/ws/projects/${encodeURIComponent(selectedId)}/logs`,
-    );
-
-    ws.onmessage = (event) => {
-      appendLogs(event.data);
-      setLogsError('');
-    };
-    ws.onerror = (event) => {
-      const message = event instanceof Event ? 'log stream connection error' : String(event);
-      setLogsError(`logs unavailable: ${message}`);
-      appendLogs('\n[dashboard] log stream connection error\n');
-    };
-
-    const pollInterval = setInterval(() => {
-      refreshLogs(selectedId).catch(() => {
-      });
-    }, LOGS_REFRESH_MS);
-
-    wsRef.current = ws;
-    return () => {
-      clearInterval(pollInterval);
-      ws.close();
-    };
-  }, [selectedId]);
-
-  const checkPreview = async (project: Project) => {
-    if (!project.running) {
-      setPreviewHttpStatus(null);
-      setPreviewMessage('Project is stopped; start it to open preview');
-      return;
-    }
-
-    setPreviewChecking(true);
-    setPreviewMessage('Checking preview...');
-
-    try {
-      const response = await fetch(project.previewPath, { method: 'GET' });
-      setPreviewHttpStatus(response.status);
-      if (response.status === 200) {
-        setPreviewMessage('Preview ready');
-      } else {
-        setPreviewMessage(`Preview warming up (HTTP ${response.status})`);
-      }
-    } catch (err) {
-      setPreviewHttpStatus(null);
-      setPreviewMessage(`Preview check failed: ${String(err)}`);
-    } finally {
-      setPreviewChecking(false);
-    }
-  };
-
-  const createProject = async () => {
-    setLoadingAction('create');
     setError('');
+    setLastAttempt({ prompt: trimmedPrompt, template });
+
     try {
-      await api('/v1/projects', {
+      setPhase('creating');
+      setPhaseText('Creating...');
+
+      const derivedName = trimmedPrompt.slice(0, 48) || 'New App';
+      const create = await api<CreateProjectResponse>('/v1/projects', {
         method: 'POST',
-        body: JSON.stringify({ name, template: 'basic-web' }),
+        body: JSON.stringify({ name: derivedName, template }),
       });
-      await refresh();
-    } catch (err) {
-      setError(String(err));
-    } finally {
-      setLoadingAction(null);
-    }
-  };
 
-  const startProject = async () => {
-    if (!selectedId) {
-      return;
-    }
-    setLoadingAction('start');
-    setError('');
-    try {
-      await api(`/v1/projects/${encodeURIComponent(selectedId)}/start`, {
+      setPhase('starting');
+      setPhaseText('Starting...');
+
+      await api(`/v1/projects/${encodeURIComponent(create.project.id)}/start`, {
         method: 'POST',
       });
-      await refreshProjectStatus(selectedId);
-      await refresh();
+
+      setPhase('opening');
+      setPhaseText('Opening preview...');
+      router.push(`/p/${create.project.id}/`);
     } catch (err) {
-      setError(String(err));
-    } finally {
-      setLoadingAction(null);
+      setPhase('error');
+      setError(`Unable to create/start project: ${String(err)}`);
+      setPhaseText('');
     }
   };
-
-  const stopProject = async () => {
-    if (!selectedId) {
-      return;
-    }
-    setLoadingAction('stop');
-    setError('');
-    try {
-      await api(`/v1/projects/${encodeURIComponent(selectedId)}/stop`, {
-        method: 'POST',
-      });
-      await refreshProjectStatus(selectedId);
-      await refresh();
-    } catch (err) {
-      setError(String(err));
-    } finally {
-      setLoadingAction(null);
-    }
-  };
-
-  const selectedCreatedAt = selected
-    ? new Date(selected.createdAt).toLocaleString()
-    : '-';
 
   return (
-    <main style={{ padding: '24px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
-      <h1 style={{ margin: 0, marginBottom: '8px' }}>AI Factory Dashboard</h1>
-      <p style={{ marginTop: 0, color: '#555' }}>
-        Local Replit-like workspace controller (Docker + preview + logs)
-      </p>
-      <div
-        style={{
-          background: webReady ? '#e7f7ee' : '#fff8e7',
-          border: webReady ? '1px solid #8fd1ac' : '1px solid #f3d288',
-          padding: '8px',
-          marginBottom: '12px',
-        }}
-      >
-        <strong>{webReady ? 'Web Ready' : 'Web Warming Up'}</strong> — {warmupMessage}
+    <main style={{ padding: '24px', fontFamily: 'Arial, Helvetica, sans-serif', maxWidth: '960px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+        <h1 style={{ margin: 0 }}>What will you build?</h1>
+        <Link href="/dashboard">Open dashboard</Link>
       </div>
 
-      <section style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-        <input
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          placeholder="Project name"
-          style={{ padding: '8px', minWidth: '260px' }}
-        />
-        <button onClick={createProject} disabled={loadingAction !== null} style={{ padding: '8px 12px' }}>
-          {loadingAction === 'create' ? 'Creating...' : 'Create Project'}
-        </button>
-        <button onClick={startProject} disabled={loadingAction !== null || !selectedId} style={{ padding: '8px 12px' }}>
-          {loadingAction === 'start' ? 'Starting...' : 'Start'}
-        </button>
-        <button onClick={stopProject} disabled={loadingAction !== null || !selectedId} style={{ padding: '8px 12px' }}>
-          {loadingAction === 'stop' ? 'Stopping...' : 'Stop'}
+      <p style={{ marginTop: 0, color: '#555' }}>
+        Describe your app, pick a template, and start instantly.
+      </p>
+
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+        <button
+          onClick={() => setBuildMode('app')}
+          style={{
+            padding: '8px 14px',
+            border: '1px solid #bbb',
+            background: buildMode === 'app' ? '#eef6ff' : '#fff',
+            cursor: 'pointer',
+          }}
+        >
+          App
         </button>
         <button
-          onClick={() => refresh().catch((err) => setError(String(err)))}
-          style={{ padding: '8px 12px' }}
+          disabled
+          title="Design mode is coming soon"
+          style={{
+            padding: '8px 14px',
+            border: '1px solid #ddd',
+            background: '#f5f5f5',
+            color: '#777',
+            cursor: 'not-allowed',
+          }}
         >
-          Refresh
+          Design
         </button>
-      </section>
+      </div>
 
-      {error && (
-        <div style={{ background: '#ffe7e7', border: '1px solid #ffb9b9', padding: '8px', marginBottom: '12px' }}>
-          {error}
-        </div>
-      )}
+      <textarea
+        value={prompt}
+        onChange={(event) => setPrompt(event.target.value)}
+        placeholder="Describe the app you want to build..."
+        rows={8}
+        style={{ width: '100%', padding: '12px', boxSizing: 'border-box', marginBottom: '10px' }}
+      />
 
-      <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-        <div>
-          <h2 style={{ marginTop: 0 }}>Projects</h2>
-          {projects.length === 0 ? (
-            <div style={{ border: '1px dashed #bbb', padding: '12px', marginBottom: '12px' }}>
-              <p style={{ marginTop: 0 }}>No projects yet.</p>
-              <button onClick={createProject} disabled={loadingAction !== null} style={{ padding: '8px 12px' }}>
-                {loadingAction === 'create' ? 'Creating...' : 'Create Project'}
-              </button>
-            </div>
-          ) : null}
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr>
-                <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd' }}>Name</th>
-                <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd' }}>Running</th>
-                <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd' }}>Healthy</th>
-                <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd' }}>Port</th>
-                <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd' }}>Created</th>
-                <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd' }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {projects.map((project) => (
-                <tr
-                  key={project.id}
-                  style={{
-                    cursor: 'pointer',
-                    background: selectedId === project.id ? '#eef6ff' : 'transparent',
-                  }}
-                  onClick={() => setSelectedId(project.id)}
-                >
-                  <td style={{ padding: '6px 4px', borderBottom: '1px solid #f0f0f0' }}>{project.name}</td>
-                  <td style={{ padding: '6px 4px', borderBottom: '1px solid #f0f0f0' }}>{project.running ? 'yes' : 'no'}</td>
-                  <td style={{ padding: '6px 4px', borderBottom: '1px solid #f0f0f0' }}>{project.healthy ? 'yes' : 'no'}</td>
-                  <td style={{ padding: '6px 4px', borderBottom: '1px solid #f0f0f0' }}>{project.port}</td>
-                  <td style={{ padding: '6px 4px', borderBottom: '1px solid #f0f0f0' }}>{new Date(project.createdAt).toLocaleString()}</td>
-                  <td style={{ padding: '6px 4px', borderBottom: '1px solid #f0f0f0' }}>
-                    {project.running ? (
-                      <a href={project.previewPath} target="_blank" rel="noreferrer" style={{ marginRight: '8px' }}>
-                        Open Preview
-                      </a>
-                    ) : (
-                      <button disabled title="Project is stopped" style={{ marginRight: '8px' }}>
-                        Preview unavailable
-                      </button>
-                    )}
-                    <button
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        setSelectedId(project.id);
-                      }}
-                      style={{ padding: '4px 8px' }}
-                    >
-                      Open Logs
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {selected && (
-            <div style={{ marginTop: '10px', borderTop: '1px solid #eee', paddingTop: '10px' }}>
-              <div><strong>Selected:</strong> {selected.name}</div>
-              <div><strong>Running:</strong> {selected.running ? 'yes' : 'no'}</div>
-              <div><strong>Healthy:</strong> {selected.healthy ? 'yes' : 'no'}</div>
-              <div><strong>Port:</strong> {selected.port}</div>
-              <div><strong>Created:</strong> {selectedCreatedAt}</div>
-              <div>
-                {selected.running ? (
-                  <a href={selected.previewPath} target="_blank" rel="noreferrer">
-                    Open Preview
-                  </a>
-                ) : (
-                  <span>Preview unavailable: project is stopped</span>
-                )}
-              </div>
-              <div style={{ marginTop: '8px' }}>
-                <button
-                  onClick={() => checkPreview(selected).catch((err) => setError(String(err)))}
-                  disabled={previewChecking}
-                  style={{ padding: '4px 8px' }}
-                >
-                  {previewChecking ? 'Checking preview...' : 'Retry Preview Check'}
-                </button>
-                <span style={{ marginLeft: '8px' }}>{previewMessage}</span>
-                {previewHttpStatus !== null ? (
-                  <span style={{ marginLeft: '8px' }}><strong>HTTP:</strong> {previewHttpStatus}</span>
-                ) : null}
-              </div>
-            </div>
-          )}
-        </div>
+      <div style={{ color: '#666', marginBottom: '12px' }}>
+        {promptLength}/10 characters minimum
+      </div>
 
-        <div>
-          <h2 style={{ marginTop: 0 }}>Live Logs</h2>
-          {logsError ? (
-            <div style={{ background: '#fff4db', border: '1px solid #f1d08a', padding: '8px', marginBottom: '8px' }}>
-              {logsError}
-            </div>
-          ) : null}
-          <div style={{ marginBottom: '8px', display: 'flex', gap: '8px' }}>
+      <div style={{ marginBottom: '14px' }}>
+        <strong>Start with an idea:</strong>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>
+          {ideaChips.map((chip) => (
             <button
-              onClick={() => {
-                if (!logs) {
-                  return;
-                }
-                navigator.clipboard.writeText(logs).catch((err) => setError(`copy logs failed: ${String(err)}`));
-              }}
-              disabled={!logs}
-              style={{ padding: '4px 8px' }}
+              key={chip}
+              onClick={() => setPrompt(`Build a ${chip.toLowerCase()} project that helps users get started quickly.`)}
+              style={{ padding: '6px 10px', border: '1px solid #ccc', background: '#fff', cursor: 'pointer' }}
             >
-              Copy logs
+              {chip}
             </button>
-            <button onClick={() => setLogs('')} style={{ padding: '4px 8px' }}>
-              Clear view
-            </button>
-          </div>
-          <pre
-            style={{
-              background: '#0f172a',
-              color: '#e2e8f0',
-              height: '420px',
-              overflow: 'auto',
-              padding: '12px',
-              whiteSpace: 'pre-wrap',
-            }}
-          >
-            {selectedId ? logs || '[dashboard] waiting for logs...' : 'Select a project to stream logs'}
-          </pre>
+          ))}
         </div>
-      </section>
+      </div>
+
+      <div style={{ marginBottom: '14px' }}>
+        <strong>Templates</strong>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px', marginTop: '8px' }}>
+          {templates.map((card) => (
+            <button
+              key={card.key}
+              onClick={() => {
+                setSelectedTemplate(card.template);
+                setPrompt(card.prompt);
+              }}
+              style={{
+                textAlign: 'left',
+                border: selectedTemplate === card.template && prompt === card.prompt ? '2px solid #2563eb' : '1px solid #ccc',
+                padding: '10px',
+                background: '#fff',
+                cursor: 'pointer',
+              }}
+            >
+              <div style={{ fontWeight: 700, marginBottom: '4px' }}>{card.title}</div>
+              <div style={{ color: '#555', fontSize: '13px' }}>{card.description}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <button
+          onClick={() => startBuild(prompt, selectedTemplate).catch(() => {})}
+          disabled={!canStart || buildMode !== 'app'}
+          style={{ padding: '10px 16px' }}
+        >
+          {startLabel}
+        </button>
+        {phaseText ? <span>{phaseText}</span> : null}
+      </div>
+
+      {error ? (
+        <div style={{ marginTop: '16px', background: '#ffe7e7', border: '1px solid #ffb9b9', padding: '10px' }}>
+          <div style={{ marginBottom: '8px' }}>{error}</div>
+          <button
+            onClick={() => {
+              if (!lastAttempt) {
+                return;
+              }
+              startBuild(lastAttempt.prompt, lastAttempt.template).catch(() => {});
+            }}
+            disabled={!lastAttempt}
+            style={{ padding: '6px 10px' }}
+          >
+            Retry
+          </button>
+        </div>
+      ) : null}
     </main>
   );
 }
