@@ -51,3 +51,42 @@ if(-not $ready){ throw "web not ready" }
 | ResponseEnded | retry web/preview request for 10-30s | rerun request loop; if persistent, check `docker compose ... logs` |
 | port in use | container start fails with bind/port error | `docker ps --format json`, stop conflicting container, rerun compose |
 | stale local state | inconsistent startup behavior | full reset with `docker compose -f docker/docker-compose.dev.yml down -v` then `up -d --build` |
+
+## Live Dashboard Preview (Local Windows)
+
+Use the preview bring-up script:
+
+```powershell
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/preview-up.ps1
+```
+
+Optional browser launch:
+
+```powershell
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/preview-up.ps1 -OpenBrowser
+```
+
+Teardown:
+
+```powershell
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/preview-down.ps1
+```
+
+The dashboard URL is always:
+
+- `http://localhost:3000`
+
+## Live Dashboard Preview (Remote/DevContainer)
+
+If your workspace runs remotely (Dev Container/Codespaces/SSH), `localhost` in your browser is not the container host.
+
+1. Run:
+
+```powershell
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/preview-up.ps1
+```
+
+2. In VS Code, open **PORTS** view and forward port `3000`.
+3. Open the forwarded URL shown by VS Code (for example `https://<forwarded-host>/`).
+
+Use URL preview for this project. VS Code Live Preview extension is for static/simple servers; this app runs in Docker with Next.js and should be accessed through `http://localhost:3000` (or the forwarded URL).
