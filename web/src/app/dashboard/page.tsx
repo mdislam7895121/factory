@@ -265,7 +265,7 @@ export default function Home() {
     : '-';
 
   return (
-    <main style={{ padding: '24px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+    <main className="factory-ui" style={{ padding: '24px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
       <h1 style={{ margin: 0, marginBottom: '8px' }}>AI Factory Dashboard</h1>
       <div style={{ marginBottom: '10px' }}>
         <Link href="/">Back to Home</Link>

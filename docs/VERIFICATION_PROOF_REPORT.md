@@ -94,3 +94,57 @@ Selected orchestrator project: `proj-mlrm213x`
 ## Notes
 - `docker compose -f docker/docker-compose.dev.yml up -d --build api web` was required so running containers reflected latest Serial 11 code.
 - Prisma generator output pinned to `api/src/generated/prisma` for compatibility with existing `PrismaService` import path.
+
+## SERIAL 11 PATCH-01 — UI Readability + Contrast
+
+### Scope
+- Branch: `feature/serial-11-ui-contrast-patch`
+- Type: additive UI styling only (no route/API/provisioning logic changes)
+- Affected UI routes:
+  - `/dashboard`
+  - `/dashboard/workspaces`
+  - `/dashboard/projects/[projectId]`
+
+### Before/After Screenshots
+- BEFORE
+  - `proof/serial11-patch01/before-dashboard.png`
+  - `proof/serial11-patch01/before-workspaces.png`
+  - `proof/serial11-patch01/before-project-build.png`
+- AFTER
+  - `proof/serial11-patch01/after-dashboard.png`
+  - `proof/serial11-patch01/after-workspaces.png`
+  - `proof/serial11-patch01/after-project-build.png`
+
+### Commands Run + Output Highlights
+- Baseline:
+  - `git status --short --branch` → clean branch on patch head
+  - `git log -1 --oneline` → `5ecb690 ... SERIAL 11 ...`
+  - `docker compose -f docker/docker-compose.dev.yml up -d web` → web running
+- BEFORE route probes:
+  - `BEFORE_ROUTE http://localhost:3000/dashboard STATUS=200 LEN=21587`
+  - `BEFORE_ROUTE http://localhost:3000/dashboard/workspaces STATUS=200 LEN=22093`
+  - `BEFORE_ROUTE http://localhost:3000/dashboard/projects/73e73f14-2a58-4cad-9fda-7cc81d774bd0 STATUS=200 LEN=21825`
+- AFTER route probes:
+  - `AFTER_ROUTE http://localhost:3000/dashboard STATUS=200 LEN=21583`
+  - `AFTER_ROUTE http://localhost:3000/dashboard/workspaces STATUS=200 LEN=22095`
+  - `AFTER_ROUTE http://localhost:3000/dashboard/projects/73e73f14-2a58-4cad-9fda-7cc81d774bd0 STATUS=200 LEN=22084`
+- Web quality checks:
+  - `npm run lint` → pass with existing warnings only (no errors)
+  - `npm run build` → pass
+
+### Styling Change Summary (Non-Breaking)
+- Added high-contrast UI tokens in `web/src/app/globals.css`:
+  - `--bg`, `--fg`, `--muted`, `--card-bg`, `--border`, `--placeholder`, `--focus-ring`
+- Added scoped `.factory-ui` styles in `globals.css` to improve readability:
+  - consistent dark page tone, near-white primary text, clearer secondary text
+  - distinct card backgrounds and visible borders
+  - input placeholder/caret visibility and keyboard focus outlines
+- Applied `className="factory-ui"` to:
+  - `web/src/app/dashboard/page.tsx`
+  - `web/src/app/dashboard/workspaces/page.tsx`
+  - `web/src/app/dashboard/projects/[projectId]/page.tsx`
+
+### Why This Is Non-Breaking
+- No API, data, state, route, or provisioning behavior changed.
+- Changes are CSS variable and class-based presentation updates only.
+- Permanent Preview routes remained reachable (`STATUS=200`) before and after.

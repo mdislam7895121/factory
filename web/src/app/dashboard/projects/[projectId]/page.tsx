@@ -141,7 +141,7 @@ export default function ProjectDetailPage() {
   };
 
   return (
-    <main style={{ padding: '24px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+    <main className="factory-ui" style={{ padding: '24px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
       <h1 style={{ marginTop: 0 }}>Project Provisioning</h1>
       <div style={{ marginBottom: '10px' }}>
         <Link href="/dashboard/workspaces">Back to Workspaces</Link>
