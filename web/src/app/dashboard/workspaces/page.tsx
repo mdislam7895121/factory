@@ -150,7 +150,7 @@ export default function WorkspaceDashboardPage() {
   };
 
   return (
-    <main style={{ padding: '24px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+    <main className="factory-ui" style={{ padding: '24px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
       <h1 style={{ marginTop: 0 }}>Workspace + Project Provisioning (SERIAL 11)</h1>
       <p style={{ color: '#555' }}>
         Tenant boundary MVP: create workspace, create project from template, provision, open preview/logs.

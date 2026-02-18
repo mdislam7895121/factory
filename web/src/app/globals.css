@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0f141d;
+  --foreground: #eef4ff;
+  --bg: #0f141d;
+  --fg: #eef4ff;
+  --muted: #a8b3c7;
+  --card-bg: #171f2d;
+  --border: #2b3648;
+  --placeholder: #8d9ab2;
+  --focus-ring: #7aa2ff;
 }
 
 @theme inline {
@@ -14,13 +21,89 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0f141d;
+    --foreground: #eef4ff;
+    --bg: #0f141d;
+    --fg: #eef4ff;
+    --muted: #a8b3c7;
+    --card-bg: #171f2d;
+    --border: #2b3648;
+    --placeholder: #8d9ab2;
+    --focus-ring: #7aa2ff;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--fg);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.factory-ui {
+  color: var(--fg);
+}
+
+.factory-ui h1,
+.factory-ui h2,
+.factory-ui h3,
+.factory-ui th,
+.factory-ui td,
+.factory-ui div,
+.factory-ui span,
+.factory-ui strong {
+  color: var(--fg);
+}
+
+.factory-ui p {
+  color: var(--muted) !important;
+}
+
+.factory-ui section {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px;
+}
+
+.factory-ui table th,
+.factory-ui table td {
+  border-bottom-color: var(--border) !important;
+}
+
+.factory-ui a {
+  color: #93b3ff;
+}
+
+.factory-ui input,
+.factory-ui select,
+.factory-ui textarea {
+  background: #121b29;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  caret-color: var(--fg);
+}
+
+.factory-ui input::placeholder,
+.factory-ui textarea::placeholder {
+  color: var(--placeholder);
+  opacity: 1;
+}
+
+.factory-ui input:focus,
+.factory-ui select:focus,
+.factory-ui textarea:focus,
+.factory-ui button:focus {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+.factory-ui button {
+  background: #22314a;
+  border: 1px solid #334868;
+  color: var(--fg);
+  border-radius: 8px;
+}
+
+.factory-ui pre {
+  border: 1px solid var(--border);
+  border-radius: 10px;
 }
