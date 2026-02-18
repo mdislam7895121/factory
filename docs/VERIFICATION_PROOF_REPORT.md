@@ -312,3 +312,58 @@ Selected orchestrator project: `proj-mlrm213x`
 - No API/orchestrator changes.
 - No dashboard flow logic changes.
 - Styling/content polish limited to root landing + minimal global marketing classes.
+
+## SERIAL 11 PATCH-04 (Option 2) — Customer-first Builder Home + Light/Dark Toggle
+
+### Scope
+- Branch: `feature/serial-11-builder-home-option2`
+- Updated files (web-only, minimal scope):
+  - `web/src/app/page.tsx`
+  - `web/src/app/layout.tsx`
+  - `web/src/app/globals.css`
+  - `web/src/app/theme-toggle.tsx`
+  - `web/src/app/recent-projects.tsx`
+
+### Implemented
+- Replaced `/` with customer-first builder home sections:
+  - Prompt-first panel
+  - Templates panel
+  - Recent projects panel
+- Added persistent light/dark toggle:
+  - storage key: `factory-theme`
+  - pre-hydration initialization script in layout chooses saved theme or system default
+- Kept dashboard/admin flows untouched (no edits under `/dashboard/*`).
+
+### Baseline probes (BEFORE)
+- `/ STATUS=200 LEN=36285`
+- `/dashboard STATUS=200 LEN=21862`
+- `/dashboard/workspaces STATUS=200 LEN=22137`
+- `/factory-preview STATUS=200 LEN=20077`
+
+### Verification probes (AFTER)
+- `/ STATUS=200 LEN=36280`
+- `/dashboard STATUS=200 LEN=21866`
+- `/dashboard/workspaces STATUS=200 LEN=22143`
+- `/factory-preview STATUS=200 LEN=20075`
+
+### Screenshots (proof artifacts)
+- BEFORE
+  - `proof/serial11-patch04-option2/before-root.png` (70804 bytes)
+  - `proof/serial11-patch04-option2/before-dashboard.png` (53084 bytes)
+- AFTER
+  - `proof/serial11-patch04-option2/after-root.png` (67960 bytes)
+  - `proof/serial11-patch04-option2/after-dashboard.png` (51437 bytes)
+
+### Quality checks
+- `npm run lint` → pass with existing warnings only (0 errors, 4 pre-existing warnings)
+- `npm run build` → pass
+
+### Git proof snapshot
+- `git status --short --branch`:
+  - `## feature/serial-11-builder-home-option2`
+  - `M web/src/app/globals.css`
+  - `M web/src/app/layout.tsx`
+  - `M web/src/app/page.tsx`
+  - `?? web/src/app/recent-projects.tsx`
+  - `?? web/src/app/theme-toggle.tsx`
+
