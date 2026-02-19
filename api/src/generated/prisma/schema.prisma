@@ -64,3 +64,15 @@ model ProvisioningRun {
 
   @@index([projectId])
 }
+
+model PublicProject {
+  id          String   @id @default(uuid())
+  ownerId     String
+  templateId  String
+  repoUrl     String?
+  status      String
+  previewUrl  String?
+  containerId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

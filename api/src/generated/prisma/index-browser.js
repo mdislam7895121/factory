@@ -157,6 +157,18 @@ exports.Prisma.ProvisioningRunScalarFieldEnum = {
   finishedAt: 'finishedAt'
 };
 
+exports.Prisma.PublicProjectScalarFieldEnum = {
+  id: 'id',
+  ownerId: 'ownerId',
+  templateId: 'templateId',
+  repoUrl: 'repoUrl',
+  status: 'status',
+  previewUrl: 'previewUrl',
+  containerId: 'containerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -188,7 +200,8 @@ exports.Prisma.ModelName = {
   HealthCheck: 'HealthCheck',
   Workspace: 'Workspace',
   Project: 'Project',
-  ProvisioningRun: 'ProvisioningRun'
+  ProvisioningRun: 'ProvisioningRun',
+  PublicProject: 'PublicProject'
 };
 
 /**

@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
+import { PublicProvisioningWidget } from '../../components/public-provisioning-widget';
 
 type Project = {
   id: string;
@@ -270,6 +271,7 @@ export default function Home() {
   return (
     <main className="factory" style={{ padding: '24px' }}>
       <h1 style={{ margin: 0, marginBottom: '8px' }}>AI Factory Dashboard</h1>
+      <PublicProvisioningWidget />
       <div style={{ marginBottom: '10px' }}>
         <Link href="/">Back to Home</Link>
       </div>
