@@ -422,10 +422,10 @@ RESULT: FAIL (HIGH/CRITICAL vulnerabilities in CI mode)
   - `pwsh -File scripts/security-scan.ps1 -CiStrict` → `RESULT: PASS (No security issues in CI mode)`.
 
 ### Proof links (fix PR)
-- Fix PR: _to be filled after PR creation_
-- Merge SHA: _to be filled after merge_
+- Fix PR: `https://github.com/mdislam7895121/factory/pull/33`
+- Merge SHA: `56c3fb504efe87f149d86dd1eff85a4ecd84bd48`
 - Main check-runs URL pattern:
-  - `https://api.github.com/repos/mdislam7895121/factory/commits/<MAIN_SHA>/check-runs`
+  - `https://api.github.com/repos/mdislam7895121/factory/commits/56c3fb504efe87f149d86dd1eff85a4ecd84bd48/check-runs`
 
 ### Notes
 - This addendum exists because PR checks continued running after admin squash merge.
