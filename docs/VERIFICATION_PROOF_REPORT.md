@@ -386,6 +386,69 @@ NAME                IMAGE             COMMAND                  SERVICE   CREATED
 - proof/serial11-patch04-option2/postmerge-root.png
 - proof/serial11-patch04-option2/postmerge-dashboard.png
 
+## SERIAL 12 — Persistent Preview Infrastructure
+
+### Scope
+- Branch: `feature/serial-12-persistent-preview`
+- Type: infrastructure-only, additive-only changes
+- No UI/page/dashboard logic changes
+
+### Docker dev stability changes
+- `docker/docker-compose.dev.yml`
+  - `web.container_name: factory-web-dev`
+  - `web.restart: unless-stopped`
+  - `web.healthcheck: curl -fsS http://localhost:3000`
+  - `web.ports: 3000:3000`
+  - `web.command: sh -lc "npm install && npm run dev"`
+  - `web` bind mount preserved (`../web -> /workspace/web`) for hot reload
+
+### Dev watch mode note
+- `web` runs `npm run dev` inside container with source bind mount and node_modules volume; this preserves Next.js dev watch/hot reload behavior.
+
+### Route probes (before)
+>>> CMD: Invoke-WebRequest probes
+BEFORE_ROUTE http://localhost:3000/ StatusCode=200
+BEFORE_ROUTE http://localhost:3000/dashboard StatusCode=200
+BEFORE_ROUTE http://localhost:3000/dashboard/workspaces StatusCode=200
+BEFORE_ROUTE http://localhost:3000/factory-preview StatusCode=200
+
+### docker ps output
+>>> CMD: docker ps --filter "name=factory-web-dev" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+NAMES             STATUS                   PORTS
+factory-web-dev   Up 5 minutes (healthy)   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp
+
+### Healthcheck result
+>>> CMD: docker inspect factory-web-dev --format "Health={{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}} Restart={{.HostConfig.RestartPolicy.Name}}"
+Health=healthy Restart=unless-stopped
+
+### preview-start.ps1 output
+>>> CMD: pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/preview-start.ps1
+=== PREVIEW START ===
+[+] up 4/4
+ ✔ Container factory-dev-orchestrator-1 Running
+ ✔ Container factory-dev-db-1           Healthy
+ ✔ Container factory-dev-api-1          Healthy
+ ✔ Container factory-web-dev            Running
+PREVIEW_URL=http://localhost:3000
+
+### preview-status.ps1 output
+>>> CMD: pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/preview-status.ps1
+=== PREVIEW STATUS ===
+NAME              IMAGE             SERVICE   STATUS                   PORTS
+factory-web-dev   factory-dev-web   web       Up 5 minutes (healthy)   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp
+ContainerRunning=True
+HealthStatus=healthy
+PortBinding=0.0.0.0:3000 [::]:3000
+HttpStatus=200
+SUCCESS
+
+### Route probes (after)
+>>> CMD: Invoke-WebRequest probes
+AFTER_ROUTE http://localhost:3000/ StatusCode=200
+AFTER_ROUTE http://localhost:3000/dashboard StatusCode=200
+AFTER_ROUTE http://localhost:3000/dashboard/workspaces StatusCode=200
+AFTER_ROUTE http://localhost:3000/factory-preview StatusCode=200
+
 ## SERIAL 11 — CI/Security Hardening failure analysis (PR #32)
 
 ### Failed run details
