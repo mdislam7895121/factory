@@ -399,7 +399,7 @@ NAME                IMAGE             COMMAND                  SERVICE   CREATED
   - `web.restart: unless-stopped`
   - `web.healthcheck: curl -fsS http://localhost:3000`
   - `web.ports: 3000:3000`
-  - `web.command: npm run dev`
+  - `web.command: sh -lc "npm install && npm run dev"`
   - `web` bind mount preserved (`../web -> /workspace/web`) for hot reload
 
 ### Dev watch mode note

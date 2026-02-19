@@ -67,7 +67,8 @@ services:
         target: /workspace/web
       - web_node_modules:/workspace/web/node_modules
     restart: unless-stopped
-    command: npm run dev
+    command: >
+      sh -lc "npm install && npm run dev"
     ports:
       - "3000:3000"
     depends_on:
