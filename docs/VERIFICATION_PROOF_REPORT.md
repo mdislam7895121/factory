@@ -386,6 +386,47 @@ NAME                IMAGE             COMMAND                  SERVICE   CREATED
 - proof/serial11-patch04-option2/postmerge-root.png
 - proof/serial11-patch04-option2/postmerge-dashboard.png
 
+## SERIAL 13 — Marketing-grade Polish (Dark Aura Premium)
+
+### Scope
+- Branch: `feature/serial-13-marketing-polish`
+- Modified files:
+  - `web/src/app/page.tsx`
+  - `web/src/app/globals.css`
+- No API, dashboard logic, routing, or backend changes.
+
+### Baseline proofs
+>>> CMD: git status --short --branch
+## feature/serial-13-marketing-polish
+
+>>> CMD: git log -1 --oneline
+529df5e SERIAL 12: Persistent live preview infrastructure (#36)
+
+>>> CMD: git diff --stat origin/main...HEAD
+(no output)
+
+>>> CMD: route probes
+BASELINE_ROUTE http://localhost:3000/ StatusCode=200
+BASELINE_ROUTE http://localhost:3000/dashboard StatusCode=200
+BASELINE_ROUTE http://localhost:3000/factory-preview StatusCode=200
+
+### Screenshots
+- BEFORE: `proof/serial13-marketing-polish/before-root.png`
+- AFTER: `proof/serial13-marketing-polish/after-root.png`
+
+### After proofs
+>>> CMD: route probes
+AFTER_ROUTE http://localhost:3000/ StatusCode=200
+AFTER_ROUTE http://localhost:3000/dashboard StatusCode=200
+AFTER_ROUTE http://localhost:3000/factory-preview StatusCode=200
+
+### Quality checks
+>>> CMD: npm run lint (web)
+- Result: pass with existing warnings only in dashboard files (no errors).
+
+>>> CMD: npm run build (web)
+- Result: success.
+
 ## SERIAL 12 — Persistent Preview Infrastructure
 
 ### Scope
