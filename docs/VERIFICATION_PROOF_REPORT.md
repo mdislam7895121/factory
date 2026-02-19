@@ -386,6 +386,143 @@ NAME                IMAGE             COMMAND                  SERVICE   CREATED
 - proof/serial11-patch04-option2/postmerge-root.png
 - proof/serial11-patch04-option2/postmerge-dashboard.png
 
+## SERIAL 12 — Permanent Live Preview Infrastructure (Non-Breaking, Agent-Only, Proof-First)
+
+### Scope
+- Branch: `feature/serial-12-permanent-preview`
+- Infra-only changes: `docker/docker-compose.dev.yml`, `scripts/preview-up.ps1`, `scripts/preview-status.ps1`, `scripts/preview-down.ps1`
+- No changes to `web/src/app/*`, dashboard pages, backend API logic, routing, or provisioning.
+
+### Docker diff summary
+>>> CMD: git diff --stat
+ docker/docker-compose.dev.yml |  4 +-
+ scripts/preview-down.ps1      |  4 +-
+ scripts/preview-status.ps1    | 43 +-------------------
+ scripts/preview-up.ps1        | 94 +++++++++----------------------------------
+ 4 files changed, 25 insertions(+), 120 deletions(-)
+
+### Docker compose config proof (key web fields)
+>>> CMD: docker compose -f docker/docker-compose.dev.yml config
+web:
+  command:
+    - npm
+    - run
+    - dev
+  environment:
+    NODE_ENV: development
+  ports:
+    - mode: ingress
+      target: 3000
+      published: "3000"
+      protocol: tcp
+  restart: unless-stopped
+
+### Compose status + restart policy proof
+>>> CMD: docker compose -f docker/docker-compose.dev.yml ps
+NAME                         IMAGE                      SERVICE        STATUS                        PORTS
+factory-dev-web-1            factory-dev-web            web            Up 29 seconds (healthy)       0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp
+
+>>> CMD: docker inspect factory-dev-web-1 --format "{{json .HostConfig.RestartPolicy}}"
+{"Name":"unless-stopped","MaximumRetryCount":0}
+
+### Preview control scripts (final contents)
+
+#### scripts/preview-up.ps1
+```powershell
+param(
+    [int]$Attempts = 60,
+    [int]$DelaySeconds = 2
+)
+
+$ErrorActionPreference = 'Stop'
+
+$RepoRoot = Split-Path -Parent $PSScriptRoot
+$ComposeFile = Join-Path $RepoRoot 'docker\docker-compose.dev.yml'
+
+docker compose -f $ComposeFile up -d --build web
+if ($LASTEXITCODE -ne 0) {
+    throw 'docker compose up -d --build web failed'
+}
+
+$ready = $false
+for ($attempt = 1; $attempt -le $Attempts; $attempt++) {
+    try {
+        $response = Invoke-WebRequest -UseBasicParsing -Uri 'http://localhost:3000' -TimeoutSec 5
+        if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 500) {
+            $ready = $true
+            break
+        }
+    } catch {
+    }
+
+    Start-Sleep -Seconds $DelaySeconds
+}
+
+if (-not $ready) {
+    throw 'preview did not become reachable on localhost:3000 in time'
+}
+
+Write-Output 'PREVIEW_READY'
+```
+
+#### scripts/preview-status.ps1
+```powershell
+$ErrorActionPreference = 'Stop'
+
+$RepoRoot = Split-Path -Parent $PSScriptRoot
+$ComposeFile = Join-Path $RepoRoot 'docker\docker-compose.dev.yml'
+
+docker compose -f $ComposeFile ps web
+Test-NetConnection localhost -Port 3000
+```
+
+#### scripts/preview-down.ps1
+```powershell
+$ErrorActionPreference = 'Stop'
+
+$RepoRoot = Split-Path -Parent $PSScriptRoot
+$ComposeFile = Join-Path $RepoRoot 'docker\docker-compose.dev.yml'
+
+docker compose -f $ComposeFile stop web
+if ($LASTEXITCODE -ne 0) {
+    throw 'docker compose stop web failed'
+}
+```
+
+### Script execution proofs (raw)
+>>> CMD: pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/preview-up.ps1
+PREVIEW_READY
+
+>>> CMD: pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/preview-status.ps1
+NAME                IMAGE             SERVICE   STATUS                    PORTS
+factory-dev-web-1   factory-dev-web   web       Up 17 seconds (healthy)   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp
+ComputerName     : localhost
+RemoteAddress    : ::1
+RemotePort       : 3000
+TcpTestSucceeded : True
+
+>>> CMD: pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/preview-down.ps1
+[+] stop 1/1
+ ✔ Container factory-dev-web-1 Stopped
+
+### Runtime verification proof
+>>> CMD: Invoke-WebRequest http://localhost:3000 -UseBasicParsing
+StatusCode=200
+ContentLength=50054
+
+### Windows auto-start (optional) proof
+>>> CMD: schtasks /Create /TN FactoryPreviewAutoStart /SC ONLOGON /TR "powershell -NoProfile -ExecutionPolicy Bypass -File C:\Users\vitor\Dev\factory\scripts\preview-up.ps1" /F
+ERROR: Access is denied.
+
+>>> CMD: schtasks /Query /TN FactoryPreviewAutoStart
+ERROR: The system cannot find the file specified.
+
+### Screenshot of root page
+- Not captured in this run (terminal-only execution environment).
+
+### Post-reboot test result
+- Not executed in this run.
+
 ## SERIAL 11 — CI/Security Hardening failure analysis (PR #32)
 
 ### Failed run details
