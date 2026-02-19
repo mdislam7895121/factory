@@ -21,10 +21,10 @@ const templates = [
 
 export default function Home() {
   return (
-    <main className="factory builder-shell">
+    <main className="factory builder-shell builder-shell-premium">
       <div className="builder-container">
-        <header className="builder-header">
-          <h1 className="builder-brand">Factory Builder</h1>
+        <header className="builder-header fade-up">
+          <p className="builder-brand">Factory Builder</p>
           <div className="builder-header-right">
             <ThemeToggle />
             <Link href="/dashboard" className="ds-btn ds-btn-secondary ds-btn-sm" style={{ textDecoration: 'none' }}>
@@ -33,18 +33,18 @@ export default function Home() {
           </div>
         </header>
 
-        <section className="builder-hero ds-card">
+        <section className="builder-hero builder-section">
           <Badge className="text-small" style={{ marginBottom: '10px' }}>Customer-first home</Badge>
-          <h2>Describe what you want to build</h2>
-          <p>
+          <h1 className="builder-hero-title">Describe what you want to build</h1>
+          <p className="builder-hero-subtitle">
             Start with a prompt, pick a template, and continue from recent projects without changing dashboard flows.
           </p>
 
           <div className="builder-prompt-grid">
-            <Card className="builder-prompt">
+            <Card className="builder-prompt builder-glass fade-up" style={{ animationDelay: '80ms' }}>
               <h3>Prompt</h3>
               <textarea
-                className="ds-input"
+                className="ds-input builder-textarea"
                 placeholder="Create a multi-tenant onboarding tool with approval flows and a workspace-level activity log..."
                 defaultValue=""
               />
@@ -58,11 +58,11 @@ export default function Home() {
               </div>
             </Card>
 
-            <Card>
+            <Card className="builder-template-panel fade-up" style={{ animationDelay: '140ms' }}>
               <h3>Templates</h3>
-              <ul className="builder-template-list">
+              <ul className="builder-template-grid">
                 {templates.map((template) => (
-                  <li key={template.name} className="builder-template-item">
+                  <li key={template.name} className="builder-template-card">
                     <div>
                       <p className="builder-template-name">{template.name}</p>
                       <p className="builder-template-meta">{template.meta}</p>
@@ -75,7 +75,7 @@ export default function Home() {
           </div>
         </section>
 
-        <Card>
+        <Card className="builder-recent-panel fade-up" style={{ animationDelay: '200ms' }}>
           <h3>Recent projects</h3>
           <RecentProjects />
         </Card>
