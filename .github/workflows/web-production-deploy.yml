@@ -1,0 +1,92 @@
+name: Production Deploy (web)
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  production-deploy:
+    name: Production Deploy (web)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate required Vercel secrets
+        run: |
+          missing=0
+          if [ -z "${VERCEL_TOKEN}" ]; then
+            echo "Missing required secret: VERCEL_TOKEN"
+            missing=1
+          fi
+          if [ -z "${VERCEL_ORG_ID}" ]; then
+            echo "Missing required secret: VERCEL_ORG_ID"
+            missing=1
+          fi
+          if [ -z "${VERCEL_PROJECT_ID}" ]; then
+            echo "Missing required secret: VERCEL_PROJECT_ID"
+            missing=1
+          fi
+          if [ "$missing" -ne 0 ]; then
+            echo "Add repository secrets at: GitHub repository > Settings > Secrets and variables > Actions > Repository secrets"
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install web dependencies
+        run: npm -C web ci
+
+      - name: Build web
+        run: npm -C web run build
+
+      - name: Vercel pull (production)
+        run: |
+          cd web
+          npx vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+
+      - name: Vercel build (production)
+        run: |
+          cd web
+          npx vercel build --prod --token="$VERCEL_TOKEN"
+
+      - name: Vercel deploy (production)
+        id: deploy
+        run: |
+          cd web
+          npx vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN" 2>&1 | tee /tmp/vercel_production.log
+          PRODUCTION_URL=$(grep -Eo 'https://[^ ]+\.vercel\.app' /tmp/vercel_production.log | tail -n 1)
+          if [ -z "$PRODUCTION_URL" ]; then
+            echo "Unable to parse production URL from Vercel output"
+            exit 1
+          fi
+          echo "production_url=$PRODUCTION_URL" >> "$GITHUB_OUTPUT"
+          echo "PRODUCTION_URL=$PRODUCTION_URL"
+
+      - name: Route probes (production)
+        env:
+          PRODUCTION_URL: ${{ steps.deploy.outputs.production_url }}
+        run: |
+          routes=("/" "/dashboard" "/dashboard/workspaces" "/factory-preview")
+          for route in "${routes[@]}"; do
+            status=$(curl -L -s -o /tmp/route_body.txt -w "%{http_code}" "${PRODUCTION_URL%/}${route}")
+            echo "PROBE route=${route} status=${status}"
+            if [ "$status" != "200" ]; then
+              echo "Route probe failed for ${route}"
+              exit 1
+            fi
+          done
