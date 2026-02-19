@@ -1,9 +1,18 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { Serial11Service } from './serial11.service';
+import { ProvisioningService } from '../services/provisioningService';
 
 @Controller('/v1')
 export class Serial11Controller {
-  constructor(private readonly serial11Service: Serial11Service) {}
+  constructor(
+    private readonly serial11Service: Serial11Service,
+    private readonly provisioningService: ProvisioningService,
+  ) {}
+
+  @Post('/projects')
+  createPublicProject(@Body() body: { templateId?: string }) {
+    return this.provisioningService.createPublicProject(body ?? {});
+  }
 
   @Get('/templates')
   listTemplates() {
@@ -39,8 +48,22 @@ export class Serial11Controller {
   }
 
   @Get('/projects/:id')
-  getProject(@Param('id') id: string) {
+  async getProject(@Param('id') id: string) {
+    const publicProject = await this.provisioningService.findPublicProject(id);
+    if (publicProject) {
+      return publicProject;
+    }
+
     return this.serial11Service.getProject(id);
+  }
+
+  @Get('/projects/:id/logs')
+  async getProjectLogs(@Param('id') id: string) {
+    const logs = await this.provisioningService.getPublicProjectLogs(id);
+    return {
+      projectId: id,
+      logs,
+    };
   }
 
   @Post('/projects/:id/provision')
