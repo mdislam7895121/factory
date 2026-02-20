@@ -5,6 +5,15 @@ CREATE TYPE "ProjectStatus" AS ENUM ('QUEUED', 'RUNNING', 'READY', 'FAILED');
 CREATE TYPE "ProvisioningRunStatus" AS ENUM ('RUNNING', 'READY', 'FAILED');
 
 -- CreateTable
+CREATE TABLE "HealthCheck" (
+    "id" TEXT NOT NULL,
+    "message" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "HealthCheck_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Workspace" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -44,11 +53,29 @@ CREATE TABLE "ProvisioningRun" (
     CONSTRAINT "ProvisioningRun_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "PublicProject" (
+    "id" TEXT NOT NULL,
+    "ownerId" TEXT NOT NULL,
+    "templateId" TEXT NOT NULL,
+    "repoUrl" TEXT,
+    "status" TEXT NOT NULL,
+    "previewUrl" TEXT,
+    "containerId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "PublicProject_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE INDEX "Project_workspaceId_idx" ON "Project"("workspaceId");
 
 -- CreateIndex
 CREATE INDEX "ProvisioningRun_projectId_idx" ON "ProvisioningRun"("projectId");
+
+-- CreateIndex
+CREATE INDEX "PublicProject_ownerId_createdAt_idx" ON "PublicProject"("ownerId", "createdAt");
 
 -- AddForeignKey
 ALTER TABLE "Project" ADD CONSTRAINT "Project_workspaceId_fkey" FOREIGN KEY ("workspaceId") REFERENCES "Workspace"("id") ON DELETE CASCADE ON UPDATE CASCADE;
