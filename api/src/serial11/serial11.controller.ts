@@ -1,9 +1,12 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { Serial11Service } from './serial11.service';
+import { requireUserId } from '../lib/auth/principal';
 
 @Controller('/v1')
 export class Serial11Controller {
   constructor(private readonly serial11Service: Serial11Service) {}
+
+  private readonly ensureUserId = requireUserId;
 
   @Get('/templates')
   listTemplates() {
