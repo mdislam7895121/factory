@@ -129,6 +129,7 @@ exports.Prisma.HealthCheckScalarFieldEnum = {
 exports.Prisma.WorkspaceScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  ownerId: 'ownerId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -155,6 +156,18 @@ exports.Prisma.ProvisioningRunScalarFieldEnum = {
   createdAt: 'createdAt',
   startedAt: 'startedAt',
   finishedAt: 'finishedAt'
+};
+
+exports.Prisma.PublicProjectScalarFieldEnum = {
+  id: 'id',
+  ownerId: 'ownerId',
+  templateId: 'templateId',
+  repoUrl: 'repoUrl',
+  status: 'status',
+  previewUrl: 'previewUrl',
+  containerId: 'containerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -188,7 +201,8 @@ exports.Prisma.ModelName = {
   HealthCheck: 'HealthCheck',
   Workspace: 'Workspace',
   Project: 'Project',
-  ProvisioningRun: 'ProvisioningRun'
+  ProvisioningRun: 'ProvisioningRun',
+  PublicProject: 'PublicProject'
 };
 
 /**
