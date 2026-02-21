@@ -555,3 +555,127 @@ NAME                IMAGE             COMMAND                  SERVICE   CREATED
 ### Post-merge screenshots (local, gitignored)
 - proof/serial11-patch04-option2/postmerge-root.png
 - proof/serial11-patch04-option2/postmerge-dashboard.png
+
+## SERIAL 12 - Ownership + Workspace isolation (Cookie-based principal)
+
+### Docker daemon recovery
+>>> CMD: docker context ls
+NAME            DESCRIPTION                               DOCKER ENDPOINT                             ERROR
+default *       Current DOCKER_HOST based configuration   npipe:////./pipe/docker_engine              
+desktop-linux   Docker Desktop                            npipe:////./pipe/dockerDesktopLinuxEngine   
+
+>>> CMD: docker context use desktop-linux
+Current context is now "desktop-linux"
+desktop-linux
+
+>>> CMD: docker info (first ~30 lines)
+Client:
+ Version:    29.2.1
+ Context:    desktop-linux
+...
+Server:
+ Containers: 29
+  Running: 6
+  Paused: 0
+  Stopped: 23
+ Images: 8
+ Server Version: 29.2.1
+ Storage Driver: overlayfs
+...
+
+### Container status
+>>> CMD: docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+NAMES                        STATUS                             PORTS
+factory-web-dev              Up 23 seconds (health: starting)   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp
+factory-dev-orchestrator-1   Up About a minute                  0.0.0.0:4100->4100/tcp, [::]:4100->4100/tcp
+factory-dev-api-1            Up 54 seconds (healthy)            0.0.0.0:4000->4000/tcp, [::]:4000->4000/tcp
+factory-dev-db-1             Up About a minute (healthy)        0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp
+
+### API route mapping
+>>> CMD: docker logs --tail 120 factory-dev-api-1 | Select-String -Pattern "Mapped|API listening|Nest application successfully started"
+[Nest] 238  - 02/21/2026, 9:20:18 AM     LOG [RouterExplorer] Mapped {/, GET} route +8ms
+[Nest] 238  - 02/21/2026, 9:20:18 AM     LOG [RouterExplorer] Mapped {/db/health, GET} route +1ms
+[Nest] 238  - 02/21/2026, 9:20:18 AM     LOG [RouterExplorer] Mapped {/v1/templates, GET} route +2ms
+[Nest] 238  - 02/21/2026, 9:20:18 AM     LOG [RouterExplorer] Mapped {/v1/workspaces, POST} route +1ms
+[Nest] 238  - 02/21/2026, 9:20:18 AM     LOG [RouterExplorer] Mapped {/v1/workspaces, GET} route +1ms
+[Nest] 238  - 02/21/2026, 9:20:18 AM     LOG [RouterExplorer] Mapped {/v1/workspaces/:id, GET} route +2ms
+[Nest] 238  - 02/21/2026, 9:20:18 AM     LOG [RouterExplorer] Mapped {/v1/workspaces/:id/projects, POST} route +1ms
+[Nest] 238  - 02/21/2026, 9:20:18 AM     LOG [RouterExplorer] Mapped {/v1/workspaces/:id/projects, GET} route +1ms
+[Nest] 238  - 02/21/2026, 9:20:18 AM     LOG [RouterExplorer] Mapped {/v1/projects/:id, GET} route +0ms
+[Nest] 238  - 02/21/2026, 9:20:18 AM     LOG [RouterExplorer] Mapped {/v1/projects/:id/provision, POST} route +2ms
+[Nest] 238  - 02/21/2026, 9:20:18 AM     LOG [NestApplication] Nest application successfully started +258ms
+API listening on http://0.0.0.0:4000
+
+### API readiness probe
+>>> CMD: curl.exe -i --retry 10 --retry-delay 2 --retry-connrefused http://localhost:4000/v1/templates
+HTTP/1.1 200 OK
+...
+{"ok":true,"templates":[{"id":"basic-web"}]}
+
+### Ownership proof - Workspace creation (User A)
+>>> CMD: curl.exe -i -X POST http://localhost:4000/v1/workspaces -H "Content-Type: application/json" -H "Cookie: factory_user_id=u_a" --data-raw '{ "name": "ws-a" }'
+HTTP/1.1 201 Created
+...
+{"ok":true,"workspace":{"id":"0fb36b78-4a27-4dfd-a3d9-5ae7dab798b1","name":"ws-a","ownerId":"u_a","createdAt":"2026-02-21T09:22:00.057Z","updatedAt":"2026-02-21T09:22:00.057Z"}}
+WS_ID=0fb36b78-4a27-4dfd-a3d9-5ae7dab798b1
+
+### Ownership proof - Project creation (User A)
+>>> CMD: curl.exe -i -X POST http://localhost:4000/v1/workspaces/0fb36b78-4a27-4dfd-a3d9-5ae7dab798b1/projects -H "Content-Type: application/json" -H "Cookie: factory_user_id=u_a" --data-raw '{ "templateId": "basic-web", "name": "proj-a" }'
+HTTP/1.1 201 Created
+...
+{"ok":true,"project":{"id":"c00f767d-ed72-4ec7-880c-a546f1887080","workspaceId":"0fb36b78-4a27-4dfd-a3d9-5ae7dab798b1",...}}
+PROJECT_ID=c00f767d-ed72-4ec7-880c-a546f1887080
+
+### Ownership proof - Owner read (User A)
+>>> CMD: curl.exe -i http://localhost:4000/v1/projects/c00f767d-ed72-4ec7-880c-a546f1887080 -H "Cookie: factory_user_id=u_a"
+HTTP/1.1 200 OK
+...
+{"ok":true,"project":{"id":"c00f767d-ed72-4ec7-880c-a546f1887080",...}}
+
+### Ownership proof - Unauthorized read (User B)
+>>> CMD: curl.exe -i http://localhost:4000/v1/projects/c00f767d-ed72-4ec7-880c-a546f1887080 -H "Cookie: factory_user_id=u_b"
+HTTP/1.1 404 Not Found
+...
+NotFoundException: project not found
+
+**RESULT: PASS** - User B correctly denied (404, NOT 200)
+
+### DB proof - Project.workspaceId
+>>> CMD: docker exec factory-dev-db-1 psql -U postgres -d factory_dev -t -A -c 'SELECT id, "workspaceId" FROM "Project" WHERE id=''c00f767d-ed72-4ec7-880c-a546f1887080'';'
+c00f767d-ed72-4ec7-880c-a546f1887080|0fb36b78-4a27-4dfd-a3d9-5ae7dab798b1
+
+### DB proof - Workspace.ownerId
+>>> CMD: docker exec factory-dev-db-1 psql -U postgres -d factory_dev -t -A -c 'SELECT id, "ownerId" FROM "Workspace" WHERE id=''0fb36b78-4a27-4dfd-a3d9-5ae7dab798b1'';'
+0fb36b78-4a27-4dfd-a3d9-5ae7dab798b1|u_a
+
+### DB proof - PublicProject count
+>>> CMD: docker exec factory-dev-db-1 psql -U postgres -d factory_dev -t -A -c 'SELECT count(*) FROM "PublicProject" WHERE id=''c00f767d-ed72-4ec7-880c-a546f1887080'';'
+0
+
+### Git status
+>>> CMD: git status --short --branch
+## serial-12-ownership-workspace...origin/serial-12-ownership-workspace
+ M api/prisma/schema.prisma
+ M api/src/generated/prisma/edge.js
+ M api/src/generated/prisma/index-browser.js
+ M api/src/generated/prisma/index.d.ts
+ M api/src/generated/prisma/index.js
+ M api/src/generated/prisma/package.json
+ M api/src/generated/prisma/schema.prisma
+ M api/src/serial11/serial11.controller.ts
+ M api/src/serial11/serial11.service.ts
+?? api/prisma/migrations/20260220093038_serial12_workspace_owner/
+
+### Git diff stat
+>>> CMD: git diff --stat
+ api/prisma/schema.prisma                  |    3 +
+ api/src/generated/prisma/edge.js          |   20 +-
+ api/src/generated/prisma/index-browser.js |   16 +-
+ api/src/generated/prisma/index.d.ts     | 1590 +++++++++++++++++++++++++++--
+ api/src/generated/prisma/index.js         |   20 +-
+ api/src/generated/prisma/package.json     |    2 +-
+ api/src/generated/prisma/schema.prisma    |   17 +
+ api/src/serial11/serial11.controller.ts   |   36 +-
+ api/src/serial11/serial11.service.ts      |   48 +-
+ 9 files changed, 1605 insertions(+), 147 deletions(-)
+

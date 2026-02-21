@@ -154,14 +154,17 @@ export class Serial11Service {
     };
   }
 
-  async createWorkspace(body: { name?: string }) {
+  async createWorkspace(body: { name?: string }, ownerId: string) {
     const name = this.ensureNonEmptyName(body?.name, 'Default Workspace');
-    const workspace = await this.prisma.workspace.create({ data: { name } });
+    const workspace = await this.prisma.workspace.create({
+      data: { name, ownerId },
+    });
     return { ok: true, workspace };
   }
 
-  async listWorkspaces() {
+  async listWorkspaces(ownerId: string) {
     const workspaces = await this.prisma.workspace.findMany({
+      where: { ownerId },
       orderBy: { createdAt: 'asc' },
       include: { _count: { select: { projects: true } } },
     });
@@ -178,9 +181,9 @@ export class Serial11Service {
     };
   }
 
-  async getWorkspace(id: string) {
-    const workspace = await this.prisma.workspace.findUnique({
-      where: { id },
+  async getWorkspace(id: string, ownerId: string) {
+    const workspace = await this.prisma.workspace.findFirst({
+      where: { id, ownerId },
       include: {
         projects: {
           orderBy: { createdAt: 'desc' },
@@ -208,9 +211,10 @@ export class Serial11Service {
   async createWorkspaceProject(
     workspaceId: string,
     body: { name?: string; templateId?: string },
+    ownerId: string,
   ) {
-    const workspace = await this.prisma.workspace.findUnique({
-      where: { id: workspaceId },
+    const workspace = await this.prisma.workspace.findFirst({
+      where: { id: workspaceId, ownerId },
     });
     if (!workspace) {
       throw new NotFoundException('workspace not found');
@@ -241,9 +245,9 @@ export class Serial11Service {
     return { ok: true, project };
   }
 
-  async listWorkspaceProjects(workspaceId: string) {
-    const workspace = await this.prisma.workspace.findUnique({
-      where: { id: workspaceId },
+  async listWorkspaceProjects(workspaceId: string, ownerId: string) {
+    const workspace = await this.prisma.workspace.findFirst({
+      where: { id: workspaceId, ownerId },
     });
     if (!workspace) {
       throw new NotFoundException('workspace not found');
@@ -257,9 +261,14 @@ export class Serial11Service {
     return { ok: true, projects };
   }
 
-  async getProject(projectId: string) {
-    const existing = await this.prisma.project.findUnique({
-      where: { id: projectId },
+  async getProject(projectId: string, ownerId: string) {
+    const existing = await this.prisma.project.findFirst({
+      where: {
+        id: projectId,
+        workspace: {
+          ownerId,
+        },
+      },
       include: {
         workspace: {
           select: {
@@ -292,9 +301,14 @@ export class Serial11Service {
     };
   }
 
-  async provisionProject(projectId: string) {
-    const project = await this.prisma.project.findUnique({
-      where: { id: projectId },
+  async provisionProject(projectId: string, ownerId: string) {
+    const project = await this.prisma.project.findFirst({
+      where: {
+        id: projectId,
+        workspace: {
+          ownerId,
+        },
+      },
     });
     if (!project) {
       throw new NotFoundException('project not found');

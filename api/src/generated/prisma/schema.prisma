@@ -29,9 +29,12 @@ enum ProvisioningRunStatus {
 model Workspace {
   id        String    @id @default(uuid())
   name      String
+  ownerId   String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   projects  Project[]
+
+  @@index([ownerId])
 }
 
 model Project {
@@ -63,4 +66,18 @@ model ProvisioningRun {
   project    Project               @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId])
+}
+
+model PublicProject {
+  id          String   @id @default(uuid())
+  ownerId     String
+  templateId  String
+  repoUrl     String?
+  status      String
+  previewUrl  String?
+  containerId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([ownerId, createdAt])
 }
