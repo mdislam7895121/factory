@@ -150,6 +150,76 @@ templates/fullstack-v1/bin/fullstack-v1.mjs
 docs/VERIFICATION_PROOF_REPORT.md
 ```
 
+## SERIAL 14 — fullstack-v1 Step 4 generator write mode
+
+Date: 2026-02-22
+
+### Git baseline (short)
+```text
+> git status --short --branch
+## main...origin/main
+
+> git log -5 --oneline
+8c10de7 SERIAL 14: fullstack-v1 generator plan mode (Step 3) (#46)
+e9a8901 SERIAL 14: finalize fullstack-v1 file map (Step 2) (#45)
+53316d9 SERIAL 14: finalize fullstack-v1 schema rules (#44)
+37b0459 docs(serial-12): local runtime + ownership proof (#43)
+1b08613 docs(serial-12): post-merge proof (#42)
+```
+
+### Runtime health
+```text
+> docker compose -f docker-compose.dev.yml ps
+factory-dev-api-1            ... Up ... (healthy)
+factory-dev-db-1             ... Up ... (healthy)
+factory-dev-orchestrator-1   ... Up ...
+factory-web-dev              ... Up ... (healthy)
+
+> curl.exe -i http://localhost:4000/v1/templates | Select-Object -First 20
+HTTP/1.1 200 OK
+
+> curl.exe -i http://localhost:3000/ | Select-Object -First 15
+HTTP/1.1 200 OK
+```
+
+### Plan determinism (unchanged)
+```text
+> Get-FileHash .\output\planA.json
+Hash      : C1D594FD872EAB818D457D77606EDC9223BCD0156C93ABD6050B6D86202AC917
+
+> Get-FileHash .\output\planB.json
+Hash      : C1D594FD872EAB818D457D77606EDC9223BCD0156C93ABD6050B6D86202AC917
+
+> Compare-Object (Get-Content .\output\planA.json -Raw) (Get-Content .\output\planB.json -Raw)
+COMPARE_RESULT=IDENTICAL
+```
+
+### Write mode functional proof
+```text
+> node .\templates\fullstack-v1\bin\fullstack-v1.mjs write --name demoapp --withAuth true --database postgres --outputDir .\output\write-demo --json > .\output\write1.json
+> node .\templates\fullstack-v1\bin\fullstack-v1.mjs write --name demoapp --withAuth true --database postgres --outputDir .\output\write-demo --json
+{
+  "ok": false,
+  "error": "TargetNotEmpty"
+}
+WRITE_NO_FORCE_EXIT=1
+
+> node .\templates\fullstack-v1\bin\fullstack-v1.mjs write --name demoapp --withAuth true --database postgres --outputDir .\output\write-demo --force --json > .\output\write2.json
+{
+  "ok": true,
+  "mode": "write",
+  "write": {
+    "force": true
+  }
+}
+```
+
+### Safety statement
+
+No files are written outside `targetFolder`. Path traversal guard blocks absolute paths, `..` paths, and resolved escape paths.
+
+বাংলা নোট: write mode default-safe—non-empty target এ `--force` ছাড়া লিখে না, তাই accidental overwrite risk কম।
+
 ### Result summary
 - SERIAL 14 smallest deliverable completed: Step 1 schema and validation rules finalized.
 - Runtime regression checks stayed green for API templates and web root.

@@ -204,6 +204,65 @@ Validation failure contract:
 }
 ```
 
+## Step 4 — Generator engine (write mode)
+
+Step 4 adds write execution that materializes the Step 2 file map into a target folder.
+
+### CLI entry
+
+- `node ./templates/fullstack-v1/bin/fullstack-v1.mjs write --name <name> --withAuth <true|false> --database <postgres|sqlite> --outputDir <dir> [--force] [--json]`
+
+### Write mode behavior
+
+- Uses the same validation as Step 1 (`name`, `withAuth`, `database`)
+- Uses the same file map as Step 2 / Step 3 plan mode
+- Default safety: if target folder exists and is not empty, returns `ok:false` with `TargetNotEmpty`
+- `--force` allows overwriting only known mapped files; unknown files are not deleted
+- Path traversal guard: rejects absolute paths, `..` segments, and any resolved path outside `targetFolder`
+- Plan determinism remains unchanged for same inputs
+
+### Write output contract (`--json`)
+
+```json
+{
+  "ok": true,
+  "templateId": "fullstack-v1",
+  "mode": "write",
+  "inputs": {
+    "name": "demoapp",
+    "withAuth": true,
+    "database": "postgres",
+    "outputDir": "./output/write-demo"
+  },
+  "output": {
+    "rule": "targetDir = outputDir ? outputDir + \"/\" + name : \"./\" + name",
+    "targetFolder": "./output/write-demo/demoapp"
+  },
+  "counts": {
+    "totalFiles": 14,
+    "totalDirs": 6
+  },
+  "write": {
+    "force": false,
+    "createdFiles": [
+      "README.md"
+    ],
+    "overwrittenFiles": []
+  }
+}
+```
+
+Write safety failure example:
+
+```json
+{
+  "ok": false,
+  "error": "TargetNotEmpty",
+  "message": "target folder exists and is not empty; use --force to overwrite known files",
+  "targetFolder": "./output/write-demo/demoapp"
+}
+```
+
 ## Environment variables (placeholders only)
 
 - `NODE_ENV=development`
@@ -226,7 +285,7 @@ Validation failure contract:
 - Step 1 — Finalize schema and validation rules (complete)
 - Step 2 — Define deterministic file map (complete)
 - Step 3 — Implement generator engine (plan mode) (complete)
-- Step 4 — Implement `apps/web` scaffold
+- Step 4 — Implement generator engine (write mode) (complete)
 - Step 5 — Implement `apps/api` scaffold
 - Step 6 — Implement `apps/mobile` scaffold
 - Step 7 — Add auth/database options wiring
