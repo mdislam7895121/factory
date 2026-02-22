@@ -9,7 +9,7 @@ Status legend:
 ## Steps
 
 - [x] Step 0 — Scaffold created
-- [ ] Step 1 — Schema finalized
+- [x] Step 1 — Schema finalized
 - [ ] Step 2 — File map finalized
 - [ ] Step 3 — Generator engine (plan mode)
 - [ ] Step 4 — Generator engine (write mode)
