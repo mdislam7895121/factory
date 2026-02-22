@@ -679,3 +679,188 @@ c00f767d-ed72-4ec7-880c-a546f1887080|0fb36b78-4a27-4dfd-a3d9-5ae7dab798b1
  api/src/serial11/serial11.service.ts      |   48 +-
  9 files changed, 1605 insertions(+), 147 deletions(-)
 
+## SERIAL 12 — Post-merge Proof (Signed)
+
+Date: 2026-02-22
+PR: https://github.com/mdislam7895121/factory/pull/41
+
+### Merge confirmation (PR #41)
+```text
+> gh pr view 41 --repo mdislam7895121/factory --json number,state,mergeable,mergeStateStatus,headRefName,baseRefName,isDraft,title,url,statusCheckRollup
+{
+  "baseRefName": "main",
+  "headRefName": "feature/serial-12-ownership-signed",
+  "isDraft": false,
+  "mergeStateStatus": "CLEAN",
+  "mergeable": "MERGEABLE",
+  "number": 41,
+  "state": "OPEN",
+  "title": "SERIAL 12: workspace/project ownership enforcement (signed)",
+  "url": "https://github.com/mdislam7895121/factory/pull/41"
+}
+
+> gh pr merge 41 --repo mdislam7895121/factory --merge --delete-branch=false
+GraphQL: Merge commits are not allowed on this repository. (mergePullRequest)
+
+> gh pr merge 41 --repo mdislam7895121/factory --rebase --delete-branch=false
+GraphQL: Base branch requires signed commits. Rebase merges cannot be automatically signed by GitHub (mergePullRequest)
+
+> git fetch origin
+> git checkout main
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+> git pull --ff-only
+Already up to date.
+> git merge --ff-only origin/feature/serial-12-ownership-signed
+Updating a492ba7..74c9ead
+Fast-forward
+...
+15 files changed, 1884 insertions(+), 153 deletions(-)
+...
+> git push origin main
+To https://github.com/mdislam7895121/factory.git
+   a492ba7..74c9ead  main -> main
+
+> gh pr view 41 --repo mdislam7895121/factory --json number,state,mergedAt,closed,mergeCommit,url
+{
+  "closed": true,
+  "mergeCommit": {
+    "oid": "74c9ead3a9f2a20b83aac1b1bcc20e1cac232c72"
+  },
+  "mergedAt": "2026-02-22T09:10:10Z",
+  "number": 41,
+  "state": "MERGED",
+  "url": "https://github.com/mdislam7895121/factory/pull/41"
+}
+```
+
+### Post-merge local sync proof
+```text
+> git checkout main
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+
+> git fetch origin
+
+> git pull --ff-only
+Already up to date.
+```
+
+### Main commit head proof
+```text
+> git log -8 --oneline --decorate
+74c9ead (HEAD -> main, origin/main, origin/feature/serial-12-ownership-signed, origin/HEAD, feature/serial-12-ownership-signed) SERIAL-12: enforce workspace/project ownership checks
+fa46a8d fix(migrations): regenerate baseline chain with PublicProject + index
+67ae9d9 SERIAL-12: enforce workspace/project ownership checks
+e146103 fix(migrations): regenerate baseline chain with PublicProject + index
+187ab45 feat(serial-12): enforce public project ownership (clean rebuild)
+657c913 chore: ignore local prisma migration backup
+a492ba7 SERIAL 13: marketing-grade polish for root builder home (#37)
+529df5e SERIAL 12: Persistent live preview infrastructure (#36)
+```
+
+### Signature verification on main
+```text
+> git log --show-signature -8
+commit 74c9ead3a9f2a20b83aac1b1bcc20e1cac232c72 (HEAD -> main, origin/main, origin/feature/serial-12-ownership-signed, origin/HEAD, feature/serial-12-ownership-signed)
+Good "git" signature for vitorgarh@gmail.com with ED25519 key SHA256:R0tYm9VWcp/raUeMTykjR7ZdxspMdeeeFwpI7JQ47b4
+Author: MD TAZIZUL ISLAM <vitorgarh@gmail.com>
+Date:   Sat Feb 21 04:26:26 2026 -0500
+
+    SERIAL-12: enforce workspace/project ownership checks
+
+commit fa46a8d9b102ec227688cd9434eefe0735cfe922
+Good "git" signature for vitorgarh@gmail.com with ED25519 key SHA256:R0tYm9VWcp/raUeMTykjR7ZdxspMdeeeFwpI7JQ47b4
+
+commit 67ae9d9ad3930d81d4210814e0062ef90ff55967
+Good "git" signature for vitorgarh@gmail.com with ED25519 key SHA256:R0tYm9VWcp/raUeMTykjR7ZdxspMdeeeFwpI7JQ47b4
+
+commit e146103d74b0ac3ab332a4d962cd7dcd616934cb
+Good "git" signature for vitorgarh@gmail.com with ED25519 key SHA256:R0tYm9VWcp/raUeMTykjR7ZdxspMdeeeFwpI7JQ47b4
+
+commit 187ab45efd6040ed249e070fe954bcfeb20161bd
+Good "git" signature for vitorgarh@gmail.com with ED25519 key SHA256:R0tYm9VWcp/raUeMTykjR7ZdxspMdeeeFwpI7JQ47b4
+
+commit 657c9132a9c006103642714a0b1f14934d244b64
+Good "git" signature for vitorgarh@gmail.com with ED25519 key SHA256:R0tYm9VWcp/raUeMTykjR7ZdxspMdeeeFwpI7JQ47b4
+```
+
+### Runtime proof — fresh dev stack
+```text
+> docker compose -f docker/docker-compose.dev.yml down -v --remove-orphans
+[+] down 9/9
+ ✔ Container factory-web-dev                    Removed
+ ✔ Container factory-dev-api-1                  Removed
+ ✔ Container factory-dev-orchestrator-1         Removed
+ ✔ Container factory-dev-db-1                   Removed
+ ✔ Volume factory-dev_pgdata                    Removed
+ ✔ Volume factory-dev_api_node_modules          Removed
+ ✔ Network factory-dev_factory-dev              Removed
+ ✔ Volume factory-dev_orchestrator_node_modules Removed
+ ✔ Volume factory-dev_web_node_modules          Removed
+
+> docker compose -f docker/docker-compose.dev.yml up -d --build
+[+] up 12/12
+ ✔ Image factory-dev-api                        Built
+ ✔ Image factory-dev-web                        Built
+ ✔ Image factory-dev-orchestrator               Built
+ ✔ Network factory-dev_factory-dev              Created
+ ✔ Volume factory-dev_orchestrator_node_modules Created
+ ✔ Volume factory-dev_pgdata                    Created
+ ✔ Volume factory-dev_api_node_modules          Created
+ ✔ Volume factory-dev_web_node_modules          Created
+ ✔ Container factory-dev-db-1                   Healthy
+ ✔ Container factory-dev-orchestrator-1         Created
+ ✔ Container factory-dev-api-1                  Healthy
+ ✔ Container factory-web-dev                    Created
+
+> docker compose -f docker/docker-compose.dev.yml ps
+NAME                         IMAGE                      COMMAND                  SERVICE        CREATED         STATUS                             PORTS
+factory-dev-api-1            factory-dev-api            "docker-entrypoint.s…"  api            2 minutes ago   Up 2 minutes (healthy)             0.0.0.0:4000->4000/tcp, [::]:4000->4000/tcp
+factory-dev-db-1             postgres:16-alpine         "docker-entrypoint.s…"  db             2 minutes ago   Up 2 minutes (healthy)             0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp
+factory-dev-orchestrator-1   factory-dev-orchestrator   "docker-entrypoint.s…"  orchestrator   2 minutes ago   Up 2 minutes                       0.0.0.0:4100->4100/tcp, [::]:4100->4100/tcp
+factory-web-dev              factory-dev-web            "docker-entrypoint.s…"  web            2 minutes ago   Up 10 seconds (health: starting)   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp
+```
+
+### Runtime proof — templates endpoint
+```text
+> curl.exe -i --retry 15 --retry-delay 2 --retry-connrefused http://localhost:4000/v1/templates | Select-Object -First 80
+HTTP/1.1 200 OK
+...
+Content-Type: application/json; charset=utf-8
+...
+{"ok":true,"templates":[{"id":"basic-web"}]}
+```
+
+### Ownership smoke proof
+```text
+> $cookieA = 'factory_user_id=u_a'
+> $cookieB = 'factory_user_id=u_b'
+
+> $wsCreate = curl.exe -s -i -X POST http://localhost:4000/v1/workspaces -H "Content-Type: application/json" -H "Cookie: $cookieA" --data-raw '{ "name": "ws-a" }'
+> $wsCreate | Select-Object -First 80
+HTTP/1.1 201 Created
+...
+{"ok":true,"workspace":{"id":"24f07b6c-504d-4bb4-a282-de9c1c1638cb","name":"ws-a","ownerId":"u_a","createdAt":"2026-02-22T09:15:44.208Z","updatedAt":"2026-02-22T09:15:44.208Z"}}
+
+> $wsJson = ($wsCreate | Select-Object -Last 1) | ConvertFrom-Json
+> $wsId = $wsJson.workspace.id
+WS_ID=24f07b6c-504d-4bb4-a282-de9c1c1638cb
+
+> $projCreate = curl.exe -s -i -X POST http://localhost:4000/v1/workspaces/$wsId/projects -H "Content-Type: application/json" -H "Cookie: $cookieA" --data-raw '{ "templateId": "basic-web", "name": "proj-a" }'
+> $projCreate | Select-Object -First 120
+HTTP/1.1 201 Created
+...
+{"ok":true,"project":{"id":"670bbed0-526c-4732-8978-92128cdb11dc","workspaceId":"24f07b6c-504d-4bb4-a282-de9c1c1638cb","name":"proj-a","templateId":"basic-web","orchestratorProjectId":"proj-mlxj8rcu","status":"QUEUED","previewUrl":"http://localhost:3000/p/proj-mlxj8rcu/","logsRef":"ws://localhost:4100/v1/ws/projects/proj-mlxj8rcu/logs","provisionError":null,"createdAt":"2026-02-22T09:15:44.799Z","updatedAt":"2026-02-22T09:15:44.799Z"}}
+
+> $projJson = ($projCreate | Select-Object -Last 1) | ConvertFrom-Json
+> $projectId = $projJson.project.id
+PROJECT_ID=670bbed0-526c-4732-8978-92128cdb11dc
+
+> curl.exe -i http://localhost:4000/v1/projects/$projectId -H "Cookie: $cookieA" | Select-Object -First 25
+HTTP/1.1 200 OK
+
+> curl.exe -i http://localhost:4000/v1/projects/$projectId -H "Cookie: $cookieB" | Select-Object -First 25
+HTTP/1.1 404 Not Found
+```
+
