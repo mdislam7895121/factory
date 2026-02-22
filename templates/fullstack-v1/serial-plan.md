@@ -13,7 +13,7 @@ Status legend:
 - [x] Step 2 — File map finalized
 - [x] Step 3 — Generator engine (plan mode)
 - [x] Step 4 — Generator engine (write mode)
-- [ ] Step 5 — apps/web scaffold integration
+- [x] Step 5 — apps/web scaffold integration
 - [ ] Step 6 — apps/api scaffold integration
 - [ ] Step 7 — apps/mobile scaffold integration
 - [ ] Step 8 — CI integration and checks
