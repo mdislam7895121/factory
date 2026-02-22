@@ -105,6 +105,7 @@ Validation error contract:
 | File path | Purpose | Source template | Write rule |
 | --- | --- | --- | --- |
 | `README.md` | Top-level project usage and bootstrap notes | `root/README.md.hbs` | `OVERWRITE` |
+| `pnpm-workspace.yaml` | Workspace package discovery for `pnpm install` at project root | `root/pnpm-workspace.yaml.hbs` | `OVERWRITE` |
 | `.gitignore` | Basic ignores for Node/TS output and env files | `root/.gitignore.hbs` | `SKIP_IF_EXISTS` |
 | `.env.example` | Safe example env values only | `root/.env.example.hbs` | `SKIP_IF_EXISTS` |
 | `apps/api/package.json` | API package manifest for minimal Node/TS service | `apps/api/package.json.hbs` | `OVERWRITE` |
@@ -183,7 +184,7 @@ Step 3 adds plan-only execution that computes what would be generated, without w
     }
   ],
   "counts": {
-    "totalFiles": 14,
+    "totalFiles": 15,
     "totalDirs": 6
   }
 }
@@ -239,7 +240,7 @@ Step 4 adds write execution that materializes the Step 2 file map into a target 
     "targetFolder": "./output/write-demo/demoapp"
   },
   "counts": {
-    "totalFiles": 14,
+    "totalFiles": 15,
     "totalDirs": 6
   },
   "write": {
@@ -251,6 +252,32 @@ Step 4 adds write execution that materializes the Step 2 file map into a target 
   }
 }
 ```
+
+## Step 5 — apps/web scaffold integration
+
+Step 5 upgrades generated `apps/web` from placeholder content to a runnable Next.js App Router scaffold.
+
+### Step 5 web scaffold requirements
+
+- `apps/web/package.json` includes scripts: `dev`, `build`, `start`, `lint`
+- `apps/web/package.json` includes minimal runtime deps: `next`, `react`, `react-dom`
+- `apps/web/tsconfig.json` is compatible with Next App Router TypeScript expectations
+- `apps/web/src/app/layout.tsx` and `apps/web/src/app/page.tsx` render a minimal landing page
+- Landing title format: `fullstack-v1 <name>` (example: `fullstack-v1 demoapp`)
+- Root workspace includes `pnpm-workspace.yaml` so `pnpm install` works from generated project root
+
+### Run commands after generation (Step 5)
+
+```text
+cd <generated-target>
+corepack enable
+pnpm install
+pnpm --filter web dev -- --port 3010
+```
+
+Expected result:
+
+- `curl.exe -i http://localhost:3010/` returns `HTTP/1.1 200 OK`
 
 Write safety failure example:
 
@@ -286,9 +313,9 @@ Write safety failure example:
 - Step 2 — Define deterministic file map (complete)
 - Step 3 — Implement generator engine (plan mode) (complete)
 - Step 4 — Implement generator engine (write mode) (complete)
-- Step 5 — Implement `apps/api` scaffold
-- Step 6 — Implement `apps/mobile` scaffold
-- Step 7 — Add auth/database options wiring
+- Step 5 — Implement `apps/web` scaffold integration (complete)
+- Step 6 — Implement `apps/api` scaffold
+- Step 7 — Implement `apps/mobile` scaffold
 - Step 8 — Add CI integration and checks
 - Step 9 — Add tests and proof scripts
 - Step 10 — Final verification and docs hardening

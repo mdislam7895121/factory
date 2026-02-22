@@ -223,6 +223,74 @@ No files are written outside `targetFolder`. Path traversal guard blocks absolut
 ### Result summary
 - SERIAL 14 smallest deliverable completed: Step 1 schema and validation rules finalized.
 - Runtime regression checks stayed green for API templates and web root.
+
+## SERIAL 14 — fullstack-v1 Step 5 apps/web scaffold integration
+
+Date: 2026-02-22
+
+### Git head (branch run)
+```text
+> git log -1 --oneline
+ab9daed SERIAL 14: fullstack-v1 generator write mode (Step 4) (#47)
+```
+
+### Generation command + write.json excerpt
+```text
+> node .\templates\fullstack-v1\bin\fullstack-v1.mjs write --name demoapp --withAuth true --database postgres --outputDir .\output\serial14-step5-web --force --json > .\output\serial14-step5-web\write.json
+
+> Get-Content .\output\serial14-step5-web\write.json -Raw | Select-Object -First 80
+{
+  "ok": true,
+  "templateId": "fullstack-v1",
+  "mode": "write",
+  "counts": {
+    "totalFiles": 15,
+    "totalDirs": 6
+  },
+  "output": {
+    "targetFolder": "./output/serial14-step5-web/demoapp"
+  }
+}
+```
+
+### Generated files proof (`apps/web`)
+```text
+> Get-ChildItem -Recurse .\output\serial14-step5-web\demoapp\apps\web | Select-Object FullName
+...\apps\web\next.config.js
+...\apps\web\package.json
+...\apps\web\tsconfig.json
+...\apps\web\src\app\layout.tsx
+...\apps\web\src\app\page.tsx
+```
+
+### Install + web runtime proof
+```text
+> Set-Location .\output\serial14-step5-web\demoapp
+> corepack enable
+> pnpm -v
+9.12.3
+
+> pnpm install
+Scope: all 3 workspace projects
+Packages: +336
+Done in 1m 49.2s
+
+> pnpm --dir apps/web dev --port 3010
+> web@0.1.0 dev ...\apps\web
+> next dev "--port" "3010"
+Next.js 16.1.6 (Turbopack)
+- Local: http://localhost:3010
+Ready in 996ms
+
+> curl.exe -i --retry 15 --retry-delay 2 --retry-connrefused http://localhost:3010/ | Select-Object -First 20
+HTTP/1.1 200 OK
+X-Powered-By: Next.js
+<title>fullstack-v1 demoapp</title>
+```
+
+### Notes
+- `pnpm --filter web dev -- --port 3010` failed in this environment due forwarded argv; fallback `pnpm --dir apps/web dev --port 3010` succeeded.
+- Docker preview endpoints remained healthy during Step 5 proof.
 ## SERIAL 12 — Local Runtime + Ownership Proof (Docker OK)
 
 Date: 2026-02-22
