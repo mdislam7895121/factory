@@ -291,6 +291,76 @@ X-Powered-By: Next.js
 ### Notes
 - `pnpm --filter web dev -- --port 3010` failed in this environment due forwarded argv; fallback `pnpm --dir apps/web dev --port 3010` succeeded.
 - Docker preview endpoints remained healthy during Step 5 proof.
+
+## SERIAL 14 — fullstack-v1 Step 6 apps/api scaffold integration
+
+Date: 2026-02-22
+
+### Git head (branch run)
+```text
+> git log -1 --oneline
+5c0050c SERIAL 14: apps/web scaffold integration (Step 5) (#48)
+```
+
+### Generation + determinism proof
+```text
+> node .\templates\fullstack-v1\bin\fullstack-v1.mjs plan --name demoapp --withAuth true --database postgres --outputDir .\output\serial14-step6-api --json > .\output\serial14-step6-api\planA.json
+> node .\templates\fullstack-v1\bin\fullstack-v1.mjs plan --name demoapp --withAuth true --database postgres --outputDir .\output\serial14-step6-api --json > .\output\serial14-step6-api\planB.json
+> Get-FileHash .\output\serial14-step6-api\planA.json
+SHA256 87DFDF57D60B3D64FCB3A9245644C694E5801C71737CB9E47ED9EE866AD319...
+> Get-FileHash .\output\serial14-step6-api\planB.json
+SHA256 87DFDF57D60B3D64FCB3A9245644C694E5801C71737CB9E47ED9EE866AD319...
+> Compare-Object (Get-Content .\output\serial14-step6-api\planA.json -Raw) (Get-Content .\output\serial14-step6-api\planB.json -Raw)
+[no output]
+
+> node .\templates\fullstack-v1\bin\fullstack-v1.mjs write --name demoapp --withAuth true --database postgres --outputDir .\output\serial14-step6-api --force --json > .\output\serial14-step6-api\write.json
+> Get-Content .\output\serial14-step6-api\write.json -Raw | Select-Object -First 80
+{
+  "ok": true,
+  "templateId": "fullstack-v1",
+  "mode": "write",
+  "counts": {
+    "totalFiles": 15,
+    "totalDirs": 6
+  },
+  "output": {
+    "targetFolder": "./output/serial14-step6-api/demoapp"
+  }
+}
+```
+
+### Generated files proof (`apps/api`)
+```text
+> Get-ChildItem -Recurse .\output\serial14-step6-api\demoapp\apps\api | Select-Object FullName
+...\apps\api\package.json
+...\apps\api\tsconfig.json
+...\apps\api\src\main.ts
+```
+
+### Install + API runtime + health proof
+```text
+> Set-Location .\output\serial14-step6-api\demoapp
+> corepack enable
+> pnpm -v
+9.12.3
+
+> pnpm install
+Scope: all 3 workspace projects
+Packages: +339
+Done in 33s
+
+> pnpm --dir apps/api dev -- --port 3020
+> api@0.1.0 dev ...\apps\api
+> tsx src/main.ts "--" "--port" "3020"
+[fullstack-v1] api ready: demoapp (enabled, postgres) on http://localhost:3020
+
+> curl.exe -i --retry 15 --retry-delay 2 --retry-connrefused http://localhost:3020/health | Select-Object -First 25
+HTTP/1.1 200 OK
+content-type: application/json; charset=utf-8
+cache-control: no-store
+
+{"ok":true}
+```
 ## SERIAL 12 — Local Runtime + Ownership Proof (Docker OK)
 
 Date: 2026-02-22

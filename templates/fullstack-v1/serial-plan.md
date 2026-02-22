@@ -14,7 +14,7 @@ Status legend:
 - [x] Step 3 — Generator engine (plan mode)
 - [x] Step 4 — Generator engine (write mode)
 - [x] Step 5 — apps/web scaffold integration
-- [ ] Step 6 — apps/api scaffold integration
+- [x] Step 6 — apps/api scaffold integration
 - [ ] Step 7 — apps/mobile scaffold integration
 - [ ] Step 8 — CI integration and checks
 - [ ] Step 9 — Proof automation and tests
