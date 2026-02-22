@@ -27,6 +27,50 @@ HTTP/1.1 200 OK
 HTTP/1.1 200 OK
 ```
 
+## SERIAL 14 — fullstack-v1 Step 2 file map finalized
+
+Date: 2026-02-22
+
+- Finalized deterministic generated file map for fullstack-v1 Step 2 in spec.
+- Marked serial-plan Step 2 as completed.
+- No runtime behavior changes; API templates and web root remain healthy.
+- Change scope remained within allowed docs/spec files only.
+
+### Commands + raw outputs
+
+```text
+> git status --short --branch
+## feature/serial-14-file-map
+ M templates/fullstack-v1/serial-plan.md
+ M templates/fullstack-v1/spec.md
+
+> git diff --stat
+ templates/fullstack-v1/serial-plan.md |  2 +-
+ templates/fullstack-v1/spec.md        | 92 +++++++++++++++++++++++++++--------
+ 2 files changed, 74 insertions(+), 20 deletions(-)
+
+> docker compose -f docker/docker-compose.dev.yml ps
+factory-dev-api-1            ... Up ... (healthy)
+factory-dev-db-1             ... Up ... (healthy)
+factory-dev-orchestrator-1   ... Up ...
+factory-web-dev              ... Up ... (healthy)
+
+> curl.exe -i http://localhost:4000/v1/templates | Select-Object -First 20
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+> curl.exe -i http://localhost:3000/ | Select-Object -First 15
+HTTP/1.1 200 OK
+X-Powered-By: Next.js
+```
+
+### Changed files confirmation
+
+Only these files changed for Step 2:
+- `templates/fullstack-v1/spec.md`
+- `templates/fullstack-v1/serial-plan.md`
+- `docs/VERIFICATION_PROOF_REPORT.md`
+
 ### Result summary
 - SERIAL 14 smallest deliverable completed: Step 1 schema and validation rules finalized.
 - Runtime regression checks stayed green for API templates and web root.

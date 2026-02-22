@@ -63,31 +63,85 @@ Validation error contract:
 }
 ```
 
-## Outputs (planned)
+## Generated file map (Step 2 — finalized)
 
-- A new target directory under `<OutDir>/<name>`
-- Generated app folders:
-  - `apps/web/`
-  - `apps/api/`
-  - `apps/mobile/`
-- Support files:
-  - `.env.example` (safe placeholders only)
-  - `README.md`
-  - optional CI and container config
+### Output folder rule
 
-## Target folder structure (planned)
+- Default output path: `./{name}`
+- Optional override: `outputDir` (when provided later by Step 3 CLI wiring)
+- Effective output path rule: `targetDir = outputDir ? outputDir + "/" + name : "./" + name`
+
+### Generated output layout (MVP)
 
 ```text
-<OutDir>/<name>/
-  apps/
-    web/
-    api/
-    mobile/
-  docs/
-  scripts/
-  .env.example
+{targetDir}/
   README.md
+  .gitignore
+  .env.example
+  apps/
+    api/
+      package.json
+      tsconfig.json
+      src/
+        main.ts
+    web/
+      package.json
+      next.config.js
+      tsconfig.json
+      src/
+        app/
+          page.tsx
+          layout.tsx
+  packages/
+    shared/
+      package.json
+      src/
+        index.ts
+        types.ts
 ```
+
+### Generated files catalog (MVP)
+
+| File path | Purpose | Source template | Write rule |
+| --- | --- | --- | --- |
+| `README.md` | Top-level project usage and bootstrap notes | `root/README.md.hbs` | `OVERWRITE` |
+| `.gitignore` | Basic ignores for Node/TS output and env files | `root/.gitignore.hbs` | `SKIP_IF_EXISTS` |
+| `.env.example` | Safe example env values only | `root/.env.example.hbs` | `SKIP_IF_EXISTS` |
+| `apps/api/package.json` | API package manifest for minimal Node/TS service | `apps/api/package.json.hbs` | `OVERWRITE` |
+| `apps/api/tsconfig.json` | API TypeScript compiler config | `apps/api/tsconfig.json.hbs` | `OVERWRITE` |
+| `apps/api/src/main.ts` | API bootstrap placeholder entrypoint | `apps/api/src/main.ts.hbs` | `OVERWRITE` |
+| `apps/web/package.json` | Web package manifest for minimal Next.js app | `apps/web/package.json.hbs` | `OVERWRITE` |
+| `apps/web/next.config.js` | Web framework baseline config | `apps/web/next.config.js.hbs` | `OVERWRITE` |
+| `apps/web/tsconfig.json` | Web TypeScript compiler config | `apps/web/tsconfig.json.hbs` | `OVERWRITE` |
+| `apps/web/src/app/layout.tsx` | Web root layout placeholder | `apps/web/src/app/layout.tsx.hbs` | `OVERWRITE` |
+| `apps/web/src/app/page.tsx` | Web root page placeholder | `apps/web/src/app/page.tsx.hbs` | `OVERWRITE` |
+| `packages/shared/package.json` | Shared package manifest for common code | `packages/shared/package.json.hbs` | `OVERWRITE` |
+| `packages/shared/src/index.ts` | Shared exports placeholder | `packages/shared/src/index.ts.hbs` | `OVERWRITE` |
+| `packages/shared/src/types.ts` | Shared types placeholder | `packages/shared/src/types.ts.hbs` | `OVERWRITE` |
+
+Write rule definitions:
+- `OVERWRITE`: always rewrite file with template output
+- `SKIP_IF_EXISTS`: generate only when the file does not already exist
+- `APPEND`: append-only mode (not used in Step 2)
+
+### Variables/placeholders used (Step 2 map)
+
+- `{{name}}`
+- `{{withAuth}}`
+- `{{database}}`
+
+### MVP vs future scope split
+
+MVP (this finalized file map):
+- Root docs/env baseline: `README.md`, `.gitignore`, `.env.example`
+- Minimal app skeleton folders for API and Web
+- Minimal shared package skeleton (`packages/shared`)
+
+Future steps (not generated in Step 2):
+- `apps/mobile/` scaffold (Step 6)
+- CI workflow files and quality gates (Step 8)
+- Test/proof automation files (Step 9)
+- Deployment/docker production assets, auth wiring, and advanced integrations
 
 ## Environment variables (placeholders only)
 
@@ -109,7 +163,7 @@ Validation error contract:
 
 - Step 0 — Scaffold docs + placeholder script (complete)
 - Step 1 — Finalize schema and validation rules (complete)
-- Step 2 — Define deterministic file map
+- Step 2 — Define deterministic file map (complete)
 - Step 3 — Implement generator engine (plan mode)
 - Step 4 — Implement `apps/web` scaffold
 - Step 5 — Implement `apps/api` scaffold
