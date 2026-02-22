@@ -71,6 +71,85 @@ Only these files changed for Step 2:
 - `templates/fullstack-v1/serial-plan.md`
 - `docs/VERIFICATION_PROOF_REPORT.md`
 
+## SERIAL 14 — fullstack-v1 Step 3 generator plan mode
+
+Date: 2026-02-22
+
+### Git baseline (short)
+```text
+> git status --short --branch
+## main...origin/main
+
+> git log -5 --oneline
+e9a8901 SERIAL 14: finalize fullstack-v1 file map (Step 2) (#45)
+53316d9 SERIAL 14: finalize fullstack-v1 schema rules (#44)
+37b0459 docs(serial-12): local runtime + ownership proof (#43)
+1b08613 docs(serial-12): post-merge proof (#42)
+74c9ead SERIAL-12: enforce workspace/project ownership checks
+```
+
+### Runtime health
+```text
+> docker compose -f docker-compose.dev.yml ps
+factory-dev-api-1            ... Up ... (healthy)
+factory-dev-db-1             ... Up ... (healthy)
+factory-dev-orchestrator-1   ... Up ...
+factory-web-dev              ... Up ... (healthy)
+
+> curl.exe -i http://localhost:4000/v1/templates | Select-Object -First 20
+HTTP/1.1 200 OK
+
+> curl.exe -i http://localhost:3000/ | Select-Object -First 15
+HTTP/1.1 200 OK
+```
+
+### Plan determinism hashes
+```text
+> Get-FileHash .\output\plan1.json
+Hash      : 50B0604ACE0101DAA3685185AC4B31EF7D3E8C2C24114457B1BED867C92D97E9
+
+> Get-FileHash .\output\plan2.json
+Hash      : 50B0604ACE0101DAA3685185AC4B31EF7D3E8C2C24114457B1BED867C92D97E9
+
+> Compare-Object (Get-Content .\output\plan1.json -Raw) (Get-Content .\output\plan2.json -Raw)
+COMPARE_RESULT=IDENTICAL
+```
+
+### Sample plan excerpt
+```json
+{
+  "ok": true,
+  "templateId": "fullstack-v1",
+  "mode": "plan",
+  "inputs": {
+    "name": "demoapp",
+    "withAuth": true,
+    "database": "postgres",
+    "outputDir": "."
+  },
+  "counts": {
+    "totalFiles": 14,
+    "totalDirs": 6
+  }
+}
+```
+
+### No files written in plan mode
+
+Statement: No files written in plan mode.
+
+```text
+Only shell redirection files were created for proof:
+- output/plan1.json
+- output/plan2.json
+
+> git diff --name-only
+templates/fullstack-v1/serial-plan.md
+templates/fullstack-v1/spec.md
+templates/fullstack-v1/bin/fullstack-v1.mjs
+docs/VERIFICATION_PROOF_REPORT.md
+```
+
 ### Result summary
 - SERIAL 14 smallest deliverable completed: Step 1 schema and validation rules finalized.
 - Runtime regression checks stayed green for API templates and web root.
@@ -78,10 +157,6 @@ Only these files changed for Step 2:
 
 Date: 2026-02-22
 
-### Docker daemon proof
-```text
-> docker version
-Server: Docker Desktop 4.61.0 (219004)
  Engine:
   Version:          29.2.1
 
@@ -183,8 +258,6 @@ Base URL: `http://localhost:4000/v1`
   - workspace listed with `projectCount`
 - `GET /workspaces/:id`
   - workspace details returned
-- `POST /workspaces/:id/projects`
-  - created project id: `f54fef6c-f345-48dd-b249-e555677829a8`
   - orchestrator project id: `proj-mlrm213x`
   - preview: `http://localhost:3000/p/proj-mlrm213x/`
   - logsRef: `ws://localhost:4100/v1/ws/projects/proj-mlrm213x/logs`

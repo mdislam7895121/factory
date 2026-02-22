@@ -143,6 +143,67 @@ Future steps (not generated in Step 2):
 - Test/proof automation files (Step 9)
 - Deployment/docker production assets, auth wiring, and advanced integrations
 
+## Step 3 — Generator engine (plan mode)
+
+Step 3 adds plan-only execution that computes what would be generated, without writing template files.
+
+### CLI entry
+
+- `node ./templates/fullstack-v1/bin/fullstack-v1.mjs plan --name <name> --withAuth <true|false> --database <postgres|sqlite> --json`
+
+### Plan mode behavior
+
+- Uses Step 1 validation rules for `name`, `withAuth`, and `database`
+- Uses Step 2 file map as source of truth for planned file list
+- Produces deterministic JSON (stable sort by `path`, no timestamps)
+- Does not write template output files in plan mode
+
+### Plan output contract
+
+```json
+{
+  "ok": true,
+  "templateId": "fullstack-v1",
+  "mode": "plan",
+  "inputs": {
+    "name": "demoapp",
+    "withAuth": true,
+    "database": "postgres",
+    "outputDir": "."
+  },
+  "output": {
+    "rule": "targetDir = outputDir ? outputDir + \"/\" + name : \"./\" + name",
+    "targetFolder": "./demoapp"
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "action": "CREATE",
+      "source": "template:root/README.md.hbs"
+    }
+  ],
+  "counts": {
+    "totalFiles": 14,
+    "totalDirs": 6
+  }
+}
+```
+
+Validation failure contract:
+
+```json
+{
+  "ok": false,
+  "error": "ValidationError",
+  "issues": [
+    {
+      "field": "name",
+      "message": "name must match ^[a-z][a-z0-9-]{2,39}$"
+    }
+  ]
+}
+```
+
 ## Environment variables (placeholders only)
 
 - `NODE_ENV=development`
@@ -164,7 +225,7 @@ Future steps (not generated in Step 2):
 - Step 0 — Scaffold docs + placeholder script (complete)
 - Step 1 — Finalize schema and validation rules (complete)
 - Step 2 — Define deterministic file map (complete)
-- Step 3 — Implement generator engine (plan mode)
+- Step 3 — Implement generator engine (plan mode) (complete)
 - Step 4 — Implement `apps/web` scaffold
 - Step 5 — Implement `apps/api` scaffold
 - Step 6 — Implement `apps/mobile` scaffold
