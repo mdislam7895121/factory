@@ -1,3 +1,60 @@
+## SERIAL 12 — Local Runtime + Ownership Proof (Docker OK)
+
+Date: 2026-02-22
+
+### Docker daemon proof
+```text
+> docker version
+Server: Docker Desktop 4.61.0 (219004)
+ Engine:
+  Version:          29.2.1
+
+> docker info
+Server Version: 29.2.1
+Operating System: Docker Desktop
+```
+
+### Compose runtime proof
+```text
+> docker compose -f docker-compose.dev.yml down -v --remove-orphans
+[+] down 9/9
+
+> docker compose -f docker-compose.dev.yml up -d --build
+[+] up 12/12
+
+> docker compose -f docker-compose.dev.yml ps
+factory-dev-api-1            factory-dev-api            api            Up ... (healthy)
+factory-dev-db-1             postgres:16-alpine         db             Up ... (healthy)
+factory-dev-orchestrator-1   factory-dev-orchestrator   orchestrator   Up ...
+factory-web-dev              factory-dev-web            web            Up ... (health: starting)
+```
+
+### API readiness proof
+```text
+> curl.exe -i --retry 15 --retry-delay 2 --retry-connrefused http://localhost:4000/v1/templates | Select-Object -First 80
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{"ok":true,"templates":[{"id":"basic-web"}]}
+```
+
+### Ownership smoke proof
+```text
+> POST /v1/workspaces as A
+HTTP/1.1 201 Created
+WS_ID=6dcd3637-4c7f-404d-8937-d70457421351
+
+> POST /v1/workspaces/{wsId}/projects as A
+HTTP/1.1 201 Created
+PROJECT_ID=5e24c861-d26b-4f37-a5ca-8d24827ead48
+
+> GET /v1/projects/{projectId} as A
+HTTP/1.1 200 OK
+
+> GET /v1/projects/{projectId} as B
+HTTP/1.1 404 Not Found
+```
+
 # VERIFICATION PROOF REPORT — SERIAL 11
 
 ## Scope
