@@ -1,14 +1,67 @@
-# fullstack-v1 generator spec (draft)
+# fullstack-v1 generator spec
 
 ## Objective
 
 Define a non-breaking generator template that can scaffold a full stack project composed of Web + API + Mobile.
 
-## Inputs (planned)
+## Inputs (finalized for Step 1)
 
 - `name` (string)
 - `withAuth` (boolean)
 - `database` (`postgres` | `sqlite`)
+
+## Validation rules (finalized for Step 1)
+
+### `name`
+- Required
+- Trimmed before validation
+- Allowed pattern: `^[a-z][a-z0-9-]{2,39}$`
+- Must not match reserved names: `api`, `web`, `mobile`, `apps`, `docs`, `scripts`
+
+### `withAuth`
+- Optional
+- Default: `false`
+- Must be a boolean when provided
+
+### `database`
+- Optional
+- Default: `postgres`
+- Allowed values: `postgres`, `sqlite`
+
+## Input payload contract
+
+```json
+{
+  "name": "acme-factory",
+  "withAuth": false,
+  "database": "postgres"
+}
+```
+
+Invalid example (`name` fails pattern):
+
+```json
+{
+  "name": "Acme Factory",
+  "withAuth": true,
+  "database": "postgres"
+}
+```
+
+Validation error contract:
+
+```json
+{
+  "ok": false,
+  "error": "ValidationError",
+  "issues": [
+    {
+      "field": "name",
+      "message": "name must match ^[a-z][a-z0-9-]{2,39}$"
+    }
+  ]
+}
+```
 
 ## Outputs (planned)
 
@@ -55,7 +108,7 @@ Define a non-breaking generator template that can scaffold a full stack project 
 ## Future serial steps (0-10)
 
 - Step 0 — Scaffold docs + placeholder script (complete)
-- Step 1 — Finalize schema and validation rules
+- Step 1 — Finalize schema and validation rules (complete)
 - Step 2 — Define deterministic file map
 - Step 3 — Implement generator engine (plan mode)
 - Step 4 — Implement `apps/web` scaffold
