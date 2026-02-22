@@ -279,6 +279,33 @@ Expected result:
 
 - `curl.exe -i http://localhost:3010/` returns `HTTP/1.1 200 OK`
 
+## Step 6 — apps/api scaffold integration
+
+Step 6 upgrades generated `apps/api` from a placeholder entrypoint to a runnable TypeScript HTTP service.
+
+### Step 6 API scaffold requirements
+
+- `apps/api/package.json` includes scripts: `dev`, `build`, `start`
+- `apps/api/dev` script supports `pnpm --dir apps/api dev -- --port <port>`
+- `apps/api/src/main.ts` exposes `GET /health` and returns `HTTP 200` JSON body `{ "ok": true }`
+- `apps/api/tsconfig.json` supports `tsc` build output to `dist/`
+
+### Run commands after generation (Step 6)
+
+```text
+cd <generated-target>
+corepack enable
+pnpm install
+pnpm --dir apps/api dev -- --port 3020
+curl.exe -i --retry 15 --retry-delay 2 --retry-connrefused http://localhost:3020/health | Select-Object -First 25
+```
+
+Expected result:
+
+- `HTTP/1.1 200 OK`
+- `content-type: application/json; charset=utf-8`
+- body contains `{"ok":true}`
+
 Write safety failure example:
 
 ```json
@@ -314,7 +341,7 @@ Write safety failure example:
 - Step 3 — Implement generator engine (plan mode) (complete)
 - Step 4 — Implement generator engine (write mode) (complete)
 - Step 5 — Implement `apps/web` scaffold integration (complete)
-- Step 6 — Implement `apps/api` scaffold
+- Step 6 — Implement `apps/api` scaffold integration (complete)
 - Step 7 — Implement `apps/mobile` scaffold
 - Step 8 — Add CI integration and checks
 - Step 9 — Add tests and proof scripts
