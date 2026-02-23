@@ -27,23 +27,28 @@ enum ProvisioningRunStatus {
 }
 
 model Workspace {
-  id        String    @id @default(uuid())
-  name      String
-  ownerId   String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  projects  Project[]
+  id          String    @id @default(uuid())
+  name        String
+  ownerId     String?
+  ownerUserId String?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  projects    Project[]
 
   @@index([ownerId])
+  @@index([ownerUserId])
 }
 
 model Project {
   id                    String            @id @default(uuid())
   workspaceId           String
   name                  String
+  slug                  String?
   templateId            String
   orchestratorProjectId String?
   status                ProjectStatus     @default(QUEUED)
+  isActive              Boolean           @default(true)
   previewUrl            String?
   logsRef               String?
   provisionError        String?
@@ -52,6 +57,7 @@ model Project {
   workspace             Workspace         @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   provisioningRuns      ProvisioningRun[]
 
+  @@unique([workspaceId, slug])
   @@index([workspaceId])
 }
 

@@ -130,6 +130,8 @@ exports.Prisma.WorkspaceScalarFieldEnum = {
   id: 'id',
   name: 'name',
   ownerId: 'ownerId',
+  ownerUserId: 'ownerUserId',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -138,9 +140,11 @@ exports.Prisma.ProjectScalarFieldEnum = {
   id: 'id',
   workspaceId: 'workspaceId',
   name: 'name',
+  slug: 'slug',
   templateId: 'templateId',
   orchestratorProjectId: 'orchestratorProjectId',
   status: 'status',
+  isActive: 'isActive',
   previewUrl: 'previewUrl',
   logsRef: 'logsRef',
   provisionError: 'provisionError',
