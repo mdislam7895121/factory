@@ -27,6 +27,84 @@ HTTP/1.1 200 OK
 HTTP/1.1 200 OK
 ```
 
+## SERIAL 18 — Project Provisioning Execution Path (Orchestrator → Status → Web)
+
+### Baseline proof (no edits)
+
+```text
+> git checkout main
+Already on 'main'
+
+> git pull --ff-only
+Already up to date.
+
+> docker compose -f docker/docker-compose.dev.yml up -d --build
+... containers started ...
+
+> curl -i http://localhost:4000/db/health
+HTTP/1.1 200 OK
+{"ok":true,"status":"up"}
+
+> curl -i http://localhost:4000/v1/templates
+HTTP/1.1 200 OK
+{"ok":true,"templates":[{"id":"basic-web","name":"Basic Web App"}]}
+
+> curl -i http://localhost:4000/ready
+HTTP/1.1 200 OK
+{"ok":true,"status":"ready","checks":{"env":"ok","db":"ok","schema":"ok"}}
+
+> curl.exe -sS -D - http://localhost:3000/ -o NUL | Select-Object -First 20
+HTTP/1.1 200 OK
+WEB_HEADERS_STATUS=PASS
+```
+
+Raw baseline file: `proof/runs/serial18-baseline-20260223-030819.txt`
+
+### Provisioning execution proof (status transition)
+
+```text
+> POST /v1/auth/signup
+HTTP/1.1 201 Created
+
+> POST /v1/auth/login
+TOKEN_PRESENT=True
+
+> POST /v1/workspaces
+WORKSPACE_ID=ddfa2dc3-0fc7-4e26-b006-ef4266add6f4
+
+> POST /v1/workspaces/{workspaceId}/projects
+PROJECT_ID=500325c5-9ec7-4d63-be29-e47aec3e1c5e
+
+> GET /v1/workspaces/{workspaceId}/projects (poll)
+POLL_1 status=QUEUED error=
+POLL_2 status=READY error=
+FINAL_STATUS=READY
+```
+
+Raw provisioning file: `proof/runs/serial18-provisioning-20260223-031301.txt`
+
+### Local checks proof
+
+```text
+> pwsh scripts/proof-runner.ps1
+PASS test/app.e2e-spec.ts
+Tests: 4 passed, 4 total
+EXIT_CODE=0
+```
+
+Raw proof-runner wrapper: `proof/runs/serial18-proof-runner-20260223-031542.txt`
+Raw proof-runner output: `proof/runs/proof-s7-20260223-031543.txt`
+
+### PR + merge metadata
+
+- Branch: `feature/serial-18-provisioning-execution`
+- PR: `https://github.com/mdislam7895121/factory/pull/57`
+- CI checks: `ALL_CHECKS_SUCCESS=1` (Proof Runner Gate, CI/Proof Runner Gate, Live Smoke, Web, API, Factory Checks, Production Build, Security Hardening, Deployment Readiness, Ops Monitoring, Ops Incident Drill, ops-live-proof-localonly, Release Packaging)
+- Merge: squash merged to `main` as `d2e4c02` (`SERIAL 18: provisioning execution (orchestrator + status + web)`)
+- Post-merge smoke: `proof/runs/serial18-postmerge-20260223-033014.txt`
+
+SERIAL 18 is now LOCKED.
+
 ## SERIAL 17 — Public SaaS Factory Production Baseline (Env/Secrets + Readiness + Ops Guardrails)
 
 ### Baseline outputs (no edits)
