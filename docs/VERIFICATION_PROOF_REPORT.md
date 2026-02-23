@@ -27,6 +27,108 @@ HTTP/1.1 200 OK
 HTTP/1.1 200 OK
 ```
 
+## SERIAL 15 — Gate Fix (Production Ops) — Railway AUTH_SECRET
+
+Date: 2026-02-22
+
+### Incident summary
+
+- Symptom: CI `Live Smoke` failed with `502 Bad Gateway` against production API base.
+- Root cause: `AUTH_SECRET` missing in Railway production API service environment, causing app crash at boot.
+- Fix: Set `AUTH_SECRET` on Railway production service `factory-production` (value not logged/exposed).
+
+### Before/after explanation
+
+- Before: production API process exited during startup due missing required env var; Railway edge returned 502.
+- After: service booted successfully and both smoke targets returned HTTP 200.
+
+### Raw external production proofs
+
+```text
+> curl -i https://factory-production-production.up.railway.app/
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 12
+Content-Security-Policy: default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+Content-Type: text/html; charset=utf-8
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Resource-Policy: same-origin
+Etag: W/"c-Lve95gjOVATpfV8EL5X4nxwjKHE"
+Origin-Agent-Cluster: ?1
+Referrer-Policy: strict-origin-when-cross-origin
+Server: railway-edge
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Dns-Prefetch-Control: off
+X-Download-Options: noopen
+X-Frame-Options: SAMEORIGIN
+X-Permitted-Cross-Domain-Policies: none
+X-Railway-Edge: railway/us-east4-eqdc4a
+X-Railway-Request-Id: Kd8mmNkiTDWVAvzBwoOzXw
+X-Ratelimit-Limit: 120
+X-Ratelimit-Remaining: 119
+X-Ratelimit-Reset: 1771820677
+X-Xss-Protection: 0
+Accept-Ranges: bytes
+Date: Mon, 23 Feb 2026 04:23:36 GMT
+Via: 1.1 varnish
+X-Cache: MISS
+X-Cache-Hits: 0
+X-Timer: S1771820617.680424,VS0,VE195
+X-Railway-CDN-Edge: fastly/cache-lga21939-LGA
+
+Hello World!
+
+> curl -i https://factory-production-production.up.railway.app/db/health
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 25
+Content-Security-Policy: default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+Content-Type: application/json; charset=utf-8
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Resource-Policy: same-origin
+Etag: W/"19-NEHt83dQ+Kvsj2Cx7o6giPncFuw"
+Origin-Agent-Cluster: ?1
+Referrer-Policy: strict-origin-when-cross-origin
+Server: railway-edge
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Dns-Prefetch-Control: off
+X-Download-Options: noopen
+X-Frame-Options: SAMEORIGIN
+X-Permitted-Cross-Domain-Policies: none
+X-Railway-Edge: railway/us-east4-eqdc4a
+X-Railway-Request-Id: Vgs4m0s8SvObiP3BAax-fw
+X-Ratelimit-Limit: 240
+X-Ratelimit-Remaining: 239
+X-Ratelimit-Reset: 1771820678
+X-Xss-Protection: 0
+Accept-Ranges: bytes
+Date: Mon, 23 Feb 2026 04:23:37 GMT
+Via: 1.1 varnish
+X-Cache: MISS
+X-Cache-Hits: 0
+X-Timer: S1771820617.035365,VS0,VE241
+X-Railway-CDN-Edge: fastly/cache-lga21985-LGA
+
+{"ok":true,"status":"up"}
+```
+
+### PR merge proof (raw)
+
+```json
+{
+  "mergeCommit": {
+    "oid": "ddd9b83057f04594b41465eea608320f2df1baa5"
+  },
+  "mergedAt": "2026-02-23T04:17:20Z",
+  "state": "MERGED",
+  "url": "https://github.com/mdislam7895121/factory/pull/51"
+}
+```
+
+SERIAL 15 is now LOCKED.
+
 ## SERIAL 14 — fullstack-v1 Step 2 file map finalized
 
 Date: 2026-02-22
