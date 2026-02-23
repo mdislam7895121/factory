@@ -348,6 +348,10 @@ function createRateLimitMiddleware(): RequestHandler {
     process.env.RATE_LIMIT_HEALTH_MAX,
     defaultMax * 2,
   );
+  const logsStreamMax = parsePositiveInteger(
+    process.env.RATE_LIMIT_LOG_STREAM_MAX,
+    30,
+  );
 
   const buckets = new Map<string, { count: number; resetAt: number }>();
 
@@ -355,8 +359,17 @@ function createRateLimitMiddleware(): RequestHandler {
     const now = Date.now();
     const route = normalizePath(req.path || req.url || '/');
     const routeKey =
-      route === '/db/health' || route === '/health/db' ? 'health' : 'default';
-    const max = routeKey === 'health' ? healthMax : defaultMax;
+      route === '/db/health' || route === '/health/db'
+        ? 'health'
+        : /^\/v1\/projects\/[^/]+\/logs\/stream$/.test(route)
+          ? 'logs-stream'
+          : 'default';
+    const max =
+      routeKey === 'health'
+        ? healthMax
+        : routeKey === 'logs-stream'
+          ? logsStreamMax
+          : defaultMax;
     const client = (req.ip || req.socket.remoteAddress || 'unknown').trim();
     const key = `${client}:${routeKey}`;
 

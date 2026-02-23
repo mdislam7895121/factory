@@ -2085,3 +2085,22 @@ HTTP/1.1 200 OK
 - [x] Migration file created (`serial15_workspace_project_core`) and applied.
 - [x] Existing endpoints still pass (`/v1/templates`, `/db/health`, `/v1/me`).
 
+## SERIAL 19 — Live Preview + Logs (SSE)
+
+Date: 2026-02-23
+
+Branch: `feature/serial-19-live-logs-preview`
+
+Proof files:
+- `proof/runs/serial19-baseline-20260223-035415.txt`
+- `proof/runs/serial19-verify-20260223-040709.txt`
+- `proof/runs/serial19-git-20260223-040901.txt`
+
+Verification highlights:
+- `logsRef` now returns API SSE URL (`http://localhost:4000/v1/projects/<orchestratorId>/logs/stream`).
+- Unauthorized stream request returns `HTTP/1.1 401 Unauthorized`.
+- Authorized stream emits `connected`, `log`, and `status` events.
+- Stream status transitions observed: `QUEUED` -> `READY` with preview URL propagated.
+
+LOCKED-SERIAL-19: pending PR/check/merge metadata update.
+

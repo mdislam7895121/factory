@@ -1,10 +1,13 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
   OnModuleInit,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import {
   Prisma,
   ProjectStatus,
@@ -37,6 +40,8 @@ type OrchestratorStatusResponse = {
 
 @Injectable()
 export class Serial11Service implements OnModuleInit {
+  private readonly activeLogStreamsByUser = new Map<string, Set<string>>();
+
   constructor(private readonly prisma: PrismaService) {}
 
   async onModuleInit() {
@@ -78,8 +83,14 @@ export class Serial11Service implements OnModuleInit {
     return process.env.PREVIEW_PUBLIC_BASE_URL ?? 'http://localhost:3000';
   }
 
-  private get logsWsBaseUrl(): string {
-    return process.env.ORCHESTRATOR_WS_PUBLIC_BASE_URL ?? 'ws://localhost:4100';
+  private get apiPublicBaseUrl(): string {
+    return process.env.API_PUBLIC_BASE_URL ?? 'http://localhost:4000';
+  }
+
+  private get maxLogStreamsPerUser(): number {
+    const raw = process.env.LOG_STREAM_MAX_PER_USER ?? '2';
+    const parsed = Number.parseInt(raw, 10);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : 2;
   }
 
   private ensureNonEmptyName(rawName: unknown, fallback: string): string {
@@ -99,7 +110,7 @@ export class Serial11Service implements OnModuleInit {
   }
 
   private buildLogsRef(orchestratorProjectId: string): string {
-    return `${this.logsWsBaseUrl.replace(/\/$/, '')}/v1/ws/projects/${encodeURIComponent(orchestratorProjectId)}/logs`;
+    return `${this.apiPublicBaseUrl.replace(/\/$/, '')}/v1/projects/${encodeURIComponent(orchestratorProjectId)}/logs/stream`;
   }
 
   private async callOrchestrator<T>(
@@ -119,6 +130,53 @@ export class Serial11Service implements OnModuleInit {
     }
 
     return (await response.json()) as T;
+  }
+
+  private async callOrchestratorText(
+    path: string,
+    init?: RequestInit,
+  ): Promise<string> {
+    const response = await fetch(`${this.orchestratorBaseUrl}${path}`, {
+      headers: { accept: 'text/plain, application/json;q=0.8' },
+      ...init,
+    });
+
+    if (!response.ok) {
+      const body = await response.text().catch(() => '');
+      throw new BadRequestException(
+        `orchestrator error: ${response.status} ${response.statusText}${body ? ` - ${body}` : ''}`,
+      );
+    }
+
+    return response.text();
+  }
+
+  private openLogStreamSlot(ownerId: string): () => void {
+    const bucket =
+      this.activeLogStreamsByUser.get(ownerId) ?? new Set<string>();
+
+    if (bucket.size >= this.maxLogStreamsPerUser) {
+      throw new HttpException(
+        'too many active log streams',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+
+    const streamId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    bucket.add(streamId);
+    this.activeLogStreamsByUser.set(ownerId, bucket);
+
+    return () => {
+      const current = this.activeLogStreamsByUser.get(ownerId);
+      if (!current) {
+        return;
+      }
+
+      current.delete(streamId);
+      if (current.size === 0) {
+        this.activeLogStreamsByUser.delete(ownerId);
+      }
+    };
   }
 
   private mapProjectStatus(status: OrchestratorProjectStatus): ProjectStatus {
@@ -353,6 +411,173 @@ export class Serial11Service implements OnModuleInit {
         provisioningRuns: existing.provisioningRuns,
       },
     };
+  }
+
+  async streamProjectLogs(
+    projectOrOrchestratorId: string,
+    ownerId: string,
+    res: Response,
+  ) {
+    const project = await this.prisma.project.findFirst({
+      where: {
+        workspace: { ownerId },
+        OR: [
+          { id: projectOrOrchestratorId },
+          { orchestratorProjectId: projectOrOrchestratorId },
+        ],
+      },
+      select: {
+        id: true,
+        orchestratorProjectId: true,
+        previewUrl: true,
+        provisionError: true,
+      },
+    });
+
+    if (!project) {
+      throw new NotFoundException('project not found');
+    }
+
+    if (!project.orchestratorProjectId) {
+      throw new InternalServerErrorException(
+        'project is missing orchestratorProjectId',
+      );
+    }
+
+    const orchestratorProjectId = project.orchestratorProjectId;
+
+    const release = this.openLogStreamSlot(ownerId);
+    let lastLogSnapshot = '';
+    let closed = false;
+
+    const sendSse = (event: string, payload: unknown) => {
+      if (closed || res.writableEnded) {
+        return;
+      }
+      res.write(`event: ${event}\n`);
+      res.write(`data: ${JSON.stringify(payload)}\n\n`);
+    };
+
+    const closeStream = () => {
+      if (closed) {
+        return;
+      }
+
+      closed = true;
+      clearInterval(pingInterval);
+      clearInterval(statusInterval);
+      clearInterval(logInterval);
+      release();
+
+      if (!res.writableEnded) {
+        res.end();
+      }
+    };
+
+    res.status(200);
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache, no-transform');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('X-Accel-Buffering', 'no');
+    res.flushHeaders?.();
+
+    const emitStatus = async () => {
+      try {
+        const orchestratorStatus =
+          await this.callOrchestrator<OrchestratorStatusResponse>(
+            `/v1/projects/${encodeURIComponent(orchestratorProjectId)}/status`,
+          );
+        const nextStatus = this.mapProjectStatus(orchestratorStatus.status);
+        const previewUrl = this.buildPreviewUrl(orchestratorStatus.status.id);
+
+        await this.prisma.project.update({
+          where: { id: project.id },
+          data: {
+            status: nextStatus,
+            previewUrl,
+            logsRef: this.buildLogsRef(orchestratorStatus.status.id),
+          },
+        });
+
+        sendSse('status', {
+          projectId: project.id,
+          status: nextStatus,
+          previewUrl,
+          running: orchestratorStatus.status.running,
+          healthy: orchestratorStatus.status.healthy,
+        });
+      } catch (error) {
+        const message = String((error as Error)?.message ?? error);
+        sendSse('status', {
+          projectId: project.id,
+          status: 'UNKNOWN',
+          previewUrl: project.previewUrl,
+          error: message,
+        });
+      }
+    };
+
+    const emitLogs = async () => {
+      try {
+        const text = await this.callOrchestratorText(
+          `/v1/projects/${encodeURIComponent(orchestratorProjectId)}/logs`,
+        );
+
+        if (text === lastLogSnapshot) {
+          return;
+        }
+
+        const chunk =
+          lastLogSnapshot.length > 0 && text.startsWith(lastLogSnapshot)
+            ? text.slice(lastLogSnapshot.length)
+            : `${lastLogSnapshot.length > 0 ? '[api] logs snapshot reset\n' : ''}${text}`;
+
+        lastLogSnapshot = text;
+
+        if (chunk.trim().length > 0) {
+          sendSse('log', {
+            projectId: project.id,
+            chunk,
+          });
+        }
+      } catch (error) {
+        const message = String((error as Error)?.message ?? error);
+        sendSse('log', {
+          projectId: project.id,
+          chunk: `[api] logs fetch error: ${message}\n`,
+        });
+
+        if (project.provisionError) {
+          sendSse('log', {
+            projectId: project.id,
+            chunk: `[api] provision error: ${project.provisionError}\n`,
+          });
+        }
+      }
+    };
+
+    const pingInterval = setInterval(() => {
+      sendSse('ping', { ts: new Date().toISOString() });
+    }, 15000);
+
+    const statusInterval = setInterval(() => {
+      void emitStatus();
+    }, 4000);
+
+    const logInterval = setInterval(() => {
+      void emitLogs();
+    }, 2000);
+
+    res.on('close', closeStream);
+    res.on('error', closeStream);
+
+    sendSse('connected', {
+      projectId: project.id,
+      maxPerUser: this.maxLogStreamsPerUser,
+      via: 'orchestrator-tail',
+    });
+    void emitStatus();
+    void emitLogs();
   }
 
   async provisionProject(projectId: string, ownerId: string) {

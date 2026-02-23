@@ -5,9 +5,10 @@ import {
   Param,
   Post,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
-import type { Request } from 'express';
+import type { Request, Response } from 'express';
 import { Serial11Service } from './serial11.service';
 import { requireUserId } from '../lib/auth/principal';
 import { JwtGuard } from '../lib/auth/jwt.guard';
@@ -85,5 +86,14 @@ export class Serial11Controller {
   @Post('/projects/:id/provision')
   provisionProject(@Req() req: Request, @Param('id') id: string) {
     return this.serial11Service.provisionProject(id, requireUserId(req));
+  }
+
+  @Get('/projects/:id/logs/stream')
+  streamProjectLogs(
+    @Req() req: Request,
+    @Param('id') id: string,
+    @Res() res: Response,
+  ) {
+    return this.serial11Service.streamProjectLogs(id, requireUserId(req), res);
   }
 }
