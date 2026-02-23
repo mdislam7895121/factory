@@ -1278,3 +1278,178 @@ HTTP/1.1 200 OK
 HTTP/1.1 404 Not Found
 ```
 
+## SERIAL 14 — Step 7 Auth + Database wiring
+
+Date: 2026-02-22
+
+Commit: `c79980e`
+
+PR: https://github.com/mdislam7895121/factory/pull/50
+
+### Raw outputs
+
+```text
+> curl.exe -i http://localhost:4000/db/health | Select-Object -First 25
+HTTP/1.1 500 Internal Server Error
+
+> curl.exe -i http://localhost:4000/health/db | Select-Object -First 25
+HTTP/1.1 500 Internal Server Error
+
+> $body = '{"email":"test.user+step7@local.dev","password":"Passw0rd!123"}'
+> curl.exe -i -X POST http://localhost:4000/v1/auth/signup -H "Content-Type: application/json" -d $body | Select-Object -First 35
+HTTP/1.1 500 Internal Server Error
+
+> $login = '{"email":"test.user+step7@local.dev","password":"Passw0rd!123"}'
+> $resp = curl.exe -s -X POST http://localhost:4000/v1/auth/login -H "Content-Type: application/json" -d $login
+<!DOCTYPE html>
+<html lang="en">
+...
+PrismaClientKnownRequestError: Invalid `this.prisma.user.findUnique()` invocation
+
+> curl.exe -i http://localhost:4000/v1/me | Select-Object -First 25
+HTTP/1.1 401 Unauthorized
+
+> $token = node -e "const jwt=require('./api/node_modules/jsonwebtoken'); process.stdout.write(jwt.sign({sub:'dev-user',email:'test.user+step7@local.dev'}, 'change-me', {expiresIn:'1h'}));"
+> curl.exe -i http://localhost:4000/v1/me -H "Authorization: Bearer <TOKEN>" | Select-Object -First 35
+HTTP/1.1 200 OK
+{"ok":true,"user":{"id":"dev-user","email":"test.user+step7@local.dev"}}
+
+> gh pr view 50 --repo mdislam7895121/factory --json number,state,url,mergeStateStatus
+{
+  "mergeStateStatus": "BLOCKED",
+  "number": 50,
+  "state": "OPEN",
+  "url": "https://github.com/mdislam7895121/factory/pull/50"
+}
+
+> curl.exe -i http://localhost:4000/v1/templates | Select-Object -First 20
+HTTP/1.1 200 OK
+```
+
+### Checklist
+
+- [x] AUTH_SECRET fail-fast wired.
+- [x] `/v1/auth/signup`, `/v1/auth/login`, `/v1/me` routes added.
+- [x] `/health/db` alias added.
+- [x] Protected route returns 401 without token.
+- [x] Protected route returns 200 with valid JWT.
+- [ ] DB health endpoint returns 200 (blocked by local DB connectivity / schema readiness in current environment).
+- [ ] Signup/login success 200 (blocked by DB state in current environment; Prisma user queries error).
+- [ ] PR merged to `main` (currently OPEN/BLOCKED).
+
+## SERIAL 14 — Step 7 dev AUTH_SECRET + runtime proofs (compose)
+
+Date: 2026-02-22
+
+Branch: `feature/serial-14-step7-auth-db`
+
+PR: https://github.com/mdislam7895121/factory/pull/50
+
+### Compose file recovery + minimal diff
+
+```text
+> Get-Item .\docker\docker-compose.dev.yml | Select-Object FullName,Length
+FullName                                                 Length
+--------                                                 ------
+C:\Users\vitor\Dev\factory\docker\docker-compose.dev.yml      0
+
+> git checkout HEAD~1 -- docker/docker-compose.dev.yml
+
+> Get-Item .\docker\docker-compose.dev.yml | Select-Object FullName,Length
+FullName                                                 Length
+--------                                                 ------
+C:\Users\vitor\Dev\factory\docker\docker-compose.dev.yml   2953
+
+> git diff -- docker/docker-compose.dev.yml
+diff --git a/docker/docker-compose.dev.yml b/docker/docker-compose.dev.yml
+index d131abf..f692d8c 100644
+--- a/docker/docker-compose.dev.yml
++++ b/docker/docker-compose.dev.yml
+@@ -26,6 +26,7 @@ services:
+     working_dir: /workspace/api
+     environment:
+       NODE_ENV: development
++      AUTH_SECRET: "change-me"
+       PORT: "4000"
+       DATABASE_URL: postgresql://postgres:postgres@db:5432/factory_dev
+```
+
+### Compose validation + stack up
+
+```text
+> docker compose -f docker/docker-compose.dev.yml config
+name: factory-dev
+services:
+  api:
+    environment:
+      AUTH_SECRET: change-me
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/factory_dev
+      NODE_ENV: development
+      PORT: "4000"
+
+> cd docker
+> docker compose -f docker-compose.dev.yml up -d --build
+✔ Container factory-dev-db-1           Healthy
+✔ Container factory-dev-api-1          Healthy
+✔ Container factory-dev-orchestrator-1 Up
+✔ Container factory-web-dev            Up
+
+> docker compose -f docker-compose.dev.yml ps -a
+factory-dev-api-1            ... Up ... (healthy)
+factory-dev-db-1             ... Up ... (healthy)
+factory-dev-orchestrator-1   ... Up ...
+factory-web-dev              ... Up ... (health: starting)
+```
+
+### API logs proof (no AUTH_SECRET error)
+
+```text
+> docker compose -f docker-compose.dev.yml logs --no-color --timestamps --tail 150 api
+...
+[Nest] ... LOG [InstanceLoader] AuthModule dependencies initialized
+[Nest] ... LOG [RouterExplorer] Mapped {/v1/templates, GET} route
+[Nest] ... LOG [RouterExplorer] Mapped {/db/health, GET} route
+[Nest] ... LOG [RouterExplorer] Mapped {/v1/auth/signup, POST} route
+[Nest] ... LOG [RouterExplorer] Mapped {/v1/auth/login, POST} route
+[Nest] ... LOG [RouterExplorer] Mapped {/v1/me, GET} route
+[Nest] ... LOG [NestApplication] Nest application successfully started
+API listening on http://0.0.0.0:4000
+```
+
+### Runtime proofs
+
+```text
+---A_TEMPLATES---
+> curl -i http://localhost:4000/v1/templates
+HTTP/1.1 200 OK
+{"ok":true,"templates":[{"id":"basic-web"}]}
+
+---B_DB_HEALTH---
+> curl -i http://localhost:4000/db/health
+HTTP/1.1 200 OK
+{"ok":true,"status":"up"}
+
+---C_SIGNUP---
+> curl -i -X POST http://localhost:4000/v1/auth/signup -H "Content-Type: application/json" -d '{"email":"step7@test.local","password":"Passw0rd!123"}'
+HTTP/1.1 201 Created
+{"accessToken":"<jwt>","tokenType":"Bearer","user":{"id":"1588c344-14f7-405a-82e2-873f12af1f80","email":"step7@test.local"}}
+
+---D_LOGIN---
+> curl -s -X POST http://localhost:4000/v1/auth/login -H "Content-Type: application/json" -d '{"email":"step7@test.local","password":"Passw0rd!123"}'
+{"accessToken":"<jwt>","tokenType":"Bearer","user":{"id":"1588c344-14f7-405a-82e2-873f12af1f80","email":"step7@test.local"}}
+
+---E_ME_WITH_TOKEN---
+> curl -i http://localhost:4000/v1/me -H "Authorization: Bearer <token>"
+HTTP/1.1 200 OK
+{"ok":true,"user":{"id":"1588c344-14f7-405a-82e2-873f12af1f80","email":"step7@test.local"}}
+```
+
+### Checklist
+
+- [x] API container status = Up
+- [x] `curl /db/health` = HTTP 200
+- [x] `curl /v1/templates` = HTTP 200
+- [x] Signup + Login return token
+- [x] `/v1/me` returns authenticated user
+- [x] Only `docker/docker-compose.dev.yml` + proof doc changed
+

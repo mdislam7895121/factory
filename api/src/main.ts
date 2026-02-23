@@ -311,6 +311,13 @@ function validateEnvironmentOrThrow(): string {
 
   process.env.NODE_ENV = normalized;
 
+  const authSecret = (process.env.AUTH_SECRET || '').trim();
+  if (!authSecret) {
+    throw new Error(
+      'AUTH_SECRET environment variable is required. Please set AUTH_SECRET in your environment.',
+    );
+  }
+
   if (
     normalized === 'production' &&
     [process.env.DATABASE_URL, process.env.DATABASE_PUBLIC_URL].every((value) =>
@@ -370,7 +377,8 @@ function createRateLimitMiddleware(): RequestHandler {
   return (req: Request, res: Response, next: NextFunction) => {
     const now = Date.now();
     const route = normalizePath(req.path || req.url || '/');
-    const routeKey = route === '/db/health' ? 'health' : 'default';
+    const routeKey =
+      route === '/db/health' || route === '/health/db' ? 'health' : 'default';
     const max = routeKey === 'health' ? healthMax : defaultMax;
     const client = (req.ip || req.socket.remoteAddress || 'unknown').trim();
     const key = `${client}:${routeKey}`;
@@ -501,7 +509,8 @@ async function bootstrap() {
     }
 
     const route = normalizePath(req.path || req.url || '/');
-    const isAllowed = route === '/' || route === '/db/health';
+    const isAllowed =
+      route === '/' || route === '/db/health' || route === '/health/db';
 
     if (isAllowed) {
       next();

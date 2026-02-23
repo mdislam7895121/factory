@@ -170,6 +170,14 @@ exports.Prisma.PublicProjectScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -202,7 +210,8 @@ exports.Prisma.ModelName = {
   Workspace: 'Workspace',
   Project: 'Project',
   ProvisioningRun: 'ProvisioningRun',
-  PublicProject: 'PublicProject'
+  PublicProject: 'PublicProject',
+  User: 'User'
 };
 
 /**
