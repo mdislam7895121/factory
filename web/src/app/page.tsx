@@ -4,22 +4,45 @@ import { Card } from '../components/ui/Card';
 import { RecentProjects } from './recent-projects';
 import { ThemeToggle } from './theme-toggle';
 
-const templates = [
-  {
-    name: 'Customer Support Portal',
-    meta: 'Auth + inbox + canned workflows',
-  },
-  {
-    name: 'Internal Ops Dashboard',
-    meta: 'Metrics + alerts + role-based access',
-  },
-  {
-    name: 'Onboarding Assistant',
-    meta: 'Guided setup + task automation',
-  },
-];
+type Template = {
+  id: string;
+  name?: string;
+};
 
-export default function Home() {
+type TemplatesResponse = {
+  ok: boolean;
+  templates: Template[];
+};
+
+const rawApiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
+const apiBase = rawApiBase?.includes('api:')
+  ? 'http://api:4000'
+  : rawApiBase ?? 'http://localhost:4000';
+
+async function loadTemplates(): Promise<Template[]> {
+  try {
+    const response = await fetch(`${apiBase}/v1/templates`, {
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const data = (await response.json()) as TemplatesResponse;
+    if (!data.ok || !Array.isArray(data.templates)) {
+      return [];
+    }
+
+    return data.templates;
+  } catch {
+    return [];
+  }
+}
+
+export default async function Home() {
+  const templates = await loadTemplates();
+
   return (
     <main className="factory builder-shell builder-shell-premium">
       <div className="builder-container">
@@ -61,15 +84,24 @@ export default function Home() {
             <Card className="builder-template-panel fade-up" style={{ animationDelay: '140ms' }}>
               <h3>Templates</h3>
               <ul className="builder-template-grid">
-                {templates.map((template) => (
-                  <li key={template.name} className="builder-template-card">
+                {templates.length === 0 ? (
+                  <li className="builder-template-card">
                     <div>
-                      <p className="builder-template-name">{template.name}</p>
-                      <p className="builder-template-meta">{template.meta}</p>
+                      <p className="builder-template-name">No templates available</p>
+                      <p className="builder-template-meta">Template registry is empty.</p>
                     </div>
-                    <button type="button" className="ds-btn ds-btn-ghost ds-btn-sm">Use</button>
                   </li>
-                ))}
+                ) : (
+                  templates.map((template) => (
+                    <li key={template.id} className="builder-template-card">
+                      <div>
+                        <p className="builder-template-name">{template.name ?? template.id}</p>
+                        <p className="builder-template-meta">{template.id}</p>
+                      </div>
+                      <button type="button" className="ds-btn ds-btn-ghost ds-btn-sm">Use</button>
+                    </li>
+                  ))
+                )}
               </ul>
             </Card>
           </div>
