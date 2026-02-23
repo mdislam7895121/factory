@@ -2095,6 +2095,8 @@ Proof files:
 - `proof/runs/serial19-baseline-20260223-035415.txt`
 - `proof/runs/serial19-verify-20260223-040709.txt`
 - `proof/runs/serial19-git-20260223-040901.txt`
+- `proof/runs/serial19-postmerge-20260223-042732.txt`
+- `proof/runs/serial19-postmerge-web-retry-20260223-042923.txt`
 
 Verification highlights:
 - `logsRef` now returns API SSE URL (`http://localhost:4000/v1/projects/<orchestratorId>/logs/stream`).
@@ -2102,5 +2104,11 @@ Verification highlights:
 - Authorized stream emits `connected`, `log`, and `status` events.
 - Stream status transitions observed: `QUEUED` -> `READY` with preview URL propagated.
 
-LOCKED-SERIAL-19: pending PR/check/merge metadata update.
+PR: `https://github.com/mdislam7895121/factory/pull/59`
+
+Merge commit on `main`: `11d1263` (`SERIAL 19: live logs SSE + preview propagation (#59)`).
+
+Checks: `ALL_CHECKS_SUCCESS=1` (`Release Packaging`, `Ops Monitoring`, `API`, `Factory Checks`, `Production Build`, `Security Hardening`, `Deployment Readiness`, `Ops Incident Drill`, `ops-live-proof-localonly`, `Web`, `Live Smoke`, `Proof Runner Gate`, `CI/Proof Runner Gate (pull_request)`).
+
+LOCKED-SERIAL-19: merged + post-merge smoke complete.
 
