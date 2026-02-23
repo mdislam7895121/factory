@@ -126,9 +126,10 @@ Raw verify file: `proof/runs/serial17-verify-20260223-023410.txt`
 ### PR + merge metadata
 
 - Branch: `feature/serial-17-prod-baseline`
-- PR: PENDING
-- CI checks: PENDING
-- Merge: PENDING
+- PR: `https://github.com/mdislam7895121/factory/pull/55`
+- CI checks: `ALL_CHECKS_SUCCESS=1` (including Proof Runner Gate, CI/Proof Runner Gate, Live Smoke, Web, API, Factory Checks, Production Build, Security Hardening, Deployment Readiness, Ops Monitoring, Ops Incident Drill, ops-live-proof-localonly, Release Packaging)
+- Merge: squash merged to `main` as `00602d1` (`SERIAL 17: production baseline (env contract + readiness)`)
+- Post-merge local smoke proof: `proof/runs/serial17-postmerge-20260223-024935.txt`
 
 SERIAL 17 is now LOCKED.
 
