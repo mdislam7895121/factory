@@ -1278,3 +1278,62 @@ HTTP/1.1 200 OK
 HTTP/1.1 404 Not Found
 ```
 
+## SERIAL 14 — Step 7 Auth + Database wiring
+
+Date: 2026-02-22
+
+Commit: `c79980e`
+
+PR: https://github.com/mdislam7895121/factory/pull/50
+
+### Raw outputs
+
+```text
+> curl.exe -i http://localhost:4000/db/health | Select-Object -First 25
+HTTP/1.1 500 Internal Server Error
+
+> curl.exe -i http://localhost:4000/health/db | Select-Object -First 25
+HTTP/1.1 500 Internal Server Error
+
+> $body = '{"email":"test.user+step7@local.dev","password":"Passw0rd!123"}'
+> curl.exe -i -X POST http://localhost:4000/v1/auth/signup -H "Content-Type: application/json" -d $body | Select-Object -First 35
+HTTP/1.1 500 Internal Server Error
+
+> $login = '{"email":"test.user+step7@local.dev","password":"Passw0rd!123"}'
+> $resp = curl.exe -s -X POST http://localhost:4000/v1/auth/login -H "Content-Type: application/json" -d $login
+<!DOCTYPE html>
+<html lang="en">
+...
+PrismaClientKnownRequestError: Invalid `this.prisma.user.findUnique()` invocation
+
+> curl.exe -i http://localhost:4000/v1/me | Select-Object -First 25
+HTTP/1.1 401 Unauthorized
+
+> $token = node -e "const jwt=require('./api/node_modules/jsonwebtoken'); process.stdout.write(jwt.sign({sub:'dev-user',email:'test.user+step7@local.dev'}, 'change-me', {expiresIn:'1h'}));"
+> curl.exe -i http://localhost:4000/v1/me -H "Authorization: Bearer <TOKEN>" | Select-Object -First 35
+HTTP/1.1 200 OK
+{"ok":true,"user":{"id":"dev-user","email":"test.user+step7@local.dev"}}
+
+> gh pr view 50 --repo mdislam7895121/factory --json number,state,url,mergeStateStatus
+{
+  "mergeStateStatus": "BLOCKED",
+  "number": 50,
+  "state": "OPEN",
+  "url": "https://github.com/mdislam7895121/factory/pull/50"
+}
+
+> curl.exe -i http://localhost:4000/v1/templates | Select-Object -First 20
+HTTP/1.1 200 OK
+```
+
+### Checklist
+
+- [x] AUTH_SECRET fail-fast wired.
+- [x] `/v1/auth/signup`, `/v1/auth/login`, `/v1/me` routes added.
+- [x] `/health/db` alias added.
+- [x] Protected route returns 401 without token.
+- [x] Protected route returns 200 with valid JWT.
+- [ ] DB health endpoint returns 200 (blocked by local DB connectivity / schema readiness in current environment).
+- [ ] Signup/login success 200 (blocked by DB state in current environment; Prisma user queries error).
+- [ ] PR merged to `main` (currently OPEN/BLOCKED).
+
