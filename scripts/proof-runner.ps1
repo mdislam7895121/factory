@@ -81,6 +81,7 @@ if ($verifyExitCode -ne 0) {
 }
 
 Set-Location -LiteralPath $repoRootCandidate
+$env:AUTH_SECRET = 'change-me'
 
 Invoke-LoggedCommand -StepNumber 1 -Command 'git rev-parse --show-toplevel' -FailOnError $true | Out-Null
 Invoke-LoggedCommand -StepNumber 2 -Command 'git status --short' -FailOnError $true | Out-Null
