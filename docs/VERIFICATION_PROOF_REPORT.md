@@ -1453,3 +1453,124 @@ HTTP/1.1 200 OK
 - [x] `/v1/me` returns authenticated user
 - [x] Only `docker/docker-compose.dev.yml` + proof doc changed
 
+## SERIAL 15 — Workspace + Project Core (DB models + CRUD API)
+
+Date: 2026-02-22
+
+Branch: `feature/serial-15-workspace-project`
+
+### Git baseline + diff scope
+
+```text
+> git status --short --branch
+## feature/serial-15-workspace-project
+ M api/prisma/schema.prisma
+ M api/src/app.module.ts
+ M api/src/generated/prisma/edge.js
+ M api/src/generated/prisma/index-browser.js
+ M api/src/generated/prisma/index.d.ts
+ M api/src/generated/prisma/index.js
+ M api/src/generated/prisma/package.json
+ M api/src/generated/prisma/schema.prisma
+ M api/src/lib/auth/auth.module.ts
+ M api/src/serial11/serial11.controller.ts
+?? api/prisma/migrations/20260223000000_serial15_workspace_project_core/
+?? api/src/serial15/
+
+> git diff --name-only
+api/prisma/schema.prisma
+api/src/app.module.ts
+api/src/generated/prisma/edge.js
+api/src/generated/prisma/index-browser.js
+api/src/generated/prisma/index.d.ts
+api/src/generated/prisma/index.js
+api/src/generated/prisma/package.json
+api/src/generated/prisma/schema.prisma
+api/src/lib/auth/auth.module.ts
+api/src/serial11/serial11.controller.ts
+
+> git diff --stat
+ api/prisma/schema.prisma                  |   6 +
+ api/src/app.module.ts                     |  10 +-
+ api/src/generated/prisma/edge.js          |   8 +-
+ api/src/generated/prisma/index-browser.js |   4 +
+ api/src/generated/prisma/index.d.ts       | 195 +++++++++++++++++++++++++++++-
+ api/src/generated/prisma/index.js         |   8 +-
+ api/src/generated/prisma/package.json     |   2 +-
+ api/src/generated/prisma/schema.prisma    |  18 ++-
+ api/src/lib/auth/auth.module.ts           |   1 +
+ api/src/serial11/serial11.controller.ts   |  48 +++++---
+ 10 files changed, 270 insertions(+), 30 deletions(-)
+```
+
+### Prisma migrate output
+
+```text
+> npx prisma migrate dev --name serial15_workspace_project_core
+Error: P1000: Authentication failed against database server...
+
+> npx prisma migrate reset --force
+Applying migration `20260220085544_init_repaired_chain`
+Applying migration `20260220093038_serial12_workspace_owner`
+Applying migration `20260222000000_serial14_step7_auth_user`
+Database reset successful
+
+> npx prisma migrate dev --name serial15_workspace_project_core
+Migration cancelled (non-interactive)
+
+> npx prisma migrate deploy
+Applying migration `20260223000000_serial15_workspace_project_core`
+All migrations have been successfully applied.
+```
+
+### Docker compose + runtime proofs
+
+```text
+> docker compose -f docker-compose.dev.yml up -d --build
+✔ Container factory-dev-db-1           Healthy
+✔ Container factory-dev-api-1          Healthy
+✔ Container factory-dev-orchestrator-1 Up
+✔ Container factory-web-dev            Recreated
+
+> docker compose -f docker-compose.dev.yml ps -a
+factory-dev-api-1            ... Up ... (healthy)
+factory-dev-db-1             ... Up ... (healthy)
+factory-dev-orchestrator-1   ... Up ...
+factory-web-dev              ... Up ... (health: starting)
+
+> POST /v1/auth/signup (serial15@test.local)
+HTTP/1.1 201 Created
+
+> POST /v1/auth/login
+{"accessToken":"...","tokenType":"Bearer","user":{"id":"3911742e-9a50-48af-9a7d-ff6c248dfd68","email":"serial15@test.local"}}
+
+> POST /v1/workspaces {"name":"Acme Workspace"}
+{"ok":true,"workspace":{"id":"e65ab17e-d2c6-4819-b10f-92a20ad05c08","name":"Acme Workspace","ownerUserId":"3911742e-9a50-48af-9a7d-ff6c248dfd68","isActive":true}}
+
+> GET /v1/workspaces
+HTTP/1.1 200 OK
+
+> POST /v1/workspaces/e65ab17e-d2c6-4819-b10f-92a20ad05c08/projects {"name":"Web App","slug":"web-app"}
+HTTP/1.1 201 Created
+
+> GET /v1/workspaces/e65ab17e-d2c6-4819-b10f-92a20ad05c08/projects
+HTTP/1.1 200 OK
+
+> GET /v1/templates
+HTTP/1.1 200 OK
+
+> GET /db/health
+HTTP/1.1 200 OK
+
+> GET /v1/me
+HTTP/1.1 200 OK
+```
+
+### Checklist
+
+- [x] Workspace + Project schema fields added (`ownerUserId`, `isActive`, `slug`, relation/index/unique).
+- [x] JWT-protected CRUD routes implemented for workspace/project create/list.
+- [x] Name + slug validation enforced.
+- [x] Migration file created (`serial15_workspace_project_core`) and applied.
+- [x] Existing endpoints still pass (`/v1/templates`, `/db/health`, `/v1/me`).
+
