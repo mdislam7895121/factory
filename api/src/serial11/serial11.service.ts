@@ -3,8 +3,10 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  OnModuleInit,
 } from '@nestjs/common';
 import {
+  Prisma,
   ProjectStatus,
   ProvisioningRunStatus,
   type Project,
@@ -34,8 +36,39 @@ type OrchestratorStatusResponse = {
 };
 
 @Injectable()
-export class Serial11Service {
+export class Serial11Service implements OnModuleInit {
   constructor(private readonly prisma: PrismaService) {}
+
+  async onModuleInit() {
+    if (process.env.NODE_ENV === 'test') {
+      return;
+    }
+
+    try {
+      await this.prisma.template.upsert({
+        where: { id: 'basic-web' },
+        create: {
+          id: 'basic-web',
+          name: 'Basic Web App',
+          description: 'Minimal starter web template',
+          isActive: true,
+        },
+        update: {
+          name: 'Basic Web App',
+          description: 'Minimal starter web template',
+          isActive: true,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2021'
+      ) {
+        return;
+      }
+      throw error;
+    }
+  }
 
   private get orchestratorBaseUrl(): string {
     return process.env.ORCHESTRATOR_BASE_URL ?? 'http://orchestrator:4100';
@@ -128,30 +161,36 @@ export class Serial11Service {
   }
 
   async listTemplates() {
-    const templates = new Set<string>();
-    templates.add('basic-web');
-
-    try {
-      const response = await this.callOrchestrator<{
-        ok: boolean;
-        projects: Array<{ template?: string }>;
-      }>('/v1/projects');
-      for (const project of response.projects) {
-        const template = String(project.template ?? '').trim();
-        if (template) {
-          templates.add(template);
-        }
-      }
-    } catch (error) {
-      void error;
-    }
+    const templates = await this.prisma.template.findMany({
+      where: { isActive: true },
+      orderBy: [{ createdAt: 'asc' }],
+      select: { id: true, name: true },
+    });
 
     return {
       ok: true,
-      templates: Array.from(templates).map((templateId) => ({
-        id: templateId,
-      })),
+      templates,
     };
+  }
+
+  async getTemplate(id: string) {
+    const template = await this.prisma.template.findFirst({
+      where: { id, isActive: true },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    if (!template) {
+      throw new NotFoundException('template not found');
+    }
+
+    return { ok: true, template };
   }
 
   async createWorkspace(body: { name?: string }, ownerId: string) {

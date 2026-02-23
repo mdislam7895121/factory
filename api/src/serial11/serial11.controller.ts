@@ -19,6 +19,11 @@ export class Serial11Controller {
     return this.serial11Service.listTemplates();
   }
 
+  @Get('/templates/:id')
+  getTemplate(@Param('id') id: string) {
+    return this.serial11Service.getTemplate(id);
+  }
+
   @UseGuards(JwtGuard)
   @Post('/workspaces')
   createWorkspace(@Req() req: Request, @Body() body: { name?: string }) {

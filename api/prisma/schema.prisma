@@ -13,6 +13,17 @@ model HealthCheck {
   createdAt DateTime @default(now())
 }
 
+model Template {
+  id          String   @id
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isActive])
+}
+
 enum ProjectStatus {
   QUEUED
   RUNNING
