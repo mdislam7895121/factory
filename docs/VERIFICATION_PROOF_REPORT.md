@@ -1,3 +1,61 @@
+## SERIAL 20 — Ops Monitoring + Production Readiness Health
+
+Date: 2026-02-23
+
+### Scope (files)
+
+- `api/src/app.controller.ts`
+- `api/package.json`
+- `api/railway.json`
+- `api/scripts/start-railway.cjs`
+- `docs/ops/MONITORING.md`
+- `scripts/prod-smoke.ps1`
+
+### Root cause and remediation summary
+
+- Production `/ready` originally returned `503` HTML from an exception path.
+- `/ready` was changed to always return deterministic JSON for both healthy and unhealthy states.
+- Railway startup was made migration-aware (`prisma migrate deploy`), then hardened with a non-blocking wrapper to avoid crash loops when migration history drift exists.
+- One-time schema sync was executed against production DB to satisfy readiness schema expectations.
+
+### Proof files (raw outputs)
+
+- `proof/runs/serial20-local-20260223-140037.txt`
+- `proof/runs/serial20-local-verify-20260223-140446.txt`
+- `proof/runs/serial20-prod-before-20260223-140648.txt`
+- `proof/runs/serial20-postmerge-20260223-142223.txt`
+- `proof/runs/serial20-migrate-fix-20260223-143244.txt`
+- `proof/runs/serial20-schema-sync-20260223-145510.txt`
+- `proof/runs/serial20-postmerge-green-20260223-145537.txt`
+
+### Production curls (final green)
+
+```text
+> curl.exe -sS -i https://factory-production-production.up.railway.app/db/health
+HTTP/1.1 200 OK
+{"ok":true,"status":"up"}
+
+> curl.exe -sS -i https://factory-production-production.up.railway.app/ready
+HTTP/1.1 200 OK
+{"ok":true,"status":"ready","checks":{"env":"ok","db":"ok","schema":"ok"}}
+```
+
+### PR metadata
+
+- PR #61: `https://github.com/mdislam7895121/factory/pull/61`
+  - Title: `SERIAL 20: ops monitoring + production /ready reliability`
+  - Merged: squash
+- PR #62: `https://github.com/mdislam7895121/factory/pull/62`
+  - Title: `SERIAL 20: Railway boot resilience for migration drift`
+  - Merged: squash
+
+### Monitoring documentation
+
+- Runbook: `docs/ops/MONITORING.md`
+- Production smoke script: `scripts/prod-smoke.ps1`
+
+SERIAL 20 is now LOCKED.
+
 ## SERIAL 14 — fullstack-v1 Step 1 schema finalized
 
 Date: 2026-02-22
