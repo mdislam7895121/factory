@@ -40,6 +40,10 @@ export class Serial11Service implements OnModuleInit {
   constructor(private readonly prisma: PrismaService) {}
 
   async onModuleInit() {
+    if (process.env.NODE_ENV === 'test') {
+      return;
+    }
+
     try {
       await this.prisma.template.upsert({
         where: { id: 'basic-web' },
