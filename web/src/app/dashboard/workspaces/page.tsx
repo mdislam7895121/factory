@@ -23,8 +23,11 @@ type Project = {
   status: 'QUEUED' | 'RUNNING' | 'READY' | 'FAILED';
   previewUrl: string | null;
   logsRef: string | null;
+  provisionError: string | null;
   createdAt: string;
 };
+
+const PROJECTS_REFRESH_MS = 2500;
 
 const rawApiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
 const apiBase = rawApiBase?.includes('api:') ? 'http://localhost:4000' : rawApiBase ?? 'http://localhost:4000';
@@ -98,6 +101,14 @@ export default function WorkspaceDashboardPage() {
     }
 
     refreshProjects(selectedWorkspaceId).catch((err) => setError(String(err)));
+
+    const interval = setInterval(() => {
+      refreshProjects(selectedWorkspaceId).catch((err) => setError(String(err)));
+    }, PROJECTS_REFRESH_MS);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [selectedWorkspaceId]);
 
   const createWorkspace = async () => {
@@ -249,6 +260,7 @@ export default function WorkspaceDashboardPage() {
                 <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: '6px' }}>Name</th>
                 <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: '6px' }}>Template</th>
                 <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: '6px' }}>Status</th>
+                <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: '6px' }}>Error</th>
                 <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: '6px' }}>Actions</th>
               </tr>
             </thead>
@@ -257,7 +269,24 @@ export default function WorkspaceDashboardPage() {
                 <tr key={project.id}>
                   <td style={{ borderBottom: '1px solid #f0f0f0', padding: '6px' }}>{project.name}</td>
                   <td style={{ borderBottom: '1px solid #f0f0f0', padding: '6px' }}>{project.templateId}</td>
-                  <td style={{ borderBottom: '1px solid #f0f0f0', padding: '6px' }}>{project.status}</td>
+                  <td style={{ borderBottom: '1px solid #f0f0f0', padding: '6px' }}>
+                    <Badge
+                      variant={
+                        project.status === 'READY'
+                          ? 'success'
+                          : project.status === 'FAILED'
+                            ? 'danger'
+                            : project.status === 'RUNNING'
+                              ? 'warning'
+                              : 'default'
+                      }
+                    >
+                      {project.status}
+                    </Badge>
+                  </td>
+                  <td style={{ borderBottom: '1px solid #f0f0f0', padding: '6px' }}>
+                    {project.provisionError ?? '-'}
+                  </td>
                   <td style={{ borderBottom: '1px solid #f0f0f0', padding: '6px' }}>
                     <Link href={`/dashboard/projects/${project.id}`}>Open Project</Link>
                   </td>

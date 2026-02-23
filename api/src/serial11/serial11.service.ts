@@ -281,6 +281,17 @@ export class Serial11Service implements OnModuleInit {
       },
     });
 
+    setTimeout(() => {
+      void this.provisionProject(project.id, ownerId).catch(
+        (error: unknown) => {
+          const message = String((error as Error)?.message ?? error);
+          console.warn(
+            `[WARN] background provision failed for project=${project.id}: ${message}`,
+          );
+        },
+      );
+    }, 0);
+
     return { ok: true, project };
   }
 
@@ -297,7 +308,11 @@ export class Serial11Service implements OnModuleInit {
       orderBy: { createdAt: 'desc' },
     });
 
-    return { ok: true, projects };
+    const syncedProjects = await Promise.all(
+      projects.map((project) => this.syncProjectFromOrchestrator(project)),
+    );
+
+    return { ok: true, projects: syncedProjects };
   }
 
   async getProject(projectId: string, ownerId: string) {

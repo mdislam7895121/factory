@@ -1,17 +1,23 @@
-import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import type { Request } from 'express';
 import { Serial11Service } from './serial11.service';
 import { requireUserId } from '../lib/auth/principal';
 import { JwtGuard } from '../lib/auth/jwt.guard';
 import { WorkspaceService } from '../serial15/workspace.service';
-import { ProjectService } from '../serial15/project.service';
 
 @Controller('/v1')
 export class Serial11Controller {
   constructor(
     private readonly serial11Service: Serial11Service,
     private readonly workspaceService: WorkspaceService,
-    private readonly projectService: ProjectService,
   ) {}
 
   @Get('/templates')
@@ -50,11 +56,13 @@ export class Serial11Controller {
   createWorkspaceProject(
     @Req() req: Request,
     @Param('workspaceId') workspaceId: string,
-    @Body() body: { name?: string; slug?: string },
+    @Body() body: { name?: string; templateId?: string },
   ) {
-    return this.projectService
-      .create(workspaceId, body ?? {}, requireUserId(req))
-      .then((project) => ({ ok: true, project }));
+    return this.serial11Service.createWorkspaceProject(
+      workspaceId,
+      body ?? {},
+      requireUserId(req),
+    );
   }
 
   @UseGuards(JwtGuard)
@@ -63,9 +71,10 @@ export class Serial11Controller {
     @Req() req: Request,
     @Param('workspaceId') workspaceId: string,
   ) {
-    return this.projectService
-      .list(workspaceId, requireUserId(req))
-      .then((projects) => ({ ok: true, projects }));
+    return this.serial11Service.listWorkspaceProjects(
+      workspaceId,
+      requireUserId(req),
+    );
   }
 
   @Get('/projects/:id')
