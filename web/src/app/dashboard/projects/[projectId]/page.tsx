@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Badge } from '../../../../components/ui/Badge';
 import { Button } from '../../../../components/ui/Button';
 
@@ -58,8 +58,12 @@ export default function ProjectDetailPage() {
   const [error, setError] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [provisioning, setProvisioning] = useState<boolean>(false);
+  const [streamState, setStreamState] = useState<'idle' | 'connecting' | 'connected' | 'retrying'>('idle');
+  const [livePreviewUrl, setLivePreviewUrl] = useState<string | null>(null);
+  const [liveStatus, setLiveStatus] = useState<string | null>(null);
 
-  const wsRef = useRef<WebSocket | null>(null);
+  const eventSourceRef = useRef<EventSource | null>(null);
+  const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const canProvision = useMemo(() => {
     if (!project) {
@@ -68,14 +72,14 @@ export default function ProjectDetailPage() {
     return project.status === 'QUEUED' || project.status === 'FAILED' || project.status === 'RUNNING';
   }, [project]);
 
-  const refreshProject = async () => {
+  const refreshProject = useCallback(async () => {
     if (!projectId) {
       return;
     }
 
     const data = await api<{ ok: boolean; project: Project }>(`/v1/projects/${encodeURIComponent(projectId)}`);
     setProject(data.project);
-  };
+  }, [projectId]);
 
   useEffect(() => {
     refreshProject().catch((err) => setError(String(err)));
@@ -87,37 +91,104 @@ export default function ProjectDetailPage() {
     return () => {
       clearInterval(interval);
     };
-  }, [projectId]);
+  }, [refreshProject]);
 
   useEffect(() => {
     if (!project?.logsRef) {
-      wsRef.current?.close();
+      eventSourceRef.current?.close();
+      eventSourceRef.current = null;
+      if (retryTimerRef.current) {
+        clearTimeout(retryTimerRef.current);
+        retryTimerRef.current = null;
+      }
+      setStreamState('idle');
       return;
     }
 
-    wsRef.current?.close();
+    eventSourceRef.current?.close();
+    if (retryTimerRef.current) {
+      clearTimeout(retryTimerRef.current);
+      retryTimerRef.current = null;
+    }
     setLogs('');
+    setStreamState('connecting');
+    setLivePreviewUrl(project.previewUrl ?? null);
+    setLiveStatus(project.status);
 
-    const ws = new WebSocket(project.logsRef);
-    ws.onopen = () => {
-      setLogs((current) => `${current}\n[project] logs stream connected\n`);
-    };
-    ws.onmessage = (event) => {
-      setLogs((current) => `${current}${String(event.data)}`);
-    };
-    ws.onerror = () => {
-      setLogs((current) => `${current}\n[project] logs stream error\n`);
-    };
-    ws.onclose = () => {
-      setLogs((current) => `${current}\n[project] logs stream closed\n`);
+    let disposed = false;
+    const connect = () => {
+      if (disposed) {
+        return;
+      }
+
+      setStreamState('connecting');
+      const source = new EventSource(project.logsRef as string, {
+        withCredentials: true,
+      });
+
+      source.addEventListener('connected', () => {
+        setStreamState('connected');
+        setLogs((current) => `${current}\n[project] logs stream connected\n`);
+      });
+
+      source.addEventListener('log', (event) => {
+        try {
+          const parsed = JSON.parse((event as MessageEvent<string>).data) as {
+            chunk?: unknown;
+          };
+          if (typeof parsed.chunk === 'string' && parsed.chunk.length > 0) {
+            setLogs((current) => `${current}${parsed.chunk}`);
+          }
+        } catch {
+          setLogs((current) => `${current}${(event as MessageEvent<string>).data}`);
+        }
+      });
+
+      source.addEventListener('status', (event) => {
+        try {
+          const parsed = JSON.parse((event as MessageEvent<string>).data) as {
+            status?: unknown;
+            previewUrl?: unknown;
+          };
+          if (typeof parsed.status === 'string') {
+            setLiveStatus(parsed.status);
+          }
+          if (typeof parsed.previewUrl === 'string' && parsed.previewUrl.length > 0) {
+            setLivePreviewUrl(parsed.previewUrl);
+          }
+        } catch {
+        }
+      });
+
+      source.onerror = () => {
+        source.close();
+        if (disposed) {
+          return;
+        }
+
+        setStreamState('retrying');
+        setLogs((current) => `${current}\n[project] logs stream retrying\n`);
+        retryTimerRef.current = setTimeout(() => {
+          retryTimerRef.current = null;
+          connect();
+        }, 1500);
+      };
+
+      eventSourceRef.current = source;
     };
 
-    wsRef.current = ws;
+    connect();
 
     return () => {
-      ws.close();
+      disposed = true;
+      eventSourceRef.current?.close();
+      eventSourceRef.current = null;
+      if (retryTimerRef.current) {
+        clearTimeout(retryTimerRef.current);
+        retryTimerRef.current = null;
+      }
     };
-  }, [project?.logsRef]);
+  }, [project?.logsRef, project?.previewUrl, project?.status]);
 
   const provision = async () => {
     if (!projectId) {
@@ -174,20 +245,21 @@ export default function ProjectDetailPage() {
               <strong>Status:</strong>{' '}
               <Badge
                 variant={
-                  project.status === 'READY'
+                  (liveStatus ?? project.status) === 'READY'
                     ? 'success'
-                    : project.status === 'FAILED'
+                    : (liveStatus ?? project.status) === 'FAILED'
                       ? 'danger'
-                      : project.status === 'RUNNING'
+                      : (liveStatus ?? project.status) === 'RUNNING'
                         ? 'warning'
                         : 'default'
                 }
               >
-                {project.status}
+                {liveStatus ?? project.status}
               </Badge>
             </div>
-            <div><strong>Preview URL:</strong> {project.previewUrl ? <a href={project.previewUrl} target="_blank" rel="noreferrer">{project.previewUrl}</a> : 'pending'}</div>
+            <div><strong>Preview URL:</strong> {livePreviewUrl ? <a href={livePreviewUrl} target="_blank" rel="noreferrer">{livePreviewUrl}</a> : 'pending'}</div>
             <div><strong>Logs Ref:</strong> {project.logsRef ?? 'pending'}</div>
+            <div><strong>Logs Stream:</strong> {streamState}</div>
             <div><strong>Provision Error:</strong> {project.provisionError ?? 'none'}</div>
             <div style={{ marginTop: '10px' }}>
               <Button onClick={provision} disabled={!canProvision || provisioning} variant="primary">
