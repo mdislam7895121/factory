@@ -2,22 +2,18 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '../generated/prisma';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
+import { getRequiredEnvOrThrow } from '../config/env.contract';
 
 type PoolConstructor = new (config: { connectionString: string }) => unknown;
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
   constructor() {
-    // Validate DATABASE_URL is set
-    if (!process.env.DATABASE_URL) {
-      throw new Error(
-        'DATABASE_URL environment variable is not set. Please check your .env file.',
-      );
-    }
+    const databaseUrl = getRequiredEnvOrThrow('DATABASE_URL');
 
     // Create PostgreSQL connection pool
     const PgPool = Pool as unknown as PoolConstructor;
-    const pool = new PgPool({ connectionString: process.env.DATABASE_URL });
+    const pool = new PgPool({ connectionString: databaseUrl });
     const adapter = new PrismaPg(pool as never);
 
     // Initialize PrismaClient with adapter

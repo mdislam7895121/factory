@@ -27,6 +27,111 @@ HTTP/1.1 200 OK
 HTTP/1.1 200 OK
 ```
 
+## SERIAL 17 — Public SaaS Factory Production Baseline (Env/Secrets + Readiness + Ops Guardrails)
+
+### Baseline outputs (no edits)
+
+```text
+> git checkout main
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+
+> git pull --ff-only
+Already up to date.
+
+> git status -sb
+## main...origin/main
+
+> git log -1 --oneline
+4831401 SERIAL 16: CI gate fix (#54)
+
+> docker compose -f docker/docker-compose.dev.yml ps -a
+factory-dev-api-1            ... Up ... (healthy)
+factory-dev-db-1             ... Up ... (healthy)
+factory-dev-orchestrator-1   ... Up ...
+factory-web-dev              ... Up ... (health: starting)
+
+> curl -i http://localhost:4000/db/health
+HTTP/1.1 200 OK
+{"ok":true,"status":"up"}
+
+> curl -i http://localhost:4000/v1/templates
+HTTP/1.1 200 OK
+{"ok":true,"templates":[{"id":"basic-web","name":"Basic Web App"}]}
+
+> curl.exe -sS -D - http://localhost:3000/ -o NUL | Select-Object -First 20
+curl: (52) Empty reply from server
+```
+
+Raw baseline file: `proof/runs/serial17-baseline-20260223-023046.txt`
+
+### Env contract summary (single source of truth)
+
+- Central contract file: `api/src/config/env.contract.ts`
+- Required envs (all runtimes): `AUTH_SECRET`, `DATABASE_URL`
+- Startup validation in `api/src/main.ts` uses contract (`resolveAndNormalizeNodeEnvironment`, `assertRequiredRuntimeEnv`)
+- Prisma startup in `api/src/prisma/prisma.service.ts` uses contract (`getRequiredEnvOrThrow('DATABASE_URL')`)
+- CI proof runner deterministic envs in `scripts/proof-runner.ps1`:
+  - `NODE_ENV=test`
+  - `AUTH_SECRET=change-me`
+  - `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/factory_dev`
+- Railway required envs documented in `docs/ops/SECURITY.md`
+
+### /ready proof
+
+```text
+> curl -i http://localhost:4000/ready
+HTTP/1.1 200 OK
+{"ok":true,"status":"ready","checks":{"env":"ok","db":"ok","schema":"ok"}}
+```
+
+### proof-runner output
+
+```text
+> pwsh scripts/proof-runner.ps1
+STEP_4_COMMAND=npm -C api run lint
+STEP_5_COMMAND=npm -C api run build
+STEP_6_COMMAND=npm -C api run test:e2e
+PASS test/app.e2e-spec.ts
+Tests:       4 passed, 4 total
+EXIT_CODE=0
+PROOF_FILE=C:\Users\vitor\Dev\factory\proof\runs\proof-s7-20260223-023410.txt
+```
+
+### Local verification outputs (post-change)
+
+```text
+> docker compose -f docker/docker-compose.dev.yml ps -a
+factory-dev-api-1            ... Up ... (healthy)
+factory-dev-db-1             ... Up ... (healthy)
+factory-dev-orchestrator-1   ... Up ...
+factory-web-dev              ... Up ... (health: starting)
+
+> curl -i http://localhost:4000/db/health
+HTTP/1.1 200 OK
+
+> curl -i http://localhost:4000/v1/templates
+HTTP/1.1 200 OK
+
+> curl -i http://localhost:4000/ready
+HTTP/1.1 200 OK
+
+> curl.exe -sS -D - http://localhost:3000/ -o NUL | Select-Object -First 20
+HTTP/1.1 200 OK
+WEB_HEADERS_STATUS=PASS
+```
+
+Raw verify file: `proof/runs/serial17-verify-20260223-023410.txt`
+
+### PR + merge metadata
+
+- Branch: `feature/serial-17-prod-baseline`
+- PR: PENDING
+- CI checks: PENDING
+- Merge: PENDING
+
+SERIAL 17 is now LOCKED.
+
 ## SERIAL 16 — Template Registry (DB-backed) — PROOF
 
 Date: 2026-02-22

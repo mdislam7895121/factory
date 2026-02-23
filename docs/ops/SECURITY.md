@@ -10,12 +10,22 @@ This document covers API-only hardening for `api` service.
 2. CORS allow-list from `CORS_ORIGINS` (comma-separated)
 3. In-memory request rate limiting
 4. Request body size limit via `BODY_LIMIT`
-5. Environment validation and production DB URL requirement
+5. Central environment contract with startup validation
 6. Production guard for `/debug-sentry`
 
 ## Environment Variables
 
+### Required (all runtimes: dev/docker/CI/prod)
+
+- `AUTH_SECRET`
+- `DATABASE_URL`
+
+### Runtime
+
 - `NODE_ENV` (`development` | `test` | `production`)
+
+### Optional
+
 - `WEB_URL` (optional helper default)
 - `CORS_ORIGINS` (comma-separated allowed origins)
 - `RATE_LIMIT_WINDOW_MS` (default `60000`)
@@ -47,3 +57,12 @@ This document covers API-only hardening for `api` service.
 - Keep `BODY_LIMIT` small unless uploads are required.
 - Set explicit `CORS_ORIGINS` in production.
 - Rotate `DEBUG_TOKEN` periodically and keep it secret.
+
+## Railway Production Guardrail
+
+Set these required variables in Railway API service before deploy:
+
+- `AUTH_SECRET`
+- `DATABASE_URL`
+
+Deploys should fail fast at startup when either variable is missing.
