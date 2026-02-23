@@ -4,6 +4,6 @@
     "buildCommand": "npm ci --include=dev && npm run build"
   },
   "deploy": {
-    "startCommand": "node dist/src/main.js"
+    "startCommand": "npm run start:railway"
   }
 }

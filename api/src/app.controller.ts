@@ -1,7 +1,8 @@
-import { Controller, Get, ServiceUnavailableException } from '@nestjs/common';
+import { Controller, Get, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { PrismaService } from './prisma/prisma.service';
 import { getMissingRequiredEnvVars } from './config/env.contract';
+import type { Response } from 'express';
 
 @Controller()
 export class AppController {
@@ -35,69 +36,69 @@ export class AppController {
   }
 
   @Get('/ready')
-  async ready(): Promise<
-    | {
-        ok: true;
-        status: 'ready';
-        checks: { env: 'ok'; db: 'ok'; schema: 'ok' };
-      }
-    | {
-        ok: false;
-        status: 'not_ready';
-        reason: 'missing_env' | 'db_unavailable' | 'schema_not_ready';
-        details: string[];
-      }
-  > {
-    const missingEnv = getMissingRequiredEnvVars();
-    if (missingEnv.length > 0) {
-      throw new ServiceUnavailableException({
-        ok: false as const,
-        status: 'not_ready' as const,
-        reason: 'missing_env' as const,
-        details: missingEnv,
-      });
-    }
-
+  async ready(@Res() res: Response): Promise<void> {
     try {
-      await this.prisma.$queryRawUnsafe('SELECT 1');
+      const missingEnv = getMissingRequiredEnvVars();
+      if (missingEnv.length > 0) {
+        res.status(503).json({
+          ok: false,
+          status: 'not_ready',
+          reason: 'missing_env',
+          details: missingEnv,
+        });
+        return;
+      }
+
+      try {
+        await this.prisma.$queryRawUnsafe('SELECT 1');
+      } catch {
+        res.status(503).json({
+          ok: false,
+          status: 'not_ready',
+          reason: 'db_unavailable',
+          details: ['database query failed'],
+        });
+        return;
+      }
+
+      type SchemaRow = {
+        template_ready: boolean;
+        user_ready: boolean;
+      };
+
+      const schema = await this.prisma.$queryRawUnsafe<SchemaRow[]>(`
+        SELECT
+          to_regclass('public."Template"') IS NOT NULL AS template_ready,
+          to_regclass('public."User"') IS NOT NULL AS user_ready
+      `);
+
+      const schemaRow = schema[0];
+      const schemaReady = Boolean(
+        schemaRow?.template_ready && schemaRow?.user_ready,
+      );
+
+      if (!schemaReady) {
+        res.status(503).json({
+          ok: false,
+          status: 'not_ready',
+          reason: 'schema_not_ready',
+          details: ['required tables missing: Template and/or User'],
+        });
+        return;
+      }
+
+      res.status(200).json({
+        ok: true,
+        status: 'ready',
+        checks: { env: 'ok', db: 'ok', schema: 'ok' },
+      });
     } catch {
-      throw new ServiceUnavailableException({
-        ok: false as const,
-        status: 'not_ready' as const,
-        reason: 'db_unavailable' as const,
-        details: ['database query failed'],
+      res.status(503).json({
+        ok: false,
+        status: 'not_ready',
+        reason: 'readiness_check_failed',
+        details: ['unexpected readiness check failure'],
       });
     }
-
-    type SchemaRow = {
-      template_ready: boolean;
-      user_ready: boolean;
-    };
-
-    const schema = await this.prisma.$queryRawUnsafe<SchemaRow[]>(`
-      SELECT
-        to_regclass('public."Template"') IS NOT NULL AS template_ready,
-        to_regclass('public."User"') IS NOT NULL AS user_ready
-    `);
-
-    const schemaRow = schema[0];
-    const schemaReady = Boolean(
-      schemaRow?.template_ready && schemaRow?.user_ready,
-    );
-
-    if (!schemaReady) {
-      throw new ServiceUnavailableException({
-        ok: false as const,
-        status: 'not_ready' as const,
-        reason: 'schema_not_ready' as const,
-        details: ['required tables missing: Template and/or User'],
-      });
-    }
-
-    return {
-      ok: true,
-      status: 'ready',
-      checks: { env: 'ok', db: 'ok', schema: 'ok' },
-    };
   }
 }
