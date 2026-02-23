@@ -20,16 +20,16 @@ export class AppController {
 
   @Get('/db/health')
   async dbHealth() {
-    const row = await this.prisma.healthCheck.create({
-      data: { message: 'ok' },
-    });
-
-    const count = await this.prisma.healthCheck.count();
+    await this.prisma.$queryRawUnsafe('SELECT 1');
 
     return {
       ok: true,
-      insertedId: row.id,
-      count,
+      status: 'up',
     };
+  }
+
+  @Get('/health/db')
+  async dbHealthAlias() {
+    return this.dbHealth();
   }
 }
