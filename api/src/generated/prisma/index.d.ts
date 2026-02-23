@@ -2393,6 +2393,8 @@ export namespace Prisma {
     id: string | null
     name: string | null
     ownerId: string | null
+    ownerUserId: string | null
+    isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2401,6 +2403,8 @@ export namespace Prisma {
     id: string | null
     name: string | null
     ownerId: string | null
+    ownerUserId: string | null
+    isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2409,6 +2413,8 @@ export namespace Prisma {
     id: number
     name: number
     ownerId: number
+    ownerUserId: number
+    isActive: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2419,6 +2425,8 @@ export namespace Prisma {
     id?: true
     name?: true
     ownerId?: true
+    ownerUserId?: true
+    isActive?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2427,6 +2435,8 @@ export namespace Prisma {
     id?: true
     name?: true
     ownerId?: true
+    ownerUserId?: true
+    isActive?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2435,6 +2445,8 @@ export namespace Prisma {
     id?: true
     name?: true
     ownerId?: true
+    ownerUserId?: true
+    isActive?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2516,6 +2528,8 @@ export namespace Prisma {
     id: string
     name: string
     ownerId: string | null
+    ownerUserId: string | null
+    isActive: boolean
     createdAt: Date
     updatedAt: Date
     _count: WorkspaceCountAggregateOutputType | null
@@ -2541,6 +2555,8 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     ownerId?: boolean
+    ownerUserId?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     projects?: boolean | Workspace$projectsArgs<ExtArgs>
@@ -2551,6 +2567,8 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     ownerId?: boolean
+    ownerUserId?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["workspace"]>
@@ -2559,6 +2577,8 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     ownerId?: boolean
+    ownerUserId?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["workspace"]>
@@ -2567,11 +2587,13 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     ownerId?: boolean
+    ownerUserId?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type WorkspaceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "ownerId" | "createdAt" | "updatedAt", ExtArgs["result"]["workspace"]>
+  export type WorkspaceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "ownerId" | "ownerUserId" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["workspace"]>
   export type WorkspaceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     projects?: boolean | Workspace$projectsArgs<ExtArgs>
     _count?: boolean | WorkspaceCountOutputTypeDefaultArgs<ExtArgs>
@@ -2588,6 +2610,8 @@ export namespace Prisma {
       id: string
       name: string
       ownerId: string | null
+      ownerUserId: string | null
+      isActive: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["workspace"]>
@@ -3017,6 +3041,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Workspace", 'String'>
     readonly name: FieldRef<"Workspace", 'String'>
     readonly ownerId: FieldRef<"Workspace", 'String'>
+    readonly ownerUserId: FieldRef<"Workspace", 'String'>
+    readonly isActive: FieldRef<"Workspace", 'Boolean'>
     readonly createdAt: FieldRef<"Workspace", 'DateTime'>
     readonly updatedAt: FieldRef<"Workspace", 'DateTime'>
   }
@@ -3463,9 +3489,11 @@ export namespace Prisma {
     id: string | null
     workspaceId: string | null
     name: string | null
+    slug: string | null
     templateId: string | null
     orchestratorProjectId: string | null
     status: $Enums.ProjectStatus | null
+    isActive: boolean | null
     previewUrl: string | null
     logsRef: string | null
     provisionError: string | null
@@ -3477,9 +3505,11 @@ export namespace Prisma {
     id: string | null
     workspaceId: string | null
     name: string | null
+    slug: string | null
     templateId: string | null
     orchestratorProjectId: string | null
     status: $Enums.ProjectStatus | null
+    isActive: boolean | null
     previewUrl: string | null
     logsRef: string | null
     provisionError: string | null
@@ -3491,9 +3521,11 @@ export namespace Prisma {
     id: number
     workspaceId: number
     name: number
+    slug: number
     templateId: number
     orchestratorProjectId: number
     status: number
+    isActive: number
     previewUrl: number
     logsRef: number
     provisionError: number
@@ -3507,9 +3539,11 @@ export namespace Prisma {
     id?: true
     workspaceId?: true
     name?: true
+    slug?: true
     templateId?: true
     orchestratorProjectId?: true
     status?: true
+    isActive?: true
     previewUrl?: true
     logsRef?: true
     provisionError?: true
@@ -3521,9 +3555,11 @@ export namespace Prisma {
     id?: true
     workspaceId?: true
     name?: true
+    slug?: true
     templateId?: true
     orchestratorProjectId?: true
     status?: true
+    isActive?: true
     previewUrl?: true
     logsRef?: true
     provisionError?: true
@@ -3535,9 +3571,11 @@ export namespace Prisma {
     id?: true
     workspaceId?: true
     name?: true
+    slug?: true
     templateId?: true
     orchestratorProjectId?: true
     status?: true
+    isActive?: true
     previewUrl?: true
     logsRef?: true
     provisionError?: true
@@ -3622,9 +3660,11 @@ export namespace Prisma {
     id: string
     workspaceId: string
     name: string
+    slug: string | null
     templateId: string
     orchestratorProjectId: string | null
     status: $Enums.ProjectStatus
+    isActive: boolean
     previewUrl: string | null
     logsRef: string | null
     provisionError: string | null
@@ -3653,9 +3693,11 @@ export namespace Prisma {
     id?: boolean
     workspaceId?: boolean
     name?: boolean
+    slug?: boolean
     templateId?: boolean
     orchestratorProjectId?: boolean
     status?: boolean
+    isActive?: boolean
     previewUrl?: boolean
     logsRef?: boolean
     provisionError?: boolean
@@ -3670,9 +3712,11 @@ export namespace Prisma {
     id?: boolean
     workspaceId?: boolean
     name?: boolean
+    slug?: boolean
     templateId?: boolean
     orchestratorProjectId?: boolean
     status?: boolean
+    isActive?: boolean
     previewUrl?: boolean
     logsRef?: boolean
     provisionError?: boolean
@@ -3685,9 +3729,11 @@ export namespace Prisma {
     id?: boolean
     workspaceId?: boolean
     name?: boolean
+    slug?: boolean
     templateId?: boolean
     orchestratorProjectId?: boolean
     status?: boolean
+    isActive?: boolean
     previewUrl?: boolean
     logsRef?: boolean
     provisionError?: boolean
@@ -3700,9 +3746,11 @@ export namespace Prisma {
     id?: boolean
     workspaceId?: boolean
     name?: boolean
+    slug?: boolean
     templateId?: boolean
     orchestratorProjectId?: boolean
     status?: boolean
+    isActive?: boolean
     previewUrl?: boolean
     logsRef?: boolean
     provisionError?: boolean
@@ -3710,7 +3758,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "workspaceId" | "name" | "templateId" | "orchestratorProjectId" | "status" | "previewUrl" | "logsRef" | "provisionError" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "workspaceId" | "name" | "slug" | "templateId" | "orchestratorProjectId" | "status" | "isActive" | "previewUrl" | "logsRef" | "provisionError" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
     provisioningRuns?: boolean | Project$provisioningRunsArgs<ExtArgs>
@@ -3733,9 +3781,11 @@ export namespace Prisma {
       id: string
       workspaceId: string
       name: string
+      slug: string | null
       templateId: string
       orchestratorProjectId: string | null
       status: $Enums.ProjectStatus
+      isActive: boolean
       previewUrl: string | null
       logsRef: string | null
       provisionError: string | null
@@ -4169,9 +4219,11 @@ export namespace Prisma {
     readonly id: FieldRef<"Project", 'String'>
     readonly workspaceId: FieldRef<"Project", 'String'>
     readonly name: FieldRef<"Project", 'String'>
+    readonly slug: FieldRef<"Project", 'String'>
     readonly templateId: FieldRef<"Project", 'String'>
     readonly orchestratorProjectId: FieldRef<"Project", 'String'>
     readonly status: FieldRef<"Project", 'ProjectStatus'>
+    readonly isActive: FieldRef<"Project", 'Boolean'>
     readonly previewUrl: FieldRef<"Project", 'String'>
     readonly logsRef: FieldRef<"Project", 'String'>
     readonly provisionError: FieldRef<"Project", 'String'>
@@ -7768,6 +7820,8 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     ownerId: 'ownerId',
+    ownerUserId: 'ownerUserId',
+    isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -7779,9 +7833,11 @@ export namespace Prisma {
     id: 'id',
     workspaceId: 'workspaceId',
     name: 'name',
+    slug: 'slug',
     templateId: 'templateId',
     orchestratorProjectId: 'orchestratorProjectId',
     status: 'status',
+    isActive: 'isActive',
     previewUrl: 'previewUrl',
     logsRef: 'logsRef',
     provisionError: 'provisionError',
@@ -7889,6 +7945,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'ProjectStatus'
    */
   export type EnumProjectStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProjectStatus'>
@@ -7982,6 +8045,8 @@ export namespace Prisma {
     id?: StringFilter<"Workspace"> | string
     name?: StringFilter<"Workspace"> | string
     ownerId?: StringNullableFilter<"Workspace"> | string | null
+    ownerUserId?: StringNullableFilter<"Workspace"> | string | null
+    isActive?: BoolFilter<"Workspace"> | boolean
     createdAt?: DateTimeFilter<"Workspace"> | Date | string
     updatedAt?: DateTimeFilter<"Workspace"> | Date | string
     projects?: ProjectListRelationFilter
@@ -7991,6 +8056,8 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     ownerId?: SortOrderInput | SortOrder
+    ownerUserId?: SortOrderInput | SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     projects?: ProjectOrderByRelationAggregateInput
@@ -8003,6 +8070,8 @@ export namespace Prisma {
     NOT?: WorkspaceWhereInput | WorkspaceWhereInput[]
     name?: StringFilter<"Workspace"> | string
     ownerId?: StringNullableFilter<"Workspace"> | string | null
+    ownerUserId?: StringNullableFilter<"Workspace"> | string | null
+    isActive?: BoolFilter<"Workspace"> | boolean
     createdAt?: DateTimeFilter<"Workspace"> | Date | string
     updatedAt?: DateTimeFilter<"Workspace"> | Date | string
     projects?: ProjectListRelationFilter
@@ -8012,6 +8081,8 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     ownerId?: SortOrderInput | SortOrder
+    ownerUserId?: SortOrderInput | SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: WorkspaceCountOrderByAggregateInput
@@ -8026,6 +8097,8 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Workspace"> | string
     name?: StringWithAggregatesFilter<"Workspace"> | string
     ownerId?: StringNullableWithAggregatesFilter<"Workspace"> | string | null
+    ownerUserId?: StringNullableWithAggregatesFilter<"Workspace"> | string | null
+    isActive?: BoolWithAggregatesFilter<"Workspace"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Workspace"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Workspace"> | Date | string
   }
@@ -8037,9 +8110,11 @@ export namespace Prisma {
     id?: StringFilter<"Project"> | string
     workspaceId?: StringFilter<"Project"> | string
     name?: StringFilter<"Project"> | string
+    slug?: StringNullableFilter<"Project"> | string | null
     templateId?: StringFilter<"Project"> | string
     orchestratorProjectId?: StringNullableFilter<"Project"> | string | null
     status?: EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
+    isActive?: BoolFilter<"Project"> | boolean
     previewUrl?: StringNullableFilter<"Project"> | string | null
     logsRef?: StringNullableFilter<"Project"> | string | null
     provisionError?: StringNullableFilter<"Project"> | string | null
@@ -8053,9 +8128,11 @@ export namespace Prisma {
     id?: SortOrder
     workspaceId?: SortOrder
     name?: SortOrder
+    slug?: SortOrderInput | SortOrder
     templateId?: SortOrder
     orchestratorProjectId?: SortOrderInput | SortOrder
     status?: SortOrder
+    isActive?: SortOrder
     previewUrl?: SortOrderInput | SortOrder
     logsRef?: SortOrderInput | SortOrder
     provisionError?: SortOrderInput | SortOrder
@@ -8067,14 +8144,17 @@ export namespace Prisma {
 
   export type ProjectWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    workspaceId_slug?: ProjectWorkspaceIdSlugCompoundUniqueInput
     AND?: ProjectWhereInput | ProjectWhereInput[]
     OR?: ProjectWhereInput[]
     NOT?: ProjectWhereInput | ProjectWhereInput[]
     workspaceId?: StringFilter<"Project"> | string
     name?: StringFilter<"Project"> | string
+    slug?: StringNullableFilter<"Project"> | string | null
     templateId?: StringFilter<"Project"> | string
     orchestratorProjectId?: StringNullableFilter<"Project"> | string | null
     status?: EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
+    isActive?: BoolFilter<"Project"> | boolean
     previewUrl?: StringNullableFilter<"Project"> | string | null
     logsRef?: StringNullableFilter<"Project"> | string | null
     provisionError?: StringNullableFilter<"Project"> | string | null
@@ -8082,15 +8162,17 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Project"> | Date | string
     workspace?: XOR<WorkspaceScalarRelationFilter, WorkspaceWhereInput>
     provisioningRuns?: ProvisioningRunListRelationFilter
-  }, "id">
+  }, "id" | "workspaceId_slug">
 
   export type ProjectOrderByWithAggregationInput = {
     id?: SortOrder
     workspaceId?: SortOrder
     name?: SortOrder
+    slug?: SortOrderInput | SortOrder
     templateId?: SortOrder
     orchestratorProjectId?: SortOrderInput | SortOrder
     status?: SortOrder
+    isActive?: SortOrder
     previewUrl?: SortOrderInput | SortOrder
     logsRef?: SortOrderInput | SortOrder
     provisionError?: SortOrderInput | SortOrder
@@ -8108,9 +8190,11 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Project"> | string
     workspaceId?: StringWithAggregatesFilter<"Project"> | string
     name?: StringWithAggregatesFilter<"Project"> | string
+    slug?: StringNullableWithAggregatesFilter<"Project"> | string | null
     templateId?: StringWithAggregatesFilter<"Project"> | string
     orchestratorProjectId?: StringNullableWithAggregatesFilter<"Project"> | string | null
     status?: EnumProjectStatusWithAggregatesFilter<"Project"> | $Enums.ProjectStatus
+    isActive?: BoolWithAggregatesFilter<"Project"> | boolean
     previewUrl?: StringNullableWithAggregatesFilter<"Project"> | string | null
     logsRef?: StringNullableWithAggregatesFilter<"Project"> | string | null
     provisionError?: StringNullableWithAggregatesFilter<"Project"> | string | null
@@ -8353,6 +8437,8 @@ export namespace Prisma {
     id?: string
     name: string
     ownerId?: string | null
+    ownerUserId?: string | null
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutWorkspaceInput
@@ -8362,6 +8448,8 @@ export namespace Prisma {
     id?: string
     name: string
     ownerId?: string | null
+    ownerUserId?: string | null
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -8371,6 +8459,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     ownerId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutWorkspaceNestedInput
@@ -8380,6 +8470,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     ownerId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -8389,6 +8481,8 @@ export namespace Prisma {
     id?: string
     name: string
     ownerId?: string | null
+    ownerUserId?: string | null
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8397,6 +8491,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     ownerId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8405,6 +8501,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     ownerId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8412,9 +8510,11 @@ export namespace Prisma {
   export type ProjectCreateInput = {
     id?: string
     name: string
+    slug?: string | null
     templateId: string
     orchestratorProjectId?: string | null
     status?: $Enums.ProjectStatus
+    isActive?: boolean
     previewUrl?: string | null
     logsRef?: string | null
     provisionError?: string | null
@@ -8428,9 +8528,11 @@ export namespace Prisma {
     id?: string
     workspaceId: string
     name: string
+    slug?: string | null
     templateId: string
     orchestratorProjectId?: string | null
     status?: $Enums.ProjectStatus
+    isActive?: boolean
     previewUrl?: string | null
     logsRef?: string | null
     provisionError?: string | null
@@ -8442,9 +8544,11 @@ export namespace Prisma {
   export type ProjectUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     templateId?: StringFieldUpdateOperationsInput | string
     orchestratorProjectId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     previewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logsRef?: NullableStringFieldUpdateOperationsInput | string | null
     provisionError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8458,9 +8562,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     workspaceId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     templateId?: StringFieldUpdateOperationsInput | string
     orchestratorProjectId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     previewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logsRef?: NullableStringFieldUpdateOperationsInput | string | null
     provisionError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8473,9 +8579,11 @@ export namespace Prisma {
     id?: string
     workspaceId: string
     name: string
+    slug?: string | null
     templateId: string
     orchestratorProjectId?: string | null
     status?: $Enums.ProjectStatus
+    isActive?: boolean
     previewUrl?: string | null
     logsRef?: string | null
     provisionError?: string | null
@@ -8486,9 +8594,11 @@ export namespace Prisma {
   export type ProjectUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     templateId?: StringFieldUpdateOperationsInput | string
     orchestratorProjectId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     previewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logsRef?: NullableStringFieldUpdateOperationsInput | string | null
     provisionError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8500,9 +8610,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     workspaceId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     templateId?: StringFieldUpdateOperationsInput | string
     orchestratorProjectId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     previewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logsRef?: NullableStringFieldUpdateOperationsInput | string | null
     provisionError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8810,6 +8922,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type ProjectListRelationFilter = {
     every?: ProjectWhereInput
     some?: ProjectWhereInput
@@ -8829,6 +8946,8 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     ownerId?: SortOrder
+    ownerUserId?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8837,6 +8956,8 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     ownerId?: SortOrder
+    ownerUserId?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8845,6 +8966,8 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     ownerId?: SortOrder
+    ownerUserId?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8865,6 +8988,14 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnumProjectStatusFilter<$PrismaModel = never> = {
@@ -8889,13 +9020,20 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type ProjectWorkspaceIdSlugCompoundUniqueInput = {
+    workspaceId: string
+    slug: string
+  }
+
   export type ProjectCountOrderByAggregateInput = {
     id?: SortOrder
     workspaceId?: SortOrder
     name?: SortOrder
+    slug?: SortOrder
     templateId?: SortOrder
     orchestratorProjectId?: SortOrder
     status?: SortOrder
+    isActive?: SortOrder
     previewUrl?: SortOrder
     logsRef?: SortOrder
     provisionError?: SortOrder
@@ -8907,9 +9045,11 @@ export namespace Prisma {
     id?: SortOrder
     workspaceId?: SortOrder
     name?: SortOrder
+    slug?: SortOrder
     templateId?: SortOrder
     orchestratorProjectId?: SortOrder
     status?: SortOrder
+    isActive?: SortOrder
     previewUrl?: SortOrder
     logsRef?: SortOrder
     provisionError?: SortOrder
@@ -8921,9 +9061,11 @@ export namespace Prisma {
     id?: SortOrder
     workspaceId?: SortOrder
     name?: SortOrder
+    slug?: SortOrder
     templateId?: SortOrder
     orchestratorProjectId?: SortOrder
     status?: SortOrder
+    isActive?: SortOrder
     previewUrl?: SortOrder
     logsRef?: SortOrder
     provisionError?: SortOrder
@@ -9102,6 +9244,10 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type ProjectUpdateManyWithoutWorkspaceNestedInput = {
@@ -9295,6 +9441,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -9321,6 +9472,14 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumProjectStatusFilter<$PrismaModel = never> = {
@@ -9385,9 +9544,11 @@ export namespace Prisma {
   export type ProjectCreateWithoutWorkspaceInput = {
     id?: string
     name: string
+    slug?: string | null
     templateId: string
     orchestratorProjectId?: string | null
     status?: $Enums.ProjectStatus
+    isActive?: boolean
     previewUrl?: string | null
     logsRef?: string | null
     provisionError?: string | null
@@ -9399,9 +9560,11 @@ export namespace Prisma {
   export type ProjectUncheckedCreateWithoutWorkspaceInput = {
     id?: string
     name: string
+    slug?: string | null
     templateId: string
     orchestratorProjectId?: string | null
     status?: $Enums.ProjectStatus
+    isActive?: boolean
     previewUrl?: string | null
     logsRef?: string | null
     provisionError?: string | null
@@ -9443,9 +9606,11 @@ export namespace Prisma {
     id?: StringFilter<"Project"> | string
     workspaceId?: StringFilter<"Project"> | string
     name?: StringFilter<"Project"> | string
+    slug?: StringNullableFilter<"Project"> | string | null
     templateId?: StringFilter<"Project"> | string
     orchestratorProjectId?: StringNullableFilter<"Project"> | string | null
     status?: EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
+    isActive?: BoolFilter<"Project"> | boolean
     previewUrl?: StringNullableFilter<"Project"> | string | null
     logsRef?: StringNullableFilter<"Project"> | string | null
     provisionError?: StringNullableFilter<"Project"> | string | null
@@ -9457,6 +9622,8 @@ export namespace Prisma {
     id?: string
     name: string
     ownerId?: string | null
+    ownerUserId?: string | null
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9465,6 +9632,8 @@ export namespace Prisma {
     id?: string
     name: string
     ownerId?: string | null
+    ownerUserId?: string | null
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9517,6 +9686,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     ownerId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9525,6 +9696,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     ownerId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9561,9 +9734,11 @@ export namespace Prisma {
   export type ProjectCreateWithoutProvisioningRunsInput = {
     id?: string
     name: string
+    slug?: string | null
     templateId: string
     orchestratorProjectId?: string | null
     status?: $Enums.ProjectStatus
+    isActive?: boolean
     previewUrl?: string | null
     logsRef?: string | null
     provisionError?: string | null
@@ -9576,9 +9751,11 @@ export namespace Prisma {
     id?: string
     workspaceId: string
     name: string
+    slug?: string | null
     templateId: string
     orchestratorProjectId?: string | null
     status?: $Enums.ProjectStatus
+    isActive?: boolean
     previewUrl?: string | null
     logsRef?: string | null
     provisionError?: string | null
@@ -9605,9 +9782,11 @@ export namespace Prisma {
   export type ProjectUpdateWithoutProvisioningRunsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     templateId?: StringFieldUpdateOperationsInput | string
     orchestratorProjectId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     previewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logsRef?: NullableStringFieldUpdateOperationsInput | string | null
     provisionError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9620,9 +9799,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     workspaceId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     templateId?: StringFieldUpdateOperationsInput | string
     orchestratorProjectId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     previewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logsRef?: NullableStringFieldUpdateOperationsInput | string | null
     provisionError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9633,9 +9814,11 @@ export namespace Prisma {
   export type ProjectCreateManyWorkspaceInput = {
     id?: string
     name: string
+    slug?: string | null
     templateId: string
     orchestratorProjectId?: string | null
     status?: $Enums.ProjectStatus
+    isActive?: boolean
     previewUrl?: string | null
     logsRef?: string | null
     provisionError?: string | null
@@ -9646,9 +9829,11 @@ export namespace Prisma {
   export type ProjectUpdateWithoutWorkspaceInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     templateId?: StringFieldUpdateOperationsInput | string
     orchestratorProjectId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     previewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logsRef?: NullableStringFieldUpdateOperationsInput | string | null
     provisionError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9660,9 +9845,11 @@ export namespace Prisma {
   export type ProjectUncheckedUpdateWithoutWorkspaceInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     templateId?: StringFieldUpdateOperationsInput | string
     orchestratorProjectId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     previewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logsRef?: NullableStringFieldUpdateOperationsInput | string | null
     provisionError?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9674,9 +9861,11 @@ export namespace Prisma {
   export type ProjectUncheckedUpdateManyWithoutWorkspaceInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     templateId?: StringFieldUpdateOperationsInput | string
     orchestratorProjectId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     previewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logsRef?: NullableStringFieldUpdateOperationsInput | string | null
     provisionError?: NullableStringFieldUpdateOperationsInput | string | null

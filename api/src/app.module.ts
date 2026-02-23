@@ -5,10 +5,18 @@ import { PrismaService } from './prisma/prisma.service';
 import { Serial11Controller } from './serial11/serial11.controller';
 import { Serial11Service } from './serial11/serial11.service';
 import { AuthModule } from './lib/auth/auth.module';
+import { WorkspaceService } from './serial15/workspace.service';
+import { ProjectService } from './serial15/project.service';
 
 @Module({
   imports: [AuthModule],
   controllers: [AppController, Serial11Controller],
-  providers: [AppService, PrismaService, Serial11Service],
+  providers: [
+    AppService,
+    PrismaService,
+    Serial11Service,
+    WorkspaceService,
+    ProjectService,
+  ],
 })
 export class AppModule {}
