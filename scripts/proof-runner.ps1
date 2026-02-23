@@ -81,7 +81,9 @@ if ($verifyExitCode -ne 0) {
 }
 
 Set-Location -LiteralPath $repoRootCandidate
+$env:NODE_ENV = 'test'
 $env:AUTH_SECRET = 'change-me'
+$env:DATABASE_URL = 'postgresql://postgres:postgres@localhost:5432/factory_dev'
 
 Invoke-LoggedCommand -StepNumber 1 -Command 'git rev-parse --show-toplevel' -FailOnError $true | Out-Null
 Invoke-LoggedCommand -StepNumber 2 -Command 'git status --short' -FailOnError $true | Out-Null

@@ -1,6 +1,10 @@
 import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import {
+  assertRequiredRuntimeEnv,
+  resolveAndNormalizeNodeEnvironment,
+} from './config/env.contract';
 import * as Sentry from '@sentry/node';
 import helmet from 'helmet';
 import { existsSync, readFileSync } from 'node:fs';
@@ -300,35 +304,8 @@ function parsePositiveInteger(
 }
 
 function validateEnvironmentOrThrow(): string {
-  const normalized = (process.env.NODE_ENV || 'development')
-    .trim()
-    .toLowerCase();
-  const allowed = new Set(['development', 'test', 'production']);
-
-  if (!allowed.has(normalized)) {
-    throw new Error(`Invalid NODE_ENV: ${normalized}`);
-  }
-
-  process.env.NODE_ENV = normalized;
-
-  const authSecret = (process.env.AUTH_SECRET || '').trim();
-  if (!authSecret) {
-    throw new Error(
-      'AUTH_SECRET environment variable is required. Please set AUTH_SECRET in your environment.',
-    );
-  }
-
-  if (
-    normalized === 'production' &&
-    [process.env.DATABASE_URL, process.env.DATABASE_PUBLIC_URL].every((value) =>
-      [undefined, ''].includes((value || '').trim()),
-    )
-  ) {
-    throw new Error(
-      'Production requires DATABASE_URL or DATABASE_PUBLIC_URL to be configured.',
-    );
-  }
-
+  const normalized = resolveAndNormalizeNodeEnvironment();
+  assertRequiredRuntimeEnv();
   return normalized;
 }
 
