@@ -126,6 +126,15 @@ exports.Prisma.HealthCheckScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.TemplateScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.WorkspaceScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -211,6 +220,7 @@ exports.ProvisioningRunStatus = exports.$Enums.ProvisioningRunStatus = {
 
 exports.Prisma.ModelName = {
   HealthCheck: 'HealthCheck',
+  Template: 'Template',
   Workspace: 'Workspace',
   Project: 'Project',
   ProvisioningRun: 'ProvisioningRun',
