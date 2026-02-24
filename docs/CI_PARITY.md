@@ -33,3 +33,9 @@ The PR gate uploads proof output from `proof/<timestamp>/` so local and CI logs 
 
 - CI proof gate uses local docker-compose dev defaults only.
 - No production secrets are consumed in this job.
+
+## Merge acceleration: `automerge` label
+
+- Workflow: `.github/workflows/pr-automerge-label.yml`
+- Behavior: when a PR has label `automerge` and is not draft, CI enables GitHub auto-merge using squash.
+- Safety: merge still waits for required checks to pass.

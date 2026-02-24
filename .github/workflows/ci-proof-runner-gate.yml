@@ -1,9 +1,16 @@
 name: CI/Proof Runner Gate (pull_request)
 
+concurrency:
+  group: ci-proof-runner-gate-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
 
 jobs:
   proof-gate:
