@@ -1,3 +1,42 @@
+## SERIAL 22.D — Landing Professional Hardening (A11y + SEO + Performance + UX)
+
+Date: 2026-02-23
+
+### Scope (files)
+
+- `web/src/app/layout.tsx`
+- `web/src/app/globals.css`
+- `web/src/app/page.tsx`
+- `web/src/app/theme-toggle.tsx`
+- `web/src/app/copy-command-button.tsx`
+
+### PR and merge metadata
+
+- PR: `(pending)`
+- Merge commit: `(pending)`
+
+### Before vs after summary
+
+- Before: 22.C delivered theme + status widget with baseline metadata and accessible interactions.
+- After: 22.D hardens semantic section labeling, skip link, focus visibility, SEO/social metadata (canonical + OG + Twitter), smoother UX polish, stable layout heights, and copy-to-clipboard command helper.
+
+### Proof files (raw outputs)
+
+- `proof/runs/serial22d-baseline-20260223-231928.txt`
+- `proof/runs/serial22d-local-20260223-232114.txt`
+- `proof/runs/serial22d-seo-20260223-232515.txt`
+
+### Definition of done status (pre-lock)
+
+- [x] Accessibility hardening applied (skip link, section labeling, heading hierarchy, keyboard focus visibility).
+- [x] SEO/social metadata present (`canonical`, `og:title`, Twitter card, title template).
+- [x] Performance/UX polish applied (stable section heights, smooth scroll, subtle hero texture, command copy action).
+- [x] Theme toggle and live status widget preserved.
+- [ ] Netlify deployment proof captured.
+- [ ] Post-merge lock proof captured.
+
+SERIAL 22.D LOCK STATUS: NOT LOCKED
+
 ## SERIAL 22.C — Public Landing Theme System + Live Status Widget
 
 Date: 2026-02-23
