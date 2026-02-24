@@ -1,3 +1,46 @@
+## SERIAL 22.E / 23.E — CI Workflow Governance Proof (Concurrency + Docs Fastlane + Auto-merge Label)
+
+Date: 2026-02-24
+
+### Scope (files)
+
+- `.github/workflows/ci.yml`
+- `.github/workflows/ci-proof-runner-gate.yml`
+- `.github/workflows/ci-docs-fastlane.yml`
+- `.github/workflows/pr-automerge-label.yml`
+- `docs/CI_PARITY.md`
+
+### PR and merge metadata
+
+- Implementation PR: `https://github.com/mdislam7895121/factory/pull/79`
+- Implementation merge commit: `https://github.com/mdislam7895121/factory/commit/7652c57a131b3b937e1e8ff46150af2244a3740f`
+- Docs-only proof PR: `https://github.com/mdislam7895121/factory/pull/81`
+
+### Before vs after summary
+
+- Before: PR workflows lacked explicit concurrency cancellation and docs-only pull requests could invoke heavy CI paths.
+- After: PR workflows have per-ref concurrency cancellation, heavy PR CI ignores docs/markdown-only paths, dedicated docs fastlane validates docs-only PRs, and `automerge` label behavior is codified in workflow + docs.
+
+### Proof files (raw outputs)
+
+- `proof/runs/serial22e-baseline-20260224-054700.txt`
+- `proof/runs/serial22e-pr-case2-20260224-054700.txt`
+- `proof/runs/serial22e-pr-case1-20260224-054700.txt`
+- `proof/runs/serial22e-postmerge-20260224-054700.txt`
+- `proof/runs/serial22e-lock-20260224-054700.txt`
+- `proof/runs/serial22e-rollback-20260224-054700.txt`
+
+### Definition of done status (pre-lock)
+
+- [x] Concurrency with cancel-in-progress is present for PR workflows.
+- [x] Heavy PR workflows skip docs/markdown-only changes.
+- [x] Docs-only PR case runs docs fastlane without heavy CI.
+- [x] Code-change PR case runs full CI workflows.
+- [x] Merge/post-merge proof captured for implementation PR on `main`.
+- [x] Rollback command plan captured with workflow/docs-only scope.
+
+SERIAL 22.E / 23.E LOCK STATUS: LOCKED
+
 ## SERIAL 22.D — Landing Professional Hardening (A11y + SEO + Performance + UX)
 
 Date: 2026-02-23
