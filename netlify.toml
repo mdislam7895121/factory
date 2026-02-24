@@ -1,6 +1,6 @@
 [build]
-  command = "npm -C web run build"
-  publish = "web"
+  command = "npm -C web run build -- --webpack"
+  publish = "web/.next"
 
 [build.environment]
   NODE_VERSION = "20"
