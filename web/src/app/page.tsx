@@ -1,79 +1,208 @@
 import Link from 'next/link';
-import { Card } from '../components/ui/Card';
+import { ThemeToggle } from './theme-toggle';
 
 const repoUrl = 'https://github.com/mdislam7895121/factory';
-const demoDocUrl = `${repoUrl}/blob/main/docs/DEMO_WORKFLOW.md`;
-const architectureDocUrl = `${repoUrl}/blob/main/docs/ARCHITECTURE.md`;
-const productionReadyUrl = 'https://factory-production-production.up.railway.app/ready';
+const docsUrl = `${repoUrl}/blob/main/docs`;
+const demoDocUrl = `${docsUrl}/DEMO_WORKFLOW.md`;
+const architectureDocUrl = `${docsUrl}/ARCHITECTURE.md`;
+const productionApiBase = process.env.NEXT_PUBLIC_PROD_API_BASE ?? 'https://factory-production-production.up.railway.app';
 
-export default function Home() {
+type EndpointResult = {
+  ok: boolean;
+  status: number | null;
+  data: unknown;
+};
+
+async function getEndpoint(path: string): Promise<EndpointResult> {
+  try {
+    const response = await fetch(`${productionApiBase}${path}`, {
+      next: { revalidate: 60 },
+      signal: AbortSignal.timeout(3000),
+      headers: { Accept: 'application/json' },
+    });
+
+    let data: unknown = null;
+    try {
+      data = await response.json();
+    } catch {
+      data = null;
+    }
+
+    return { ok: response.ok, status: response.status, data };
+  } catch {
+    return { ok: false, status: null, data: null };
+  }
+}
+
+function countTemplates(data: unknown): number | null {
+  if (Array.isArray(data)) return data.length;
+  if (!data || typeof data !== 'object') return null;
+
+  const maybeObject = data as { templates?: unknown; items?: unknown; data?: unknown };
+  if (Array.isArray(maybeObject.templates)) return maybeObject.templates.length;
+  if (Array.isArray(maybeObject.items)) return maybeObject.items.length;
+  if (Array.isArray(maybeObject.data)) return maybeObject.data.length;
+  return null;
+}
+
+function badge(ok: boolean) {
+  return ok ? 'bg-[var(--success)]/15 text-[var(--success)]' : 'bg-[var(--danger)]/15 text-[var(--danger)]';
+}
+
+export default async function Home() {
+  const [dbHealth, ready, templates] = await Promise.all([
+    getEndpoint('/db/health'),
+    getEndpoint('/ready'),
+    getEndpoint('/v1/templates'),
+  ]);
+
+  const templatesCount = countTemplates(templates.data);
+  const updatedAt = new Date().toISOString();
+
   return (
-    <main className="factory builder-shell builder-shell-premium">
-      <div className="builder-container" style={{ paddingTop: '32px', paddingBottom: '32px', display: 'grid', gap: '18px' }}>
-        <section className="builder-section fade-up" style={{ display: 'grid', gap: '12px' }}>
-          <p className="builder-brand">Factory Platform</p>
-          <h1 className="builder-hero-title" style={{ margin: 0 }}>Ship full-stack products from one guided workspace.</h1>
-          <p className="builder-hero-subtitle" style={{ margin: 0 }}>
-            Factory provides a proof-first workflow for local development, production readiness, and repeatable delivery.
-          </p>
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            <Link href="/dashboard" className="ds-btn ds-btn-primary ds-btn-md" style={{ textDecoration: 'none' }}>
+    <main className="min-h-screen bg-[var(--bg)] text-[var(--text)] transition-colors">
+      <header className="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--bg)]/95 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <Link href="/" className="text-lg font-semibold">Factory Platform</Link>
+          <nav className="hidden items-center gap-4 text-sm text-[var(--text-muted)] md:flex">
+            <a href={demoDocUrl} target="_blank" rel="noreferrer" className="hover:text-[var(--text)]">Docs</a>
+            <a href={demoDocUrl} target="_blank" rel="noreferrer" className="hover:text-[var(--text)]">Demo</a>
+            <a href={architectureDocUrl} target="_blank" rel="noreferrer" className="hover:text-[var(--text)]">Architecture</a>
+            <a href="#status" className="hover:text-[var(--text)]">Status</a>
+            <a href={repoUrl} target="_blank" rel="noreferrer" className="hover:text-[var(--text)]">GitHub</a>
+          </nav>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Link href="/dashboard" className="rounded-full bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--primary-hover)]">
               Open dashboard
             </Link>
-            <Link href="/factory-preview" className="ds-btn ds-btn-secondary ds-btn-md" style={{ textDecoration: 'none' }}>
-              View factory preview
-            </Link>
+          </div>
+        </div>
+      </header>
+
+      <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-10 sm:px-6">
+        <section className="grid gap-6 lg:grid-cols-2">
+          <div className="space-y-4">
+            <p className="text-sm font-semibold uppercase tracking-wide text-[var(--text-muted)]">Factory Platform</p>
+            <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Ship production-ready full-stack products with a proof-first workflow.</h1>
+            <p className="max-w-xl text-lg text-[var(--text-muted)]">Factory combines templates, orchestration, and release evidence so teams can move quickly without losing operational control.</p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/dashboard" className="rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[var(--primary-hover)]">Launch Factory</Link>
+              <a href={demoDocUrl} target="_blank" rel="noreferrer" className="rounded-full border border-[var(--border)] bg-[var(--card)] px-5 py-3 text-sm font-semibold hover:bg-[var(--bg-muted)]">View demo guide</a>
+            </div>
+          </div>
+          <aside className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-[var(--shadow)]">
+            <p className="mb-3 text-sm font-semibold text-[var(--text-muted)]">Pipeline preview</p>
+            <ol className="grid gap-2 text-sm text-[var(--text-muted)]">
+              <li>1. Select generation template</li>
+              <li>2. Validate local health checks</li>
+              <li>3. Create PR with proof artifacts</li>
+              <li>4. Deploy and verify production endpoints</li>
+            </ol>
+          </aside>
+        </section>
+
+        <section className="flex flex-wrap gap-2">
+          {['Next.js App Router', 'Nest API', 'Prisma + PostgreSQL', 'Netlify + Railway', 'Proof-first CI', 'Ops readiness checks'].map((item) => (
+            <span key={item} className="rounded-full border border-[var(--border)] bg-[var(--bg-muted)] px-3 py-1 text-xs font-medium text-[var(--text-muted)]">{item}</span>
+          ))}
+        </section>
+
+        <section className="grid gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)] md:grid-cols-2">
+          <div>
+            <h2 className="mb-2 text-2xl font-semibold">Problem</h2>
+            <p className="text-[var(--text-muted)]">Teams lose confidence when deployment speed grows faster than verification discipline.</p>
+          </div>
+          <div>
+            <h2 className="mb-2 text-2xl font-semibold">Solution</h2>
+            <p className="text-[var(--text-muted)]">Factory enforces repeatable delivery with built-in readiness checks, template workflows, and proof artifacts.</p>
           </div>
         </section>
 
-        <div style={{ display: 'grid', gap: '14px', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}>
-          <Card className="fade-up" style={{ animationDelay: '60ms' }}>
-            <h3 className="ds-card-title">What it is</h3>
-            <p className="ds-card-subtitle">A platform workspace that combines API, web UI, templates, and orchestration into one delivery pipeline.</p>
-          </Card>
+        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {[
+            'Template-driven generation',
+            'Deterministic local demos',
+            'Production readiness endpoints',
+            'Netlify web deployment',
+            'Railway API operations',
+            'PR-gated verification logs',
+          ].map((capability) => (
+            <article key={capability} className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-[var(--shadow)]">
+              <h3 className="text-lg font-semibold">{capability}</h3>
+              <p className="mt-2 text-sm text-[var(--text-muted)]">Production-grade defaults with focused, auditable changes.</p>
+            </article>
+          ))}
+        </section>
 
-          <Card className="fade-up" style={{ animationDelay: '90ms' }}>
-            <h3 className="ds-card-title">Who it&rsquo;s for</h3>
-            <p className="ds-card-subtitle">Platform teams, product engineers, and operators who need predictable delivery with evidence at every step.</p>
-          </Card>
+        <section id="status" className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)]">
+          <h2 className="mb-4 text-2xl font-semibold">Live production status</h2>
+          <div className="grid gap-3 text-sm">
+            {[
+              { name: '/db/health', result: dbHealth, detail: null },
+              { name: '/ready', result: ready, detail: null },
+              { name: '/v1/templates', result: templates, detail: templatesCount },
+            ].map((item) => (
+              <div key={item.name} className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] px-4 py-3">
+                <div>
+                  <p className="font-medium">{item.name}</p>
+                  <p className="text-xs text-[var(--text-muted)]">
+                    {item.detail !== null ? `Template count: ${item.detail}` : `HTTP: ${item.result.status ?? 'Unavailable'}`}
+                  </p>
+                </div>
+                <span className={`rounded-full px-3 py-1 text-xs font-semibold ${badge(item.result.ok)}`}>
+                  {item.result.ok ? 'OK' : 'Unavailable'}
+                </span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-xs text-[var(--text-muted)]">Last updated: {updatedAt}</p>
+        </section>
 
-          <Card className="fade-up" style={{ animationDelay: '120ms' }}>
-            <h3 className="ds-card-title">How it works</h3>
-            <p className="ds-card-subtitle">Start local services, validate readiness, select templates, and execute PR-based changes with proof artifacts.</p>
-          </Card>
-        </div>
+        <section className="grid gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)] md:grid-cols-2">
+          <div>
+            <h2 className="mb-3 text-2xl font-semibold">How it works</h2>
+            <ol className="grid gap-2 text-[var(--text-muted)]">
+              <li>1. Start the local stack and run health checks.</li>
+              <li>2. Apply focused changes on feature branches.</li>
+              <li>3. Merge with proof files and deploy verification.</li>
+            </ol>
+          </div>
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] p-4">
+            <p className="mb-2 font-semibold">Demo commands</p>
+            <pre className="overflow-x-auto text-xs text-[var(--text-muted)]">scripts/demo.ps1
+scripts/preview-up.ps1
+curl -i {productionApiBase}/ready</pre>
+          </div>
+        </section>
 
-        <Card className="fade-up" style={{ animationDelay: '150ms' }}>
-          <h3 className="ds-card-title">Demo steps</h3>
-          <ol style={{ margin: 0, paddingLeft: '20px', display: 'grid', gap: '8px' }}>
-            <li>Run <strong>scripts/demo.ps1</strong> (or <strong>scripts/demo.sh</strong>) from repo root.</li>
-            <li>Confirm local checks for <strong>/db/health</strong>, <strong>/ready</strong>, and <strong>/v1/templates</strong>.</li>
-            <li>Open the web app at <strong>http://localhost:3000</strong> and continue in the dashboard.</li>
-          </ol>
-        </Card>
+        <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)]">
+          <h2 className="mb-3 text-2xl font-semibold">Engineering philosophy</h2>
+          <p className="text-[var(--text-muted)]">Proof-first engineering keeps shipping quality high: every claim is backed by reproducible evidence in `proof/runs/`.</p>
+        </section>
 
-        <Card className="fade-up" style={{ animationDelay: '180ms' }}>
-          <h3 className="ds-card-title">Architecture highlights</h3>
-          <ul style={{ margin: 0, paddingLeft: '20px', display: 'grid', gap: '8px' }}>
-            <li>Next.js web app for dashboard and public entrypoint.</li>
-            <li>Nest API with readiness and health endpoints.</li>
-            <li>PostgreSQL-backed local stack via Docker Compose.</li>
-            <li>Proof-first scripts for local validation and CI gating.</li>
-          </ul>
-        </Card>
+        <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)]">
+          <h2 className="mb-3 text-2xl font-semibold">Demo</h2>
+          <p className="text-[var(--text-muted)]">Run the guided workflow and evidence capture from the demo documentation.</p>
+          <a href={demoDocUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex rounded-full border border-[var(--border)] bg-[var(--bg-muted)] px-4 py-2 text-sm font-medium hover:bg-[var(--card)]">Open DEMO_WORKFLOW.md</a>
+        </section>
 
-        <Card className="fade-up" style={{ animationDelay: '210ms' }}>
-          <h3 className="ds-card-title">Links</h3>
-          <ul style={{ margin: 0, paddingLeft: '20px', display: 'grid', gap: '8px' }}>
-            <li><a href={repoUrl} target="_blank" rel="noreferrer">GitHub repository</a></li>
-            <li><a href={demoDocUrl} target="_blank" rel="noreferrer">Demo workflow documentation</a></li>
-            <li><a href={architectureDocUrl} target="_blank" rel="noreferrer">Architecture documentation</a></li>
-            <li><a href={productionReadyUrl} target="_blank" rel="noreferrer">Production API readiness endpoint</a></li>
-          </ul>
-        </Card>
+        <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)]">
+          <h2 className="mb-4 text-2xl font-semibold">FAQ</h2>
+          <div className="grid gap-4 text-sm text-[var(--text-muted)]">
+            <div>
+              <p className="font-semibold text-[var(--text)]">Is this production-safe?</p>
+              <p>Yes, the platform tracks readiness with explicit health endpoints and proof-gated merges.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-[var(--text)]">Can I verify deployment quickly?</p>
+              <p>Use `scripts/prod-smoke.ps1` and check `/ready`, `/db/health`, and `/v1/templates`.</p>
+            </div>
+          </div>
+        </section>
 
-        <footer style={{ color: 'var(--muted)', fontSize: '13px', padding: '4px 6px' }}>
-          Factory Workspace · Licensed under MIT. See repository LICENSE for terms.
+        <footer className="border-t border-[var(--border)] py-4 text-sm text-[var(--text-muted)]">
+          Factory Platform · <a href={`${repoUrl}/blob/main/LICENSE`} target="_blank" rel="noreferrer" className="underline underline-offset-4">MIT License</a>
         </footer>
       </div>
     </main>
