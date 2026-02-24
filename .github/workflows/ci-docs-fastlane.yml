@@ -31,7 +31,7 @@ jobs:
         run: |
           set -euo pipefail
           git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
-          CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}...${{ github.sha }}")
+          CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}" "${{ github.sha }}")
           echo "$CHANGED"
           BAD=$(echo "$CHANGED" | grep -Ev '^(docs/|.*\.md$|$)' || true)
           if [ -n "$BAD" ]; then
