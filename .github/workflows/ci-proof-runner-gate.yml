@@ -8,9 +8,6 @@ on:
   pull_request:
     branches:
       - main
-    paths-ignore:
-      - 'docs/**'
-      - '**/*.md'
 
 jobs:
   proof-gate:
@@ -25,7 +22,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Determine docs-only change set
+        id: changes
+        run: |
+          $base = "${{ github.event.pull_request.base.sha }}"
+          $head = "${{ github.sha }}"
+          $changed = git diff --name-only $base $head
+          $docsOnly = $true
+          foreach ($file in $changed) {
+            if ($file -notmatch '^(docs/|.*\.md$)$') {
+              $docsOnly = $false
+              break
+            }
+          }
+          if ($docsOnly) {
+            "docs_only=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          } else {
+            "docs_only=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          }
+
+      - name: Docs-only fast pass
+        if: steps.changes.outputs.docs_only == 'true'
+        run: |
+          Write-Host "Docs-only change detected; skipping heavy proof gate steps."
+
       - name: Setup Node.js
+        if: steps.changes.outputs.docs_only != 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
@@ -35,27 +57,32 @@ jobs:
             web/package-lock.json
 
       - name: Install API deps
+        if: steps.changes.outputs.docs_only != 'true'
         run: npm -C api ci
 
       - name: Install Web deps
+        if: steps.changes.outputs.docs_only != 'true'
         run: npm -C web ci
 
       - name: Lint/Build API (if present)
+        if: steps.changes.outputs.docs_only != 'true'
         run: |
           npm -C api run lint --if-present
           npm -C api run build --if-present
 
       - name: Lint/Build/Test Web (if present)
+        if: steps.changes.outputs.docs_only != 'true'
         run: |
           npm -C web run lint --if-present
           npm -C web run build --if-present
           npm -C web test --if-present
 
       - name: Run proof-l2 (compose + smoke + report)
+        if: steps.changes.outputs.docs_only != 'true'
         run: pwsh -File scripts/proof-l2.ps1 -DownWithVolumes -Ci
 
       - name: Upload proof artifacts
-        if: always()
+        if: always() && steps.changes.outputs.docs_only != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: proof-l2-${{ github.run_id }}
