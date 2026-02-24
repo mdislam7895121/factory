@@ -1,34 +1,40 @@
 'use client';
 
-const THEME_KEY = 'factory-theme';
+import { useEffect, useState } from 'react';
 
-function applyTheme(theme: 'light' | 'dark') {
-  const root = document.documentElement;
+type Theme = 'light' | 'dark';
 
-  if (theme === 'light') {
-    root.setAttribute('data-theme', 'light');
-  } else {
-    root.removeAttribute('data-theme');
+function getInitialTheme(): Theme {
+  if (typeof document !== 'undefined' && document.documentElement.classList.contains('dark')) {
+    return 'dark';
   }
+  return 'light';
 }
 
 export function ThemeToggle() {
-  const toggleTheme = () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    applyTheme(nextTheme);
-    window.localStorage.setItem(THEME_KEY, nextTheme);
+  const [theme, setTheme] = useState<Theme>('light');
+
+  useEffect(() => {
+    setTheme(getInitialTheme());
+  }, []);
+
+  const applyTheme = (nextTheme: Theme) => {
+    document.documentElement.classList.toggle('dark', nextTheme === 'dark');
+    localStorage.setItem('theme', nextTheme);
+    setTheme(nextTheme);
   };
+
+  const nextTheme: Theme = theme === 'dark' ? 'light' : 'dark';
 
   return (
     <button
       type="button"
-      className="ds-btn ds-btn-ghost ds-btn-sm theme-toggle"
-      onClick={toggleTheme}
-      aria-label="Toggle color theme"
-      title="Toggle color theme"
+      aria-label={`Switch to ${nextTheme} theme`}
+      aria-pressed={theme === 'dark'}
+      onClick={() => applyTheme(nextTheme)}
+      className="rounded-full border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm font-medium text-[var(--text)] transition-colors hover:bg-[var(--bg-muted)] focus-visible:outline-none"
     >
-      Toggle theme
+      {theme === 'dark' ? 'Dark' : 'Light'}
     </button>
   );
 }
