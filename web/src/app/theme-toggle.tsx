@@ -32,7 +32,7 @@ export function ThemeToggle() {
       aria-label={`Switch to ${nextTheme} theme`}
       aria-pressed={theme === 'dark'}
       onClick={() => applyTheme(nextTheme)}
-      className="rounded-full border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm font-medium text-[var(--text)] transition-colors hover:bg-[var(--bg-muted)] focus-visible:outline-none"
+      className="rounded-full border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm font-medium text-[var(--text)] transition-all duration-200 ease-out hover:bg-[var(--bg-muted)] focus-visible:outline-2 focus-visible:outline-[var(--primary)]"
     >
       {theme === 'dark' ? 'Dark' : 'Light'}
     </button>

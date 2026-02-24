@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import { ThemeToggle } from './theme-toggle';
+import { CopyCommandButton } from './copy-command-button';
 
 const repoUrl = 'https://github.com/mdislam7895121/factory';
 const docsUrl = `${repoUrl}/blob/main/docs`;
 const demoDocUrl = `${docsUrl}/DEMO_WORKFLOW.md`;
 const architectureDocUrl = `${docsUrl}/ARCHITECTURE.md`;
 const productionApiBase = process.env.NEXT_PUBLIC_PROD_API_BASE ?? 'https://factory-production-production.up.railway.app';
+export const revalidate = 60;
 
 type EndpointResult = {
   ok: boolean;
@@ -60,39 +62,39 @@ export default async function Home() {
   const updatedAt = new Date().toISOString();
 
   return (
-    <main className="min-h-screen bg-[var(--bg)] text-[var(--text)] transition-colors">
+    <main id="main-content" className="min-h-screen bg-[var(--bg)] text-[var(--text)] transition-colors">
       <header className="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--bg)]/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <Link href="/" className="text-lg font-semibold">Factory Platform</Link>
+          <Link href="/" className="text-lg font-semibold transition-all duration-200 ease-out focus-visible:outline-2 focus-visible:outline-[var(--primary)]">Factory Platform</Link>
           <nav className="hidden items-center gap-4 text-sm text-[var(--text-muted)] md:flex">
-            <a href={demoDocUrl} target="_blank" rel="noreferrer" className="hover:text-[var(--text)]">Docs</a>
-            <a href={demoDocUrl} target="_blank" rel="noreferrer" className="hover:text-[var(--text)]">Demo</a>
-            <a href={architectureDocUrl} target="_blank" rel="noreferrer" className="hover:text-[var(--text)]">Architecture</a>
-            <a href="#status" className="hover:text-[var(--text)]">Status</a>
-            <a href={repoUrl} target="_blank" rel="noreferrer" className="hover:text-[var(--text)]">GitHub</a>
+            <a href={demoDocUrl} target="_blank" rel="noreferrer" className="transition-all duration-200 ease-out hover:text-[var(--text)] focus-visible:outline-2 focus-visible:outline-[var(--primary)]">Docs</a>
+            <a href={demoDocUrl} target="_blank" rel="noreferrer" className="transition-all duration-200 ease-out hover:text-[var(--text)] focus-visible:outline-2 focus-visible:outline-[var(--primary)]">Demo</a>
+            <a href={architectureDocUrl} target="_blank" rel="noreferrer" className="transition-all duration-200 ease-out hover:text-[var(--text)] focus-visible:outline-2 focus-visible:outline-[var(--primary)]">Architecture</a>
+            <a href="#status" className="transition-all duration-200 ease-out hover:text-[var(--text)] focus-visible:outline-2 focus-visible:outline-[var(--primary)]">Status</a>
+            <a href={repoUrl} target="_blank" rel="noreferrer" className="transition-all duration-200 ease-out hover:text-[var(--text)] focus-visible:outline-2 focus-visible:outline-[var(--primary)]">GitHub</a>
           </nav>
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <Link href="/dashboard" className="rounded-full bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--primary-hover)]">
+            <Link href="/dashboard" className="rounded-full bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-white transition-all duration-200 ease-out hover:bg-[var(--primary-hover)] focus-visible:outline-2 focus-visible:outline-[var(--primary)]">
               Open dashboard
             </Link>
           </div>
         </div>
       </header>
 
-      <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-10 sm:px-6">
-        <section className="grid gap-6 lg:grid-cols-2">
-          <div className="space-y-4">
+      <div className="mx-auto grid w-full max-w-6xl gap-12 px-4 py-12 sm:px-6">
+        <section aria-labelledby="hero-title" className="grid gap-6 lg:grid-cols-2">
+          <div className="hero-noise min-h-[22rem] space-y-4 rounded-2xl border border-[var(--border)] p-6 shadow-[var(--shadow)]">
             <p className="text-sm font-semibold uppercase tracking-wide text-[var(--text-muted)]">Factory Platform</p>
-            <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Ship production-ready full-stack products with a proof-first workflow.</h1>
-            <p className="max-w-xl text-lg text-[var(--text-muted)]">Factory combines templates, orchestration, and release evidence so teams can move quickly without losing operational control.</p>
+            <h1 id="hero-title" className="text-4xl font-semibold tracking-tight leading-[1.18] sm:text-5xl">Ship production-ready full-stack products with a proof-first workflow.</h1>
+            <p className="max-w-2xl text-lg text-[var(--text-muted)]">Factory combines templates, orchestration, and release evidence so teams can move quickly without losing operational control.</p>
             <div className="flex flex-wrap gap-3">
-              <Link href="/dashboard" className="rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[var(--primary-hover)]">Launch Factory</Link>
-              <a href={demoDocUrl} target="_blank" rel="noreferrer" className="rounded-full border border-[var(--border)] bg-[var(--card)] px-5 py-3 text-sm font-semibold hover:bg-[var(--bg-muted)]">View demo guide</a>
+              <Link href="/dashboard" className="rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-semibold text-white transition-all duration-200 ease-out hover:bg-[var(--primary-hover)] focus-visible:outline-2 focus-visible:outline-[var(--primary)]">Launch Factory</Link>
+              <a href={demoDocUrl} target="_blank" rel="noreferrer" className="rounded-full border border-[var(--border)] bg-[var(--card)] px-5 py-3 text-sm font-semibold transition-all duration-200 ease-out hover:bg-[var(--bg-muted)] focus-visible:outline-2 focus-visible:outline-[var(--primary)]">View demo guide</a>
             </div>
           </div>
-          <aside className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-[var(--shadow)]">
-            <p className="mb-3 text-sm font-semibold text-[var(--text-muted)]">Pipeline preview</p>
+          <aside className="min-h-[22rem] rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-[var(--shadow)]">
+            <h2 id="pipeline-preview-title" className="mb-3 text-sm font-semibold text-[var(--text-muted)]">Pipeline preview</h2>
             <ol className="grid gap-2 text-sm text-[var(--text-muted)]">
               <li>1. Select generation template</li>
               <li>2. Validate local health checks</li>
@@ -102,24 +104,27 @@ export default async function Home() {
           </aside>
         </section>
 
-        <section className="flex flex-wrap gap-2">
+        <section aria-labelledby="trust-bar-title" className="flex flex-wrap gap-2">
+          <h2 id="trust-bar-title" className="sr-only">Platform capabilities</h2>
           {['Next.js App Router', 'Nest API', 'Prisma + PostgreSQL', 'Netlify + Railway', 'Proof-first CI', 'Ops readiness checks'].map((item) => (
             <span key={item} className="rounded-full border border-[var(--border)] bg-[var(--bg-muted)] px-3 py-1 text-xs font-medium text-[var(--text-muted)]">{item}</span>
           ))}
         </section>
 
-        <section className="grid gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)] md:grid-cols-2">
+        <section aria-labelledby="problem-solution-title" className="grid gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)] md:grid-cols-2">
+          <h2 id="problem-solution-title" className="sr-only">Problem and solution</h2>
           <div>
-            <h2 className="mb-2 text-2xl font-semibold">Problem</h2>
-            <p className="text-[var(--text-muted)]">Teams lose confidence when deployment speed grows faster than verification discipline.</p>
+            <h3 className="mb-2 text-2xl font-semibold">Problem</h3>
+            <p className="max-w-2xl text-[var(--text-muted)]">Teams lose confidence when deployment speed grows faster than verification discipline.</p>
           </div>
           <div>
-            <h2 className="mb-2 text-2xl font-semibold">Solution</h2>
-            <p className="text-[var(--text-muted)]">Factory enforces repeatable delivery with built-in readiness checks, template workflows, and proof artifacts.</p>
+            <h3 className="mb-2 text-2xl font-semibold">Solution</h3>
+            <p className="max-w-2xl text-[var(--text-muted)]">Factory enforces repeatable delivery with built-in readiness checks, template workflows, and proof artifacts.</p>
           </div>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <section aria-labelledby="capabilities-title" className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <h2 id="capabilities-title" className="sr-only">Core capabilities</h2>
           {[
             'Template-driven generation',
             'Deterministic local demos',
@@ -135,15 +140,15 @@ export default async function Home() {
           ))}
         </section>
 
-        <section id="status" className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)]">
-          <h2 className="mb-4 text-2xl font-semibold">Live production status</h2>
+        <section id="status" aria-labelledby="status-title" className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)]">
+          <h2 id="status-title" className="mb-4 text-2xl font-semibold">Live production status</h2>
           <div className="grid gap-3 text-sm">
             {[
               { name: '/db/health', result: dbHealth, detail: null },
               { name: '/ready', result: ready, detail: null },
               { name: '/v1/templates', result: templates, detail: templatesCount },
             ].map((item) => (
-              <div key={item.name} className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] px-4 py-3">
+              <div key={item.name} className="flex min-h-[74px] items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] px-4 py-3">
                 <div>
                   <p className="font-medium">{item.name}</p>
                   <p className="text-xs text-[var(--text-muted)]">
@@ -159,36 +164,39 @@ export default async function Home() {
           <p className="mt-3 text-xs text-[var(--text-muted)]">Last updated: {updatedAt}</p>
         </section>
 
-        <section className="grid gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)] md:grid-cols-2">
+        <section aria-labelledby="how-it-works-title" className="grid gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)] md:grid-cols-2">
           <div>
-            <h2 className="mb-3 text-2xl font-semibold">How it works</h2>
-            <ol className="grid gap-2 text-[var(--text-muted)]">
+            <h2 id="how-it-works-title" className="mb-3 text-2xl font-semibold">How it works</h2>
+            <ol className="grid max-w-2xl gap-2 text-[var(--text-muted)]">
               <li>1. Start the local stack and run health checks.</li>
               <li>2. Apply focused changes on feature branches.</li>
               <li>3. Merge with proof files and deploy verification.</li>
             </ol>
           </div>
           <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] p-4">
-            <p className="mb-2 font-semibold">Demo commands</p>
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <p className="font-semibold">Demo commands</p>
+              <CopyCommandButton value={`scripts/demo.ps1\nscripts/preview-up.ps1\ncurl -i ${productionApiBase}/ready`} />
+            </div>
             <pre className="overflow-x-auto text-xs text-[var(--text-muted)]">scripts/demo.ps1
 scripts/preview-up.ps1
 curl -i {productionApiBase}/ready</pre>
           </div>
         </section>
 
-        <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)]">
-          <h2 className="mb-3 text-2xl font-semibold">Engineering philosophy</h2>
-          <p className="text-[var(--text-muted)]">Proof-first engineering keeps shipping quality high: every claim is backed by reproducible evidence in `proof/runs/`.</p>
+        <section aria-labelledby="engineering-title" className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)]">
+          <h2 id="engineering-title" className="mb-3 text-2xl font-semibold">Engineering philosophy</h2>
+          <p className="max-w-2xl text-[var(--text-muted)]">Proof-first engineering keeps shipping quality high: every claim is backed by reproducible evidence in `proof/runs/`.</p>
         </section>
 
-        <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)]">
-          <h2 className="mb-3 text-2xl font-semibold">Demo</h2>
-          <p className="text-[var(--text-muted)]">Run the guided workflow and evidence capture from the demo documentation.</p>
-          <a href={demoDocUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex rounded-full border border-[var(--border)] bg-[var(--bg-muted)] px-4 py-2 text-sm font-medium hover:bg-[var(--card)]">Open DEMO_WORKFLOW.md</a>
+        <section aria-labelledby="demo-title" className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)]">
+          <h2 id="demo-title" className="mb-3 text-2xl font-semibold">Demo</h2>
+          <p className="max-w-2xl text-[var(--text-muted)]">Run the guided workflow and evidence capture from the demo documentation.</p>
+          <a href={demoDocUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex rounded-full border border-[var(--border)] bg-[var(--bg-muted)] px-4 py-2 text-sm font-medium transition-all duration-200 ease-out hover:bg-[var(--card)] focus-visible:outline-2 focus-visible:outline-[var(--primary)]">Open DEMO_WORKFLOW.md</a>
         </section>
 
-        <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)]">
-          <h2 className="mb-4 text-2xl font-semibold">FAQ</h2>
+        <section aria-labelledby="faq-title" className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow)]">
+          <h2 id="faq-title" className="mb-4 text-2xl font-semibold">FAQ</h2>
           <div className="grid gap-4 text-sm text-[var(--text-muted)]">
             <div>
               <p className="font-semibold text-[var(--text)]">Is this production-safe?</p>
@@ -202,7 +210,7 @@ curl -i {productionApiBase}/ready</pre>
         </section>
 
         <footer className="border-t border-[var(--border)] py-4 text-sm text-[var(--text-muted)]">
-          Factory Platform · <a href={`${repoUrl}/blob/main/LICENSE`} target="_blank" rel="noreferrer" className="underline underline-offset-4">MIT License</a>
+          Factory Platform · <a href={`${repoUrl}/blob/main/LICENSE`} target="_blank" rel="noreferrer" className="underline underline-offset-4 transition-all duration-200 ease-out focus-visible:outline-2 focus-visible:outline-[var(--primary)]">MIT License</a>
         </footer>
       </div>
     </main>
