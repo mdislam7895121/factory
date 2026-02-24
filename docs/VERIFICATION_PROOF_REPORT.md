@@ -1,3 +1,42 @@
+## SERIAL 22.B — Public Web Landing + Netlify Deploy
+
+Date: 2026-02-24
+
+### Scope (files)
+
+- `web/src/app/page.tsx`
+- `netlify.toml`
+
+### PR and merge metadata
+
+- Primary PR (landing): `https://github.com/mdislam7895121/factory/pull/69`
+- Primary merge commit: `https://github.com/mdislam7895121/factory/commit/bd340bd97a4fd8d5479afec9b182f6a78e77c0b5`
+- Netlify fix PRs: `#70`, `#71`, `#72`, `#73`
+- Final merge commit (deploy config): `https://github.com/mdislam7895121/factory/commit/17a96a55a0044e798b53d11e17443515cf32c455`
+
+### Deployment metadata
+
+- Netlify URL: `https://factory-production-web.netlify.app`
+- Netlify unique deploy URL: `https://699d1b568ad29682df8442cf--factory-production-web.netlify.app`
+
+### Proof files (raw outputs)
+
+- `proof/runs/serial22b-baseline-20260223-213041.txt`
+- `proof/runs/serial22b-local-20260223-213747.txt`
+- `proof/runs/serial22b-pr-20260223-214512.txt`
+- `proof/runs/serial22b-netlify-20260223-223018.txt`
+- `proof/runs/serial22b-postmerge-20260223-223307.txt`
+
+### Definition of done
+
+- [x] Public web landing content is implemented in `web/src/app/page.tsx`.
+- [x] Local web verification captured with HTTP 200 and landing markers.
+- [x] PR checks are green and merged to `main`.
+- [x] Netlify production deploy is live at `factory-production-web.netlify.app`.
+- [x] Post-merge evidence captured.
+
+SERIAL 22.B LOCK STATUS: LOCKED
+
 ## SERIAL 22.A — Web Readiness Hardening (Pre-public deploy)
 
 Date: 2026-02-23
