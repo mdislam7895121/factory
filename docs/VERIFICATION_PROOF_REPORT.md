@@ -24,7 +24,7 @@ Date: 2026-02-23
 
 ### PR and merge metadata
 
-- PR: `TBD`
+- PR: `https://github.com/mdislam7895121/factory/pull/65`
 - Merge commit: `TBD`
 
 ### Definition of done
