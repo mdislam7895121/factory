@@ -21,11 +21,13 @@ Date: 2026-02-23
 - `proof/runs/serial21-baseline-20260223-200451.txt`
 - `proof/runs/serial21-demo-20260223-201345.txt`
 - `proof/runs/serial21-verify-20260223-201345.txt`
+- `proof/runs/serial21-pr-20260223-201716.txt`
+- `proof/runs/serial21-postmerge-20260223-202828.txt`
 
 ### PR and merge metadata
 
 - PR: `https://github.com/mdislam7895121/factory/pull/65`
-- Merge commit: `TBD`
+- Merge commit: `https://github.com/mdislam7895121/factory/commit/06f2aad2c8ff9a75f7ad1b4d2b1957f227f64f34`
 
 ### Definition of done
 
@@ -33,10 +35,10 @@ Date: 2026-02-23
 - [x] `scripts/demo.ps1` creates timestamped proof output under `proof/runs/`.
 - [x] `docs/DEMO_WORKFLOW.md` added and aligned to script behavior.
 - [x] Local verification proof captured for `/db/health`, `/ready`, `/v1/templates`, and web HTTP 200.
-- [ ] PR checks green and merged.
-- [ ] Post-merge proof captured on `main`.
+- [x] PR checks green and merged.
+- [x] Post-merge proof captured on `main`.
 
-SERIAL 21 LOCK STATUS: PENDING
+SERIAL 21 LOCK STATUS: LOCKED
 
 ## SERIAL 20 — Ops Monitoring + Production Readiness Health
 
