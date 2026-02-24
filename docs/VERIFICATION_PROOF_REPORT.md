@@ -12,8 +12,8 @@ Date: 2026-02-23
 
 ### PR and merge metadata
 
-- PR: `(pending)`
-- Merge commit: `(pending)`
+- PR: `https://github.com/mdislam7895121/factory/pull/77`
+- Merge commit: `https://github.com/mdislam7895121/factory/commit/2bac9173e061dd315a45795c252a9dcd60412b6e`
 
 ### Before vs after summary
 
@@ -25,6 +25,8 @@ Date: 2026-02-23
 - `proof/runs/serial22d-baseline-20260223-231928.txt`
 - `proof/runs/serial22d-local-20260223-232114.txt`
 - `proof/runs/serial22d-seo-20260223-232515.txt`
+- `proof/runs/serial22d-netlify-20260223-234405.txt`
+- `proof/runs/serial22d-lock-20260223-235954.txt`
 
 ### Definition of done status (pre-lock)
 
@@ -32,10 +34,10 @@ Date: 2026-02-23
 - [x] SEO/social metadata present (`canonical`, `og:title`, Twitter card, title template).
 - [x] Performance/UX polish applied (stable section heights, smooth scroll, subtle hero texture, command copy action).
 - [x] Theme toggle and live status widget preserved.
-- [ ] Netlify deployment proof captured.
-- [ ] Post-merge lock proof captured.
+- [x] Netlify deployment proof captured.
+- [x] Post-merge lock proof captured.
 
-SERIAL 22.D LOCK STATUS: NOT LOCKED
+SERIAL 22.D LOCK STATUS: LOCKED
 
 ## SERIAL 22.C — Public Landing Theme System + Live Status Widget
 
