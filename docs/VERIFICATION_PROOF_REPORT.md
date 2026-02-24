@@ -1,3 +1,42 @@
+## SERIAL 22.C — Public Landing Theme System + Live Status Widget
+
+Date: 2026-02-23
+
+### Scope (files)
+
+- `web/src/app/layout.tsx`
+- `web/src/app/globals.css`
+- `web/src/app/theme-toggle.tsx`
+- `web/src/app/page.tsx`
+
+### PR and merge metadata
+
+- PR: `https://github.com/mdislam7895121/factory/pull/75`
+- Merge commit: `(pending merge)`
+
+### Before vs after summary
+
+- Before: landing had static sections with no class-based light/dark theme toggle and no server-side production status card.
+- After: landing includes locked Light/Dark tokens, no-flash class strategy, persistent accessible toggle, and SSR status widget for `/db/health`, `/ready`, `/v1/templates` with timeout/fallback.
+
+### Proof files (raw outputs)
+
+- `proof/runs/serial22c-baseline-20260223-224751.txt`
+- `proof/runs/serial22c-local-20260223-225051.txt`
+- `proof/runs/serial22c-theme-20260223-225405.txt`
+- `proof/runs/serial22c-status-20260223-225422.txt`
+
+### Definition of done status (pre-lock)
+
+- [x] Theme toggle persists via `localStorage.theme` and supports keyboard interaction.
+- [x] No-flash theme script applies `html.dark` before paint.
+- [x] Status widget uses server-side fetch with `3s` timeout and graceful fallback.
+- [x] Landing keeps compatibility markers (`Factory Platform`, `How it works`, `MIT License`).
+- [ ] Netlify production deploy proof captured for SERIAL 22.C.
+- [ ] Post-merge and lock proof captured.
+
+SERIAL 22.C LOCK STATUS: NOT LOCKED
+
 ## SERIAL 22.B — Public Web Landing + Netlify Deploy
 
 Date: 2026-02-24
