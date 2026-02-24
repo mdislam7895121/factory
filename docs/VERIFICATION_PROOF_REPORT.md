@@ -1,3 +1,38 @@
+## SERIAL 22.A — Web Readiness Hardening (Pre-public deploy)
+
+Date: 2026-02-23
+
+### Scope (files)
+
+- `scripts/demo.ps1`
+
+### PR and merge metadata
+
+- PR: `https://github.com/mdislam7895121/factory/pull/67`
+- Merge commit: `https://github.com/mdislam7895121/factory/commit/36ac1869e52b98f3eea131aae4b8c4563461c5d6`
+
+### Before vs after behavior
+
+- Before (baseline): demo reached `db_health`/`ready`/`templates` quickly, but web probe in `scripts/demo.ps1` repeatedly failed with transport errors and only returned `web_status=200` after many attempts (`web_attempt=22`).
+- After (fix): demo now waits for Docker web health (`factory-web-dev`) before probing web, and web probe returns `200` on attempt `1` (bounded to max `3`) on two consecutive runs.
+
+### Proof files (raw outputs)
+
+- `proof/runs/serial22a-baseline-20260223-204622.txt`
+- `proof/runs/serial22a-diagnose-20260223-204809.txt`
+- `proof/runs/serial22a-verify-20260223-204917.txt`
+- `proof/runs/serial22a-pr-20260223-205315.txt`
+- `proof/runs/serial22a-postmerge-20260223-210911.txt`
+
+### Definition of done
+
+- [x] `scripts/demo.ps1` keeps output contract unchanged and remains non-breaking.
+- [x] Web readiness is deterministic: `web_status=200` within `<=3` attempts on two back-to-back runs.
+- [x] CI checks for PR #67 are green and PR is merged.
+- [x] Proof artifacts captured under `proof/runs/serial22a-*.txt`.
+
+SERIAL 22.A LOCK STATUS: LOCKED
+
 ## SERIAL 21 — Productization + Demo Onboarding (Public-facing)
 
 Date: 2026-02-23
