@@ -78,6 +78,33 @@ function Wait-Http200 {
     throw "$Name did not return HTTP 200 within retry budget."
 }
 
+function Wait-ContainerHealthy {
+    param(
+        [Parameter(Mandatory = $true)][string]$ContainerName,
+        [int]$Attempts = 80,
+        [int]$DelaySec = 2
+    )
+
+    for ($attempt = 1; $attempt -le $Attempts; $attempt++) {
+        $status = (docker inspect -f "{{if .State.Health}}{{.State.Health.Status}}{{else}}no-healthcheck{{end}}" $ContainerName 2>$null)
+        if ([string]::IsNullOrWhiteSpace($status)) {
+            $status = 'missing'
+        }
+
+        Write-Proof ("web_container_health_attempt={0} status={1}" -f $attempt, $status)
+
+        if ($status -eq 'healthy' -or $status -eq 'no-healthcheck') {
+            return
+        }
+
+        if ($attempt -lt $Attempts) {
+            Start-Sleep -Seconds $DelaySec
+        }
+    }
+
+    throw "Container $ContainerName did not become healthy within retry budget."
+}
+
 Set-Location -LiteralPath $RepoRoot
 
 Write-Proof "# SERIAL 21 Demo Proof - $timestamp"
@@ -104,7 +131,18 @@ $templates = Invoke-WebRequest -Uri 'http://localhost:4000/v1/templates' -UseBas
 Write-Proof ("templates_status=" + [int]$templates.StatusCode)
 Write-Proof ("templates_body=" + (($templates.Content -replace "`r", '') -replace "`n", ''))
 
-$null = Wait-Http200 -Name 'web' -Url 'http://localhost:3000/' -Attempts 60 -DelaySec 2 -TimeoutSec 10
+$webContainer = 'factory-web-dev'
+$foundWebContainer = (docker ps --format "{{.Names}}" | Select-String -Pattern "^$webContainer$" -SimpleMatch | Select-Object -First 1)
+if (-not $foundWebContainer) {
+    $fallback = docker ps --format "{{.Names}}" | Select-String -Pattern 'web' | Select-Object -First 1
+    if ($fallback) {
+        $webContainer = $fallback.Line
+    }
+}
+Write-Proof ("web_container=" + $webContainer)
+Wait-ContainerHealthy -ContainerName $webContainer -Attempts 80 -DelaySec 2
+
+$null = Wait-Http200 -Name 'web' -Url 'http://localhost:3000/' -Attempts 3 -DelaySec 2 -TimeoutSec 10
 $web = Invoke-WebRequest -Uri 'http://localhost:3000/' -UseBasicParsing -TimeoutSec 10
 Write-Proof ("web_status=" + [int]$web.StatusCode)
 
