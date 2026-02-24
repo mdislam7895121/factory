@@ -97,18 +97,58 @@ jobs:
           $apiHost = ([uri]$apiBase).Host
           $webHost = ([uri]$webUrl).Host
 
-          $apiRoot = Invoke-WebRequest -Uri "$apiBase/" -Method Get
-          Write-Host "API host=$apiHost status=$($apiRoot.StatusCode)"
-          if ($apiRoot.StatusCode -ne 200) {
-            Write-Error "API root check failed with status $($apiRoot.StatusCode)."
+          function Invoke-WithRetry {
+            param(
+              [Parameter(Mandatory = $true)][string]$Name,
+              [Parameter(Mandatory = $true)][scriptblock]$Action,
+              [int]$Attempts = 6,
+              [int]$DelaySeconds = 5
+            )
+
+            for ($attempt = 1; $attempt -le $Attempts; $attempt++) {
+              try {
+                return & $Action
+              }
+              catch {
+                $statusCode = $null
+                if ($_.Exception.Response -and $_.Exception.Response.StatusCode) {
+                  $statusCode = [int]$_.Exception.Response.StatusCode
+                }
+                Write-Host "Retryable check '$Name' attempt $attempt/$Attempts failed (status=$statusCode)."
+                if ($attempt -eq $Attempts) {
+                  throw
+                }
+                Start-Sleep -Seconds $DelaySeconds
+              }
+            }
+          }
+
+          $ready = Invoke-WithRetry -Name 'api-ready' -Attempts 6 -DelaySeconds 5 -Action {
+            Invoke-WebRequest -Uri "$apiBase/ready" -Method Get
+          }
+          $readyJson = $ready.Content | ConvertFrom-Json
+          Write-Host "API host=$apiHost ready status=$($ready.StatusCode) ok=$($readyJson.ok)"
+          if ($ready.StatusCode -ne 200 -or $readyJson.ok -ne $true) {
+            Write-Error "API /ready check failed."
             exit 1
           }
 
-          $dbHealth = Invoke-WebRequest -Uri "$apiBase/db/health" -Method Get
+          $dbHealth = Invoke-WithRetry -Name 'api-db-health' -Attempts 6 -DelaySeconds 5 -Action {
+            Invoke-WebRequest -Uri "$apiBase/db/health" -Method Get
+          }
           $dbJson = $dbHealth.Content | ConvertFrom-Json
           Write-Host "API host=$apiHost db-health status=$($dbHealth.StatusCode) ok=$($dbJson.ok)"
           if ($dbHealth.StatusCode -ne 200 -or $dbJson.ok -ne $true) {
             Write-Error "API db/health check failed."
+            exit 1
+          }
+
+          $apiRoot = Invoke-WithRetry -Name 'api-root' -Attempts 4 -DelaySeconds 3 -Action {
+            Invoke-WebRequest -Uri "$apiBase/" -Method Get
+          }
+          Write-Host "API host=$apiHost status=$($apiRoot.StatusCode)"
+          if ($apiRoot.StatusCode -ne 200) {
+            Write-Error "API root check failed with status $($apiRoot.StatusCode)."
             exit 1
           }
 
