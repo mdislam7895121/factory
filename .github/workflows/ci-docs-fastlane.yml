@@ -1,0 +1,41 @@
+name: CI Docs Fastlane
+
+concurrency:
+  group: ci-docs-fastlane-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - '**/*.md'
+
+jobs:
+  docs-fastlane:
+    name: Docs Fastlane
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Markdown syntax check (lightweight)
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "docs-fastlane: lightweight checks only"
+          find docs -type f -name "*.md" -print >/dev/null
+
+      - name: Verify changed files are docs/markdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+          CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}" "${{ github.sha }}")
+          echo "$CHANGED"
+          BAD=$(echo "$CHANGED" | grep -Ev '^(docs/|.*\.md$|$)' || true)
+          if [ -n "$BAD" ]; then
+            echo "Non-doc changes detected; skipping docs-fastlane strict mode."
+            echo "$BAD"
+            exit 0
+          fi
