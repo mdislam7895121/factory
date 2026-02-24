@@ -12,7 +12,7 @@ Date: 2026-02-23
 ### PR and merge metadata
 
 - PR: `https://github.com/mdislam7895121/factory/pull/75`
-- Merge commit: `(pending merge)`
+- Merge commit: `https://github.com/mdislam7895121/factory/commit/05160d6b32fa90a89fa05fc7989326b9e1b91755`
 
 ### Before vs after summary
 
@@ -25,6 +25,9 @@ Date: 2026-02-23
 - `proof/runs/serial22c-local-20260223-225051.txt`
 - `proof/runs/serial22c-theme-20260223-225405.txt`
 - `proof/runs/serial22c-status-20260223-225422.txt`
+- `proof/runs/serial22c-pr-20260223-230323.txt`
+- `proof/runs/serial22c-netlify-20260223-230026.txt`
+- `proof/runs/serial22c-postmerge-20260223-230312.txt`
 
 ### Definition of done status (pre-lock)
 
@@ -32,10 +35,10 @@ Date: 2026-02-23
 - [x] No-flash theme script applies `html.dark` before paint.
 - [x] Status widget uses server-side fetch with `3s` timeout and graceful fallback.
 - [x] Landing keeps compatibility markers (`Factory Platform`, `How it works`, `MIT License`).
-- [ ] Netlify production deploy proof captured for SERIAL 22.C.
-- [ ] Post-merge and lock proof captured.
+- [x] Netlify production deploy proof captured for SERIAL 22.C.
+- [x] Post-merge evidence captured on `main`.
 
-SERIAL 22.C LOCK STATUS: NOT LOCKED
+SERIAL 22.C LOCK STATUS: LOCKED
 
 ## SERIAL 22.B — Public Web Landing + Netlify Deploy
 
