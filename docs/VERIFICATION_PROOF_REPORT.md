@@ -1,3 +1,43 @@
+## SERIAL 21 — Productization + Demo Onboarding (Public-facing)
+
+Date: 2026-02-23
+
+### Scope (files)
+
+- `README.md`
+- `LICENSE`
+- `scripts/demo.ps1`
+- `scripts/demo.sh`
+- `docs/DEMO_WORKFLOW.md`
+- `docs/ARCHITECTURE.md`
+
+### Serial objective
+
+- Provide one repeatable local demo workflow on a clean machine.
+- Keep changes additive and non-breaking (no production infra changes).
+
+### Proof files (raw outputs)
+
+- `proof/runs/serial21-baseline-20260223-200451.txt`
+- `proof/runs/serial21-demo-20260223-201345.txt`
+- `proof/runs/serial21-verify-20260223-201345.txt`
+
+### PR and merge metadata
+
+- PR: `TBD`
+- Merge commit: `TBD`
+
+### Definition of done
+
+- [x] README includes product context, quick start, demo workflow, architecture/ops/license references.
+- [x] `scripts/demo.ps1` creates timestamped proof output under `proof/runs/`.
+- [x] `docs/DEMO_WORKFLOW.md` added and aligned to script behavior.
+- [x] Local verification proof captured for `/db/health`, `/ready`, `/v1/templates`, and web HTTP 200.
+- [ ] PR checks green and merged.
+- [ ] Post-merge proof captured on `main`.
+
+SERIAL 21 LOCK STATUS: PENDING
+
 ## SERIAL 20 — Ops Monitoring + Production Readiness Health
 
 Date: 2026-02-23
