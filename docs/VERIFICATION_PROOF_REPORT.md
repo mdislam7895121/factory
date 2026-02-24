@@ -54,6 +54,14 @@ HTTP/1.1 200 OK
 - Runbook: `docs/ops/MONITORING.md`
 - Production smoke script: `scripts/prod-smoke.ps1`
 
+### Post-merge observation (PR #62 audit closure)
+
+- Failing run: `https://github.com/mdislam7895121/factory/actions/runs/22321700413`
+- Failing job: `https://github.com/mdislam7895121/factory/actions/runs/22321700413/job/64582355079`
+- Root-cause category: **Flake (timing/upstream readiness race)**.
+- Evidence: `Live Smoke -> Smoke checks` failed on first API probe with `Invoke-WebRequest` to `$apiBase/` returning `502` and message `"Application failed to respond"`, then exited with code `1`; required env validation passed in the same job.
+- Mitigation (CI-only): added bounded retries/readiness probes for `/ready`, `/db/health`, and API root in `Live Smoke` to reduce transient startup/network flake without changing runtime behavior.
+
 SERIAL 20 is now LOCKED.
 
 ## SERIAL 14 — fullstack-v1 Step 1 schema finalized
