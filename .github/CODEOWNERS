@@ -1,0 +1,5 @@
+# Default owners for entire repo
+* @mdislam7895121
+
+# Optional: workflow ownership (keep you as owner)
+.github/workflows/* @mdislam7895121
