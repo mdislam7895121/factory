@@ -5,9 +5,10 @@ import {
   type RegulatedWarning,
   type SelectedAgent,
 } from './agent-classifier.service';
+import { GuardedExpertPolicyService } from './guarded-expert-policy.service';
 import { getAgent, type AgentCategory } from './agent-registry';
 
-// 13-03: Full routing result contract
+// 13-03 / 14-04: Full routing result contract (guarded fields added additively)
 export interface RoutingResult {
   coreAgents: SelectedAgent[];
   domainAgents: SelectedAgent[];
@@ -16,6 +17,12 @@ export interface RoutingResult {
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH';
   suggestedTemplate: string;
   nextActions: string[];
+  // 14-04: Guarded expert mode fields
+  guardedMode: boolean;
+  disclaimers: string[];
+  blockedScopes: string[];
+  safeRewrite: string;
+  requiresProfessionalReview: boolean;
 }
 
 // 13-02: Co-routing rules — when agent X is matched, automatically include agents Y[]
@@ -99,7 +106,10 @@ const DOMAIN_NEXT_ACTIONS: Partial<Record<string, string>> = {
 
 @Injectable()
 export class PromptRouterService {
-  constructor(private readonly classifier: AgentClassifierService) {}
+  constructor(
+    private readonly classifier: AgentClassifierService,
+    private readonly policyService: GuardedExpertPolicyService,
+  ) {}
 
   // 13-01 / 13-03: Full agent routing from a prompt
   route(prompt: string): RoutingResult {
@@ -176,6 +186,26 @@ export class PromptRouterService {
       ...coRoutedAgents.map((a) => a.reason),
     ];
 
+    // Step 7: Guarded expert mode (14-04)
+    const regulatedIds = allDomainAgents
+      .filter((a) => a.kind === 'REGULATED')
+      .map((a) => a.id);
+
+    let guardedMode = false;
+    let disclaimers: string[] = [];
+    let blockedScopes: string[] = [];
+    let safeRewrite = '';
+    let requiresProfessionalReview = false;
+
+    if (regulatedIds.length > 0) {
+      const guard = this.policyService.guard(regulatedIds, prompt);
+      guardedMode = true;
+      disclaimers = guard.disclaimers;
+      blockedScopes = guard.blockedScopes;
+      safeRewrite = guard.safeRewrite;
+      requiresProfessionalReview = guard.requiresProfessionalReview;
+    }
+
     return {
       coreAgents: base.coreAgents,
       domainAgents: allDomainAgents,
@@ -184,6 +214,11 @@ export class PromptRouterService {
       riskLevel,
       suggestedTemplate,
       nextActions,
+      guardedMode,
+      disclaimers,
+      blockedScopes,
+      safeRewrite,
+      requiresProfessionalReview,
     };
   }
 

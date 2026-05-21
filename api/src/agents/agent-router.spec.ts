@@ -1,11 +1,12 @@
 import { AgentClassifierService } from './agent-classifier.service';
 import { PromptRouterService } from './prompt-router.service';
+import { GuardedExpertPolicyService } from './guarded-expert-policy.service';
 
 describe('PromptRouterService', () => {
   let router: PromptRouterService;
 
   beforeEach(() => {
-    router = new PromptRouterService(new AgentClassifierService());
+    router = new PromptRouterService(new AgentClassifierService(), new GuardedExpertPolicyService());
   });
 
   // ── 13-06: Always includes 10 core agents ──────────────────────────────────

@@ -231,6 +231,13 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
   border-left:2px solid rgba(255,193,7,.3);padding-left:5px}
 .tp-assembled{font-size:12px;color:var(--green);margin-top:6px;font-weight:600;
   animation:fadeIn .4s ease;display:flex;align-items:center;gap:5px}
+.tp-guarded{font-size:11px;color:#60a5fa;margin-top:5px;display:flex;align-items:center;gap:5px;
+  padding:4px 9px;background:rgba(96,165,250,.05);border:1px solid rgba(96,165,250,.2);
+  border-radius:7px;width:fit-content}
+.tp-prof-review{font-size:11px;color:var(--yellow);margin-top:5px;display:flex;align-items:center;gap:5px}
+.tp-safe-rewrite{margin-top:7px;padding:7px 10px;background:rgba(96,165,250,.05);
+  border:1px solid rgba(96,165,250,.15);border-radius:8px;font-size:11px;color:#93c5fd;line-height:1.5}
+@keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
 /* ---- Phase 2: Building ---- */
 .theater-header{padding:14px 16px;display:flex;align-items:center;gap:10px;max-width:900px;margin:0 auto;width:100%;flex-shrink:0}
 .theater-header h2{font-size:17px;font-weight:700;flex:1}
@@ -346,7 +353,10 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
     <div class="tp-header">Specialist agents joining your team:</div>
     <div class="tp-badges" id="tp-badges"></div>
     <div id="tp-assembled" style="display:none" class="tp-assembled"></div>
+    <div id="tp-guarded-badge" style="display:none" class="tp-guarded"></div>
+    <div id="tp-prof-review" style="display:none" class="tp-prof-review"></div>
     <div class="tp-warnings" id="tp-warnings"></div>
+    <div id="tp-safe-rewrite" style="display:none" class="tp-safe-rewrite"></div>
   </div>
 </div>
 
@@ -433,10 +443,13 @@ function showPhase(name) {
   currentPhase = name;
 }
 
-// ---- 12-06: Agent team preview ----
+// ---- 12-06 / 14-05: Agent team preview ----
 var teamPreview = document.getElementById('team-preview');
 var tpBadges = document.getElementById('tp-badges');
 var tpWarnings = document.getElementById('tp-warnings');
+var tpGuardedBadge = document.getElementById('tp-guarded-badge');
+var tpProfReview = document.getElementById('tp-prof-review');
+var tpSafeRewrite = document.getElementById('tp-safe-rewrite');
 var tpDebounce = null;
 
 // 13-04: Call /v1/agents/route for full team assembly with co-routing + risk
@@ -469,6 +482,22 @@ function updateTeamPreview(prompt) {
       assembled.textContent = '✓ AI team assembled — ' + totalAgents + ' agents' + riskLabel;
       assembled.style.display = 'flex';
 
+      // 14-05: Guarded expert mode badge
+      if (d.guardedMode) {
+        tpGuardedBadge.textContent = '⚙️ Guarded expert mode — agents will design workflows only, not provide professional advice';
+        tpGuardedBadge.style.display = 'flex';
+      } else {
+        tpGuardedBadge.style.display = 'none';
+      }
+
+      // 14-05: Professional review recommendation
+      if (d.requiresProfessionalReview) {
+        tpProfReview.textContent = '👨‍⚕️ Professional review recommended before launch';
+        tpProfReview.style.display = 'flex';
+      } else {
+        tpProfReview.style.display = 'none';
+      }
+
       // Regulated warnings + disclaimers (13-05)
       tpWarnings.innerHTML = warns.map(function(w) {
         return '<div class="tp-warn"><span class="wi">⚠️</span>'
@@ -476,6 +505,14 @@ function updateTeamPreview(prompt) {
           + '<div class="tp-disc">' + escHtml(w.disclaimer) + '</div>'
           + '</div></div>';
       }).join('');
+
+      // 14-05: Safe rewrite suggestion (shown when prompt contained unsafe professional advice)
+      if (d.safeRewrite) {
+        tpSafeRewrite.innerHTML = '💡 <strong>Tip:</strong> ' + escHtml(d.safeRewrite);
+        tpSafeRewrite.style.display = 'block';
+      } else {
+        tpSafeRewrite.style.display = 'none';
+      }
     }).catch(function() {});
   }, 400);
 }
