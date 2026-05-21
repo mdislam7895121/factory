@@ -29,17 +29,48 @@ const WORKSPACES_DIR = path.join(ROOT_DIR, 'workspaces');
 const TEMPLATES_DIR = path.join(ROOT_DIR, 'templates');
 const CONTAINER_PREFIX = 'factory_proj_';
 
+const ORCHESTRATOR_API_KEY = process.env.ORCHESTRATOR_API_KEY;
+const ALLOWED_ORIGINS = (process.env.CORS_ORIGINS || 'http://localhost:3000')
+  .split(',')
+  .map((o) => o.trim())
+  .filter(Boolean);
+const CONTAINER_NAME_RE = /^factory_proj_[a-z0-9-]+$/;
+
+if (!ORCHESTRATOR_API_KEY) {
+  console.error('[orchestrator] FATAL: ORCHESTRATOR_API_KEY env var is required');
+  process.exit(1);
+}
+
 app.use(express.json({ limit: '1mb' }));
-app.use((_, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (_.method === 'OPTIONS') {
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin || '';
+  if (ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  if (req.method === 'OPTIONS') {
     res.status(204).end();
     return;
   }
   next();
 });
+
+function requireApiKey(req, res, next) {
+  const header = req.headers['authorization'] || '';
+  const token = header.startsWith('Bearer ') ? header.slice(7) : '';
+  if (!token || token !== ORCHESTRATOR_API_KEY) {
+    res.status(401).json({ ok: false, error: 'Unauthorized' });
+    return;
+  }
+  next();
+}
+
+function validateContainerName(name) {
+  return CONTAINER_NAME_RE.test(name);
+}
 
 async function ensureStateDirs() {
   await fs.mkdir(DATA_DIR, { recursive: true });
@@ -175,7 +206,10 @@ async function collectStatus(project) {
 
   if (running) {
     try {
-      const response = await fetch(`http://host.docker.internal:${project.port}/`, { method: 'GET' });
+      const response = await fetch(`http://host.docker.internal:${project.port}/`, {
+        method: 'GET',
+        signal: AbortSignal.timeout(3000),
+      });
       healthy = response.status >= 200 && response.status < 500;
     } catch {
       healthy = false;
@@ -219,6 +253,8 @@ app.get('/health', (_req, res) => {
   res.json({ ok: true, service: 'orchestrator', version: packageJson.version });
 });
 
+app.use('/v1', requireApiKey);
+
 app.get('/v1/projects', async (_req, res) => {
   const projects = await readProjects();
   const enriched = await Promise.all(projects.map((project) => collectStatus(project)));
@@ -229,7 +265,17 @@ app.post('/v1/projects', async (req, res) => {
   const template = String(req.body?.template || 'basic-web');
   const name = String(req.body?.name || 'Factory Project');
 
+  if (!/^[a-zA-Z0-9_-]+$/.test(template)) {
+    res.status(400).json({ ok: false, error: 'Invalid template name' });
+    return;
+  }
+
   const templatePath = path.join(TEMPLATES_DIR, template);
+  if (!path.resolve(templatePath).startsWith(path.resolve(TEMPLATES_DIR) + path.sep)) {
+    res.status(400).json({ ok: false, error: 'Invalid template path' });
+    return;
+  }
+
   try {
     await fs.access(templatePath);
   } catch {
@@ -242,10 +288,7 @@ app.post('/v1/projects', async (req, res) => {
   await fs.cp(templatePath, workspacePath, { recursive: true });
 
   const registry = await loadRegistry();
-  const requestedPort = Number(req.body?.port);
-  const port = Number.isFinite(requestedPort) && requestedPort > 0
-    ? requestedPort
-    : await pickPort(registry);
+  const port = await pickPort(registry);
   const project = {
     id,
     name,
@@ -270,6 +313,11 @@ app.post('/v1/projects/:id/start', async (req, res) => {
   const project = getProjectById(registry, req.params.id);
   if (!project) {
     res.status(404).json({ ok: false, error: 'Project not found' });
+    return;
+  }
+
+  if (!validateContainerName(project.containerName)) {
+    res.status(400).json({ ok: false, error: 'Invalid container name' });
     return;
   }
 

@@ -47,6 +47,7 @@ export class Serial11Controller {
       .then((workspaces) => ({ ok: true, workspaces }));
   }
 
+  @UseGuards(JwtGuard)
   @Get('/workspaces/:id')
   getWorkspace(@Req() req: Request, @Param('id') id: string) {
     return this.serial11Service.getWorkspace(id, requireUserId(req));
@@ -78,16 +79,19 @@ export class Serial11Controller {
     );
   }
 
+  @UseGuards(JwtGuard)
   @Get('/projects/:id')
   getProject(@Req() req: Request, @Param('id') id: string) {
     return this.serial11Service.getProject(id, requireUserId(req));
   }
 
+  @UseGuards(JwtGuard)
   @Post('/projects/:id/provision')
   provisionProject(@Req() req: Request, @Param('id') id: string) {
     return this.serial11Service.provisionProject(id, requireUserId(req));
   }
 
+  @UseGuards(JwtGuard)
   @Get('/projects/:id/logs/stream')
   streamProjectLogs(
     @Req() req: Request,

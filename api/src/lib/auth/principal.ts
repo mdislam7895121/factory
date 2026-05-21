@@ -94,7 +94,7 @@ function readRequestUser(req: Request): string | null {
 }
 
 export function getUserId(req: Request): string | null {
-  return readRequestUser(req) ?? readHeaderUserId(req) ?? readCookieUserId(req);
+  return readRequestUser(req);
 }
 
 export function requireUserId(req: Request): string {

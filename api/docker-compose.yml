@@ -3,9 +3,9 @@ services:
     image: postgres:16
     container_name: factory_postgres
     environment:
-      POSTGRES_USER: factory
-      POSTGRES_PASSWORD: factorypass
-      POSTGRES_DB: factorydb
+      POSTGRES_USER: ${POSTGRES_USER:-factory}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-factorydb}
     ports:
       - "5432:5432"
     volumes:
