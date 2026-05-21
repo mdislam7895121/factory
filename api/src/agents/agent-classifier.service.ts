@@ -48,7 +48,7 @@ const DOMAIN_KEYWORD_RULES: Record<string, KeywordRule> = {
     reason: 'Detected insurance domain keywords',
   },
   'real-estate': {
-    keywords: ['real estate', 'property', 'rental', 'rent', 'listing', 'mortgage', 'realtor', 'mls', 'lease', 'tenant', 'landlord', 'apartment', 'house', 'condo', 'airbnb', 'vacation rental', 'short term rental', 'property management'],
+    keywords: ['real estate', 'property', 'rental', 'rent', 'property listing', 'mortgage', 'realtor', 'mls', 'lease', 'tenant', 'landlord', 'apartment', 'house', 'condo', 'airbnb', 'vacation rental', 'short term rental', 'property management'],
     reason: 'Detected real estate domain keywords',
   },
   'education': {
@@ -64,7 +64,7 @@ const DOMAIN_KEYWORD_RULES: Record<string, KeywordRule> = {
     reason: 'Detected cybersecurity domain keywords',
   },
   'ecommerce': {
-    keywords: ['ecommerce', 'e-commerce', 'shop', 'store', 'product catalog', 'shopping cart', 'checkout', 'inventory', 'shopify', 'woocommerce', 'buy', 'sell', 'order', 'fulfillment', 'retail'],
+    keywords: ['ecommerce', 'e-commerce', 'online shop', 'online store', 'product catalog', 'shopping cart', 'checkout', 'shopify', 'woocommerce', 'add to cart', 'order management', 'fulfillment', 'retail store'],
     reason: 'Detected e-commerce domain keywords',
   },
   'restaurant': {
@@ -133,8 +133,8 @@ const DOMAIN_KEYWORD_RULES: Record<string, KeywordRule> = {
   },
 };
 
-// 12-02: Regulated guard messages per domain
-const REGULATED_GUARD_MESSAGES: Partial<Record<string, { warning: string; disclaimer: string }>> = {
+// 12-02 / 13-05: Regulated guard messages per domain (exported for router)
+export const REGULATED_GUARD_MESSAGES: Partial<Record<string, { warning: string; disclaimer: string }>> = {
   'legal-compliance': {
     warning: 'This app touches legal compliance domains. The Legal Compliance agent builds app workflows, consent flows, and compliance checklists only. It will NOT provide legal advice or legal conclusions.',
     disclaimer: 'Not legal advice. Consult a qualified attorney for legal decisions.',

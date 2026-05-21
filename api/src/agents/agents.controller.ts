@@ -12,6 +12,7 @@ import {
 import { IsString, MaxLength } from 'class-validator';
 import { AGENT_REGISTRY, getAgent, getCategories, type AgentCategory, type AgentKind } from './agent-registry';
 import { AgentClassifierService } from './agent-classifier.service';
+import { PromptRouterService } from './prompt-router.service';
 
 class PreviewSelectionDto {
   @IsString()
@@ -21,7 +22,10 @@ class PreviewSelectionDto {
 
 @Controller('v1/agents')
 export class AgentsController {
-  constructor(private readonly classifier: AgentClassifierService) {}
+  constructor(
+    private readonly classifier: AgentClassifierService,
+    private readonly router: PromptRouterService,
+  ) {}
 
   // 12-04: GET /v1/agents — list all agents (optionally filtered)
   @Get()
@@ -70,6 +74,14 @@ export class AgentsController {
   @HttpCode(HttpStatus.OK)
   previewSelection(@Body() dto: PreviewSelectionDto) {
     const result = this.classifier.classify(dto.prompt);
+    return { ok: true, ...result };
+  }
+
+  // 13-03: POST /v1/agents/route — full routing with co-agents, risk, template, next actions
+  @Post('route')
+  @HttpCode(HttpStatus.OK)
+  route(@Body() dto: PreviewSelectionDto) {
+    const result = this.router.route(dto.prompt);
     return { ok: true, ...result };
   }
 }

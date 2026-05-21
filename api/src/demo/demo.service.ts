@@ -229,6 +229,8 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
 .tp-warn .wi{flex-shrink:0}
 .tp-disc{margin-top:4px;font-size:10px;color:var(--muted);font-style:italic;
   border-left:2px solid rgba(255,193,7,.3);padding-left:5px}
+.tp-assembled{font-size:12px;color:var(--green);margin-top:6px;font-weight:600;
+  animation:fadeIn .4s ease;display:flex;align-items:center;gap:5px}
 /* ---- Phase 2: Building ---- */
 .theater-header{padding:14px 16px;display:flex;align-items:center;gap:10px;max-width:900px;margin:0 auto;width:100%;flex-shrink:0}
 .theater-header h2{font-size:17px;font-weight:700;flex:1}
@@ -343,6 +345,7 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
   <div id="team-preview">
     <div class="tp-header">Specialist agents joining your team:</div>
     <div class="tp-badges" id="tp-badges"></div>
+    <div id="tp-assembled" style="display:none" class="tp-assembled"></div>
     <div class="tp-warnings" id="tp-warnings"></div>
   </div>
 </div>
@@ -436,11 +439,12 @@ var tpBadges = document.getElementById('tp-badges');
 var tpWarnings = document.getElementById('tp-warnings');
 var tpDebounce = null;
 
+// 13-04: Call /v1/agents/route for full team assembly with co-routing + risk
 function updateTeamPreview(prompt) {
   if (!prompt || prompt.trim().length < 8) { teamPreview.style.display = 'none'; return; }
   clearTimeout(tpDebounce);
   tpDebounce = setTimeout(function() {
-    fetch('/v1/agents/preview-selection', {
+    fetch('/v1/agents/route', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ prompt: prompt })
@@ -450,10 +454,22 @@ function updateTeamPreview(prompt) {
       var warns = d.regulatedWarnings || [];
       if (!domain.length && !warns.length) { teamPreview.style.display = 'none'; return; }
       teamPreview.style.display = 'block';
+
+      // Domain agent badges (blue = DOMAIN, yellow = REGULATED)
       tpBadges.innerHTML = domain.map(function(a) {
         var cls = a.kind === 'REGULATED' ? 'tp-badge regulated' : 'tp-badge';
         return '<span class="' + cls + '">' + escHtml(a.name) + '</span>';
       }).join('');
+
+      // 13-04: "AI team assembled" moment
+      var totalAgents = (d.coreAgents || []).length + domain.length;
+      var assembled = document.getElementById('tp-assembled');
+      var risk = d.riskLevel || 'LOW';
+      var riskLabel = risk === 'HIGH' ? ' · ⚠️ Regulated domain' : risk === 'MEDIUM' ? ' · ⚡ Complex build' : '';
+      assembled.textContent = '✓ AI team assembled — ' + totalAgents + ' agents' + riskLabel;
+      assembled.style.display = 'flex';
+
+      // Regulated warnings + disclaimers (13-05)
       tpWarnings.innerHTML = warns.map(function(w) {
         return '<div class="tp-warn"><span class="wi">⚠️</span>'
           + '<div>' + escHtml(w.warning)
