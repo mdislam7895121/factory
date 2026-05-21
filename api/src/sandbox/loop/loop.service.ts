@@ -5,6 +5,7 @@ import {
 import Anthropic from '@anthropic-ai/sdk';
 import { PrismaService } from '../../prisma/prisma.service';
 import { MemoryService } from '../memory.service';
+import { RedisService } from '../../lib/redis/redis.service';
 
 const MODEL = 'claude-haiku-4-5-20251001'; // fast + cheap for monitoring
 const MAX_TOKENS = 1024;
@@ -62,9 +63,14 @@ export class LoopService implements OnModuleInit, OnModuleDestroy {
   private ticker: ReturnType<typeof setInterval> | null = null;
   private runningLoops = new Set<string>();
 
+  // Lua script: delete key only if its value matches instanceId (atomic check-and-delete)
+  private static readonly RELEASE_LOCK_LUA =
+    `if redis.call("get", KEYS[1]) == ARGV[1] then return redis.call("del", KEYS[1]) else return 0 end`;
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly memory: MemoryService,
+    private readonly redis: RedisService,
   ) {}
 
   onModuleInit() {
@@ -192,22 +198,39 @@ export class LoopService implements OnModuleInit, OnModuleDestroy {
   }
 
   // ── Tick — runs every 60 s, dispatches due loops ──────────────────────
+  // Redis distributed lock prevents duplicate execution across instances.
 
   private async tick() {
-    const now = new Date();
-    const dueLops = await this.prisma.loopConfig.findMany({
-      where: { isActive: true, nextRunAt: { lte: now } },
-      take: 10, // process at most 10 per tick to avoid overload
-    });
+    const lockKey = 'loop:tick:lock';
+    const lockTtl = parseInt(process.env.LOOP_LOCK_TTL_SEC ?? '120', 10);
+    const instanceId = `${process.env.INSTANCE_ID ?? process.pid}`;
 
-    for (const loop of dueLops) {
-      if (this.runningLoops.has(loop.id)) continue;
+    const acquired = await this.redis.client
+      .set(lockKey, instanceId, 'EX', lockTtl, 'NX')
+      .catch(() => null);
 
-      const run = await this.prisma.loopRun.create({
-        data: { loopId: loop.id, status: 'RUNNING' },
+    if (!acquired) return; // another instance holds the scheduler lock
+
+    try {
+      const now = new Date();
+      const dueLops = await this.prisma.loopConfig.findMany({
+        where: { isActive: true, nextRunAt: { lte: now } },
+        take: 10,
       });
 
-      void this.executeRun(loop, run.id).catch(() => {});
+      for (const loop of dueLops) {
+        if (this.runningLoops.has(loop.id)) continue;
+
+        const run = await this.prisma.loopRun.create({
+          data: { loopId: loop.id, status: 'RUNNING' },
+        });
+
+        void this.executeRun(loop, run.id).catch(() => {});
+      }
+    } finally {
+      await this.redis.client
+        .eval(LoopService.RELEASE_LOCK_LUA, 1, lockKey, instanceId)
+        .catch(() => {});
     }
   }
 

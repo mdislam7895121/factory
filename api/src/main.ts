@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { timingSafeEqual } from 'node:crypto';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { RedisService } from './lib/redis/redis.service';
 import {
   assertRequiredRuntimeEnv,
   resolveAndNormalizeNodeEnvironment,
@@ -339,7 +340,7 @@ function resolveAllowedOrigins(nodeEnvironment: string): Set<string> {
   return defaults;
 }
 
-function createRateLimitMiddleware(): RequestHandler {
+function createRateLimitMiddleware(redis: RedisService): RequestHandler {
   const windowMs = parsePositiveInteger(
     process.env.RATE_LIMIT_WINDOW_MS,
     60000,
@@ -354,18 +355,7 @@ function createRateLimitMiddleware(): RequestHandler {
     30,
   );
 
-  const buckets = new Map<string, { count: number; resetAt: number }>();
-
-  // Periodic cleanup every 60s — not just on rate-limited responses
-  setInterval(() => {
-    const now = Date.now();
-    for (const [k, v] of buckets) {
-      if (now >= v.resetAt) buckets.delete(k);
-    }
-  }, 60_000).unref();
-
   return (req: Request, res: Response, next: NextFunction) => {
-    const now = Date.now();
     const route = normalizePath(req.path || req.url || '/');
     const routeKey =
       route === '/db/health' || route === '/health/db'
@@ -388,27 +378,32 @@ function createRateLimitMiddleware(): RequestHandler {
       req.socket.remoteAddress ||
       'unknown'
     ).trim();
-    const key = `${clientIp}:${routeKey}`;
 
-    const existing = buckets.get(key);
-    const bucket =
-      !existing || now >= existing.resetAt
-        ? { count: 0, resetAt: now + windowMs }
-        : existing;
+    // Redis fixed-window rate limiting — shared across all instances
+    const redisKey = `rl:ip:${clientIp}:${routeKey}`;
+    redis.client
+      .incr(redisKey)
+      .then(async (count) => {
+        if (count === 1) {
+          await redis.client.pexpire(redisKey, windowMs);
+        }
+        const ttlMs = count === 1 ? windowMs : await redis.client.pttl(redisKey);
+        const resetSec = Math.ceil((Date.now() + Math.max(ttlMs, 0)) / 1000);
 
-    bucket.count += 1;
-    buckets.set(key, bucket);
+        res.setHeader('X-RateLimit-Limit', String(max));
+        res.setHeader('X-RateLimit-Remaining', String(Math.max(max - count, 0)));
+        res.setHeader('X-RateLimit-Reset', String(resetSec));
 
-    res.setHeader('X-RateLimit-Limit', String(max));
-    res.setHeader('X-RateLimit-Remaining', String(Math.max(max - bucket.count, 0)));
-    res.setHeader('X-RateLimit-Reset', String(Math.ceil(bucket.resetAt / 1000)));
-
-    if (bucket.count > max) {
-      res.status(429).json({ ok: false, error: 'TOO_MANY_REQUESTS' });
-      return;
-    }
-
-    next();
+        if (count > max) {
+          res.status(429).json({ ok: false, error: 'TOO_MANY_REQUESTS' });
+          return;
+        }
+        next();
+      })
+      .catch(() => {
+        // Redis unavailable — fail open to avoid blocking all traffic
+        next();
+      });
   };
 }
 
@@ -446,7 +441,7 @@ async function bootstrap() {
     optionsSuccessStatus: 204,
   });
 
-  app.use(createRateLimitMiddleware());
+  app.use(createRateLimitMiddleware(app.get(RedisService)));
 
   const expressApp = app.getHttpAdapter().getInstance() as unknown as Express;
   expressApp.get('/debug-sentry', function (req: Request, res: Response) {

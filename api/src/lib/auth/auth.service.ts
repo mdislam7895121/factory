@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  ConflictException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -17,6 +16,8 @@ type LoginResult = {
   };
 };
 
+type SignupResult = LoginResult | { message: string };
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -24,7 +25,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signup(input: { email?: string; password?: string }): Promise<LoginResult> {
+  async signup(input: { email?: string; password?: string }): Promise<SignupResult> {
     const email = this.normalizeEmail(input.email);
     const password = this.normalizePassword(input.password);
     const passwordHash = await hash(password, 12);
@@ -58,7 +59,9 @@ export class AuthService {
         'code' in error &&
         (error as { code?: unknown }).code === 'P2002'
       ) {
-        throw new ConflictException('email already exists');
+        // Don't reveal whether the email already exists — return a neutral response
+        // with the same HTTP 201 status as a successful registration.
+        return { message: 'Registration complete.' };
       }
 
       throw error;

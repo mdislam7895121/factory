@@ -424,7 +424,13 @@ app.use('/v1/preview/:id', async (req, res) => {
     return;
   }
 
-  const forwardPath = req.originalUrl.replace(`/v1/preview/${project.id}`, '') || '/';
+  const rawPath = req.originalUrl.replace(`/v1/preview/${project.id}`, '') || '/';
+  const forwardPath = path.posix.normalize(rawPath.split('?')[0]) + (rawPath.includes('?') ? '?' + rawPath.split('?').slice(1).join('?') : '');
+  // Block path traversal attempts that escape the root
+  if (!forwardPath.startsWith('/')) {
+    res.status(400).json({ ok: false, error: 'Invalid path' });
+    return;
+  }
   const targetUrl = `http://host.docker.internal:${project.port}${forwardPath}`;
 
   try {
