@@ -268,6 +268,33 @@ exports.Prisma.CouncilMessageScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.LoopConfigScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  description: 'description',
+  intervalSecs: 'intervalSecs',
+  context: 'context',
+  webhookUrl: 'webhookUrl',
+  isActive: 'isActive',
+  lastRunAt: 'lastRunAt',
+  nextRunAt: 'nextRunAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LoopRunScalarFieldEnum = {
+  id: 'id',
+  loopId: 'loopId',
+  status: 'status',
+  monitorOutput: 'monitorOutput',
+  healerOutput: 'healerOutput',
+  issuesFound: 'issuesFound',
+  issuesFixed: 'issuesFixed',
+  createdAt: 'createdAt',
+  completedAt: 'completedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -316,6 +343,14 @@ exports.CouncilStatus = exports.$Enums.CouncilStatus = {
   FAILED: 'FAILED'
 };
 
+exports.LoopRunStatus = exports.$Enums.LoopRunStatus = {
+  RUNNING: 'RUNNING',
+  HEALTHY: 'HEALTHY',
+  ISSUES_FOUND: 'ISSUES_FOUND',
+  HEALED: 'HEALED',
+  FAILED: 'FAILED'
+};
+
 exports.Prisma.ModelName = {
   HealthCheck: 'HealthCheck',
   Template: 'Template',
@@ -330,7 +365,9 @@ exports.Prisma.ModelName = {
   AgentMemory: 'AgentMemory',
   AgentEvent: 'AgentEvent',
   CouncilSession: 'CouncilSession',
-  CouncilMessage: 'CouncilMessage'
+  CouncilMessage: 'CouncilMessage',
+  LoopConfig: 'LoopConfig',
+  LoopRun: 'LoopRun'
 };
 
 /**

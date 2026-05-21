@@ -83,6 +83,16 @@ export type CouncilSession = $Result.DefaultSelection<Prisma.$CouncilSessionPayl
  * 
  */
 export type CouncilMessage = $Result.DefaultSelection<Prisma.$CouncilMessagePayload>
+/**
+ * Model LoopConfig
+ * 
+ */
+export type LoopConfig = $Result.DefaultSelection<Prisma.$LoopConfigPayload>
+/**
+ * Model LoopRun
+ * 
+ */
+export type LoopRun = $Result.DefaultSelection<Prisma.$LoopRunPayload>
 
 /**
  * Enums
@@ -136,6 +146,17 @@ export const CouncilStatus: {
 
 export type CouncilStatus = (typeof CouncilStatus)[keyof typeof CouncilStatus]
 
+
+export const LoopRunStatus: {
+  RUNNING: 'RUNNING',
+  HEALTHY: 'HEALTHY',
+  ISSUES_FOUND: 'ISSUES_FOUND',
+  HEALED: 'HEALED',
+  FAILED: 'FAILED'
+};
+
+export type LoopRunStatus = (typeof LoopRunStatus)[keyof typeof LoopRunStatus]
+
 }
 
 export type ProjectStatus = $Enums.ProjectStatus
@@ -157,6 +178,10 @@ export const SandboxStatus: typeof $Enums.SandboxStatus
 export type CouncilStatus = $Enums.CouncilStatus
 
 export const CouncilStatus: typeof $Enums.CouncilStatus
+
+export type LoopRunStatus = $Enums.LoopRunStatus
+
+export const LoopRunStatus: typeof $Enums.LoopRunStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -414,6 +439,26 @@ export class PrismaClient<
     * ```
     */
   get councilMessage(): Prisma.CouncilMessageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.loopConfig`: Exposes CRUD operations for the **LoopConfig** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LoopConfigs
+    * const loopConfigs = await prisma.loopConfig.findMany()
+    * ```
+    */
+  get loopConfig(): Prisma.LoopConfigDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.loopRun`: Exposes CRUD operations for the **LoopRun** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LoopRuns
+    * const loopRuns = await prisma.loopRun.findMany()
+    * ```
+    */
+  get loopRun(): Prisma.LoopRunDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -861,7 +906,9 @@ export namespace Prisma {
     AgentMemory: 'AgentMemory',
     AgentEvent: 'AgentEvent',
     CouncilSession: 'CouncilSession',
-    CouncilMessage: 'CouncilMessage'
+    CouncilMessage: 'CouncilMessage',
+    LoopConfig: 'LoopConfig',
+    LoopRun: 'LoopRun'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -877,7 +924,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user" | "apiKey" | "sandbox" | "usageLog" | "agentMemory" | "agentEvent" | "councilSession" | "councilMessage"
+      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user" | "apiKey" | "sandbox" | "usageLog" | "agentMemory" | "agentEvent" | "councilSession" | "councilMessage" | "loopConfig" | "loopRun"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1917,6 +1964,154 @@ export namespace Prisma {
           }
         }
       }
+      LoopConfig: {
+        payload: Prisma.$LoopConfigPayload<ExtArgs>
+        fields: Prisma.LoopConfigFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LoopConfigFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopConfigPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LoopConfigFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopConfigPayload>
+          }
+          findFirst: {
+            args: Prisma.LoopConfigFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopConfigPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LoopConfigFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopConfigPayload>
+          }
+          findMany: {
+            args: Prisma.LoopConfigFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopConfigPayload>[]
+          }
+          create: {
+            args: Prisma.LoopConfigCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopConfigPayload>
+          }
+          createMany: {
+            args: Prisma.LoopConfigCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LoopConfigCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopConfigPayload>[]
+          }
+          delete: {
+            args: Prisma.LoopConfigDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopConfigPayload>
+          }
+          update: {
+            args: Prisma.LoopConfigUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopConfigPayload>
+          }
+          deleteMany: {
+            args: Prisma.LoopConfigDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LoopConfigUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LoopConfigUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopConfigPayload>[]
+          }
+          upsert: {
+            args: Prisma.LoopConfigUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopConfigPayload>
+          }
+          aggregate: {
+            args: Prisma.LoopConfigAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLoopConfig>
+          }
+          groupBy: {
+            args: Prisma.LoopConfigGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LoopConfigGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LoopConfigCountArgs<ExtArgs>
+            result: $Utils.Optional<LoopConfigCountAggregateOutputType> | number
+          }
+        }
+      }
+      LoopRun: {
+        payload: Prisma.$LoopRunPayload<ExtArgs>
+        fields: Prisma.LoopRunFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LoopRunFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopRunPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LoopRunFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopRunPayload>
+          }
+          findFirst: {
+            args: Prisma.LoopRunFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopRunPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LoopRunFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopRunPayload>
+          }
+          findMany: {
+            args: Prisma.LoopRunFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopRunPayload>[]
+          }
+          create: {
+            args: Prisma.LoopRunCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopRunPayload>
+          }
+          createMany: {
+            args: Prisma.LoopRunCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LoopRunCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopRunPayload>[]
+          }
+          delete: {
+            args: Prisma.LoopRunDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopRunPayload>
+          }
+          update: {
+            args: Prisma.LoopRunUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopRunPayload>
+          }
+          deleteMany: {
+            args: Prisma.LoopRunDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LoopRunUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LoopRunUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopRunPayload>[]
+          }
+          upsert: {
+            args: Prisma.LoopRunUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoopRunPayload>
+          }
+          aggregate: {
+            args: Prisma.LoopRunAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLoopRun>
+          }
+          groupBy: {
+            args: Prisma.LoopRunGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LoopRunGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LoopRunCountArgs<ExtArgs>
+            result: $Utils.Optional<LoopRunCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2039,6 +2234,8 @@ export namespace Prisma {
     agentEvent?: AgentEventOmit
     councilSession?: CouncilSessionOmit
     councilMessage?: CouncilMessageOmit
+    loopConfig?: LoopConfigOmit
+    loopRun?: LoopRunOmit
   }
 
   /* Types for Logging */
@@ -2186,6 +2383,7 @@ export namespace Prisma {
     agentMemories: number
     agentEvents: number
     councilSessions: number
+    loopConfigs: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2194,6 +2392,7 @@ export namespace Prisma {
     agentMemories?: boolean | UserCountOutputTypeCountAgentMemoriesArgs
     agentEvents?: boolean | UserCountOutputTypeCountAgentEventsArgs
     councilSessions?: boolean | UserCountOutputTypeCountCouncilSessionsArgs
+    loopConfigs?: boolean | UserCountOutputTypeCountLoopConfigsArgs
   }
 
   // Custom InputTypes
@@ -2240,6 +2439,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountCouncilSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CouncilSessionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountLoopConfigsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LoopConfigWhereInput
   }
 
 
@@ -2302,6 +2508,37 @@ export namespace Prisma {
    */
   export type CouncilSessionCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CouncilMessageWhereInput
+  }
+
+
+  /**
+   * Count Type LoopConfigCountOutputType
+   */
+
+  export type LoopConfigCountOutputType = {
+    runs: number
+  }
+
+  export type LoopConfigCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    runs?: boolean | LoopConfigCountOutputTypeCountRunsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * LoopConfigCountOutputType without action
+   */
+  export type LoopConfigCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopConfigCountOutputType
+     */
+    select?: LoopConfigCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * LoopConfigCountOutputType without action
+   */
+  export type LoopConfigCountOutputTypeCountRunsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LoopRunWhereInput
   }
 
 
@@ -8874,6 +9111,7 @@ export namespace Prisma {
     agentMemories?: boolean | User$agentMemoriesArgs<ExtArgs>
     agentEvents?: boolean | User$agentEventsArgs<ExtArgs>
     councilSessions?: boolean | User$councilSessionsArgs<ExtArgs>
+    loopConfigs?: boolean | User$loopConfigsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -8908,6 +9146,7 @@ export namespace Prisma {
     agentMemories?: boolean | User$agentMemoriesArgs<ExtArgs>
     agentEvents?: boolean | User$agentEventsArgs<ExtArgs>
     councilSessions?: boolean | User$councilSessionsArgs<ExtArgs>
+    loopConfigs?: boolean | User$loopConfigsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8921,6 +9160,7 @@ export namespace Prisma {
       agentMemories: Prisma.$AgentMemoryPayload<ExtArgs>[]
       agentEvents: Prisma.$AgentEventPayload<ExtArgs>[]
       councilSessions: Prisma.$CouncilSessionPayload<ExtArgs>[]
+      loopConfigs: Prisma.$LoopConfigPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9327,6 +9567,7 @@ export namespace Prisma {
     agentMemories<T extends User$agentMemoriesArgs<ExtArgs> = {}>(args?: Subset<T, User$agentMemoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgentMemoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     agentEvents<T extends User$agentEventsArgs<ExtArgs> = {}>(args?: Subset<T, User$agentEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgentEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     councilSessions<T extends User$councilSessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$councilSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    loopConfigs<T extends User$loopConfigsArgs<ExtArgs> = {}>(args?: Subset<T, User$loopConfigsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoopConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9866,6 +10107,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CouncilSessionScalarFieldEnum | CouncilSessionScalarFieldEnum[]
+  }
+
+  /**
+   * User.loopConfigs
+   */
+  export type User$loopConfigsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopConfig
+     */
+    select?: LoopConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopConfig
+     */
+    omit?: LoopConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopConfigInclude<ExtArgs> | null
+    where?: LoopConfigWhereInput
+    orderBy?: LoopConfigOrderByWithRelationInput | LoopConfigOrderByWithRelationInput[]
+    cursor?: LoopConfigWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LoopConfigScalarFieldEnum | LoopConfigScalarFieldEnum[]
   }
 
   /**
@@ -17745,6 +18010,2367 @@ export namespace Prisma {
 
 
   /**
+   * Model LoopConfig
+   */
+
+  export type AggregateLoopConfig = {
+    _count: LoopConfigCountAggregateOutputType | null
+    _avg: LoopConfigAvgAggregateOutputType | null
+    _sum: LoopConfigSumAggregateOutputType | null
+    _min: LoopConfigMinAggregateOutputType | null
+    _max: LoopConfigMaxAggregateOutputType | null
+  }
+
+  export type LoopConfigAvgAggregateOutputType = {
+    intervalSecs: number | null
+  }
+
+  export type LoopConfigSumAggregateOutputType = {
+    intervalSecs: number | null
+  }
+
+  export type LoopConfigMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    name: string | null
+    description: string | null
+    intervalSecs: number | null
+    context: string | null
+    webhookUrl: string | null
+    isActive: boolean | null
+    lastRunAt: Date | null
+    nextRunAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LoopConfigMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    name: string | null
+    description: string | null
+    intervalSecs: number | null
+    context: string | null
+    webhookUrl: string | null
+    isActive: boolean | null
+    lastRunAt: Date | null
+    nextRunAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LoopConfigCountAggregateOutputType = {
+    id: number
+    userId: number
+    name: number
+    description: number
+    intervalSecs: number
+    context: number
+    webhookUrl: number
+    isActive: number
+    lastRunAt: number
+    nextRunAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LoopConfigAvgAggregateInputType = {
+    intervalSecs?: true
+  }
+
+  export type LoopConfigSumAggregateInputType = {
+    intervalSecs?: true
+  }
+
+  export type LoopConfigMinAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    description?: true
+    intervalSecs?: true
+    context?: true
+    webhookUrl?: true
+    isActive?: true
+    lastRunAt?: true
+    nextRunAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LoopConfigMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    description?: true
+    intervalSecs?: true
+    context?: true
+    webhookUrl?: true
+    isActive?: true
+    lastRunAt?: true
+    nextRunAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LoopConfigCountAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    description?: true
+    intervalSecs?: true
+    context?: true
+    webhookUrl?: true
+    isActive?: true
+    lastRunAt?: true
+    nextRunAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LoopConfigAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LoopConfig to aggregate.
+     */
+    where?: LoopConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoopConfigs to fetch.
+     */
+    orderBy?: LoopConfigOrderByWithRelationInput | LoopConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LoopConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoopConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoopConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LoopConfigs
+    **/
+    _count?: true | LoopConfigCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LoopConfigAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LoopConfigSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LoopConfigMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LoopConfigMaxAggregateInputType
+  }
+
+  export type GetLoopConfigAggregateType<T extends LoopConfigAggregateArgs> = {
+        [P in keyof T & keyof AggregateLoopConfig]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLoopConfig[P]>
+      : GetScalarType<T[P], AggregateLoopConfig[P]>
+  }
+
+
+
+
+  export type LoopConfigGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LoopConfigWhereInput
+    orderBy?: LoopConfigOrderByWithAggregationInput | LoopConfigOrderByWithAggregationInput[]
+    by: LoopConfigScalarFieldEnum[] | LoopConfigScalarFieldEnum
+    having?: LoopConfigScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LoopConfigCountAggregateInputType | true
+    _avg?: LoopConfigAvgAggregateInputType
+    _sum?: LoopConfigSumAggregateInputType
+    _min?: LoopConfigMinAggregateInputType
+    _max?: LoopConfigMaxAggregateInputType
+  }
+
+  export type LoopConfigGroupByOutputType = {
+    id: string
+    userId: string
+    name: string
+    description: string | null
+    intervalSecs: number
+    context: string | null
+    webhookUrl: string | null
+    isActive: boolean
+    lastRunAt: Date | null
+    nextRunAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: LoopConfigCountAggregateOutputType | null
+    _avg: LoopConfigAvgAggregateOutputType | null
+    _sum: LoopConfigSumAggregateOutputType | null
+    _min: LoopConfigMinAggregateOutputType | null
+    _max: LoopConfigMaxAggregateOutputType | null
+  }
+
+  type GetLoopConfigGroupByPayload<T extends LoopConfigGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LoopConfigGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LoopConfigGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LoopConfigGroupByOutputType[P]>
+            : GetScalarType<T[P], LoopConfigGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LoopConfigSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    description?: boolean
+    intervalSecs?: boolean
+    context?: boolean
+    webhookUrl?: boolean
+    isActive?: boolean
+    lastRunAt?: boolean
+    nextRunAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    runs?: boolean | LoopConfig$runsArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    _count?: boolean | LoopConfigCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["loopConfig"]>
+
+  export type LoopConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    description?: boolean
+    intervalSecs?: boolean
+    context?: boolean
+    webhookUrl?: boolean
+    isActive?: boolean
+    lastRunAt?: boolean
+    nextRunAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["loopConfig"]>
+
+  export type LoopConfigSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    description?: boolean
+    intervalSecs?: boolean
+    context?: boolean
+    webhookUrl?: boolean
+    isActive?: boolean
+    lastRunAt?: boolean
+    nextRunAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["loopConfig"]>
+
+  export type LoopConfigSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    description?: boolean
+    intervalSecs?: boolean
+    context?: boolean
+    webhookUrl?: boolean
+    isActive?: boolean
+    lastRunAt?: boolean
+    nextRunAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LoopConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "description" | "intervalSecs" | "context" | "webhookUrl" | "isActive" | "lastRunAt" | "nextRunAt" | "createdAt" | "updatedAt", ExtArgs["result"]["loopConfig"]>
+  export type LoopConfigInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    runs?: boolean | LoopConfig$runsArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    _count?: boolean | LoopConfigCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type LoopConfigIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type LoopConfigIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $LoopConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LoopConfig"
+    objects: {
+      runs: Prisma.$LoopRunPayload<ExtArgs>[]
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      name: string
+      description: string | null
+      intervalSecs: number
+      context: string | null
+      webhookUrl: string | null
+      isActive: boolean
+      lastRunAt: Date | null
+      nextRunAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["loopConfig"]>
+    composites: {}
+  }
+
+  type LoopConfigGetPayload<S extends boolean | null | undefined | LoopConfigDefaultArgs> = $Result.GetResult<Prisma.$LoopConfigPayload, S>
+
+  type LoopConfigCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LoopConfigFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LoopConfigCountAggregateInputType | true
+    }
+
+  export interface LoopConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LoopConfig'], meta: { name: 'LoopConfig' } }
+    /**
+     * Find zero or one LoopConfig that matches the filter.
+     * @param {LoopConfigFindUniqueArgs} args - Arguments to find a LoopConfig
+     * @example
+     * // Get one LoopConfig
+     * const loopConfig = await prisma.loopConfig.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LoopConfigFindUniqueArgs>(args: SelectSubset<T, LoopConfigFindUniqueArgs<ExtArgs>>): Prisma__LoopConfigClient<$Result.GetResult<Prisma.$LoopConfigPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LoopConfig that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LoopConfigFindUniqueOrThrowArgs} args - Arguments to find a LoopConfig
+     * @example
+     * // Get one LoopConfig
+     * const loopConfig = await prisma.loopConfig.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LoopConfigFindUniqueOrThrowArgs>(args: SelectSubset<T, LoopConfigFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LoopConfigClient<$Result.GetResult<Prisma.$LoopConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LoopConfig that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoopConfigFindFirstArgs} args - Arguments to find a LoopConfig
+     * @example
+     * // Get one LoopConfig
+     * const loopConfig = await prisma.loopConfig.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LoopConfigFindFirstArgs>(args?: SelectSubset<T, LoopConfigFindFirstArgs<ExtArgs>>): Prisma__LoopConfigClient<$Result.GetResult<Prisma.$LoopConfigPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LoopConfig that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoopConfigFindFirstOrThrowArgs} args - Arguments to find a LoopConfig
+     * @example
+     * // Get one LoopConfig
+     * const loopConfig = await prisma.loopConfig.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LoopConfigFindFirstOrThrowArgs>(args?: SelectSubset<T, LoopConfigFindFirstOrThrowArgs<ExtArgs>>): Prisma__LoopConfigClient<$Result.GetResult<Prisma.$LoopConfigPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LoopConfigs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoopConfigFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LoopConfigs
+     * const loopConfigs = await prisma.loopConfig.findMany()
+     * 
+     * // Get first 10 LoopConfigs
+     * const loopConfigs = await prisma.loopConfig.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const loopConfigWithIdOnly = await prisma.loopConfig.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LoopConfigFindManyArgs>(args?: SelectSubset<T, LoopConfigFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoopConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LoopConfig.
+     * @param {LoopConfigCreateArgs} args - Arguments to create a LoopConfig.
+     * @example
+     * // Create one LoopConfig
+     * const LoopConfig = await prisma.loopConfig.create({
+     *   data: {
+     *     // ... data to create a LoopConfig
+     *   }
+     * })
+     * 
+     */
+    create<T extends LoopConfigCreateArgs>(args: SelectSubset<T, LoopConfigCreateArgs<ExtArgs>>): Prisma__LoopConfigClient<$Result.GetResult<Prisma.$LoopConfigPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LoopConfigs.
+     * @param {LoopConfigCreateManyArgs} args - Arguments to create many LoopConfigs.
+     * @example
+     * // Create many LoopConfigs
+     * const loopConfig = await prisma.loopConfig.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LoopConfigCreateManyArgs>(args?: SelectSubset<T, LoopConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LoopConfigs and returns the data saved in the database.
+     * @param {LoopConfigCreateManyAndReturnArgs} args - Arguments to create many LoopConfigs.
+     * @example
+     * // Create many LoopConfigs
+     * const loopConfig = await prisma.loopConfig.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LoopConfigs and only return the `id`
+     * const loopConfigWithIdOnly = await prisma.loopConfig.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LoopConfigCreateManyAndReturnArgs>(args?: SelectSubset<T, LoopConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoopConfigPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LoopConfig.
+     * @param {LoopConfigDeleteArgs} args - Arguments to delete one LoopConfig.
+     * @example
+     * // Delete one LoopConfig
+     * const LoopConfig = await prisma.loopConfig.delete({
+     *   where: {
+     *     // ... filter to delete one LoopConfig
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LoopConfigDeleteArgs>(args: SelectSubset<T, LoopConfigDeleteArgs<ExtArgs>>): Prisma__LoopConfigClient<$Result.GetResult<Prisma.$LoopConfigPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LoopConfig.
+     * @param {LoopConfigUpdateArgs} args - Arguments to update one LoopConfig.
+     * @example
+     * // Update one LoopConfig
+     * const loopConfig = await prisma.loopConfig.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LoopConfigUpdateArgs>(args: SelectSubset<T, LoopConfigUpdateArgs<ExtArgs>>): Prisma__LoopConfigClient<$Result.GetResult<Prisma.$LoopConfigPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LoopConfigs.
+     * @param {LoopConfigDeleteManyArgs} args - Arguments to filter LoopConfigs to delete.
+     * @example
+     * // Delete a few LoopConfigs
+     * const { count } = await prisma.loopConfig.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LoopConfigDeleteManyArgs>(args?: SelectSubset<T, LoopConfigDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LoopConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoopConfigUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LoopConfigs
+     * const loopConfig = await prisma.loopConfig.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LoopConfigUpdateManyArgs>(args: SelectSubset<T, LoopConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LoopConfigs and returns the data updated in the database.
+     * @param {LoopConfigUpdateManyAndReturnArgs} args - Arguments to update many LoopConfigs.
+     * @example
+     * // Update many LoopConfigs
+     * const loopConfig = await prisma.loopConfig.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LoopConfigs and only return the `id`
+     * const loopConfigWithIdOnly = await prisma.loopConfig.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LoopConfigUpdateManyAndReturnArgs>(args: SelectSubset<T, LoopConfigUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoopConfigPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LoopConfig.
+     * @param {LoopConfigUpsertArgs} args - Arguments to update or create a LoopConfig.
+     * @example
+     * // Update or create a LoopConfig
+     * const loopConfig = await prisma.loopConfig.upsert({
+     *   create: {
+     *     // ... data to create a LoopConfig
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LoopConfig we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LoopConfigUpsertArgs>(args: SelectSubset<T, LoopConfigUpsertArgs<ExtArgs>>): Prisma__LoopConfigClient<$Result.GetResult<Prisma.$LoopConfigPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LoopConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoopConfigCountArgs} args - Arguments to filter LoopConfigs to count.
+     * @example
+     * // Count the number of LoopConfigs
+     * const count = await prisma.loopConfig.count({
+     *   where: {
+     *     // ... the filter for the LoopConfigs we want to count
+     *   }
+     * })
+    **/
+    count<T extends LoopConfigCountArgs>(
+      args?: Subset<T, LoopConfigCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LoopConfigCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LoopConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoopConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LoopConfigAggregateArgs>(args: Subset<T, LoopConfigAggregateArgs>): Prisma.PrismaPromise<GetLoopConfigAggregateType<T>>
+
+    /**
+     * Group by LoopConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoopConfigGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LoopConfigGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LoopConfigGroupByArgs['orderBy'] }
+        : { orderBy?: LoopConfigGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LoopConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLoopConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LoopConfig model
+   */
+  readonly fields: LoopConfigFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LoopConfig.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LoopConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    runs<T extends LoopConfig$runsArgs<ExtArgs> = {}>(args?: Subset<T, LoopConfig$runsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoopRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LoopConfig model
+   */
+  interface LoopConfigFieldRefs {
+    readonly id: FieldRef<"LoopConfig", 'String'>
+    readonly userId: FieldRef<"LoopConfig", 'String'>
+    readonly name: FieldRef<"LoopConfig", 'String'>
+    readonly description: FieldRef<"LoopConfig", 'String'>
+    readonly intervalSecs: FieldRef<"LoopConfig", 'Int'>
+    readonly context: FieldRef<"LoopConfig", 'String'>
+    readonly webhookUrl: FieldRef<"LoopConfig", 'String'>
+    readonly isActive: FieldRef<"LoopConfig", 'Boolean'>
+    readonly lastRunAt: FieldRef<"LoopConfig", 'DateTime'>
+    readonly nextRunAt: FieldRef<"LoopConfig", 'DateTime'>
+    readonly createdAt: FieldRef<"LoopConfig", 'DateTime'>
+    readonly updatedAt: FieldRef<"LoopConfig", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LoopConfig findUnique
+   */
+  export type LoopConfigFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopConfig
+     */
+    select?: LoopConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopConfig
+     */
+    omit?: LoopConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which LoopConfig to fetch.
+     */
+    where: LoopConfigWhereUniqueInput
+  }
+
+  /**
+   * LoopConfig findUniqueOrThrow
+   */
+  export type LoopConfigFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopConfig
+     */
+    select?: LoopConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopConfig
+     */
+    omit?: LoopConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which LoopConfig to fetch.
+     */
+    where: LoopConfigWhereUniqueInput
+  }
+
+  /**
+   * LoopConfig findFirst
+   */
+  export type LoopConfigFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopConfig
+     */
+    select?: LoopConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopConfig
+     */
+    omit?: LoopConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which LoopConfig to fetch.
+     */
+    where?: LoopConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoopConfigs to fetch.
+     */
+    orderBy?: LoopConfigOrderByWithRelationInput | LoopConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoopConfigs.
+     */
+    cursor?: LoopConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoopConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoopConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoopConfigs.
+     */
+    distinct?: LoopConfigScalarFieldEnum | LoopConfigScalarFieldEnum[]
+  }
+
+  /**
+   * LoopConfig findFirstOrThrow
+   */
+  export type LoopConfigFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopConfig
+     */
+    select?: LoopConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopConfig
+     */
+    omit?: LoopConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which LoopConfig to fetch.
+     */
+    where?: LoopConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoopConfigs to fetch.
+     */
+    orderBy?: LoopConfigOrderByWithRelationInput | LoopConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoopConfigs.
+     */
+    cursor?: LoopConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoopConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoopConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoopConfigs.
+     */
+    distinct?: LoopConfigScalarFieldEnum | LoopConfigScalarFieldEnum[]
+  }
+
+  /**
+   * LoopConfig findMany
+   */
+  export type LoopConfigFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopConfig
+     */
+    select?: LoopConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopConfig
+     */
+    omit?: LoopConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which LoopConfigs to fetch.
+     */
+    where?: LoopConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoopConfigs to fetch.
+     */
+    orderBy?: LoopConfigOrderByWithRelationInput | LoopConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LoopConfigs.
+     */
+    cursor?: LoopConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoopConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoopConfigs.
+     */
+    skip?: number
+    distinct?: LoopConfigScalarFieldEnum | LoopConfigScalarFieldEnum[]
+  }
+
+  /**
+   * LoopConfig create
+   */
+  export type LoopConfigCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopConfig
+     */
+    select?: LoopConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopConfig
+     */
+    omit?: LoopConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LoopConfig.
+     */
+    data: XOR<LoopConfigCreateInput, LoopConfigUncheckedCreateInput>
+  }
+
+  /**
+   * LoopConfig createMany
+   */
+  export type LoopConfigCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LoopConfigs.
+     */
+    data: LoopConfigCreateManyInput | LoopConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LoopConfig createManyAndReturn
+   */
+  export type LoopConfigCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopConfig
+     */
+    select?: LoopConfigSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopConfig
+     */
+    omit?: LoopConfigOmit<ExtArgs> | null
+    /**
+     * The data used to create many LoopConfigs.
+     */
+    data: LoopConfigCreateManyInput | LoopConfigCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopConfigIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LoopConfig update
+   */
+  export type LoopConfigUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopConfig
+     */
+    select?: LoopConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopConfig
+     */
+    omit?: LoopConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LoopConfig.
+     */
+    data: XOR<LoopConfigUpdateInput, LoopConfigUncheckedUpdateInput>
+    /**
+     * Choose, which LoopConfig to update.
+     */
+    where: LoopConfigWhereUniqueInput
+  }
+
+  /**
+   * LoopConfig updateMany
+   */
+  export type LoopConfigUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LoopConfigs.
+     */
+    data: XOR<LoopConfigUpdateManyMutationInput, LoopConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which LoopConfigs to update
+     */
+    where?: LoopConfigWhereInput
+    /**
+     * Limit how many LoopConfigs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LoopConfig updateManyAndReturn
+   */
+  export type LoopConfigUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopConfig
+     */
+    select?: LoopConfigSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopConfig
+     */
+    omit?: LoopConfigOmit<ExtArgs> | null
+    /**
+     * The data used to update LoopConfigs.
+     */
+    data: XOR<LoopConfigUpdateManyMutationInput, LoopConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which LoopConfigs to update
+     */
+    where?: LoopConfigWhereInput
+    /**
+     * Limit how many LoopConfigs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopConfigIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LoopConfig upsert
+   */
+  export type LoopConfigUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopConfig
+     */
+    select?: LoopConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopConfig
+     */
+    omit?: LoopConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopConfigInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LoopConfig to update in case it exists.
+     */
+    where: LoopConfigWhereUniqueInput
+    /**
+     * In case the LoopConfig found by the `where` argument doesn't exist, create a new LoopConfig with this data.
+     */
+    create: XOR<LoopConfigCreateInput, LoopConfigUncheckedCreateInput>
+    /**
+     * In case the LoopConfig was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LoopConfigUpdateInput, LoopConfigUncheckedUpdateInput>
+  }
+
+  /**
+   * LoopConfig delete
+   */
+  export type LoopConfigDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopConfig
+     */
+    select?: LoopConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopConfig
+     */
+    omit?: LoopConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopConfigInclude<ExtArgs> | null
+    /**
+     * Filter which LoopConfig to delete.
+     */
+    where: LoopConfigWhereUniqueInput
+  }
+
+  /**
+   * LoopConfig deleteMany
+   */
+  export type LoopConfigDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LoopConfigs to delete
+     */
+    where?: LoopConfigWhereInput
+    /**
+     * Limit how many LoopConfigs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LoopConfig.runs
+   */
+  export type LoopConfig$runsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopRun
+     */
+    select?: LoopRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopRun
+     */
+    omit?: LoopRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopRunInclude<ExtArgs> | null
+    where?: LoopRunWhereInput
+    orderBy?: LoopRunOrderByWithRelationInput | LoopRunOrderByWithRelationInput[]
+    cursor?: LoopRunWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LoopRunScalarFieldEnum | LoopRunScalarFieldEnum[]
+  }
+
+  /**
+   * LoopConfig without action
+   */
+  export type LoopConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopConfig
+     */
+    select?: LoopConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopConfig
+     */
+    omit?: LoopConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopConfigInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LoopRun
+   */
+
+  export type AggregateLoopRun = {
+    _count: LoopRunCountAggregateOutputType | null
+    _avg: LoopRunAvgAggregateOutputType | null
+    _sum: LoopRunSumAggregateOutputType | null
+    _min: LoopRunMinAggregateOutputType | null
+    _max: LoopRunMaxAggregateOutputType | null
+  }
+
+  export type LoopRunAvgAggregateOutputType = {
+    issuesFound: number | null
+    issuesFixed: number | null
+  }
+
+  export type LoopRunSumAggregateOutputType = {
+    issuesFound: number | null
+    issuesFixed: number | null
+  }
+
+  export type LoopRunMinAggregateOutputType = {
+    id: string | null
+    loopId: string | null
+    status: $Enums.LoopRunStatus | null
+    monitorOutput: string | null
+    healerOutput: string | null
+    issuesFound: number | null
+    issuesFixed: number | null
+    createdAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type LoopRunMaxAggregateOutputType = {
+    id: string | null
+    loopId: string | null
+    status: $Enums.LoopRunStatus | null
+    monitorOutput: string | null
+    healerOutput: string | null
+    issuesFound: number | null
+    issuesFixed: number | null
+    createdAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type LoopRunCountAggregateOutputType = {
+    id: number
+    loopId: number
+    status: number
+    monitorOutput: number
+    healerOutput: number
+    issuesFound: number
+    issuesFixed: number
+    createdAt: number
+    completedAt: number
+    _all: number
+  }
+
+
+  export type LoopRunAvgAggregateInputType = {
+    issuesFound?: true
+    issuesFixed?: true
+  }
+
+  export type LoopRunSumAggregateInputType = {
+    issuesFound?: true
+    issuesFixed?: true
+  }
+
+  export type LoopRunMinAggregateInputType = {
+    id?: true
+    loopId?: true
+    status?: true
+    monitorOutput?: true
+    healerOutput?: true
+    issuesFound?: true
+    issuesFixed?: true
+    createdAt?: true
+    completedAt?: true
+  }
+
+  export type LoopRunMaxAggregateInputType = {
+    id?: true
+    loopId?: true
+    status?: true
+    monitorOutput?: true
+    healerOutput?: true
+    issuesFound?: true
+    issuesFixed?: true
+    createdAt?: true
+    completedAt?: true
+  }
+
+  export type LoopRunCountAggregateInputType = {
+    id?: true
+    loopId?: true
+    status?: true
+    monitorOutput?: true
+    healerOutput?: true
+    issuesFound?: true
+    issuesFixed?: true
+    createdAt?: true
+    completedAt?: true
+    _all?: true
+  }
+
+  export type LoopRunAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LoopRun to aggregate.
+     */
+    where?: LoopRunWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoopRuns to fetch.
+     */
+    orderBy?: LoopRunOrderByWithRelationInput | LoopRunOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LoopRunWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoopRuns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoopRuns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LoopRuns
+    **/
+    _count?: true | LoopRunCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LoopRunAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LoopRunSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LoopRunMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LoopRunMaxAggregateInputType
+  }
+
+  export type GetLoopRunAggregateType<T extends LoopRunAggregateArgs> = {
+        [P in keyof T & keyof AggregateLoopRun]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLoopRun[P]>
+      : GetScalarType<T[P], AggregateLoopRun[P]>
+  }
+
+
+
+
+  export type LoopRunGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LoopRunWhereInput
+    orderBy?: LoopRunOrderByWithAggregationInput | LoopRunOrderByWithAggregationInput[]
+    by: LoopRunScalarFieldEnum[] | LoopRunScalarFieldEnum
+    having?: LoopRunScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LoopRunCountAggregateInputType | true
+    _avg?: LoopRunAvgAggregateInputType
+    _sum?: LoopRunSumAggregateInputType
+    _min?: LoopRunMinAggregateInputType
+    _max?: LoopRunMaxAggregateInputType
+  }
+
+  export type LoopRunGroupByOutputType = {
+    id: string
+    loopId: string
+    status: $Enums.LoopRunStatus
+    monitorOutput: string | null
+    healerOutput: string | null
+    issuesFound: number
+    issuesFixed: number
+    createdAt: Date
+    completedAt: Date | null
+    _count: LoopRunCountAggregateOutputType | null
+    _avg: LoopRunAvgAggregateOutputType | null
+    _sum: LoopRunSumAggregateOutputType | null
+    _min: LoopRunMinAggregateOutputType | null
+    _max: LoopRunMaxAggregateOutputType | null
+  }
+
+  type GetLoopRunGroupByPayload<T extends LoopRunGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LoopRunGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LoopRunGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LoopRunGroupByOutputType[P]>
+            : GetScalarType<T[P], LoopRunGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LoopRunSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    loopId?: boolean
+    status?: boolean
+    monitorOutput?: boolean
+    healerOutput?: boolean
+    issuesFound?: boolean
+    issuesFixed?: boolean
+    createdAt?: boolean
+    completedAt?: boolean
+    config?: boolean | LoopConfigDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["loopRun"]>
+
+  export type LoopRunSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    loopId?: boolean
+    status?: boolean
+    monitorOutput?: boolean
+    healerOutput?: boolean
+    issuesFound?: boolean
+    issuesFixed?: boolean
+    createdAt?: boolean
+    completedAt?: boolean
+    config?: boolean | LoopConfigDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["loopRun"]>
+
+  export type LoopRunSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    loopId?: boolean
+    status?: boolean
+    monitorOutput?: boolean
+    healerOutput?: boolean
+    issuesFound?: boolean
+    issuesFixed?: boolean
+    createdAt?: boolean
+    completedAt?: boolean
+    config?: boolean | LoopConfigDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["loopRun"]>
+
+  export type LoopRunSelectScalar = {
+    id?: boolean
+    loopId?: boolean
+    status?: boolean
+    monitorOutput?: boolean
+    healerOutput?: boolean
+    issuesFound?: boolean
+    issuesFixed?: boolean
+    createdAt?: boolean
+    completedAt?: boolean
+  }
+
+  export type LoopRunOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "loopId" | "status" | "monitorOutput" | "healerOutput" | "issuesFound" | "issuesFixed" | "createdAt" | "completedAt", ExtArgs["result"]["loopRun"]>
+  export type LoopRunInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    config?: boolean | LoopConfigDefaultArgs<ExtArgs>
+  }
+  export type LoopRunIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    config?: boolean | LoopConfigDefaultArgs<ExtArgs>
+  }
+  export type LoopRunIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    config?: boolean | LoopConfigDefaultArgs<ExtArgs>
+  }
+
+  export type $LoopRunPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LoopRun"
+    objects: {
+      config: Prisma.$LoopConfigPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      loopId: string
+      status: $Enums.LoopRunStatus
+      monitorOutput: string | null
+      healerOutput: string | null
+      issuesFound: number
+      issuesFixed: number
+      createdAt: Date
+      completedAt: Date | null
+    }, ExtArgs["result"]["loopRun"]>
+    composites: {}
+  }
+
+  type LoopRunGetPayload<S extends boolean | null | undefined | LoopRunDefaultArgs> = $Result.GetResult<Prisma.$LoopRunPayload, S>
+
+  type LoopRunCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LoopRunFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LoopRunCountAggregateInputType | true
+    }
+
+  export interface LoopRunDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LoopRun'], meta: { name: 'LoopRun' } }
+    /**
+     * Find zero or one LoopRun that matches the filter.
+     * @param {LoopRunFindUniqueArgs} args - Arguments to find a LoopRun
+     * @example
+     * // Get one LoopRun
+     * const loopRun = await prisma.loopRun.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LoopRunFindUniqueArgs>(args: SelectSubset<T, LoopRunFindUniqueArgs<ExtArgs>>): Prisma__LoopRunClient<$Result.GetResult<Prisma.$LoopRunPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LoopRun that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LoopRunFindUniqueOrThrowArgs} args - Arguments to find a LoopRun
+     * @example
+     * // Get one LoopRun
+     * const loopRun = await prisma.loopRun.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LoopRunFindUniqueOrThrowArgs>(args: SelectSubset<T, LoopRunFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LoopRunClient<$Result.GetResult<Prisma.$LoopRunPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LoopRun that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoopRunFindFirstArgs} args - Arguments to find a LoopRun
+     * @example
+     * // Get one LoopRun
+     * const loopRun = await prisma.loopRun.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LoopRunFindFirstArgs>(args?: SelectSubset<T, LoopRunFindFirstArgs<ExtArgs>>): Prisma__LoopRunClient<$Result.GetResult<Prisma.$LoopRunPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LoopRun that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoopRunFindFirstOrThrowArgs} args - Arguments to find a LoopRun
+     * @example
+     * // Get one LoopRun
+     * const loopRun = await prisma.loopRun.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LoopRunFindFirstOrThrowArgs>(args?: SelectSubset<T, LoopRunFindFirstOrThrowArgs<ExtArgs>>): Prisma__LoopRunClient<$Result.GetResult<Prisma.$LoopRunPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LoopRuns that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoopRunFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LoopRuns
+     * const loopRuns = await prisma.loopRun.findMany()
+     * 
+     * // Get first 10 LoopRuns
+     * const loopRuns = await prisma.loopRun.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const loopRunWithIdOnly = await prisma.loopRun.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LoopRunFindManyArgs>(args?: SelectSubset<T, LoopRunFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoopRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LoopRun.
+     * @param {LoopRunCreateArgs} args - Arguments to create a LoopRun.
+     * @example
+     * // Create one LoopRun
+     * const LoopRun = await prisma.loopRun.create({
+     *   data: {
+     *     // ... data to create a LoopRun
+     *   }
+     * })
+     * 
+     */
+    create<T extends LoopRunCreateArgs>(args: SelectSubset<T, LoopRunCreateArgs<ExtArgs>>): Prisma__LoopRunClient<$Result.GetResult<Prisma.$LoopRunPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LoopRuns.
+     * @param {LoopRunCreateManyArgs} args - Arguments to create many LoopRuns.
+     * @example
+     * // Create many LoopRuns
+     * const loopRun = await prisma.loopRun.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LoopRunCreateManyArgs>(args?: SelectSubset<T, LoopRunCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LoopRuns and returns the data saved in the database.
+     * @param {LoopRunCreateManyAndReturnArgs} args - Arguments to create many LoopRuns.
+     * @example
+     * // Create many LoopRuns
+     * const loopRun = await prisma.loopRun.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LoopRuns and only return the `id`
+     * const loopRunWithIdOnly = await prisma.loopRun.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LoopRunCreateManyAndReturnArgs>(args?: SelectSubset<T, LoopRunCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoopRunPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LoopRun.
+     * @param {LoopRunDeleteArgs} args - Arguments to delete one LoopRun.
+     * @example
+     * // Delete one LoopRun
+     * const LoopRun = await prisma.loopRun.delete({
+     *   where: {
+     *     // ... filter to delete one LoopRun
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LoopRunDeleteArgs>(args: SelectSubset<T, LoopRunDeleteArgs<ExtArgs>>): Prisma__LoopRunClient<$Result.GetResult<Prisma.$LoopRunPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LoopRun.
+     * @param {LoopRunUpdateArgs} args - Arguments to update one LoopRun.
+     * @example
+     * // Update one LoopRun
+     * const loopRun = await prisma.loopRun.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LoopRunUpdateArgs>(args: SelectSubset<T, LoopRunUpdateArgs<ExtArgs>>): Prisma__LoopRunClient<$Result.GetResult<Prisma.$LoopRunPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LoopRuns.
+     * @param {LoopRunDeleteManyArgs} args - Arguments to filter LoopRuns to delete.
+     * @example
+     * // Delete a few LoopRuns
+     * const { count } = await prisma.loopRun.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LoopRunDeleteManyArgs>(args?: SelectSubset<T, LoopRunDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LoopRuns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoopRunUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LoopRuns
+     * const loopRun = await prisma.loopRun.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LoopRunUpdateManyArgs>(args: SelectSubset<T, LoopRunUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LoopRuns and returns the data updated in the database.
+     * @param {LoopRunUpdateManyAndReturnArgs} args - Arguments to update many LoopRuns.
+     * @example
+     * // Update many LoopRuns
+     * const loopRun = await prisma.loopRun.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LoopRuns and only return the `id`
+     * const loopRunWithIdOnly = await prisma.loopRun.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LoopRunUpdateManyAndReturnArgs>(args: SelectSubset<T, LoopRunUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoopRunPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LoopRun.
+     * @param {LoopRunUpsertArgs} args - Arguments to update or create a LoopRun.
+     * @example
+     * // Update or create a LoopRun
+     * const loopRun = await prisma.loopRun.upsert({
+     *   create: {
+     *     // ... data to create a LoopRun
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LoopRun we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LoopRunUpsertArgs>(args: SelectSubset<T, LoopRunUpsertArgs<ExtArgs>>): Prisma__LoopRunClient<$Result.GetResult<Prisma.$LoopRunPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LoopRuns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoopRunCountArgs} args - Arguments to filter LoopRuns to count.
+     * @example
+     * // Count the number of LoopRuns
+     * const count = await prisma.loopRun.count({
+     *   where: {
+     *     // ... the filter for the LoopRuns we want to count
+     *   }
+     * })
+    **/
+    count<T extends LoopRunCountArgs>(
+      args?: Subset<T, LoopRunCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LoopRunCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LoopRun.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoopRunAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LoopRunAggregateArgs>(args: Subset<T, LoopRunAggregateArgs>): Prisma.PrismaPromise<GetLoopRunAggregateType<T>>
+
+    /**
+     * Group by LoopRun.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoopRunGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LoopRunGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LoopRunGroupByArgs['orderBy'] }
+        : { orderBy?: LoopRunGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LoopRunGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLoopRunGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LoopRun model
+   */
+  readonly fields: LoopRunFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LoopRun.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LoopRunClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    config<T extends LoopConfigDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LoopConfigDefaultArgs<ExtArgs>>): Prisma__LoopConfigClient<$Result.GetResult<Prisma.$LoopConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LoopRun model
+   */
+  interface LoopRunFieldRefs {
+    readonly id: FieldRef<"LoopRun", 'String'>
+    readonly loopId: FieldRef<"LoopRun", 'String'>
+    readonly status: FieldRef<"LoopRun", 'LoopRunStatus'>
+    readonly monitorOutput: FieldRef<"LoopRun", 'String'>
+    readonly healerOutput: FieldRef<"LoopRun", 'String'>
+    readonly issuesFound: FieldRef<"LoopRun", 'Int'>
+    readonly issuesFixed: FieldRef<"LoopRun", 'Int'>
+    readonly createdAt: FieldRef<"LoopRun", 'DateTime'>
+    readonly completedAt: FieldRef<"LoopRun", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LoopRun findUnique
+   */
+  export type LoopRunFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopRun
+     */
+    select?: LoopRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopRun
+     */
+    omit?: LoopRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopRunInclude<ExtArgs> | null
+    /**
+     * Filter, which LoopRun to fetch.
+     */
+    where: LoopRunWhereUniqueInput
+  }
+
+  /**
+   * LoopRun findUniqueOrThrow
+   */
+  export type LoopRunFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopRun
+     */
+    select?: LoopRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopRun
+     */
+    omit?: LoopRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopRunInclude<ExtArgs> | null
+    /**
+     * Filter, which LoopRun to fetch.
+     */
+    where: LoopRunWhereUniqueInput
+  }
+
+  /**
+   * LoopRun findFirst
+   */
+  export type LoopRunFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopRun
+     */
+    select?: LoopRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopRun
+     */
+    omit?: LoopRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopRunInclude<ExtArgs> | null
+    /**
+     * Filter, which LoopRun to fetch.
+     */
+    where?: LoopRunWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoopRuns to fetch.
+     */
+    orderBy?: LoopRunOrderByWithRelationInput | LoopRunOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoopRuns.
+     */
+    cursor?: LoopRunWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoopRuns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoopRuns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoopRuns.
+     */
+    distinct?: LoopRunScalarFieldEnum | LoopRunScalarFieldEnum[]
+  }
+
+  /**
+   * LoopRun findFirstOrThrow
+   */
+  export type LoopRunFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopRun
+     */
+    select?: LoopRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopRun
+     */
+    omit?: LoopRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopRunInclude<ExtArgs> | null
+    /**
+     * Filter, which LoopRun to fetch.
+     */
+    where?: LoopRunWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoopRuns to fetch.
+     */
+    orderBy?: LoopRunOrderByWithRelationInput | LoopRunOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoopRuns.
+     */
+    cursor?: LoopRunWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoopRuns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoopRuns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoopRuns.
+     */
+    distinct?: LoopRunScalarFieldEnum | LoopRunScalarFieldEnum[]
+  }
+
+  /**
+   * LoopRun findMany
+   */
+  export type LoopRunFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopRun
+     */
+    select?: LoopRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopRun
+     */
+    omit?: LoopRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopRunInclude<ExtArgs> | null
+    /**
+     * Filter, which LoopRuns to fetch.
+     */
+    where?: LoopRunWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoopRuns to fetch.
+     */
+    orderBy?: LoopRunOrderByWithRelationInput | LoopRunOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LoopRuns.
+     */
+    cursor?: LoopRunWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoopRuns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoopRuns.
+     */
+    skip?: number
+    distinct?: LoopRunScalarFieldEnum | LoopRunScalarFieldEnum[]
+  }
+
+  /**
+   * LoopRun create
+   */
+  export type LoopRunCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopRun
+     */
+    select?: LoopRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopRun
+     */
+    omit?: LoopRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopRunInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LoopRun.
+     */
+    data: XOR<LoopRunCreateInput, LoopRunUncheckedCreateInput>
+  }
+
+  /**
+   * LoopRun createMany
+   */
+  export type LoopRunCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LoopRuns.
+     */
+    data: LoopRunCreateManyInput | LoopRunCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LoopRun createManyAndReturn
+   */
+  export type LoopRunCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopRun
+     */
+    select?: LoopRunSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopRun
+     */
+    omit?: LoopRunOmit<ExtArgs> | null
+    /**
+     * The data used to create many LoopRuns.
+     */
+    data: LoopRunCreateManyInput | LoopRunCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopRunIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LoopRun update
+   */
+  export type LoopRunUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopRun
+     */
+    select?: LoopRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopRun
+     */
+    omit?: LoopRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopRunInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LoopRun.
+     */
+    data: XOR<LoopRunUpdateInput, LoopRunUncheckedUpdateInput>
+    /**
+     * Choose, which LoopRun to update.
+     */
+    where: LoopRunWhereUniqueInput
+  }
+
+  /**
+   * LoopRun updateMany
+   */
+  export type LoopRunUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LoopRuns.
+     */
+    data: XOR<LoopRunUpdateManyMutationInput, LoopRunUncheckedUpdateManyInput>
+    /**
+     * Filter which LoopRuns to update
+     */
+    where?: LoopRunWhereInput
+    /**
+     * Limit how many LoopRuns to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LoopRun updateManyAndReturn
+   */
+  export type LoopRunUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopRun
+     */
+    select?: LoopRunSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopRun
+     */
+    omit?: LoopRunOmit<ExtArgs> | null
+    /**
+     * The data used to update LoopRuns.
+     */
+    data: XOR<LoopRunUpdateManyMutationInput, LoopRunUncheckedUpdateManyInput>
+    /**
+     * Filter which LoopRuns to update
+     */
+    where?: LoopRunWhereInput
+    /**
+     * Limit how many LoopRuns to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopRunIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LoopRun upsert
+   */
+  export type LoopRunUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopRun
+     */
+    select?: LoopRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopRun
+     */
+    omit?: LoopRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopRunInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LoopRun to update in case it exists.
+     */
+    where: LoopRunWhereUniqueInput
+    /**
+     * In case the LoopRun found by the `where` argument doesn't exist, create a new LoopRun with this data.
+     */
+    create: XOR<LoopRunCreateInput, LoopRunUncheckedCreateInput>
+    /**
+     * In case the LoopRun was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LoopRunUpdateInput, LoopRunUncheckedUpdateInput>
+  }
+
+  /**
+   * LoopRun delete
+   */
+  export type LoopRunDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopRun
+     */
+    select?: LoopRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopRun
+     */
+    omit?: LoopRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopRunInclude<ExtArgs> | null
+    /**
+     * Filter which LoopRun to delete.
+     */
+    where: LoopRunWhereUniqueInput
+  }
+
+  /**
+   * LoopRun deleteMany
+   */
+  export type LoopRunDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LoopRuns to delete
+     */
+    where?: LoopRunWhereInput
+    /**
+     * Limit how many LoopRuns to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LoopRun without action
+   */
+  export type LoopRunDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoopRun
+     */
+    select?: LoopRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoopRun
+     */
+    omit?: LoopRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoopRunInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -17948,6 +20574,39 @@ export namespace Prisma {
   export type CouncilMessageScalarFieldEnum = (typeof CouncilMessageScalarFieldEnum)[keyof typeof CouncilMessageScalarFieldEnum]
 
 
+  export const LoopConfigScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    name: 'name',
+    description: 'description',
+    intervalSecs: 'intervalSecs',
+    context: 'context',
+    webhookUrl: 'webhookUrl',
+    isActive: 'isActive',
+    lastRunAt: 'lastRunAt',
+    nextRunAt: 'nextRunAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LoopConfigScalarFieldEnum = (typeof LoopConfigScalarFieldEnum)[keyof typeof LoopConfigScalarFieldEnum]
+
+
+  export const LoopRunScalarFieldEnum: {
+    id: 'id',
+    loopId: 'loopId',
+    status: 'status',
+    monitorOutput: 'monitorOutput',
+    healerOutput: 'healerOutput',
+    issuesFound: 'issuesFound',
+    issuesFixed: 'issuesFixed',
+    createdAt: 'createdAt',
+    completedAt: 'completedAt'
+  };
+
+  export type LoopRunScalarFieldEnum = (typeof LoopRunScalarFieldEnum)[keyof typeof LoopRunScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -18107,6 +20766,20 @@ export namespace Prisma {
    * Reference to a field of type 'CouncilStatus[]'
    */
   export type ListEnumCouncilStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CouncilStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'LoopRunStatus'
+   */
+  export type EnumLoopRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LoopRunStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'LoopRunStatus[]'
+   */
+  export type ListEnumLoopRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LoopRunStatus[]'>
     
   /**
    * Deep Input Types
@@ -18527,6 +21200,7 @@ export namespace Prisma {
     agentMemories?: AgentMemoryListRelationFilter
     agentEvents?: AgentEventListRelationFilter
     councilSessions?: CouncilSessionListRelationFilter
+    loopConfigs?: LoopConfigListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -18540,6 +21214,7 @@ export namespace Prisma {
     agentMemories?: AgentMemoryOrderByRelationAggregateInput
     agentEvents?: AgentEventOrderByRelationAggregateInput
     councilSessions?: CouncilSessionOrderByRelationAggregateInput
+    loopConfigs?: LoopConfigOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -18556,6 +21231,7 @@ export namespace Prisma {
     agentMemories?: AgentMemoryListRelationFilter
     agentEvents?: AgentEventListRelationFilter
     councilSessions?: CouncilSessionListRelationFilter
+    loopConfigs?: LoopConfigListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -19083,6 +21759,178 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"CouncilMessage"> | Date | string
   }
 
+  export type LoopConfigWhereInput = {
+    AND?: LoopConfigWhereInput | LoopConfigWhereInput[]
+    OR?: LoopConfigWhereInput[]
+    NOT?: LoopConfigWhereInput | LoopConfigWhereInput[]
+    id?: StringFilter<"LoopConfig"> | string
+    userId?: StringFilter<"LoopConfig"> | string
+    name?: StringFilter<"LoopConfig"> | string
+    description?: StringNullableFilter<"LoopConfig"> | string | null
+    intervalSecs?: IntFilter<"LoopConfig"> | number
+    context?: StringNullableFilter<"LoopConfig"> | string | null
+    webhookUrl?: StringNullableFilter<"LoopConfig"> | string | null
+    isActive?: BoolFilter<"LoopConfig"> | boolean
+    lastRunAt?: DateTimeNullableFilter<"LoopConfig"> | Date | string | null
+    nextRunAt?: DateTimeNullableFilter<"LoopConfig"> | Date | string | null
+    createdAt?: DateTimeFilter<"LoopConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"LoopConfig"> | Date | string
+    runs?: LoopRunListRelationFilter
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type LoopConfigOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    intervalSecs?: SortOrder
+    context?: SortOrderInput | SortOrder
+    webhookUrl?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    lastRunAt?: SortOrderInput | SortOrder
+    nextRunAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    runs?: LoopRunOrderByRelationAggregateInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type LoopConfigWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LoopConfigWhereInput | LoopConfigWhereInput[]
+    OR?: LoopConfigWhereInput[]
+    NOT?: LoopConfigWhereInput | LoopConfigWhereInput[]
+    userId?: StringFilter<"LoopConfig"> | string
+    name?: StringFilter<"LoopConfig"> | string
+    description?: StringNullableFilter<"LoopConfig"> | string | null
+    intervalSecs?: IntFilter<"LoopConfig"> | number
+    context?: StringNullableFilter<"LoopConfig"> | string | null
+    webhookUrl?: StringNullableFilter<"LoopConfig"> | string | null
+    isActive?: BoolFilter<"LoopConfig"> | boolean
+    lastRunAt?: DateTimeNullableFilter<"LoopConfig"> | Date | string | null
+    nextRunAt?: DateTimeNullableFilter<"LoopConfig"> | Date | string | null
+    createdAt?: DateTimeFilter<"LoopConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"LoopConfig"> | Date | string
+    runs?: LoopRunListRelationFilter
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type LoopConfigOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    intervalSecs?: SortOrder
+    context?: SortOrderInput | SortOrder
+    webhookUrl?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    lastRunAt?: SortOrderInput | SortOrder
+    nextRunAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LoopConfigCountOrderByAggregateInput
+    _avg?: LoopConfigAvgOrderByAggregateInput
+    _max?: LoopConfigMaxOrderByAggregateInput
+    _min?: LoopConfigMinOrderByAggregateInput
+    _sum?: LoopConfigSumOrderByAggregateInput
+  }
+
+  export type LoopConfigScalarWhereWithAggregatesInput = {
+    AND?: LoopConfigScalarWhereWithAggregatesInput | LoopConfigScalarWhereWithAggregatesInput[]
+    OR?: LoopConfigScalarWhereWithAggregatesInput[]
+    NOT?: LoopConfigScalarWhereWithAggregatesInput | LoopConfigScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LoopConfig"> | string
+    userId?: StringWithAggregatesFilter<"LoopConfig"> | string
+    name?: StringWithAggregatesFilter<"LoopConfig"> | string
+    description?: StringNullableWithAggregatesFilter<"LoopConfig"> | string | null
+    intervalSecs?: IntWithAggregatesFilter<"LoopConfig"> | number
+    context?: StringNullableWithAggregatesFilter<"LoopConfig"> | string | null
+    webhookUrl?: StringNullableWithAggregatesFilter<"LoopConfig"> | string | null
+    isActive?: BoolWithAggregatesFilter<"LoopConfig"> | boolean
+    lastRunAt?: DateTimeNullableWithAggregatesFilter<"LoopConfig"> | Date | string | null
+    nextRunAt?: DateTimeNullableWithAggregatesFilter<"LoopConfig"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"LoopConfig"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LoopConfig"> | Date | string
+  }
+
+  export type LoopRunWhereInput = {
+    AND?: LoopRunWhereInput | LoopRunWhereInput[]
+    OR?: LoopRunWhereInput[]
+    NOT?: LoopRunWhereInput | LoopRunWhereInput[]
+    id?: StringFilter<"LoopRun"> | string
+    loopId?: StringFilter<"LoopRun"> | string
+    status?: EnumLoopRunStatusFilter<"LoopRun"> | $Enums.LoopRunStatus
+    monitorOutput?: StringNullableFilter<"LoopRun"> | string | null
+    healerOutput?: StringNullableFilter<"LoopRun"> | string | null
+    issuesFound?: IntFilter<"LoopRun"> | number
+    issuesFixed?: IntFilter<"LoopRun"> | number
+    createdAt?: DateTimeFilter<"LoopRun"> | Date | string
+    completedAt?: DateTimeNullableFilter<"LoopRun"> | Date | string | null
+    config?: XOR<LoopConfigScalarRelationFilter, LoopConfigWhereInput>
+  }
+
+  export type LoopRunOrderByWithRelationInput = {
+    id?: SortOrder
+    loopId?: SortOrder
+    status?: SortOrder
+    monitorOutput?: SortOrderInput | SortOrder
+    healerOutput?: SortOrderInput | SortOrder
+    issuesFound?: SortOrder
+    issuesFixed?: SortOrder
+    createdAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    config?: LoopConfigOrderByWithRelationInput
+  }
+
+  export type LoopRunWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LoopRunWhereInput | LoopRunWhereInput[]
+    OR?: LoopRunWhereInput[]
+    NOT?: LoopRunWhereInput | LoopRunWhereInput[]
+    loopId?: StringFilter<"LoopRun"> | string
+    status?: EnumLoopRunStatusFilter<"LoopRun"> | $Enums.LoopRunStatus
+    monitorOutput?: StringNullableFilter<"LoopRun"> | string | null
+    healerOutput?: StringNullableFilter<"LoopRun"> | string | null
+    issuesFound?: IntFilter<"LoopRun"> | number
+    issuesFixed?: IntFilter<"LoopRun"> | number
+    createdAt?: DateTimeFilter<"LoopRun"> | Date | string
+    completedAt?: DateTimeNullableFilter<"LoopRun"> | Date | string | null
+    config?: XOR<LoopConfigScalarRelationFilter, LoopConfigWhereInput>
+  }, "id">
+
+  export type LoopRunOrderByWithAggregationInput = {
+    id?: SortOrder
+    loopId?: SortOrder
+    status?: SortOrder
+    monitorOutput?: SortOrderInput | SortOrder
+    healerOutput?: SortOrderInput | SortOrder
+    issuesFound?: SortOrder
+    issuesFixed?: SortOrder
+    createdAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    _count?: LoopRunCountOrderByAggregateInput
+    _avg?: LoopRunAvgOrderByAggregateInput
+    _max?: LoopRunMaxOrderByAggregateInput
+    _min?: LoopRunMinOrderByAggregateInput
+    _sum?: LoopRunSumOrderByAggregateInput
+  }
+
+  export type LoopRunScalarWhereWithAggregatesInput = {
+    AND?: LoopRunScalarWhereWithAggregatesInput | LoopRunScalarWhereWithAggregatesInput[]
+    OR?: LoopRunScalarWhereWithAggregatesInput[]
+    NOT?: LoopRunScalarWhereWithAggregatesInput | LoopRunScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LoopRun"> | string
+    loopId?: StringWithAggregatesFilter<"LoopRun"> | string
+    status?: EnumLoopRunStatusWithAggregatesFilter<"LoopRun"> | $Enums.LoopRunStatus
+    monitorOutput?: StringNullableWithAggregatesFilter<"LoopRun"> | string | null
+    healerOutput?: StringNullableWithAggregatesFilter<"LoopRun"> | string | null
+    issuesFound?: IntWithAggregatesFilter<"LoopRun"> | number
+    issuesFixed?: IntWithAggregatesFilter<"LoopRun"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"LoopRun"> | Date | string
+    completedAt?: DateTimeNullableWithAggregatesFilter<"LoopRun"> | Date | string | null
+  }
+
   export type HealthCheckCreateInput = {
     id?: string
     message: string
@@ -19541,6 +22389,7 @@ export namespace Prisma {
     agentMemories?: AgentMemoryCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventCreateNestedManyWithoutUserInput
     councilSessions?: CouncilSessionCreateNestedManyWithoutUserInput
+    loopConfigs?: LoopConfigCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -19554,6 +22403,7 @@ export namespace Prisma {
     agentMemories?: AgentMemoryUncheckedCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventUncheckedCreateNestedManyWithoutUserInput
     councilSessions?: CouncilSessionUncheckedCreateNestedManyWithoutUserInput
+    loopConfigs?: LoopConfigUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -19567,6 +22417,7 @@ export namespace Prisma {
     agentMemories?: AgentMemoryUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUpdateManyWithoutUserNestedInput
     councilSessions?: CouncilSessionUpdateManyWithoutUserNestedInput
+    loopConfigs?: LoopConfigUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -19580,6 +22431,7 @@ export namespace Prisma {
     agentMemories?: AgentMemoryUncheckedUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUncheckedUpdateManyWithoutUserNestedInput
     councilSessions?: CouncilSessionUncheckedUpdateManyWithoutUserNestedInput
+    loopConfigs?: LoopConfigUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -20146,6 +22998,197 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LoopConfigCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    intervalSecs?: number
+    context?: string | null
+    webhookUrl?: string | null
+    isActive?: boolean
+    lastRunAt?: Date | string | null
+    nextRunAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    runs?: LoopRunCreateNestedManyWithoutConfigInput
+    user: UserCreateNestedOneWithoutLoopConfigsInput
+  }
+
+  export type LoopConfigUncheckedCreateInput = {
+    id?: string
+    userId: string
+    name: string
+    description?: string | null
+    intervalSecs?: number
+    context?: string | null
+    webhookUrl?: string | null
+    isActive?: boolean
+    lastRunAt?: Date | string | null
+    nextRunAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    runs?: LoopRunUncheckedCreateNestedManyWithoutConfigInput
+  }
+
+  export type LoopConfigUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalSecs?: IntFieldUpdateOperationsInput | number
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    webhookUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    runs?: LoopRunUpdateManyWithoutConfigNestedInput
+    user?: UserUpdateOneRequiredWithoutLoopConfigsNestedInput
+  }
+
+  export type LoopConfigUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalSecs?: IntFieldUpdateOperationsInput | number
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    webhookUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    runs?: LoopRunUncheckedUpdateManyWithoutConfigNestedInput
+  }
+
+  export type LoopConfigCreateManyInput = {
+    id?: string
+    userId: string
+    name: string
+    description?: string | null
+    intervalSecs?: number
+    context?: string | null
+    webhookUrl?: string | null
+    isActive?: boolean
+    lastRunAt?: Date | string | null
+    nextRunAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LoopConfigUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalSecs?: IntFieldUpdateOperationsInput | number
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    webhookUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoopConfigUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalSecs?: IntFieldUpdateOperationsInput | number
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    webhookUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoopRunCreateInput = {
+    id?: string
+    status?: $Enums.LoopRunStatus
+    monitorOutput?: string | null
+    healerOutput?: string | null
+    issuesFound?: number
+    issuesFixed?: number
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+    config: LoopConfigCreateNestedOneWithoutRunsInput
+  }
+
+  export type LoopRunUncheckedCreateInput = {
+    id?: string
+    loopId: string
+    status?: $Enums.LoopRunStatus
+    monitorOutput?: string | null
+    healerOutput?: string | null
+    issuesFound?: number
+    issuesFixed?: number
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type LoopRunUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumLoopRunStatusFieldUpdateOperationsInput | $Enums.LoopRunStatus
+    monitorOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    healerOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    issuesFound?: IntFieldUpdateOperationsInput | number
+    issuesFixed?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    config?: LoopConfigUpdateOneRequiredWithoutRunsNestedInput
+  }
+
+  export type LoopRunUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    loopId?: StringFieldUpdateOperationsInput | string
+    status?: EnumLoopRunStatusFieldUpdateOperationsInput | $Enums.LoopRunStatus
+    monitorOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    healerOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    issuesFound?: IntFieldUpdateOperationsInput | number
+    issuesFixed?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LoopRunCreateManyInput = {
+    id?: string
+    loopId: string
+    status?: $Enums.LoopRunStatus
+    monitorOutput?: string | null
+    healerOutput?: string | null
+    issuesFound?: number
+    issuesFixed?: number
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type LoopRunUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumLoopRunStatusFieldUpdateOperationsInput | $Enums.LoopRunStatus
+    monitorOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    healerOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    issuesFound?: IntFieldUpdateOperationsInput | number
+    issuesFixed?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LoopRunUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    loopId?: StringFieldUpdateOperationsInput | string
+    status?: EnumLoopRunStatusFieldUpdateOperationsInput | $Enums.LoopRunStatus
+    monitorOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    healerOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    issuesFound?: IntFieldUpdateOperationsInput | number
+    issuesFixed?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -20568,6 +23611,12 @@ export namespace Prisma {
     none?: CouncilSessionWhereInput
   }
 
+  export type LoopConfigListRelationFilter = {
+    every?: LoopConfigWhereInput
+    some?: LoopConfigWhereInput
+    none?: LoopConfigWhereInput
+  }
+
   export type ApiKeyOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -20585,6 +23634,10 @@ export namespace Prisma {
   }
 
   export type CouncilSessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LoopConfigOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -21048,6 +24101,137 @@ export namespace Prisma {
     outTokens?: SortOrder
   }
 
+  export type LoopRunListRelationFilter = {
+    every?: LoopRunWhereInput
+    some?: LoopRunWhereInput
+    none?: LoopRunWhereInput
+  }
+
+  export type LoopRunOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LoopConfigCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    intervalSecs?: SortOrder
+    context?: SortOrder
+    webhookUrl?: SortOrder
+    isActive?: SortOrder
+    lastRunAt?: SortOrder
+    nextRunAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LoopConfigAvgOrderByAggregateInput = {
+    intervalSecs?: SortOrder
+  }
+
+  export type LoopConfigMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    intervalSecs?: SortOrder
+    context?: SortOrder
+    webhookUrl?: SortOrder
+    isActive?: SortOrder
+    lastRunAt?: SortOrder
+    nextRunAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LoopConfigMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    intervalSecs?: SortOrder
+    context?: SortOrder
+    webhookUrl?: SortOrder
+    isActive?: SortOrder
+    lastRunAt?: SortOrder
+    nextRunAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LoopConfigSumOrderByAggregateInput = {
+    intervalSecs?: SortOrder
+  }
+
+  export type EnumLoopRunStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.LoopRunStatus | EnumLoopRunStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LoopRunStatus[] | ListEnumLoopRunStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LoopRunStatus[] | ListEnumLoopRunStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLoopRunStatusFilter<$PrismaModel> | $Enums.LoopRunStatus
+  }
+
+  export type LoopConfigScalarRelationFilter = {
+    is?: LoopConfigWhereInput
+    isNot?: LoopConfigWhereInput
+  }
+
+  export type LoopRunCountOrderByAggregateInput = {
+    id?: SortOrder
+    loopId?: SortOrder
+    status?: SortOrder
+    monitorOutput?: SortOrder
+    healerOutput?: SortOrder
+    issuesFound?: SortOrder
+    issuesFixed?: SortOrder
+    createdAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type LoopRunAvgOrderByAggregateInput = {
+    issuesFound?: SortOrder
+    issuesFixed?: SortOrder
+  }
+
+  export type LoopRunMaxOrderByAggregateInput = {
+    id?: SortOrder
+    loopId?: SortOrder
+    status?: SortOrder
+    monitorOutput?: SortOrder
+    healerOutput?: SortOrder
+    issuesFound?: SortOrder
+    issuesFixed?: SortOrder
+    createdAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type LoopRunMinOrderByAggregateInput = {
+    id?: SortOrder
+    loopId?: SortOrder
+    status?: SortOrder
+    monitorOutput?: SortOrder
+    healerOutput?: SortOrder
+    issuesFound?: SortOrder
+    issuesFixed?: SortOrder
+    createdAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type LoopRunSumOrderByAggregateInput = {
+    issuesFound?: SortOrder
+    issuesFixed?: SortOrder
+  }
+
+  export type EnumLoopRunStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LoopRunStatus | EnumLoopRunStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LoopRunStatus[] | ListEnumLoopRunStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LoopRunStatus[] | ListEnumLoopRunStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLoopRunStatusWithAggregatesFilter<$PrismaModel> | $Enums.LoopRunStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLoopRunStatusFilter<$PrismaModel>
+    _max?: NestedEnumLoopRunStatusFilter<$PrismaModel>
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -21223,6 +24407,13 @@ export namespace Prisma {
     connect?: CouncilSessionWhereUniqueInput | CouncilSessionWhereUniqueInput[]
   }
 
+  export type LoopConfigCreateNestedManyWithoutUserInput = {
+    create?: XOR<LoopConfigCreateWithoutUserInput, LoopConfigUncheckedCreateWithoutUserInput> | LoopConfigCreateWithoutUserInput[] | LoopConfigUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LoopConfigCreateOrConnectWithoutUserInput | LoopConfigCreateOrConnectWithoutUserInput[]
+    createMany?: LoopConfigCreateManyUserInputEnvelope
+    connect?: LoopConfigWhereUniqueInput | LoopConfigWhereUniqueInput[]
+  }
+
   export type ApiKeyUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<ApiKeyCreateWithoutUserInput, ApiKeyUncheckedCreateWithoutUserInput> | ApiKeyCreateWithoutUserInput[] | ApiKeyUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ApiKeyCreateOrConnectWithoutUserInput | ApiKeyCreateOrConnectWithoutUserInput[]
@@ -21256,6 +24447,13 @@ export namespace Prisma {
     connectOrCreate?: CouncilSessionCreateOrConnectWithoutUserInput | CouncilSessionCreateOrConnectWithoutUserInput[]
     createMany?: CouncilSessionCreateManyUserInputEnvelope
     connect?: CouncilSessionWhereUniqueInput | CouncilSessionWhereUniqueInput[]
+  }
+
+  export type LoopConfigUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<LoopConfigCreateWithoutUserInput, LoopConfigUncheckedCreateWithoutUserInput> | LoopConfigCreateWithoutUserInput[] | LoopConfigUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LoopConfigCreateOrConnectWithoutUserInput | LoopConfigCreateOrConnectWithoutUserInput[]
+    createMany?: LoopConfigCreateManyUserInputEnvelope
+    connect?: LoopConfigWhereUniqueInput | LoopConfigWhereUniqueInput[]
   }
 
   export type ApiKeyUpdateManyWithoutUserNestedInput = {
@@ -21328,6 +24526,20 @@ export namespace Prisma {
     deleteMany?: CouncilSessionScalarWhereInput | CouncilSessionScalarWhereInput[]
   }
 
+  export type LoopConfigUpdateManyWithoutUserNestedInput = {
+    create?: XOR<LoopConfigCreateWithoutUserInput, LoopConfigUncheckedCreateWithoutUserInput> | LoopConfigCreateWithoutUserInput[] | LoopConfigUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LoopConfigCreateOrConnectWithoutUserInput | LoopConfigCreateOrConnectWithoutUserInput[]
+    upsert?: LoopConfigUpsertWithWhereUniqueWithoutUserInput | LoopConfigUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: LoopConfigCreateManyUserInputEnvelope
+    set?: LoopConfigWhereUniqueInput | LoopConfigWhereUniqueInput[]
+    disconnect?: LoopConfigWhereUniqueInput | LoopConfigWhereUniqueInput[]
+    delete?: LoopConfigWhereUniqueInput | LoopConfigWhereUniqueInput[]
+    connect?: LoopConfigWhereUniqueInput | LoopConfigWhereUniqueInput[]
+    update?: LoopConfigUpdateWithWhereUniqueWithoutUserInput | LoopConfigUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: LoopConfigUpdateManyWithWhereWithoutUserInput | LoopConfigUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: LoopConfigScalarWhereInput | LoopConfigScalarWhereInput[]
+  }
+
   export type ApiKeyUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ApiKeyCreateWithoutUserInput, ApiKeyUncheckedCreateWithoutUserInput> | ApiKeyCreateWithoutUserInput[] | ApiKeyUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ApiKeyCreateOrConnectWithoutUserInput | ApiKeyCreateOrConnectWithoutUserInput[]
@@ -21396,6 +24608,20 @@ export namespace Prisma {
     update?: CouncilSessionUpdateWithWhereUniqueWithoutUserInput | CouncilSessionUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: CouncilSessionUpdateManyWithWhereWithoutUserInput | CouncilSessionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: CouncilSessionScalarWhereInput | CouncilSessionScalarWhereInput[]
+  }
+
+  export type LoopConfigUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<LoopConfigCreateWithoutUserInput, LoopConfigUncheckedCreateWithoutUserInput> | LoopConfigCreateWithoutUserInput[] | LoopConfigUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LoopConfigCreateOrConnectWithoutUserInput | LoopConfigCreateOrConnectWithoutUserInput[]
+    upsert?: LoopConfigUpsertWithWhereUniqueWithoutUserInput | LoopConfigUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: LoopConfigCreateManyUserInputEnvelope
+    set?: LoopConfigWhereUniqueInput | LoopConfigWhereUniqueInput[]
+    disconnect?: LoopConfigWhereUniqueInput | LoopConfigWhereUniqueInput[]
+    delete?: LoopConfigWhereUniqueInput | LoopConfigWhereUniqueInput[]
+    connect?: LoopConfigWhereUniqueInput | LoopConfigWhereUniqueInput[]
+    update?: LoopConfigUpdateWithWhereUniqueWithoutUserInput | LoopConfigUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: LoopConfigUpdateManyWithWhereWithoutUserInput | LoopConfigUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: LoopConfigScalarWhereInput | LoopConfigScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutApiKeysInput = {
@@ -21614,6 +24840,80 @@ export namespace Prisma {
     upsert?: CouncilSessionUpsertWithoutMessagesInput
     connect?: CouncilSessionWhereUniqueInput
     update?: XOR<XOR<CouncilSessionUpdateToOneWithWhereWithoutMessagesInput, CouncilSessionUpdateWithoutMessagesInput>, CouncilSessionUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type LoopRunCreateNestedManyWithoutConfigInput = {
+    create?: XOR<LoopRunCreateWithoutConfigInput, LoopRunUncheckedCreateWithoutConfigInput> | LoopRunCreateWithoutConfigInput[] | LoopRunUncheckedCreateWithoutConfigInput[]
+    connectOrCreate?: LoopRunCreateOrConnectWithoutConfigInput | LoopRunCreateOrConnectWithoutConfigInput[]
+    createMany?: LoopRunCreateManyConfigInputEnvelope
+    connect?: LoopRunWhereUniqueInput | LoopRunWhereUniqueInput[]
+  }
+
+  export type UserCreateNestedOneWithoutLoopConfigsInput = {
+    create?: XOR<UserCreateWithoutLoopConfigsInput, UserUncheckedCreateWithoutLoopConfigsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLoopConfigsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type LoopRunUncheckedCreateNestedManyWithoutConfigInput = {
+    create?: XOR<LoopRunCreateWithoutConfigInput, LoopRunUncheckedCreateWithoutConfigInput> | LoopRunCreateWithoutConfigInput[] | LoopRunUncheckedCreateWithoutConfigInput[]
+    connectOrCreate?: LoopRunCreateOrConnectWithoutConfigInput | LoopRunCreateOrConnectWithoutConfigInput[]
+    createMany?: LoopRunCreateManyConfigInputEnvelope
+    connect?: LoopRunWhereUniqueInput | LoopRunWhereUniqueInput[]
+  }
+
+  export type LoopRunUpdateManyWithoutConfigNestedInput = {
+    create?: XOR<LoopRunCreateWithoutConfigInput, LoopRunUncheckedCreateWithoutConfigInput> | LoopRunCreateWithoutConfigInput[] | LoopRunUncheckedCreateWithoutConfigInput[]
+    connectOrCreate?: LoopRunCreateOrConnectWithoutConfigInput | LoopRunCreateOrConnectWithoutConfigInput[]
+    upsert?: LoopRunUpsertWithWhereUniqueWithoutConfigInput | LoopRunUpsertWithWhereUniqueWithoutConfigInput[]
+    createMany?: LoopRunCreateManyConfigInputEnvelope
+    set?: LoopRunWhereUniqueInput | LoopRunWhereUniqueInput[]
+    disconnect?: LoopRunWhereUniqueInput | LoopRunWhereUniqueInput[]
+    delete?: LoopRunWhereUniqueInput | LoopRunWhereUniqueInput[]
+    connect?: LoopRunWhereUniqueInput | LoopRunWhereUniqueInput[]
+    update?: LoopRunUpdateWithWhereUniqueWithoutConfigInput | LoopRunUpdateWithWhereUniqueWithoutConfigInput[]
+    updateMany?: LoopRunUpdateManyWithWhereWithoutConfigInput | LoopRunUpdateManyWithWhereWithoutConfigInput[]
+    deleteMany?: LoopRunScalarWhereInput | LoopRunScalarWhereInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutLoopConfigsNestedInput = {
+    create?: XOR<UserCreateWithoutLoopConfigsInput, UserUncheckedCreateWithoutLoopConfigsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLoopConfigsInput
+    upsert?: UserUpsertWithoutLoopConfigsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLoopConfigsInput, UserUpdateWithoutLoopConfigsInput>, UserUncheckedUpdateWithoutLoopConfigsInput>
+  }
+
+  export type LoopRunUncheckedUpdateManyWithoutConfigNestedInput = {
+    create?: XOR<LoopRunCreateWithoutConfigInput, LoopRunUncheckedCreateWithoutConfigInput> | LoopRunCreateWithoutConfigInput[] | LoopRunUncheckedCreateWithoutConfigInput[]
+    connectOrCreate?: LoopRunCreateOrConnectWithoutConfigInput | LoopRunCreateOrConnectWithoutConfigInput[]
+    upsert?: LoopRunUpsertWithWhereUniqueWithoutConfigInput | LoopRunUpsertWithWhereUniqueWithoutConfigInput[]
+    createMany?: LoopRunCreateManyConfigInputEnvelope
+    set?: LoopRunWhereUniqueInput | LoopRunWhereUniqueInput[]
+    disconnect?: LoopRunWhereUniqueInput | LoopRunWhereUniqueInput[]
+    delete?: LoopRunWhereUniqueInput | LoopRunWhereUniqueInput[]
+    connect?: LoopRunWhereUniqueInput | LoopRunWhereUniqueInput[]
+    update?: LoopRunUpdateWithWhereUniqueWithoutConfigInput | LoopRunUpdateWithWhereUniqueWithoutConfigInput[]
+    updateMany?: LoopRunUpdateManyWithWhereWithoutConfigInput | LoopRunUpdateManyWithWhereWithoutConfigInput[]
+    deleteMany?: LoopRunScalarWhereInput | LoopRunScalarWhereInput[]
+  }
+
+  export type LoopConfigCreateNestedOneWithoutRunsInput = {
+    create?: XOR<LoopConfigCreateWithoutRunsInput, LoopConfigUncheckedCreateWithoutRunsInput>
+    connectOrCreate?: LoopConfigCreateOrConnectWithoutRunsInput
+    connect?: LoopConfigWhereUniqueInput
+  }
+
+  export type EnumLoopRunStatusFieldUpdateOperationsInput = {
+    set?: $Enums.LoopRunStatus
+  }
+
+  export type LoopConfigUpdateOneRequiredWithoutRunsNestedInput = {
+    create?: XOR<LoopConfigCreateWithoutRunsInput, LoopConfigUncheckedCreateWithoutRunsInput>
+    connectOrCreate?: LoopConfigCreateOrConnectWithoutRunsInput
+    upsert?: LoopConfigUpsertWithoutRunsInput
+    connect?: LoopConfigWhereUniqueInput
+    update?: XOR<XOR<LoopConfigUpdateToOneWithWhereWithoutRunsInput, LoopConfigUpdateWithoutRunsInput>, LoopConfigUncheckedUpdateWithoutRunsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -21916,6 +25216,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumCouncilStatusFilter<$PrismaModel>
     _max?: NestedEnumCouncilStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumLoopRunStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.LoopRunStatus | EnumLoopRunStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LoopRunStatus[] | ListEnumLoopRunStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LoopRunStatus[] | ListEnumLoopRunStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLoopRunStatusFilter<$PrismaModel> | $Enums.LoopRunStatus
+  }
+
+  export type NestedEnumLoopRunStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LoopRunStatus | EnumLoopRunStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LoopRunStatus[] | ListEnumLoopRunStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LoopRunStatus[] | ListEnumLoopRunStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLoopRunStatusWithAggregatesFilter<$PrismaModel> | $Enums.LoopRunStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLoopRunStatusFilter<$PrismaModel>
+    _max?: NestedEnumLoopRunStatusFilter<$PrismaModel>
   }
 
   export type ProjectCreateWithoutWorkspaceInput = {
@@ -22344,6 +25661,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type LoopConfigCreateWithoutUserInput = {
+    id?: string
+    name: string
+    description?: string | null
+    intervalSecs?: number
+    context?: string | null
+    webhookUrl?: string | null
+    isActive?: boolean
+    lastRunAt?: Date | string | null
+    nextRunAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    runs?: LoopRunCreateNestedManyWithoutConfigInput
+  }
+
+  export type LoopConfigUncheckedCreateWithoutUserInput = {
+    id?: string
+    name: string
+    description?: string | null
+    intervalSecs?: number
+    context?: string | null
+    webhookUrl?: string | null
+    isActive?: boolean
+    lastRunAt?: Date | string | null
+    nextRunAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    runs?: LoopRunUncheckedCreateNestedManyWithoutConfigInput
+  }
+
+  export type LoopConfigCreateOrConnectWithoutUserInput = {
+    where: LoopConfigWhereUniqueInput
+    create: XOR<LoopConfigCreateWithoutUserInput, LoopConfigUncheckedCreateWithoutUserInput>
+  }
+
+  export type LoopConfigCreateManyUserInputEnvelope = {
+    data: LoopConfigCreateManyUserInput | LoopConfigCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ApiKeyUpsertWithWhereUniqueWithoutUserInput = {
     where: ApiKeyWhereUniqueInput
     update: XOR<ApiKeyUpdateWithoutUserInput, ApiKeyUncheckedUpdateWithoutUserInput>
@@ -22495,6 +25852,40 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"CouncilSession"> | Date | string
   }
 
+  export type LoopConfigUpsertWithWhereUniqueWithoutUserInput = {
+    where: LoopConfigWhereUniqueInput
+    update: XOR<LoopConfigUpdateWithoutUserInput, LoopConfigUncheckedUpdateWithoutUserInput>
+    create: XOR<LoopConfigCreateWithoutUserInput, LoopConfigUncheckedCreateWithoutUserInput>
+  }
+
+  export type LoopConfigUpdateWithWhereUniqueWithoutUserInput = {
+    where: LoopConfigWhereUniqueInput
+    data: XOR<LoopConfigUpdateWithoutUserInput, LoopConfigUncheckedUpdateWithoutUserInput>
+  }
+
+  export type LoopConfigUpdateManyWithWhereWithoutUserInput = {
+    where: LoopConfigScalarWhereInput
+    data: XOR<LoopConfigUpdateManyMutationInput, LoopConfigUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type LoopConfigScalarWhereInput = {
+    AND?: LoopConfigScalarWhereInput | LoopConfigScalarWhereInput[]
+    OR?: LoopConfigScalarWhereInput[]
+    NOT?: LoopConfigScalarWhereInput | LoopConfigScalarWhereInput[]
+    id?: StringFilter<"LoopConfig"> | string
+    userId?: StringFilter<"LoopConfig"> | string
+    name?: StringFilter<"LoopConfig"> | string
+    description?: StringNullableFilter<"LoopConfig"> | string | null
+    intervalSecs?: IntFilter<"LoopConfig"> | number
+    context?: StringNullableFilter<"LoopConfig"> | string | null
+    webhookUrl?: StringNullableFilter<"LoopConfig"> | string | null
+    isActive?: BoolFilter<"LoopConfig"> | boolean
+    lastRunAt?: DateTimeNullableFilter<"LoopConfig"> | Date | string | null
+    nextRunAt?: DateTimeNullableFilter<"LoopConfig"> | Date | string | null
+    createdAt?: DateTimeFilter<"LoopConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"LoopConfig"> | Date | string
+  }
+
   export type UserCreateWithoutApiKeysInput = {
     id?: string
     email: string
@@ -22505,6 +25896,7 @@ export namespace Prisma {
     agentMemories?: AgentMemoryCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventCreateNestedManyWithoutUserInput
     councilSessions?: CouncilSessionCreateNestedManyWithoutUserInput
+    loopConfigs?: LoopConfigCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApiKeysInput = {
@@ -22517,6 +25909,7 @@ export namespace Prisma {
     agentMemories?: AgentMemoryUncheckedCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventUncheckedCreateNestedManyWithoutUserInput
     councilSessions?: CouncilSessionUncheckedCreateNestedManyWithoutUserInput
+    loopConfigs?: LoopConfigUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApiKeysInput = {
@@ -22545,6 +25938,7 @@ export namespace Prisma {
     agentMemories?: AgentMemoryUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUpdateManyWithoutUserNestedInput
     councilSessions?: CouncilSessionUpdateManyWithoutUserNestedInput
+    loopConfigs?: LoopConfigUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApiKeysInput = {
@@ -22557,6 +25951,7 @@ export namespace Prisma {
     agentMemories?: AgentMemoryUncheckedUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUncheckedUpdateManyWithoutUserNestedInput
     councilSessions?: CouncilSessionUncheckedUpdateManyWithoutUserNestedInput
+    loopConfigs?: LoopConfigUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UsageLogCreateWithoutSandboxInput = {
@@ -22597,6 +25992,7 @@ export namespace Prisma {
     agentMemories?: AgentMemoryCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventCreateNestedManyWithoutUserInput
     councilSessions?: CouncilSessionCreateNestedManyWithoutUserInput
+    loopConfigs?: LoopConfigCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSandboxesInput = {
@@ -22609,6 +26005,7 @@ export namespace Prisma {
     agentMemories?: AgentMemoryUncheckedCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventUncheckedCreateNestedManyWithoutUserInput
     councilSessions?: CouncilSessionUncheckedCreateNestedManyWithoutUserInput
+    loopConfigs?: LoopConfigUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSandboxesInput = {
@@ -22666,6 +26063,7 @@ export namespace Prisma {
     agentMemories?: AgentMemoryUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUpdateManyWithoutUserNestedInput
     councilSessions?: CouncilSessionUpdateManyWithoutUserNestedInput
+    loopConfigs?: LoopConfigUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSandboxesInput = {
@@ -22678,6 +26076,7 @@ export namespace Prisma {
     agentMemories?: AgentMemoryUncheckedUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUncheckedUpdateManyWithoutUserNestedInput
     councilSessions?: CouncilSessionUncheckedUpdateManyWithoutUserNestedInput
+    loopConfigs?: LoopConfigUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SandboxCreateWithoutUsageLogsInput = {
@@ -22758,6 +26157,7 @@ export namespace Prisma {
     sandboxes?: SandboxCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventCreateNestedManyWithoutUserInput
     councilSessions?: CouncilSessionCreateNestedManyWithoutUserInput
+    loopConfigs?: LoopConfigCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAgentMemoriesInput = {
@@ -22770,6 +26170,7 @@ export namespace Prisma {
     sandboxes?: SandboxUncheckedCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventUncheckedCreateNestedManyWithoutUserInput
     councilSessions?: CouncilSessionUncheckedCreateNestedManyWithoutUserInput
+    loopConfigs?: LoopConfigUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAgentMemoriesInput = {
@@ -22798,6 +26199,7 @@ export namespace Prisma {
     sandboxes?: SandboxUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUpdateManyWithoutUserNestedInput
     councilSessions?: CouncilSessionUpdateManyWithoutUserNestedInput
+    loopConfigs?: LoopConfigUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAgentMemoriesInput = {
@@ -22810,6 +26212,7 @@ export namespace Prisma {
     sandboxes?: SandboxUncheckedUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUncheckedUpdateManyWithoutUserNestedInput
     councilSessions?: CouncilSessionUncheckedUpdateManyWithoutUserNestedInput
+    loopConfigs?: LoopConfigUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAgentEventsInput = {
@@ -22822,6 +26225,7 @@ export namespace Prisma {
     sandboxes?: SandboxCreateNestedManyWithoutUserInput
     agentMemories?: AgentMemoryCreateNestedManyWithoutUserInput
     councilSessions?: CouncilSessionCreateNestedManyWithoutUserInput
+    loopConfigs?: LoopConfigCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAgentEventsInput = {
@@ -22834,6 +26238,7 @@ export namespace Prisma {
     sandboxes?: SandboxUncheckedCreateNestedManyWithoutUserInput
     agentMemories?: AgentMemoryUncheckedCreateNestedManyWithoutUserInput
     councilSessions?: CouncilSessionUncheckedCreateNestedManyWithoutUserInput
+    loopConfigs?: LoopConfigUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAgentEventsInput = {
@@ -22862,6 +26267,7 @@ export namespace Prisma {
     sandboxes?: SandboxUpdateManyWithoutUserNestedInput
     agentMemories?: AgentMemoryUpdateManyWithoutUserNestedInput
     councilSessions?: CouncilSessionUpdateManyWithoutUserNestedInput
+    loopConfigs?: LoopConfigUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAgentEventsInput = {
@@ -22874,6 +26280,7 @@ export namespace Prisma {
     sandboxes?: SandboxUncheckedUpdateManyWithoutUserNestedInput
     agentMemories?: AgentMemoryUncheckedUpdateManyWithoutUserNestedInput
     councilSessions?: CouncilSessionUncheckedUpdateManyWithoutUserNestedInput
+    loopConfigs?: LoopConfigUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CouncilMessageCreateWithoutSessionInput = {
@@ -22916,6 +26323,7 @@ export namespace Prisma {
     sandboxes?: SandboxCreateNestedManyWithoutUserInput
     agentMemories?: AgentMemoryCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventCreateNestedManyWithoutUserInput
+    loopConfigs?: LoopConfigCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCouncilSessionsInput = {
@@ -22928,6 +26336,7 @@ export namespace Prisma {
     sandboxes?: SandboxUncheckedCreateNestedManyWithoutUserInput
     agentMemories?: AgentMemoryUncheckedCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventUncheckedCreateNestedManyWithoutUserInput
+    loopConfigs?: LoopConfigUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCouncilSessionsInput = {
@@ -22986,6 +26395,7 @@ export namespace Prisma {
     sandboxes?: SandboxUpdateManyWithoutUserNestedInput
     agentMemories?: AgentMemoryUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUpdateManyWithoutUserNestedInput
+    loopConfigs?: LoopConfigUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCouncilSessionsInput = {
@@ -22998,6 +26408,7 @@ export namespace Prisma {
     sandboxes?: SandboxUncheckedUpdateManyWithoutUserNestedInput
     agentMemories?: AgentMemoryUncheckedUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUncheckedUpdateManyWithoutUserNestedInput
+    loopConfigs?: LoopConfigUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CouncilSessionCreateWithoutMessagesInput = {
@@ -23060,6 +26471,213 @@ export namespace Prisma {
     status?: EnumCouncilStatusFieldUpdateOperationsInput | $Enums.CouncilStatus
     result?: NullableStringFieldUpdateOperationsInput | string | null
     errorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoopRunCreateWithoutConfigInput = {
+    id?: string
+    status?: $Enums.LoopRunStatus
+    monitorOutput?: string | null
+    healerOutput?: string | null
+    issuesFound?: number
+    issuesFixed?: number
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type LoopRunUncheckedCreateWithoutConfigInput = {
+    id?: string
+    status?: $Enums.LoopRunStatus
+    monitorOutput?: string | null
+    healerOutput?: string | null
+    issuesFound?: number
+    issuesFixed?: number
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type LoopRunCreateOrConnectWithoutConfigInput = {
+    where: LoopRunWhereUniqueInput
+    create: XOR<LoopRunCreateWithoutConfigInput, LoopRunUncheckedCreateWithoutConfigInput>
+  }
+
+  export type LoopRunCreateManyConfigInputEnvelope = {
+    data: LoopRunCreateManyConfigInput | LoopRunCreateManyConfigInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserCreateWithoutLoopConfigsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
+    sandboxes?: SandboxCreateNestedManyWithoutUserInput
+    agentMemories?: AgentMemoryCreateNestedManyWithoutUserInput
+    agentEvents?: AgentEventCreateNestedManyWithoutUserInput
+    councilSessions?: CouncilSessionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutLoopConfigsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
+    sandboxes?: SandboxUncheckedCreateNestedManyWithoutUserInput
+    agentMemories?: AgentMemoryUncheckedCreateNestedManyWithoutUserInput
+    agentEvents?: AgentEventUncheckedCreateNestedManyWithoutUserInput
+    councilSessions?: CouncilSessionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutLoopConfigsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutLoopConfigsInput, UserUncheckedCreateWithoutLoopConfigsInput>
+  }
+
+  export type LoopRunUpsertWithWhereUniqueWithoutConfigInput = {
+    where: LoopRunWhereUniqueInput
+    update: XOR<LoopRunUpdateWithoutConfigInput, LoopRunUncheckedUpdateWithoutConfigInput>
+    create: XOR<LoopRunCreateWithoutConfigInput, LoopRunUncheckedCreateWithoutConfigInput>
+  }
+
+  export type LoopRunUpdateWithWhereUniqueWithoutConfigInput = {
+    where: LoopRunWhereUniqueInput
+    data: XOR<LoopRunUpdateWithoutConfigInput, LoopRunUncheckedUpdateWithoutConfigInput>
+  }
+
+  export type LoopRunUpdateManyWithWhereWithoutConfigInput = {
+    where: LoopRunScalarWhereInput
+    data: XOR<LoopRunUpdateManyMutationInput, LoopRunUncheckedUpdateManyWithoutConfigInput>
+  }
+
+  export type LoopRunScalarWhereInput = {
+    AND?: LoopRunScalarWhereInput | LoopRunScalarWhereInput[]
+    OR?: LoopRunScalarWhereInput[]
+    NOT?: LoopRunScalarWhereInput | LoopRunScalarWhereInput[]
+    id?: StringFilter<"LoopRun"> | string
+    loopId?: StringFilter<"LoopRun"> | string
+    status?: EnumLoopRunStatusFilter<"LoopRun"> | $Enums.LoopRunStatus
+    monitorOutput?: StringNullableFilter<"LoopRun"> | string | null
+    healerOutput?: StringNullableFilter<"LoopRun"> | string | null
+    issuesFound?: IntFilter<"LoopRun"> | number
+    issuesFixed?: IntFilter<"LoopRun"> | number
+    createdAt?: DateTimeFilter<"LoopRun"> | Date | string
+    completedAt?: DateTimeNullableFilter<"LoopRun"> | Date | string | null
+  }
+
+  export type UserUpsertWithoutLoopConfigsInput = {
+    update: XOR<UserUpdateWithoutLoopConfigsInput, UserUncheckedUpdateWithoutLoopConfigsInput>
+    create: XOR<UserCreateWithoutLoopConfigsInput, UserUncheckedCreateWithoutLoopConfigsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutLoopConfigsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutLoopConfigsInput, UserUncheckedUpdateWithoutLoopConfigsInput>
+  }
+
+  export type UserUpdateWithoutLoopConfigsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
+    sandboxes?: SandboxUpdateManyWithoutUserNestedInput
+    agentMemories?: AgentMemoryUpdateManyWithoutUserNestedInput
+    agentEvents?: AgentEventUpdateManyWithoutUserNestedInput
+    councilSessions?: CouncilSessionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutLoopConfigsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+    sandboxes?: SandboxUncheckedUpdateManyWithoutUserNestedInput
+    agentMemories?: AgentMemoryUncheckedUpdateManyWithoutUserNestedInput
+    agentEvents?: AgentEventUncheckedUpdateManyWithoutUserNestedInput
+    councilSessions?: CouncilSessionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type LoopConfigCreateWithoutRunsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    intervalSecs?: number
+    context?: string | null
+    webhookUrl?: string | null
+    isActive?: boolean
+    lastRunAt?: Date | string | null
+    nextRunAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutLoopConfigsInput
+  }
+
+  export type LoopConfigUncheckedCreateWithoutRunsInput = {
+    id?: string
+    userId: string
+    name: string
+    description?: string | null
+    intervalSecs?: number
+    context?: string | null
+    webhookUrl?: string | null
+    isActive?: boolean
+    lastRunAt?: Date | string | null
+    nextRunAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LoopConfigCreateOrConnectWithoutRunsInput = {
+    where: LoopConfigWhereUniqueInput
+    create: XOR<LoopConfigCreateWithoutRunsInput, LoopConfigUncheckedCreateWithoutRunsInput>
+  }
+
+  export type LoopConfigUpsertWithoutRunsInput = {
+    update: XOR<LoopConfigUpdateWithoutRunsInput, LoopConfigUncheckedUpdateWithoutRunsInput>
+    create: XOR<LoopConfigCreateWithoutRunsInput, LoopConfigUncheckedCreateWithoutRunsInput>
+    where?: LoopConfigWhereInput
+  }
+
+  export type LoopConfigUpdateToOneWithWhereWithoutRunsInput = {
+    where?: LoopConfigWhereInput
+    data: XOR<LoopConfigUpdateWithoutRunsInput, LoopConfigUncheckedUpdateWithoutRunsInput>
+  }
+
+  export type LoopConfigUpdateWithoutRunsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalSecs?: IntFieldUpdateOperationsInput | number
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    webhookUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutLoopConfigsNestedInput
+  }
+
+  export type LoopConfigUncheckedUpdateWithoutRunsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalSecs?: IntFieldUpdateOperationsInput | number
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    webhookUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23209,6 +26827,20 @@ export namespace Prisma {
     status?: $Enums.CouncilStatus
     result?: string | null
     errorMsg?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LoopConfigCreateManyUserInput = {
+    id?: string
+    name: string
+    description?: string | null
+    intervalSecs?: number
+    context?: string | null
+    webhookUrl?: string | null
+    isActive?: boolean
+    lastRunAt?: Date | string | null
+    nextRunAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -23370,6 +27002,50 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LoopConfigUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalSecs?: IntFieldUpdateOperationsInput | number
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    webhookUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    runs?: LoopRunUpdateManyWithoutConfigNestedInput
+  }
+
+  export type LoopConfigUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalSecs?: IntFieldUpdateOperationsInput | number
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    webhookUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    runs?: LoopRunUncheckedUpdateManyWithoutConfigNestedInput
+  }
+
+  export type LoopConfigUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalSecs?: IntFieldUpdateOperationsInput | number
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    webhookUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UsageLogCreateManySandboxInput = {
     id?: string
     userId: string
@@ -23444,6 +27120,50 @@ export namespace Prisma {
     inputTokens?: IntFieldUpdateOperationsInput | number
     outTokens?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoopRunCreateManyConfigInput = {
+    id?: string
+    status?: $Enums.LoopRunStatus
+    monitorOutput?: string | null
+    healerOutput?: string | null
+    issuesFound?: number
+    issuesFixed?: number
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type LoopRunUpdateWithoutConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumLoopRunStatusFieldUpdateOperationsInput | $Enums.LoopRunStatus
+    monitorOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    healerOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    issuesFound?: IntFieldUpdateOperationsInput | number
+    issuesFixed?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LoopRunUncheckedUpdateWithoutConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumLoopRunStatusFieldUpdateOperationsInput | $Enums.LoopRunStatus
+    monitorOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    healerOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    issuesFound?: IntFieldUpdateOperationsInput | number
+    issuesFixed?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LoopRunUncheckedUpdateManyWithoutConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumLoopRunStatusFieldUpdateOperationsInput | $Enums.LoopRunStatus
+    monitorOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    healerOutput?: NullableStringFieldUpdateOperationsInput | string | null
+    issuesFound?: IntFieldUpdateOperationsInput | number
+    issuesFixed?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 

@@ -110,6 +110,7 @@ model User {
   agentMemories   AgentMemory[]
   agentEvents     AgentEvent[]
   councilSessions CouncilSession[]
+  loopConfigs     LoopConfig[]
 }
 
 enum SandboxLanguage {
@@ -244,4 +245,50 @@ model CouncilMessage {
   session     CouncilSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   @@index([sessionId, round])
+}
+
+enum LoopRunStatus {
+  RUNNING
+  HEALTHY
+  ISSUES_FOUND
+  HEALED
+  FAILED
+}
+
+// User-registered continuous monitoring loop
+model LoopConfig {
+  id           String    @id @default(uuid())
+  userId       String
+  name         String
+  description  String?
+  intervalSecs Int       @default(3600)
+  context      String? // JSON — what to monitor (repo, project, custom instructions)
+  webhookUrl   String? // POST notifications on issues/heals
+  isActive     Boolean   @default(true)
+  lastRunAt    DateTime?
+  nextRunAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  runs         LoopRun[]
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isActive, nextRunAt])
+}
+
+// One iteration of a loop
+model LoopRun {
+  id            String        @id @default(uuid())
+  loopId        String
+  status        LoopRunStatus @default(RUNNING)
+  monitorOutput String? // JSON — monitor agent findings
+  healerOutput  String? // JSON — healer agent actions
+  issuesFound   Int           @default(0)
+  issuesFixed   Int           @default(0)
+  createdAt     DateTime      @default(now())
+  completedAt   DateTime?
+  config        LoopConfig    @relation(fields: [loopId], references: [id], onDelete: Cascade)
+
+  @@index([loopId, createdAt])
+  @@index([status])
 }
