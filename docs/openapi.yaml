@@ -1,0 +1,770 @@
+openapi: 3.1.0
+info:
+  title: Perpetual Sandbox Engine API
+  version: 1.0.0
+  description: |
+    Sandbox Infrastructure for AI Agents.
+
+    Run isolated code, coordinate multi-agent councils, persist agent memory,
+    and register continuous monitoring loops — all via a single API key.
+
+    ## Authentication
+    All `/v1/*` endpoints (except `/v1/billing/webhook`) require:
+    ```
+    Authorization: Bearer sk-live-<your-key>
+    ```
+
+    ## Rate Limits
+    - **60 requests / minute** per API key on all `/v1/*` endpoints
+    - **120 requests / minute** per IP on the global rate limiter
+    - `429 Too Many Requests` with `retry_after_secs` in the body
+
+    ## Pricing
+    - **100 free seconds / user / day** (cumulative across all runs)
+    - **$0.001 / second** after the free tier
+    - Billing is per-run, calculated from `docker exec` start to finish
+
+servers:
+  - url: https://api.perpetual.dev
+    description: Production
+  - url: http://localhost:4000
+    description: Local development
+
+security:
+  - ApiKeyAuth: []
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: sk-live-<hex>
+
+  schemas:
+    Error:
+      type: object
+      required: [ok, error]
+      properties:
+        ok:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: VALIDATION_ERROR
+        message:
+          type: string
+
+    Sandbox:
+      type: object
+      properties:
+        sandbox_id: { type: string, format: uuid }
+        status: { type: string, enum: [creating, ready, running, terminated, failed] }
+        language: { type: string, enum: [python, nodejs, bash] }
+        timeout_secs: { type: integer }
+        started_at: { type: string, format: date-time, nullable: true }
+        terminated_at: { type: string, format: date-time, nullable: true }
+        created_at: { type: string, format: date-time }
+
+    RunResult:
+      type: object
+      properties:
+        stdout: { type: string }
+        stderr: { type: string }
+        exit_code: { type: integer }
+        duration_secs: { type: integer }
+
+    ApiKey:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        key: { type: string, description: "Only present on create — store it securely, never shown again" }
+        prefix: { type: string, example: "sk-live-abcd" }
+        name: { type: string }
+        last_used_at: { type: string, format: date-time, nullable: true }
+        created_at: { type: string, format: date-time }
+
+    MemoryEntry:
+      type: object
+      properties:
+        namespace: { type: string }
+        key: { type: string }
+        value: {}
+        expires_at: { type: string, format: date-time, nullable: true }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    CouncilSession:
+      type: object
+      properties:
+        session_id: { type: string, format: uuid }
+        status: { type: string, enum: [pending, running, completed, failed] }
+        task: { type: string }
+        result:
+          nullable: true
+          type: object
+          properties:
+            plan: { type: string }
+            synthesis: { type: string }
+            agent_outputs:
+              type: array
+              items:
+                type: object
+                properties:
+                  agent: { type: string }
+                  output: { type: string }
+            total_tokens: { type: integer }
+        error: { type: string, nullable: true }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    LoopConfig:
+      type: object
+      properties:
+        loop_id: { type: string, format: uuid }
+        name: { type: string }
+        description: { type: string, nullable: true }
+        interval_secs: { type: integer }
+        is_active: { type: boolean }
+        last_run_at: { type: string, format: date-time, nullable: true }
+        next_run_at: { type: string, format: date-time, nullable: true }
+        webhook_url: { type: string, nullable: true }
+        created_at: { type: string, format: date-time }
+
+    LoopRun:
+      type: object
+      properties:
+        run_id: { type: string, format: uuid }
+        loop_id: { type: string, format: uuid }
+        status: { type: string, enum: [running, healthy, issues_found, healed, failed] }
+        issues_found: { type: integer }
+        issues_fixed: { type: integer }
+        monitor_summary: { type: string, nullable: true }
+        healer_summary: { type: string, nullable: true }
+        created_at: { type: string, format: date-time }
+        completed_at: { type: string, format: date-time, nullable: true }
+
+paths:
+  # ── Sandboxes ────────────────────────────────────────────────────────────
+
+  /v1/sandbox/create:
+    post:
+      summary: Create a sandbox
+      operationId: createSandbox
+      tags: [Sandbox]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [language]
+              properties:
+                language:
+                  type: string
+                  enum: [python, nodejs, bash]
+                timeout_secs:
+                  type: integer
+                  minimum: 1
+                  maximum: 3600
+                  default: 300
+            example:
+              language: python
+              timeout_secs: 60
+      responses:
+        '201':
+          description: Sandbox created (may still be starting)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Sandbox' }
+        '400': { description: Invalid request }
+        '401': { description: Missing or invalid API key }
+        '429': { description: Rate limit exceeded }
+
+  /v1/sandbox/{id}:
+    get:
+      summary: Get sandbox status
+      operationId: getSandbox
+      tags: [Sandbox]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Sandbox' }
+        '404': { description: Sandbox not found }
+    delete:
+      summary: Terminate a sandbox
+      operationId: terminateSandbox
+      tags: [Sandbox]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: terminated }
+
+  /v1/sandbox/{id}/run:
+    post:
+      summary: Execute code in a sandbox
+      operationId: runCode
+      tags: [Sandbox]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [code]
+              properties:
+                code: { type: string }
+            example:
+              code: "import math\nprint(math.pi)"
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RunResult' }
+        '400': { description: Sandbox not in READY state }
+        '404': { description: Sandbox not found }
+
+  # ── API Keys ─────────────────────────────────────────────────────────────
+
+  /v1/api-keys:
+    post:
+      summary: Create an API key
+      operationId: createApiKey
+      tags: [API Keys]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name: { type: string, maxLength: 64 }
+      responses:
+        '201':
+          description: Key created — `key` field will not be shown again
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApiKey' }
+    get:
+      summary: List API keys
+      operationId: listApiKeys
+      tags: [API Keys]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ApiKey' }
+
+  /v1/api-keys/{id}:
+    delete:
+      summary: Revoke an API key
+      operationId: revokeApiKey
+      tags: [API Keys]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+
+  # ── Usage ────────────────────────────────────────────────────────────────
+
+  /v1/usage/today:
+    get:
+      summary: Today's usage
+      operationId: getUsageToday
+      tags: [Usage]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  date: { type: string }
+                  runs: { type: integer }
+                  used_secs: { type: integer }
+                  free_secs: { type: integer }
+                  free_remaining_secs: { type: integer }
+                  billed_amount_usd: { type: number }
+                  price_per_second_usd: { type: number }
+
+  /v1/usage/summary:
+    get:
+      summary: All-time usage summary
+      operationId: getUsageSummary
+      tags: [Usage]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  current_month:
+                    type: object
+                    properties:
+                      period: { type: string }
+                      runs: { type: integer }
+                      used_secs: { type: integer }
+                      billed_amount_usd: { type: number }
+                  all_time:
+                    type: object
+                    properties:
+                      runs: { type: integer }
+                      used_secs: { type: integer }
+                      billed_amount_usd: { type: number }
+                  recent_runs:
+                    type: array
+                    items: { type: object }
+
+  # ── Memory ───────────────────────────────────────────────────────────────
+
+  /v1/memory/{namespace}:
+    get:
+      summary: List all keys in a namespace
+      operationId: listMemory
+      tags: [Memory]
+      parameters:
+        - { name: namespace, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  namespace: { type: string }
+                  count: { type: integer }
+                  keys: { type: array, items: { type: object } }
+    delete:
+      summary: Clear all keys in a namespace
+      operationId: clearMemory
+      tags: [Memory]
+      parameters:
+        - { name: namespace, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deleted_count: { type: integer }
+                  namespace: { type: string }
+
+  /v1/memory/{namespace}/{key}:
+    put:
+      summary: Set a memory value
+      operationId: setMemory
+      tags: [Memory]
+      parameters:
+        - { name: namespace, in: path, required: true, schema: { type: string } }
+        - { name: key, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [value]
+              properties:
+                value: {}
+                ttl_secs: { type: integer, minimum: 1, maximum: 2592000 }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MemoryEntry' }
+    get:
+      summary: Get a memory value
+      operationId: getMemory
+      tags: [Memory]
+      parameters:
+        - { name: namespace, in: path, required: true, schema: { type: string } }
+        - { name: key, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MemoryEntry' }
+        '404': { description: Key not found or expired }
+    delete:
+      summary: Delete a memory key
+      operationId: deleteMemory
+      tags: [Memory]
+      parameters:
+        - { name: namespace, in: path, required: true, schema: { type: string } }
+        - { name: key, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deleted: { type: boolean }
+
+  /v1/memory/{namespace}/events:
+    post:
+      summary: Append an event to the agent log
+      operationId: logEvent
+      tags: [Memory]
+      parameters:
+        - { name: namespace, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [event_type, payload]
+              properties:
+                event_type:
+                  type: string
+                  enum: [decision, action, observation, error, checkpoint]
+                payload: {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: { type: string }
+                  event_type: { type: string }
+                  created_at: { type: string, format: date-time }
+    get:
+      summary: Get agent event log
+      operationId: getEvents
+      tags: [Memory]
+      parameters:
+        - { name: namespace, in: path, required: true, schema: { type: string } }
+        - { name: limit, in: query, schema: { type: integer, default: 50, maximum: 200 } }
+        - { name: before, in: query, schema: { type: string }, description: Cursor for pagination }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  namespace: { type: string }
+                  events: { type: array, items: { type: object } }
+                  has_more: { type: boolean }
+
+  # ── Council ──────────────────────────────────────────────────────────────
+
+  /v1/council/run:
+    post:
+      summary: Start a council session
+      description: |
+        Triggers an asynchronous 3-round multi-agent analysis:
+        1. **Architect** creates the plan
+        2. **Dev×3 + QA + Security** run in parallel
+        3. **Architect** synthesises into a final result
+
+        Returns immediately with `session_id`. Poll `GET /v1/council/{id}` until `status=completed`.
+      operationId: runCouncil
+      tags: [Council]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [task]
+              properties:
+                task:
+                  type: string
+                  maxLength: 4000
+                  description: The goal or problem statement for the council
+                context:
+                  type: object
+                  description: Optional extra context (repo info, prior state, etc.)
+            example:
+              task: "Design and implement a rate limiter for a multi-tenant SaaS API"
+              context:
+                language: python
+                framework: FastAPI
+      responses:
+        '202':
+          description: Council session started
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  session_id: { type: string }
+                  status: { type: string, example: pending }
+                  task: { type: string }
+                  created_at: { type: string, format: date-time }
+
+  /v1/council:
+    get:
+      summary: List council sessions
+      operationId: listCouncil
+      tags: [Council]
+      parameters:
+        - { name: limit, in: query, schema: { type: integer, default: 20, maximum: 100 } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/CouncilSession' }
+
+  /v1/council/{id}:
+    get:
+      summary: Get council session status and result
+      operationId: getCouncil
+      tags: [Council]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CouncilSession' }
+        '404': { description: Session not found }
+
+  /v1/council/{id}/messages:
+    get:
+      summary: Get full agent transcript
+      operationId: getCouncilMessages
+      tags: [Council]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  session_id: { type: string }
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        agent: { type: string }
+                        round: { type: integer }
+                        content: { type: string }
+                        tokens:
+                          type: object
+                          properties:
+                            input: { type: integer }
+                            output: { type: integer }
+                        created_at: { type: string, format: date-time }
+
+  # ── Loops ────────────────────────────────────────────────────────────────
+
+  /v1/loops:
+    post:
+      summary: Register a monitoring loop
+      operationId: createLoop
+      tags: [Loops]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name: { type: string, maxLength: 64 }
+                description: { type: string, maxLength: 256 }
+                interval_secs:
+                  type: integer
+                  minimum: 300
+                  maximum: 86400
+                  default: 3600
+                context:
+                  type: object
+                  description: What to monitor (project info, custom instructions)
+                webhook_url:
+                  type: string
+                  format: uri
+                  description: HTTPS endpoint to notify when issues are found
+            example:
+              name: production-monitor
+              interval_secs: 3600
+              context:
+                project: my-saas-api
+                alert_on: [failed_sandboxes, billing_spike]
+              webhook_url: https://hooks.slack.com/your-webhook
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/LoopConfig' }
+    get:
+      summary: List monitoring loops
+      operationId: listLoops
+      tags: [Loops]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/LoopConfig' }
+
+  /v1/loops/{id}:
+    get:
+      summary: Get loop config
+      operationId: getLoop
+      tags: [Loops]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/LoopConfig' }
+    delete:
+      summary: Delete a loop
+      operationId: deleteLoop
+      tags: [Loops]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deleted: { type: boolean }
+
+  /v1/loops/{id}/pause:
+    patch:
+      summary: Pause a loop
+      operationId: pauseLoop
+      tags: [Loops]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  loop_id: { type: string }
+                  status: { type: string, example: paused }
+
+  /v1/loops/{id}/resume:
+    patch:
+      summary: Resume a paused loop
+      operationId: resumeLoop
+      tags: [Loops]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  loop_id: { type: string }
+                  status: { type: string, example: active }
+                  next_run_at: { type: string, format: date-time }
+
+  /v1/loops/{id}/trigger:
+    post:
+      summary: Trigger an immediate loop run
+      operationId: triggerLoop
+      tags: [Loops]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  run_id: { type: string }
+                  loop_id: { type: string }
+                  status: { type: string, example: running }
+
+  /v1/loops/{id}/runs:
+    get:
+      summary: Get loop run history
+      operationId: getLoopRuns
+      tags: [Loops]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+        - { name: limit, in: query, schema: { type: integer, default: 20, maximum: 100 } }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/LoopRun' }
+
+  # ── Billing ──────────────────────────────────────────────────────────────
+
+  /v1/billing/checkout:
+    post:
+      summary: Create a Stripe checkout session
+      operationId: createCheckout
+      tags: [Billing]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount_usd]
+              properties:
+                amount_usd:
+                  type: integer
+                  enum: [5, 10, 25, 50, 100]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  checkout_url: { type: string, format: uri }
+
+  /v1/billing/webhook:
+    post:
+      summary: Stripe webhook receiver
+      operationId: stripeWebhook
+      tags: [Billing]
+      security: []
+      description: Stripe calls this endpoint. Requires `Stripe-Signature` header.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  received: { type: boolean }
