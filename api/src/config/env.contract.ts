@@ -6,7 +6,7 @@ const allowedNodeEnvironments = new Set<NodeEnvironment>([
   'production',
 ]);
 
-export const API_REQUIRED_ENV = ['AUTH_SECRET', 'DATABASE_URL'] as const;
+export const API_REQUIRED_ENV = ['AUTH_SECRET', 'DATABASE_URL', 'REDIS_URL'] as const;
 
 export type RequiredEnvVar = (typeof API_REQUIRED_ENV)[number];
 
@@ -53,4 +53,20 @@ export function getRequiredEnvOrThrow(name: RequiredEnvVar): string {
   }
 
   return value;
+}
+
+export function getRedisPrefix(): string {
+  return readEnv('REDIS_PREFIX') || 'factory';
+}
+
+export function getRedisRuntimeTtl(): number {
+  return parseInt(readEnv('REDIS_RUNTIME_TTL_SEC') || '300', 10);
+}
+
+export function getRedisPreviewTtl(): number {
+  return parseInt(readEnv('REDIS_PREVIEW_TTL_SEC') || '300', 10);
+}
+
+export function getRedisWsTtl(): number {
+  return parseInt(readEnv('REDIS_WS_TTL_SEC') || '120', 10);
 }

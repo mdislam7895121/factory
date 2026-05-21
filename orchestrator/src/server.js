@@ -5,6 +5,7 @@ import { spawn } from 'node:child_process';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
+import Redis from 'ioredis';
 import {
   loadRegistry,
   saveRegistry,
@@ -14,6 +15,19 @@ import {
   getProjectById,
   getUsedPorts,
 } from './registry.js';
+
+// Shared Redis client — fail open if unavailable (preview tracking is best-effort)
+const REDIS_URL    = (process.env.REDIS_URL    ?? 'redis://localhost:6379').trim();
+const REDIS_PREFIX = (process.env.REDIS_PREFIX ?? 'factory').trim();
+const PREVIEW_TTL  = parseInt(process.env.REDIS_PREVIEW_TTL_SEC ?? '300', 10);
+
+const redis = new Redis(REDIS_URL, {
+  lazyConnect: true,
+  maxRetriesPerRequest: 1,
+  connectTimeout: 3_000,
+  enableReadyCheck: false,
+});
+redis.on('error', () => {}); // suppress unhandled rejection; fail-open
 
 const require = createRequire(import.meta.url);
 const packageJson = require('../package.json');
@@ -431,6 +445,18 @@ app.use('/v1/preview/:id', async (req, res) => {
     res.status(400).json({ ok: false, error: 'Invalid path' });
     return;
   }
+
+  // Refresh distributed preview activity state (best-effort, non-blocking)
+  const now = new Date().toISOString();
+  void redis.pipeline()
+    .set(`${REDIS_PREFIX}:preview:active:${project.id}`, '1', 'EX', PREVIEW_TTL)
+    .set(`${REDIS_PREFIX}:preview:lastSeen:${project.id}`, now, 'EX', PREVIEW_TTL)
+    .set(`${REDIS_PREFIX}:preview:meta:${project.id}`,
+      JSON.stringify({ id: project.id, port: project.port, name: project.name, updatedAt: now }),
+      'EX', PREVIEW_TTL)
+    .exec()
+    .catch(() => {});
+
   const targetUrl = `http://host.docker.internal:${project.port}${forwardPath}`;
 
   try {

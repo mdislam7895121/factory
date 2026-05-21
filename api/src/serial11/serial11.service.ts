@@ -15,6 +15,7 @@ import {
   type Project,
 } from '../generated/prisma';
 import { PrismaService } from '../prisma/prisma.service';
+import { RedisService } from '../lib/redis/redis.service';
 
 type OrchestratorProjectStatus = {
   id: string;
@@ -40,9 +41,10 @@ type OrchestratorStatusResponse = {
 
 @Injectable()
 export class Serial11Service implements OnModuleInit {
-  private readonly activeLogStreamsByUser = new Map<string, Set<string>>();
-
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly redis: RedisService,
+  ) {}
 
   async onModuleInit() {
     if (process.env.NODE_ENV === 'test') {
@@ -151,31 +153,37 @@ export class Serial11Service implements OnModuleInit {
     return response.text();
   }
 
-  private openLogStreamSlot(ownerId: string): () => void {
-    const bucket =
-      this.activeLogStreamsByUser.get(ownerId) ?? new Set<string>();
+  private async openLogStreamSlot(ownerId: string): Promise<() => void> {
+    const pfx    = this.redis.prefix;
+    const wsTtl  = parseInt(process.env.REDIS_WS_TTL_SEC ?? '120', 10);
+    const setKey = `${pfx}:ws:user:${ownerId}:streams`;
 
-    if (bucket.size >= this.maxLogStreamsPerUser) {
+    // Atomically count + add using a pipeline: check cardinality first
+    const count = await this.redis.client.scard(setKey);
+    if (count >= this.maxLogStreamsPerUser) {
       throw new HttpException(
         'too many active log streams',
         HttpStatus.TOO_MANY_REQUESTS,
       );
     }
 
-    const streamId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    bucket.add(streamId);
-    this.activeLogStreamsByUser.set(ownerId, bucket);
+    const streamId  = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const sessionKey = `${pfx}:ws:session:${streamId}`;
+
+    await this.redis.client
+      .pipeline()
+      .sadd(setKey, streamId)
+      .expire(setKey, wsTtl)
+      .set(sessionKey, ownerId, 'EX', wsTtl)
+      .exec();
 
     return () => {
-      const current = this.activeLogStreamsByUser.get(ownerId);
-      if (!current) {
-        return;
-      }
-
-      current.delete(streamId);
-      if (current.size === 0) {
-        this.activeLogStreamsByUser.delete(ownerId);
-      }
+      void this.redis.client
+        .pipeline()
+        .srem(setKey, streamId)
+        .del(sessionKey)
+        .exec()
+        .catch(() => {});
     };
   }
 
@@ -446,7 +454,7 @@ export class Serial11Service implements OnModuleInit {
 
     const orchestratorProjectId = project.orchestratorProjectId;
 
-    const release = this.openLogStreamSlot(ownerId);
+    const release = await this.openLogStreamSlot(ownerId);
     let lastLogSnapshot = '';
     let closed = false;
 
