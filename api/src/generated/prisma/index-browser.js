@@ -225,6 +225,26 @@ exports.Prisma.UsageLogScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.AgentMemoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  namespace: 'namespace',
+  key: 'key',
+  value: 'value',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AgentEventScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  namespace: 'namespace',
+  eventType: 'eventType',
+  payload: 'payload',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -276,7 +296,9 @@ exports.Prisma.ModelName = {
   User: 'User',
   ApiKey: 'ApiKey',
   Sandbox: 'Sandbox',
-  UsageLog: 'UsageLog'
+  UsageLog: 'UsageLog',
+  AgentMemory: 'AgentMemory',
+  AgentEvent: 'AgentEvent'
 };
 
 /**

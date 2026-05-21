@@ -63,6 +63,16 @@ export type Sandbox = $Result.DefaultSelection<Prisma.$SandboxPayload>
  * 
  */
 export type UsageLog = $Result.DefaultSelection<Prisma.$UsageLogPayload>
+/**
+ * Model AgentMemory
+ * 
+ */
+export type AgentMemory = $Result.DefaultSelection<Prisma.$AgentMemoryPayload>
+/**
+ * Model AgentEvent
+ * 
+ */
+export type AgentEvent = $Result.DefaultSelection<Prisma.$AgentEventPayload>
 
 /**
  * Enums
@@ -340,6 +350,26 @@ export class PrismaClient<
     * ```
     */
   get usageLog(): Prisma.UsageLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.agentMemory`: Exposes CRUD operations for the **AgentMemory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AgentMemories
+    * const agentMemories = await prisma.agentMemory.findMany()
+    * ```
+    */
+  get agentMemory(): Prisma.AgentMemoryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.agentEvent`: Exposes CRUD operations for the **AgentEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AgentEvents
+    * const agentEvents = await prisma.agentEvent.findMany()
+    * ```
+    */
+  get agentEvent(): Prisma.AgentEventDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -783,7 +813,9 @@ export namespace Prisma {
     User: 'User',
     ApiKey: 'ApiKey',
     Sandbox: 'Sandbox',
-    UsageLog: 'UsageLog'
+    UsageLog: 'UsageLog',
+    AgentMemory: 'AgentMemory',
+    AgentEvent: 'AgentEvent'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -799,7 +831,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user" | "apiKey" | "sandbox" | "usageLog"
+      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user" | "apiKey" | "sandbox" | "usageLog" | "agentMemory" | "agentEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1543,6 +1575,154 @@ export namespace Prisma {
           }
         }
       }
+      AgentMemory: {
+        payload: Prisma.$AgentMemoryPayload<ExtArgs>
+        fields: Prisma.AgentMemoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AgentMemoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentMemoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AgentMemoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentMemoryPayload>
+          }
+          findFirst: {
+            args: Prisma.AgentMemoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentMemoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AgentMemoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentMemoryPayload>
+          }
+          findMany: {
+            args: Prisma.AgentMemoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentMemoryPayload>[]
+          }
+          create: {
+            args: Prisma.AgentMemoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentMemoryPayload>
+          }
+          createMany: {
+            args: Prisma.AgentMemoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AgentMemoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentMemoryPayload>[]
+          }
+          delete: {
+            args: Prisma.AgentMemoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentMemoryPayload>
+          }
+          update: {
+            args: Prisma.AgentMemoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentMemoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.AgentMemoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AgentMemoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AgentMemoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentMemoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.AgentMemoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentMemoryPayload>
+          }
+          aggregate: {
+            args: Prisma.AgentMemoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAgentMemory>
+          }
+          groupBy: {
+            args: Prisma.AgentMemoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AgentMemoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AgentMemoryCountArgs<ExtArgs>
+            result: $Utils.Optional<AgentMemoryCountAggregateOutputType> | number
+          }
+        }
+      }
+      AgentEvent: {
+        payload: Prisma.$AgentEventPayload<ExtArgs>
+        fields: Prisma.AgentEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AgentEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AgentEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentEventPayload>
+          }
+          findFirst: {
+            args: Prisma.AgentEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AgentEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentEventPayload>
+          }
+          findMany: {
+            args: Prisma.AgentEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentEventPayload>[]
+          }
+          create: {
+            args: Prisma.AgentEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentEventPayload>
+          }
+          createMany: {
+            args: Prisma.AgentEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AgentEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentEventPayload>[]
+          }
+          delete: {
+            args: Prisma.AgentEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentEventPayload>
+          }
+          update: {
+            args: Prisma.AgentEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.AgentEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AgentEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AgentEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.AgentEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgentEventPayload>
+          }
+          aggregate: {
+            args: Prisma.AgentEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAgentEvent>
+          }
+          groupBy: {
+            args: Prisma.AgentEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AgentEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AgentEventCountArgs<ExtArgs>
+            result: $Utils.Optional<AgentEventCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1661,6 +1841,8 @@ export namespace Prisma {
     apiKey?: ApiKeyOmit
     sandbox?: SandboxOmit
     usageLog?: UsageLogOmit
+    agentMemory?: AgentMemoryOmit
+    agentEvent?: AgentEventOmit
   }
 
   /* Types for Logging */
@@ -1805,11 +1987,15 @@ export namespace Prisma {
   export type UserCountOutputType = {
     apiKeys: number
     sandboxes: number
+    agentMemories: number
+    agentEvents: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     apiKeys?: boolean | UserCountOutputTypeCountApiKeysArgs
     sandboxes?: boolean | UserCountOutputTypeCountSandboxesArgs
+    agentMemories?: boolean | UserCountOutputTypeCountAgentMemoriesArgs
+    agentEvents?: boolean | UserCountOutputTypeCountAgentEventsArgs
   }
 
   // Custom InputTypes
@@ -1835,6 +2021,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountSandboxesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SandboxWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAgentMemoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AgentMemoryWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAgentEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AgentEventWhereInput
   }
 
 
@@ -8435,6 +8635,8 @@ export namespace Prisma {
     updatedAt?: boolean
     apiKeys?: boolean | User$apiKeysArgs<ExtArgs>
     sandboxes?: boolean | User$sandboxesArgs<ExtArgs>
+    agentMemories?: boolean | User$agentMemoriesArgs<ExtArgs>
+    agentEvents?: boolean | User$agentEventsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -8466,6 +8668,8 @@ export namespace Prisma {
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     apiKeys?: boolean | User$apiKeysArgs<ExtArgs>
     sandboxes?: boolean | User$sandboxesArgs<ExtArgs>
+    agentMemories?: boolean | User$agentMemoriesArgs<ExtArgs>
+    agentEvents?: boolean | User$agentEventsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8476,6 +8680,8 @@ export namespace Prisma {
     objects: {
       apiKeys: Prisma.$ApiKeyPayload<ExtArgs>[]
       sandboxes: Prisma.$SandboxPayload<ExtArgs>[]
+      agentMemories: Prisma.$AgentMemoryPayload<ExtArgs>[]
+      agentEvents: Prisma.$AgentEventPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8879,6 +9085,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     apiKeys<T extends User$apiKeysArgs<ExtArgs> = {}>(args?: Subset<T, User$apiKeysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sandboxes<T extends User$sandboxesArgs<ExtArgs> = {}>(args?: Subset<T, User$sandboxesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SandboxPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    agentMemories<T extends User$agentMemoriesArgs<ExtArgs> = {}>(args?: Subset<T, User$agentMemoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgentMemoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    agentEvents<T extends User$agentEventsArgs<ExtArgs> = {}>(args?: Subset<T, User$agentEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgentEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9346,6 +9554,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SandboxScalarFieldEnum | SandboxScalarFieldEnum[]
+  }
+
+  /**
+   * User.agentMemories
+   */
+  export type User$agentMemoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentMemory
+     */
+    select?: AgentMemorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentMemory
+     */
+    omit?: AgentMemoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentMemoryInclude<ExtArgs> | null
+    where?: AgentMemoryWhereInput
+    orderBy?: AgentMemoryOrderByWithRelationInput | AgentMemoryOrderByWithRelationInput[]
+    cursor?: AgentMemoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AgentMemoryScalarFieldEnum | AgentMemoryScalarFieldEnum[]
+  }
+
+  /**
+   * User.agentEvents
+   */
+  export type User$agentEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentEvent
+     */
+    select?: AgentEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentEvent
+     */
+    omit?: AgentEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentEventInclude<ExtArgs> | null
+    where?: AgentEventWhereInput
+    orderBy?: AgentEventOrderByWithRelationInput | AgentEventOrderByWithRelationInput[]
+    cursor?: AgentEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AgentEventScalarFieldEnum | AgentEventScalarFieldEnum[]
   }
 
   /**
@@ -12778,6 +13034,2174 @@ export namespace Prisma {
 
 
   /**
+   * Model AgentMemory
+   */
+
+  export type AggregateAgentMemory = {
+    _count: AgentMemoryCountAggregateOutputType | null
+    _min: AgentMemoryMinAggregateOutputType | null
+    _max: AgentMemoryMaxAggregateOutputType | null
+  }
+
+  export type AgentMemoryMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    namespace: string | null
+    key: string | null
+    value: string | null
+    expiresAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AgentMemoryMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    namespace: string | null
+    key: string | null
+    value: string | null
+    expiresAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AgentMemoryCountAggregateOutputType = {
+    id: number
+    userId: number
+    namespace: number
+    key: number
+    value: number
+    expiresAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AgentMemoryMinAggregateInputType = {
+    id?: true
+    userId?: true
+    namespace?: true
+    key?: true
+    value?: true
+    expiresAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AgentMemoryMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    namespace?: true
+    key?: true
+    value?: true
+    expiresAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AgentMemoryCountAggregateInputType = {
+    id?: true
+    userId?: true
+    namespace?: true
+    key?: true
+    value?: true
+    expiresAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AgentMemoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AgentMemory to aggregate.
+     */
+    where?: AgentMemoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgentMemories to fetch.
+     */
+    orderBy?: AgentMemoryOrderByWithRelationInput | AgentMemoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AgentMemoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgentMemories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgentMemories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AgentMemories
+    **/
+    _count?: true | AgentMemoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AgentMemoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AgentMemoryMaxAggregateInputType
+  }
+
+  export type GetAgentMemoryAggregateType<T extends AgentMemoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateAgentMemory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAgentMemory[P]>
+      : GetScalarType<T[P], AggregateAgentMemory[P]>
+  }
+
+
+
+
+  export type AgentMemoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AgentMemoryWhereInput
+    orderBy?: AgentMemoryOrderByWithAggregationInput | AgentMemoryOrderByWithAggregationInput[]
+    by: AgentMemoryScalarFieldEnum[] | AgentMemoryScalarFieldEnum
+    having?: AgentMemoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AgentMemoryCountAggregateInputType | true
+    _min?: AgentMemoryMinAggregateInputType
+    _max?: AgentMemoryMaxAggregateInputType
+  }
+
+  export type AgentMemoryGroupByOutputType = {
+    id: string
+    userId: string
+    namespace: string
+    key: string
+    value: string
+    expiresAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: AgentMemoryCountAggregateOutputType | null
+    _min: AgentMemoryMinAggregateOutputType | null
+    _max: AgentMemoryMaxAggregateOutputType | null
+  }
+
+  type GetAgentMemoryGroupByPayload<T extends AgentMemoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AgentMemoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AgentMemoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AgentMemoryGroupByOutputType[P]>
+            : GetScalarType<T[P], AgentMemoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AgentMemorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    namespace?: boolean
+    key?: boolean
+    value?: boolean
+    expiresAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["agentMemory"]>
+
+  export type AgentMemorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    namespace?: boolean
+    key?: boolean
+    value?: boolean
+    expiresAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["agentMemory"]>
+
+  export type AgentMemorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    namespace?: boolean
+    key?: boolean
+    value?: boolean
+    expiresAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["agentMemory"]>
+
+  export type AgentMemorySelectScalar = {
+    id?: boolean
+    userId?: boolean
+    namespace?: boolean
+    key?: boolean
+    value?: boolean
+    expiresAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AgentMemoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "namespace" | "key" | "value" | "expiresAt" | "createdAt" | "updatedAt", ExtArgs["result"]["agentMemory"]>
+  export type AgentMemoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AgentMemoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AgentMemoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $AgentMemoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AgentMemory"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      namespace: string
+      key: string
+      value: string
+      expiresAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["agentMemory"]>
+    composites: {}
+  }
+
+  type AgentMemoryGetPayload<S extends boolean | null | undefined | AgentMemoryDefaultArgs> = $Result.GetResult<Prisma.$AgentMemoryPayload, S>
+
+  type AgentMemoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AgentMemoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AgentMemoryCountAggregateInputType | true
+    }
+
+  export interface AgentMemoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AgentMemory'], meta: { name: 'AgentMemory' } }
+    /**
+     * Find zero or one AgentMemory that matches the filter.
+     * @param {AgentMemoryFindUniqueArgs} args - Arguments to find a AgentMemory
+     * @example
+     * // Get one AgentMemory
+     * const agentMemory = await prisma.agentMemory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AgentMemoryFindUniqueArgs>(args: SelectSubset<T, AgentMemoryFindUniqueArgs<ExtArgs>>): Prisma__AgentMemoryClient<$Result.GetResult<Prisma.$AgentMemoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AgentMemory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AgentMemoryFindUniqueOrThrowArgs} args - Arguments to find a AgentMemory
+     * @example
+     * // Get one AgentMemory
+     * const agentMemory = await prisma.agentMemory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AgentMemoryFindUniqueOrThrowArgs>(args: SelectSubset<T, AgentMemoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AgentMemoryClient<$Result.GetResult<Prisma.$AgentMemoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AgentMemory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgentMemoryFindFirstArgs} args - Arguments to find a AgentMemory
+     * @example
+     * // Get one AgentMemory
+     * const agentMemory = await prisma.agentMemory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AgentMemoryFindFirstArgs>(args?: SelectSubset<T, AgentMemoryFindFirstArgs<ExtArgs>>): Prisma__AgentMemoryClient<$Result.GetResult<Prisma.$AgentMemoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AgentMemory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgentMemoryFindFirstOrThrowArgs} args - Arguments to find a AgentMemory
+     * @example
+     * // Get one AgentMemory
+     * const agentMemory = await prisma.agentMemory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AgentMemoryFindFirstOrThrowArgs>(args?: SelectSubset<T, AgentMemoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__AgentMemoryClient<$Result.GetResult<Prisma.$AgentMemoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AgentMemories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgentMemoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AgentMemories
+     * const agentMemories = await prisma.agentMemory.findMany()
+     * 
+     * // Get first 10 AgentMemories
+     * const agentMemories = await prisma.agentMemory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const agentMemoryWithIdOnly = await prisma.agentMemory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AgentMemoryFindManyArgs>(args?: SelectSubset<T, AgentMemoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgentMemoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AgentMemory.
+     * @param {AgentMemoryCreateArgs} args - Arguments to create a AgentMemory.
+     * @example
+     * // Create one AgentMemory
+     * const AgentMemory = await prisma.agentMemory.create({
+     *   data: {
+     *     // ... data to create a AgentMemory
+     *   }
+     * })
+     * 
+     */
+    create<T extends AgentMemoryCreateArgs>(args: SelectSubset<T, AgentMemoryCreateArgs<ExtArgs>>): Prisma__AgentMemoryClient<$Result.GetResult<Prisma.$AgentMemoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AgentMemories.
+     * @param {AgentMemoryCreateManyArgs} args - Arguments to create many AgentMemories.
+     * @example
+     * // Create many AgentMemories
+     * const agentMemory = await prisma.agentMemory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AgentMemoryCreateManyArgs>(args?: SelectSubset<T, AgentMemoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AgentMemories and returns the data saved in the database.
+     * @param {AgentMemoryCreateManyAndReturnArgs} args - Arguments to create many AgentMemories.
+     * @example
+     * // Create many AgentMemories
+     * const agentMemory = await prisma.agentMemory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AgentMemories and only return the `id`
+     * const agentMemoryWithIdOnly = await prisma.agentMemory.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AgentMemoryCreateManyAndReturnArgs>(args?: SelectSubset<T, AgentMemoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgentMemoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AgentMemory.
+     * @param {AgentMemoryDeleteArgs} args - Arguments to delete one AgentMemory.
+     * @example
+     * // Delete one AgentMemory
+     * const AgentMemory = await prisma.agentMemory.delete({
+     *   where: {
+     *     // ... filter to delete one AgentMemory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AgentMemoryDeleteArgs>(args: SelectSubset<T, AgentMemoryDeleteArgs<ExtArgs>>): Prisma__AgentMemoryClient<$Result.GetResult<Prisma.$AgentMemoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AgentMemory.
+     * @param {AgentMemoryUpdateArgs} args - Arguments to update one AgentMemory.
+     * @example
+     * // Update one AgentMemory
+     * const agentMemory = await prisma.agentMemory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AgentMemoryUpdateArgs>(args: SelectSubset<T, AgentMemoryUpdateArgs<ExtArgs>>): Prisma__AgentMemoryClient<$Result.GetResult<Prisma.$AgentMemoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AgentMemories.
+     * @param {AgentMemoryDeleteManyArgs} args - Arguments to filter AgentMemories to delete.
+     * @example
+     * // Delete a few AgentMemories
+     * const { count } = await prisma.agentMemory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AgentMemoryDeleteManyArgs>(args?: SelectSubset<T, AgentMemoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AgentMemories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgentMemoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AgentMemories
+     * const agentMemory = await prisma.agentMemory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AgentMemoryUpdateManyArgs>(args: SelectSubset<T, AgentMemoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AgentMemories and returns the data updated in the database.
+     * @param {AgentMemoryUpdateManyAndReturnArgs} args - Arguments to update many AgentMemories.
+     * @example
+     * // Update many AgentMemories
+     * const agentMemory = await prisma.agentMemory.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AgentMemories and only return the `id`
+     * const agentMemoryWithIdOnly = await prisma.agentMemory.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AgentMemoryUpdateManyAndReturnArgs>(args: SelectSubset<T, AgentMemoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgentMemoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AgentMemory.
+     * @param {AgentMemoryUpsertArgs} args - Arguments to update or create a AgentMemory.
+     * @example
+     * // Update or create a AgentMemory
+     * const agentMemory = await prisma.agentMemory.upsert({
+     *   create: {
+     *     // ... data to create a AgentMemory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AgentMemory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AgentMemoryUpsertArgs>(args: SelectSubset<T, AgentMemoryUpsertArgs<ExtArgs>>): Prisma__AgentMemoryClient<$Result.GetResult<Prisma.$AgentMemoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AgentMemories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgentMemoryCountArgs} args - Arguments to filter AgentMemories to count.
+     * @example
+     * // Count the number of AgentMemories
+     * const count = await prisma.agentMemory.count({
+     *   where: {
+     *     // ... the filter for the AgentMemories we want to count
+     *   }
+     * })
+    **/
+    count<T extends AgentMemoryCountArgs>(
+      args?: Subset<T, AgentMemoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AgentMemoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AgentMemory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgentMemoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AgentMemoryAggregateArgs>(args: Subset<T, AgentMemoryAggregateArgs>): Prisma.PrismaPromise<GetAgentMemoryAggregateType<T>>
+
+    /**
+     * Group by AgentMemory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgentMemoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AgentMemoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AgentMemoryGroupByArgs['orderBy'] }
+        : { orderBy?: AgentMemoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AgentMemoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAgentMemoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AgentMemory model
+   */
+  readonly fields: AgentMemoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AgentMemory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AgentMemoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AgentMemory model
+   */
+  interface AgentMemoryFieldRefs {
+    readonly id: FieldRef<"AgentMemory", 'String'>
+    readonly userId: FieldRef<"AgentMemory", 'String'>
+    readonly namespace: FieldRef<"AgentMemory", 'String'>
+    readonly key: FieldRef<"AgentMemory", 'String'>
+    readonly value: FieldRef<"AgentMemory", 'String'>
+    readonly expiresAt: FieldRef<"AgentMemory", 'DateTime'>
+    readonly createdAt: FieldRef<"AgentMemory", 'DateTime'>
+    readonly updatedAt: FieldRef<"AgentMemory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AgentMemory findUnique
+   */
+  export type AgentMemoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentMemory
+     */
+    select?: AgentMemorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentMemory
+     */
+    omit?: AgentMemoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentMemoryInclude<ExtArgs> | null
+    /**
+     * Filter, which AgentMemory to fetch.
+     */
+    where: AgentMemoryWhereUniqueInput
+  }
+
+  /**
+   * AgentMemory findUniqueOrThrow
+   */
+  export type AgentMemoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentMemory
+     */
+    select?: AgentMemorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentMemory
+     */
+    omit?: AgentMemoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentMemoryInclude<ExtArgs> | null
+    /**
+     * Filter, which AgentMemory to fetch.
+     */
+    where: AgentMemoryWhereUniqueInput
+  }
+
+  /**
+   * AgentMemory findFirst
+   */
+  export type AgentMemoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentMemory
+     */
+    select?: AgentMemorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentMemory
+     */
+    omit?: AgentMemoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentMemoryInclude<ExtArgs> | null
+    /**
+     * Filter, which AgentMemory to fetch.
+     */
+    where?: AgentMemoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgentMemories to fetch.
+     */
+    orderBy?: AgentMemoryOrderByWithRelationInput | AgentMemoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AgentMemories.
+     */
+    cursor?: AgentMemoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgentMemories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgentMemories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AgentMemories.
+     */
+    distinct?: AgentMemoryScalarFieldEnum | AgentMemoryScalarFieldEnum[]
+  }
+
+  /**
+   * AgentMemory findFirstOrThrow
+   */
+  export type AgentMemoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentMemory
+     */
+    select?: AgentMemorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentMemory
+     */
+    omit?: AgentMemoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentMemoryInclude<ExtArgs> | null
+    /**
+     * Filter, which AgentMemory to fetch.
+     */
+    where?: AgentMemoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgentMemories to fetch.
+     */
+    orderBy?: AgentMemoryOrderByWithRelationInput | AgentMemoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AgentMemories.
+     */
+    cursor?: AgentMemoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgentMemories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgentMemories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AgentMemories.
+     */
+    distinct?: AgentMemoryScalarFieldEnum | AgentMemoryScalarFieldEnum[]
+  }
+
+  /**
+   * AgentMemory findMany
+   */
+  export type AgentMemoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentMemory
+     */
+    select?: AgentMemorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentMemory
+     */
+    omit?: AgentMemoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentMemoryInclude<ExtArgs> | null
+    /**
+     * Filter, which AgentMemories to fetch.
+     */
+    where?: AgentMemoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgentMemories to fetch.
+     */
+    orderBy?: AgentMemoryOrderByWithRelationInput | AgentMemoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AgentMemories.
+     */
+    cursor?: AgentMemoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgentMemories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgentMemories.
+     */
+    skip?: number
+    distinct?: AgentMemoryScalarFieldEnum | AgentMemoryScalarFieldEnum[]
+  }
+
+  /**
+   * AgentMemory create
+   */
+  export type AgentMemoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentMemory
+     */
+    select?: AgentMemorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentMemory
+     */
+    omit?: AgentMemoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentMemoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AgentMemory.
+     */
+    data: XOR<AgentMemoryCreateInput, AgentMemoryUncheckedCreateInput>
+  }
+
+  /**
+   * AgentMemory createMany
+   */
+  export type AgentMemoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AgentMemories.
+     */
+    data: AgentMemoryCreateManyInput | AgentMemoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AgentMemory createManyAndReturn
+   */
+  export type AgentMemoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentMemory
+     */
+    select?: AgentMemorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentMemory
+     */
+    omit?: AgentMemoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many AgentMemories.
+     */
+    data: AgentMemoryCreateManyInput | AgentMemoryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentMemoryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AgentMemory update
+   */
+  export type AgentMemoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentMemory
+     */
+    select?: AgentMemorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentMemory
+     */
+    omit?: AgentMemoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentMemoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AgentMemory.
+     */
+    data: XOR<AgentMemoryUpdateInput, AgentMemoryUncheckedUpdateInput>
+    /**
+     * Choose, which AgentMemory to update.
+     */
+    where: AgentMemoryWhereUniqueInput
+  }
+
+  /**
+   * AgentMemory updateMany
+   */
+  export type AgentMemoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AgentMemories.
+     */
+    data: XOR<AgentMemoryUpdateManyMutationInput, AgentMemoryUncheckedUpdateManyInput>
+    /**
+     * Filter which AgentMemories to update
+     */
+    where?: AgentMemoryWhereInput
+    /**
+     * Limit how many AgentMemories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AgentMemory updateManyAndReturn
+   */
+  export type AgentMemoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentMemory
+     */
+    select?: AgentMemorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentMemory
+     */
+    omit?: AgentMemoryOmit<ExtArgs> | null
+    /**
+     * The data used to update AgentMemories.
+     */
+    data: XOR<AgentMemoryUpdateManyMutationInput, AgentMemoryUncheckedUpdateManyInput>
+    /**
+     * Filter which AgentMemories to update
+     */
+    where?: AgentMemoryWhereInput
+    /**
+     * Limit how many AgentMemories to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentMemoryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AgentMemory upsert
+   */
+  export type AgentMemoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentMemory
+     */
+    select?: AgentMemorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentMemory
+     */
+    omit?: AgentMemoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentMemoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AgentMemory to update in case it exists.
+     */
+    where: AgentMemoryWhereUniqueInput
+    /**
+     * In case the AgentMemory found by the `where` argument doesn't exist, create a new AgentMemory with this data.
+     */
+    create: XOR<AgentMemoryCreateInput, AgentMemoryUncheckedCreateInput>
+    /**
+     * In case the AgentMemory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AgentMemoryUpdateInput, AgentMemoryUncheckedUpdateInput>
+  }
+
+  /**
+   * AgentMemory delete
+   */
+  export type AgentMemoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentMemory
+     */
+    select?: AgentMemorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentMemory
+     */
+    omit?: AgentMemoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentMemoryInclude<ExtArgs> | null
+    /**
+     * Filter which AgentMemory to delete.
+     */
+    where: AgentMemoryWhereUniqueInput
+  }
+
+  /**
+   * AgentMemory deleteMany
+   */
+  export type AgentMemoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AgentMemories to delete
+     */
+    where?: AgentMemoryWhereInput
+    /**
+     * Limit how many AgentMemories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AgentMemory without action
+   */
+  export type AgentMemoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentMemory
+     */
+    select?: AgentMemorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentMemory
+     */
+    omit?: AgentMemoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentMemoryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AgentEvent
+   */
+
+  export type AggregateAgentEvent = {
+    _count: AgentEventCountAggregateOutputType | null
+    _min: AgentEventMinAggregateOutputType | null
+    _max: AgentEventMaxAggregateOutputType | null
+  }
+
+  export type AgentEventMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    namespace: string | null
+    eventType: string | null
+    payload: string | null
+    createdAt: Date | null
+  }
+
+  export type AgentEventMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    namespace: string | null
+    eventType: string | null
+    payload: string | null
+    createdAt: Date | null
+  }
+
+  export type AgentEventCountAggregateOutputType = {
+    id: number
+    userId: number
+    namespace: number
+    eventType: number
+    payload: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AgentEventMinAggregateInputType = {
+    id?: true
+    userId?: true
+    namespace?: true
+    eventType?: true
+    payload?: true
+    createdAt?: true
+  }
+
+  export type AgentEventMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    namespace?: true
+    eventType?: true
+    payload?: true
+    createdAt?: true
+  }
+
+  export type AgentEventCountAggregateInputType = {
+    id?: true
+    userId?: true
+    namespace?: true
+    eventType?: true
+    payload?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AgentEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AgentEvent to aggregate.
+     */
+    where?: AgentEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgentEvents to fetch.
+     */
+    orderBy?: AgentEventOrderByWithRelationInput | AgentEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AgentEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgentEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgentEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AgentEvents
+    **/
+    _count?: true | AgentEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AgentEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AgentEventMaxAggregateInputType
+  }
+
+  export type GetAgentEventAggregateType<T extends AgentEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateAgentEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAgentEvent[P]>
+      : GetScalarType<T[P], AggregateAgentEvent[P]>
+  }
+
+
+
+
+  export type AgentEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AgentEventWhereInput
+    orderBy?: AgentEventOrderByWithAggregationInput | AgentEventOrderByWithAggregationInput[]
+    by: AgentEventScalarFieldEnum[] | AgentEventScalarFieldEnum
+    having?: AgentEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AgentEventCountAggregateInputType | true
+    _min?: AgentEventMinAggregateInputType
+    _max?: AgentEventMaxAggregateInputType
+  }
+
+  export type AgentEventGroupByOutputType = {
+    id: string
+    userId: string
+    namespace: string
+    eventType: string
+    payload: string
+    createdAt: Date
+    _count: AgentEventCountAggregateOutputType | null
+    _min: AgentEventMinAggregateOutputType | null
+    _max: AgentEventMaxAggregateOutputType | null
+  }
+
+  type GetAgentEventGroupByPayload<T extends AgentEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AgentEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AgentEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AgentEventGroupByOutputType[P]>
+            : GetScalarType<T[P], AgentEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AgentEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    namespace?: boolean
+    eventType?: boolean
+    payload?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["agentEvent"]>
+
+  export type AgentEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    namespace?: boolean
+    eventType?: boolean
+    payload?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["agentEvent"]>
+
+  export type AgentEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    namespace?: boolean
+    eventType?: boolean
+    payload?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["agentEvent"]>
+
+  export type AgentEventSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    namespace?: boolean
+    eventType?: boolean
+    payload?: boolean
+    createdAt?: boolean
+  }
+
+  export type AgentEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "namespace" | "eventType" | "payload" | "createdAt", ExtArgs["result"]["agentEvent"]>
+  export type AgentEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AgentEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AgentEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $AgentEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AgentEvent"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      namespace: string
+      eventType: string
+      payload: string
+      createdAt: Date
+    }, ExtArgs["result"]["agentEvent"]>
+    composites: {}
+  }
+
+  type AgentEventGetPayload<S extends boolean | null | undefined | AgentEventDefaultArgs> = $Result.GetResult<Prisma.$AgentEventPayload, S>
+
+  type AgentEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AgentEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AgentEventCountAggregateInputType | true
+    }
+
+  export interface AgentEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AgentEvent'], meta: { name: 'AgentEvent' } }
+    /**
+     * Find zero or one AgentEvent that matches the filter.
+     * @param {AgentEventFindUniqueArgs} args - Arguments to find a AgentEvent
+     * @example
+     * // Get one AgentEvent
+     * const agentEvent = await prisma.agentEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AgentEventFindUniqueArgs>(args: SelectSubset<T, AgentEventFindUniqueArgs<ExtArgs>>): Prisma__AgentEventClient<$Result.GetResult<Prisma.$AgentEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AgentEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AgentEventFindUniqueOrThrowArgs} args - Arguments to find a AgentEvent
+     * @example
+     * // Get one AgentEvent
+     * const agentEvent = await prisma.agentEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AgentEventFindUniqueOrThrowArgs>(args: SelectSubset<T, AgentEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AgentEventClient<$Result.GetResult<Prisma.$AgentEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AgentEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgentEventFindFirstArgs} args - Arguments to find a AgentEvent
+     * @example
+     * // Get one AgentEvent
+     * const agentEvent = await prisma.agentEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AgentEventFindFirstArgs>(args?: SelectSubset<T, AgentEventFindFirstArgs<ExtArgs>>): Prisma__AgentEventClient<$Result.GetResult<Prisma.$AgentEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AgentEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgentEventFindFirstOrThrowArgs} args - Arguments to find a AgentEvent
+     * @example
+     * // Get one AgentEvent
+     * const agentEvent = await prisma.agentEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AgentEventFindFirstOrThrowArgs>(args?: SelectSubset<T, AgentEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__AgentEventClient<$Result.GetResult<Prisma.$AgentEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AgentEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgentEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AgentEvents
+     * const agentEvents = await prisma.agentEvent.findMany()
+     * 
+     * // Get first 10 AgentEvents
+     * const agentEvents = await prisma.agentEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const agentEventWithIdOnly = await prisma.agentEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AgentEventFindManyArgs>(args?: SelectSubset<T, AgentEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgentEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AgentEvent.
+     * @param {AgentEventCreateArgs} args - Arguments to create a AgentEvent.
+     * @example
+     * // Create one AgentEvent
+     * const AgentEvent = await prisma.agentEvent.create({
+     *   data: {
+     *     // ... data to create a AgentEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends AgentEventCreateArgs>(args: SelectSubset<T, AgentEventCreateArgs<ExtArgs>>): Prisma__AgentEventClient<$Result.GetResult<Prisma.$AgentEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AgentEvents.
+     * @param {AgentEventCreateManyArgs} args - Arguments to create many AgentEvents.
+     * @example
+     * // Create many AgentEvents
+     * const agentEvent = await prisma.agentEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AgentEventCreateManyArgs>(args?: SelectSubset<T, AgentEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AgentEvents and returns the data saved in the database.
+     * @param {AgentEventCreateManyAndReturnArgs} args - Arguments to create many AgentEvents.
+     * @example
+     * // Create many AgentEvents
+     * const agentEvent = await prisma.agentEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AgentEvents and only return the `id`
+     * const agentEventWithIdOnly = await prisma.agentEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AgentEventCreateManyAndReturnArgs>(args?: SelectSubset<T, AgentEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgentEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AgentEvent.
+     * @param {AgentEventDeleteArgs} args - Arguments to delete one AgentEvent.
+     * @example
+     * // Delete one AgentEvent
+     * const AgentEvent = await prisma.agentEvent.delete({
+     *   where: {
+     *     // ... filter to delete one AgentEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AgentEventDeleteArgs>(args: SelectSubset<T, AgentEventDeleteArgs<ExtArgs>>): Prisma__AgentEventClient<$Result.GetResult<Prisma.$AgentEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AgentEvent.
+     * @param {AgentEventUpdateArgs} args - Arguments to update one AgentEvent.
+     * @example
+     * // Update one AgentEvent
+     * const agentEvent = await prisma.agentEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AgentEventUpdateArgs>(args: SelectSubset<T, AgentEventUpdateArgs<ExtArgs>>): Prisma__AgentEventClient<$Result.GetResult<Prisma.$AgentEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AgentEvents.
+     * @param {AgentEventDeleteManyArgs} args - Arguments to filter AgentEvents to delete.
+     * @example
+     * // Delete a few AgentEvents
+     * const { count } = await prisma.agentEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AgentEventDeleteManyArgs>(args?: SelectSubset<T, AgentEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AgentEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgentEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AgentEvents
+     * const agentEvent = await prisma.agentEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AgentEventUpdateManyArgs>(args: SelectSubset<T, AgentEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AgentEvents and returns the data updated in the database.
+     * @param {AgentEventUpdateManyAndReturnArgs} args - Arguments to update many AgentEvents.
+     * @example
+     * // Update many AgentEvents
+     * const agentEvent = await prisma.agentEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AgentEvents and only return the `id`
+     * const agentEventWithIdOnly = await prisma.agentEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AgentEventUpdateManyAndReturnArgs>(args: SelectSubset<T, AgentEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgentEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AgentEvent.
+     * @param {AgentEventUpsertArgs} args - Arguments to update or create a AgentEvent.
+     * @example
+     * // Update or create a AgentEvent
+     * const agentEvent = await prisma.agentEvent.upsert({
+     *   create: {
+     *     // ... data to create a AgentEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AgentEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AgentEventUpsertArgs>(args: SelectSubset<T, AgentEventUpsertArgs<ExtArgs>>): Prisma__AgentEventClient<$Result.GetResult<Prisma.$AgentEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AgentEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgentEventCountArgs} args - Arguments to filter AgentEvents to count.
+     * @example
+     * // Count the number of AgentEvents
+     * const count = await prisma.agentEvent.count({
+     *   where: {
+     *     // ... the filter for the AgentEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends AgentEventCountArgs>(
+      args?: Subset<T, AgentEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AgentEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AgentEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgentEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AgentEventAggregateArgs>(args: Subset<T, AgentEventAggregateArgs>): Prisma.PrismaPromise<GetAgentEventAggregateType<T>>
+
+    /**
+     * Group by AgentEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgentEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AgentEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AgentEventGroupByArgs['orderBy'] }
+        : { orderBy?: AgentEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AgentEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAgentEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AgentEvent model
+   */
+  readonly fields: AgentEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AgentEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AgentEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AgentEvent model
+   */
+  interface AgentEventFieldRefs {
+    readonly id: FieldRef<"AgentEvent", 'String'>
+    readonly userId: FieldRef<"AgentEvent", 'String'>
+    readonly namespace: FieldRef<"AgentEvent", 'String'>
+    readonly eventType: FieldRef<"AgentEvent", 'String'>
+    readonly payload: FieldRef<"AgentEvent", 'String'>
+    readonly createdAt: FieldRef<"AgentEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AgentEvent findUnique
+   */
+  export type AgentEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentEvent
+     */
+    select?: AgentEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentEvent
+     */
+    omit?: AgentEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentEventInclude<ExtArgs> | null
+    /**
+     * Filter, which AgentEvent to fetch.
+     */
+    where: AgentEventWhereUniqueInput
+  }
+
+  /**
+   * AgentEvent findUniqueOrThrow
+   */
+  export type AgentEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentEvent
+     */
+    select?: AgentEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentEvent
+     */
+    omit?: AgentEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentEventInclude<ExtArgs> | null
+    /**
+     * Filter, which AgentEvent to fetch.
+     */
+    where: AgentEventWhereUniqueInput
+  }
+
+  /**
+   * AgentEvent findFirst
+   */
+  export type AgentEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentEvent
+     */
+    select?: AgentEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentEvent
+     */
+    omit?: AgentEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentEventInclude<ExtArgs> | null
+    /**
+     * Filter, which AgentEvent to fetch.
+     */
+    where?: AgentEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgentEvents to fetch.
+     */
+    orderBy?: AgentEventOrderByWithRelationInput | AgentEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AgentEvents.
+     */
+    cursor?: AgentEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgentEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgentEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AgentEvents.
+     */
+    distinct?: AgentEventScalarFieldEnum | AgentEventScalarFieldEnum[]
+  }
+
+  /**
+   * AgentEvent findFirstOrThrow
+   */
+  export type AgentEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentEvent
+     */
+    select?: AgentEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentEvent
+     */
+    omit?: AgentEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentEventInclude<ExtArgs> | null
+    /**
+     * Filter, which AgentEvent to fetch.
+     */
+    where?: AgentEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgentEvents to fetch.
+     */
+    orderBy?: AgentEventOrderByWithRelationInput | AgentEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AgentEvents.
+     */
+    cursor?: AgentEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgentEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgentEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AgentEvents.
+     */
+    distinct?: AgentEventScalarFieldEnum | AgentEventScalarFieldEnum[]
+  }
+
+  /**
+   * AgentEvent findMany
+   */
+  export type AgentEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentEvent
+     */
+    select?: AgentEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentEvent
+     */
+    omit?: AgentEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentEventInclude<ExtArgs> | null
+    /**
+     * Filter, which AgentEvents to fetch.
+     */
+    where?: AgentEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgentEvents to fetch.
+     */
+    orderBy?: AgentEventOrderByWithRelationInput | AgentEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AgentEvents.
+     */
+    cursor?: AgentEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgentEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgentEvents.
+     */
+    skip?: number
+    distinct?: AgentEventScalarFieldEnum | AgentEventScalarFieldEnum[]
+  }
+
+  /**
+   * AgentEvent create
+   */
+  export type AgentEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentEvent
+     */
+    select?: AgentEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentEvent
+     */
+    omit?: AgentEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AgentEvent.
+     */
+    data: XOR<AgentEventCreateInput, AgentEventUncheckedCreateInput>
+  }
+
+  /**
+   * AgentEvent createMany
+   */
+  export type AgentEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AgentEvents.
+     */
+    data: AgentEventCreateManyInput | AgentEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AgentEvent createManyAndReturn
+   */
+  export type AgentEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentEvent
+     */
+    select?: AgentEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentEvent
+     */
+    omit?: AgentEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many AgentEvents.
+     */
+    data: AgentEventCreateManyInput | AgentEventCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentEventIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AgentEvent update
+   */
+  export type AgentEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentEvent
+     */
+    select?: AgentEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentEvent
+     */
+    omit?: AgentEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AgentEvent.
+     */
+    data: XOR<AgentEventUpdateInput, AgentEventUncheckedUpdateInput>
+    /**
+     * Choose, which AgentEvent to update.
+     */
+    where: AgentEventWhereUniqueInput
+  }
+
+  /**
+   * AgentEvent updateMany
+   */
+  export type AgentEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AgentEvents.
+     */
+    data: XOR<AgentEventUpdateManyMutationInput, AgentEventUncheckedUpdateManyInput>
+    /**
+     * Filter which AgentEvents to update
+     */
+    where?: AgentEventWhereInput
+    /**
+     * Limit how many AgentEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AgentEvent updateManyAndReturn
+   */
+  export type AgentEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentEvent
+     */
+    select?: AgentEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentEvent
+     */
+    omit?: AgentEventOmit<ExtArgs> | null
+    /**
+     * The data used to update AgentEvents.
+     */
+    data: XOR<AgentEventUpdateManyMutationInput, AgentEventUncheckedUpdateManyInput>
+    /**
+     * Filter which AgentEvents to update
+     */
+    where?: AgentEventWhereInput
+    /**
+     * Limit how many AgentEvents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentEventIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AgentEvent upsert
+   */
+  export type AgentEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentEvent
+     */
+    select?: AgentEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentEvent
+     */
+    omit?: AgentEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AgentEvent to update in case it exists.
+     */
+    where: AgentEventWhereUniqueInput
+    /**
+     * In case the AgentEvent found by the `where` argument doesn't exist, create a new AgentEvent with this data.
+     */
+    create: XOR<AgentEventCreateInput, AgentEventUncheckedCreateInput>
+    /**
+     * In case the AgentEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AgentEventUpdateInput, AgentEventUncheckedUpdateInput>
+  }
+
+  /**
+   * AgentEvent delete
+   */
+  export type AgentEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentEvent
+     */
+    select?: AgentEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentEvent
+     */
+    omit?: AgentEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentEventInclude<ExtArgs> | null
+    /**
+     * Filter which AgentEvent to delete.
+     */
+    where: AgentEventWhereUniqueInput
+  }
+
+  /**
+   * AgentEvent deleteMany
+   */
+  export type AgentEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AgentEvents to delete
+     */
+    where?: AgentEventWhereInput
+    /**
+     * Limit how many AgentEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AgentEvent without action
+   */
+  export type AgentEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgentEvent
+     */
+    select?: AgentEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgentEvent
+     */
+    omit?: AgentEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgentEventInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -12924,6 +15348,32 @@ export namespace Prisma {
   };
 
   export type UsageLogScalarFieldEnum = (typeof UsageLogScalarFieldEnum)[keyof typeof UsageLogScalarFieldEnum]
+
+
+  export const AgentMemoryScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    namespace: 'namespace',
+    key: 'key',
+    value: 'value',
+    expiresAt: 'expiresAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AgentMemoryScalarFieldEnum = (typeof AgentMemoryScalarFieldEnum)[keyof typeof AgentMemoryScalarFieldEnum]
+
+
+  export const AgentEventScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    namespace: 'namespace',
+    eventType: 'eventType',
+    payload: 'payload',
+    createdAt: 'createdAt'
+  };
+
+  export type AgentEventScalarFieldEnum = (typeof AgentEventScalarFieldEnum)[keyof typeof AgentEventScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -13488,6 +15938,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     apiKeys?: ApiKeyListRelationFilter
     sandboxes?: SandboxListRelationFilter
+    agentMemories?: AgentMemoryListRelationFilter
+    agentEvents?: AgentEventListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -13498,6 +15950,8 @@ export namespace Prisma {
     updatedAt?: SortOrder
     apiKeys?: ApiKeyOrderByRelationAggregateInput
     sandboxes?: SandboxOrderByRelationAggregateInput
+    agentMemories?: AgentMemoryOrderByRelationAggregateInput
+    agentEvents?: AgentEventOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -13511,6 +15965,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     apiKeys?: ApiKeyListRelationFilter
     sandboxes?: SandboxListRelationFilter
+    agentMemories?: AgentMemoryListRelationFilter
+    agentEvents?: AgentEventListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -13755,6 +16211,137 @@ export namespace Prisma {
     billedAmount?: FloatWithAggregatesFilter<"UsageLog"> | number
     language?: StringWithAggregatesFilter<"UsageLog"> | string
     createdAt?: DateTimeWithAggregatesFilter<"UsageLog"> | Date | string
+  }
+
+  export type AgentMemoryWhereInput = {
+    AND?: AgentMemoryWhereInput | AgentMemoryWhereInput[]
+    OR?: AgentMemoryWhereInput[]
+    NOT?: AgentMemoryWhereInput | AgentMemoryWhereInput[]
+    id?: StringFilter<"AgentMemory"> | string
+    userId?: StringFilter<"AgentMemory"> | string
+    namespace?: StringFilter<"AgentMemory"> | string
+    key?: StringFilter<"AgentMemory"> | string
+    value?: StringFilter<"AgentMemory"> | string
+    expiresAt?: DateTimeNullableFilter<"AgentMemory"> | Date | string | null
+    createdAt?: DateTimeFilter<"AgentMemory"> | Date | string
+    updatedAt?: DateTimeFilter<"AgentMemory"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type AgentMemoryOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    namespace?: SortOrder
+    key?: SortOrder
+    value?: SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type AgentMemoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_namespace_key?: AgentMemoryUserIdNamespaceKeyCompoundUniqueInput
+    AND?: AgentMemoryWhereInput | AgentMemoryWhereInput[]
+    OR?: AgentMemoryWhereInput[]
+    NOT?: AgentMemoryWhereInput | AgentMemoryWhereInput[]
+    userId?: StringFilter<"AgentMemory"> | string
+    namespace?: StringFilter<"AgentMemory"> | string
+    key?: StringFilter<"AgentMemory"> | string
+    value?: StringFilter<"AgentMemory"> | string
+    expiresAt?: DateTimeNullableFilter<"AgentMemory"> | Date | string | null
+    createdAt?: DateTimeFilter<"AgentMemory"> | Date | string
+    updatedAt?: DateTimeFilter<"AgentMemory"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId_namespace_key">
+
+  export type AgentMemoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    namespace?: SortOrder
+    key?: SortOrder
+    value?: SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AgentMemoryCountOrderByAggregateInput
+    _max?: AgentMemoryMaxOrderByAggregateInput
+    _min?: AgentMemoryMinOrderByAggregateInput
+  }
+
+  export type AgentMemoryScalarWhereWithAggregatesInput = {
+    AND?: AgentMemoryScalarWhereWithAggregatesInput | AgentMemoryScalarWhereWithAggregatesInput[]
+    OR?: AgentMemoryScalarWhereWithAggregatesInput[]
+    NOT?: AgentMemoryScalarWhereWithAggregatesInput | AgentMemoryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AgentMemory"> | string
+    userId?: StringWithAggregatesFilter<"AgentMemory"> | string
+    namespace?: StringWithAggregatesFilter<"AgentMemory"> | string
+    key?: StringWithAggregatesFilter<"AgentMemory"> | string
+    value?: StringWithAggregatesFilter<"AgentMemory"> | string
+    expiresAt?: DateTimeNullableWithAggregatesFilter<"AgentMemory"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AgentMemory"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AgentMemory"> | Date | string
+  }
+
+  export type AgentEventWhereInput = {
+    AND?: AgentEventWhereInput | AgentEventWhereInput[]
+    OR?: AgentEventWhereInput[]
+    NOT?: AgentEventWhereInput | AgentEventWhereInput[]
+    id?: StringFilter<"AgentEvent"> | string
+    userId?: StringFilter<"AgentEvent"> | string
+    namespace?: StringFilter<"AgentEvent"> | string
+    eventType?: StringFilter<"AgentEvent"> | string
+    payload?: StringFilter<"AgentEvent"> | string
+    createdAt?: DateTimeFilter<"AgentEvent"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type AgentEventOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    namespace?: SortOrder
+    eventType?: SortOrder
+    payload?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type AgentEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AgentEventWhereInput | AgentEventWhereInput[]
+    OR?: AgentEventWhereInput[]
+    NOT?: AgentEventWhereInput | AgentEventWhereInput[]
+    userId?: StringFilter<"AgentEvent"> | string
+    namespace?: StringFilter<"AgentEvent"> | string
+    eventType?: StringFilter<"AgentEvent"> | string
+    payload?: StringFilter<"AgentEvent"> | string
+    createdAt?: DateTimeFilter<"AgentEvent"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type AgentEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    namespace?: SortOrder
+    eventType?: SortOrder
+    payload?: SortOrder
+    createdAt?: SortOrder
+    _count?: AgentEventCountOrderByAggregateInput
+    _max?: AgentEventMaxOrderByAggregateInput
+    _min?: AgentEventMinOrderByAggregateInput
+  }
+
+  export type AgentEventScalarWhereWithAggregatesInput = {
+    AND?: AgentEventScalarWhereWithAggregatesInput | AgentEventScalarWhereWithAggregatesInput[]
+    OR?: AgentEventScalarWhereWithAggregatesInput[]
+    NOT?: AgentEventScalarWhereWithAggregatesInput | AgentEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AgentEvent"> | string
+    userId?: StringWithAggregatesFilter<"AgentEvent"> | string
+    namespace?: StringWithAggregatesFilter<"AgentEvent"> | string
+    eventType?: StringWithAggregatesFilter<"AgentEvent"> | string
+    payload?: StringWithAggregatesFilter<"AgentEvent"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"AgentEvent"> | Date | string
   }
 
   export type HealthCheckCreateInput = {
@@ -14212,6 +16799,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     sandboxes?: SandboxCreateNestedManyWithoutUserInput
+    agentMemories?: AgentMemoryCreateNestedManyWithoutUserInput
+    agentEvents?: AgentEventCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -14222,6 +16811,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     sandboxes?: SandboxUncheckedCreateNestedManyWithoutUserInput
+    agentMemories?: AgentMemoryUncheckedCreateNestedManyWithoutUserInput
+    agentEvents?: AgentEventUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -14232,6 +16823,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     sandboxes?: SandboxUpdateManyWithoutUserNestedInput
+    agentMemories?: AgentMemoryUpdateManyWithoutUserNestedInput
+    agentEvents?: AgentEventUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -14242,6 +16835,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     sandboxes?: SandboxUncheckedUpdateManyWithoutUserNestedInput
+    agentMemories?: AgentMemoryUncheckedUpdateManyWithoutUserNestedInput
+    agentEvents?: AgentEventUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -14504,6 +17099,144 @@ export namespace Prisma {
     durationSecs?: IntFieldUpdateOperationsInput | number
     billedAmount?: FloatFieldUpdateOperationsInput | number
     language?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgentMemoryCreateInput = {
+    id?: string
+    namespace: string
+    key: string
+    value: string
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutAgentMemoriesInput
+  }
+
+  export type AgentMemoryUncheckedCreateInput = {
+    id?: string
+    userId: string
+    namespace: string
+    key: string
+    value: string
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgentMemoryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namespace?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutAgentMemoriesNestedInput
+  }
+
+  export type AgentMemoryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    namespace?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgentMemoryCreateManyInput = {
+    id?: string
+    userId: string
+    namespace: string
+    key: string
+    value: string
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgentMemoryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namespace?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgentMemoryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    namespace?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgentEventCreateInput = {
+    id?: string
+    namespace: string
+    eventType: string
+    payload: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutAgentEventsInput
+  }
+
+  export type AgentEventUncheckedCreateInput = {
+    id?: string
+    userId: string
+    namespace: string
+    eventType: string
+    payload: string
+    createdAt?: Date | string
+  }
+
+  export type AgentEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namespace?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    payload?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutAgentEventsNestedInput
+  }
+
+  export type AgentEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    namespace?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    payload?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgentEventCreateManyInput = {
+    id?: string
+    userId: string
+    namespace: string
+    eventType: string
+    payload: string
+    createdAt?: Date | string
+  }
+
+  export type AgentEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namespace?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    payload?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgentEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    namespace?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    payload?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -14911,11 +17644,31 @@ export namespace Prisma {
     none?: SandboxWhereInput
   }
 
+  export type AgentMemoryListRelationFilter = {
+    every?: AgentMemoryWhereInput
+    some?: AgentMemoryWhereInput
+    none?: AgentMemoryWhereInput
+  }
+
+  export type AgentEventListRelationFilter = {
+    every?: AgentEventWhereInput
+    some?: AgentEventWhereInput
+    none?: AgentEventWhereInput
+  }
+
   export type ApiKeyOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type SandboxOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AgentMemoryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AgentEventOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -15200,6 +17953,72 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type AgentMemoryUserIdNamespaceKeyCompoundUniqueInput = {
+    userId: string
+    namespace: string
+    key: string
+  }
+
+  export type AgentMemoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    namespace?: SortOrder
+    key?: SortOrder
+    value?: SortOrder
+    expiresAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AgentMemoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    namespace?: SortOrder
+    key?: SortOrder
+    value?: SortOrder
+    expiresAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AgentMemoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    namespace?: SortOrder
+    key?: SortOrder
+    value?: SortOrder
+    expiresAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AgentEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    namespace?: SortOrder
+    eventType?: SortOrder
+    payload?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AgentEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    namespace?: SortOrder
+    eventType?: SortOrder
+    payload?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AgentEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    namespace?: SortOrder
+    eventType?: SortOrder
+    payload?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -15354,6 +18173,20 @@ export namespace Prisma {
     connect?: SandboxWhereUniqueInput | SandboxWhereUniqueInput[]
   }
 
+  export type AgentMemoryCreateNestedManyWithoutUserInput = {
+    create?: XOR<AgentMemoryCreateWithoutUserInput, AgentMemoryUncheckedCreateWithoutUserInput> | AgentMemoryCreateWithoutUserInput[] | AgentMemoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AgentMemoryCreateOrConnectWithoutUserInput | AgentMemoryCreateOrConnectWithoutUserInput[]
+    createMany?: AgentMemoryCreateManyUserInputEnvelope
+    connect?: AgentMemoryWhereUniqueInput | AgentMemoryWhereUniqueInput[]
+  }
+
+  export type AgentEventCreateNestedManyWithoutUserInput = {
+    create?: XOR<AgentEventCreateWithoutUserInput, AgentEventUncheckedCreateWithoutUserInput> | AgentEventCreateWithoutUserInput[] | AgentEventUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AgentEventCreateOrConnectWithoutUserInput | AgentEventCreateOrConnectWithoutUserInput[]
+    createMany?: AgentEventCreateManyUserInputEnvelope
+    connect?: AgentEventWhereUniqueInput | AgentEventWhereUniqueInput[]
+  }
+
   export type ApiKeyUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<ApiKeyCreateWithoutUserInput, ApiKeyUncheckedCreateWithoutUserInput> | ApiKeyCreateWithoutUserInput[] | ApiKeyUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ApiKeyCreateOrConnectWithoutUserInput | ApiKeyCreateOrConnectWithoutUserInput[]
@@ -15366,6 +18199,20 @@ export namespace Prisma {
     connectOrCreate?: SandboxCreateOrConnectWithoutUserInput | SandboxCreateOrConnectWithoutUserInput[]
     createMany?: SandboxCreateManyUserInputEnvelope
     connect?: SandboxWhereUniqueInput | SandboxWhereUniqueInput[]
+  }
+
+  export type AgentMemoryUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<AgentMemoryCreateWithoutUserInput, AgentMemoryUncheckedCreateWithoutUserInput> | AgentMemoryCreateWithoutUserInput[] | AgentMemoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AgentMemoryCreateOrConnectWithoutUserInput | AgentMemoryCreateOrConnectWithoutUserInput[]
+    createMany?: AgentMemoryCreateManyUserInputEnvelope
+    connect?: AgentMemoryWhereUniqueInput | AgentMemoryWhereUniqueInput[]
+  }
+
+  export type AgentEventUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<AgentEventCreateWithoutUserInput, AgentEventUncheckedCreateWithoutUserInput> | AgentEventCreateWithoutUserInput[] | AgentEventUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AgentEventCreateOrConnectWithoutUserInput | AgentEventCreateOrConnectWithoutUserInput[]
+    createMany?: AgentEventCreateManyUserInputEnvelope
+    connect?: AgentEventWhereUniqueInput | AgentEventWhereUniqueInput[]
   }
 
   export type ApiKeyUpdateManyWithoutUserNestedInput = {
@@ -15396,6 +18243,34 @@ export namespace Prisma {
     deleteMany?: SandboxScalarWhereInput | SandboxScalarWhereInput[]
   }
 
+  export type AgentMemoryUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AgentMemoryCreateWithoutUserInput, AgentMemoryUncheckedCreateWithoutUserInput> | AgentMemoryCreateWithoutUserInput[] | AgentMemoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AgentMemoryCreateOrConnectWithoutUserInput | AgentMemoryCreateOrConnectWithoutUserInput[]
+    upsert?: AgentMemoryUpsertWithWhereUniqueWithoutUserInput | AgentMemoryUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AgentMemoryCreateManyUserInputEnvelope
+    set?: AgentMemoryWhereUniqueInput | AgentMemoryWhereUniqueInput[]
+    disconnect?: AgentMemoryWhereUniqueInput | AgentMemoryWhereUniqueInput[]
+    delete?: AgentMemoryWhereUniqueInput | AgentMemoryWhereUniqueInput[]
+    connect?: AgentMemoryWhereUniqueInput | AgentMemoryWhereUniqueInput[]
+    update?: AgentMemoryUpdateWithWhereUniqueWithoutUserInput | AgentMemoryUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AgentMemoryUpdateManyWithWhereWithoutUserInput | AgentMemoryUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AgentMemoryScalarWhereInput | AgentMemoryScalarWhereInput[]
+  }
+
+  export type AgentEventUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AgentEventCreateWithoutUserInput, AgentEventUncheckedCreateWithoutUserInput> | AgentEventCreateWithoutUserInput[] | AgentEventUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AgentEventCreateOrConnectWithoutUserInput | AgentEventCreateOrConnectWithoutUserInput[]
+    upsert?: AgentEventUpsertWithWhereUniqueWithoutUserInput | AgentEventUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AgentEventCreateManyUserInputEnvelope
+    set?: AgentEventWhereUniqueInput | AgentEventWhereUniqueInput[]
+    disconnect?: AgentEventWhereUniqueInput | AgentEventWhereUniqueInput[]
+    delete?: AgentEventWhereUniqueInput | AgentEventWhereUniqueInput[]
+    connect?: AgentEventWhereUniqueInput | AgentEventWhereUniqueInput[]
+    update?: AgentEventUpdateWithWhereUniqueWithoutUserInput | AgentEventUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AgentEventUpdateManyWithWhereWithoutUserInput | AgentEventUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AgentEventScalarWhereInput | AgentEventScalarWhereInput[]
+  }
+
   export type ApiKeyUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ApiKeyCreateWithoutUserInput, ApiKeyUncheckedCreateWithoutUserInput> | ApiKeyCreateWithoutUserInput[] | ApiKeyUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ApiKeyCreateOrConnectWithoutUserInput | ApiKeyCreateOrConnectWithoutUserInput[]
@@ -15422,6 +18297,34 @@ export namespace Prisma {
     update?: SandboxUpdateWithWhereUniqueWithoutUserInput | SandboxUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: SandboxUpdateManyWithWhereWithoutUserInput | SandboxUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: SandboxScalarWhereInput | SandboxScalarWhereInput[]
+  }
+
+  export type AgentMemoryUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AgentMemoryCreateWithoutUserInput, AgentMemoryUncheckedCreateWithoutUserInput> | AgentMemoryCreateWithoutUserInput[] | AgentMemoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AgentMemoryCreateOrConnectWithoutUserInput | AgentMemoryCreateOrConnectWithoutUserInput[]
+    upsert?: AgentMemoryUpsertWithWhereUniqueWithoutUserInput | AgentMemoryUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AgentMemoryCreateManyUserInputEnvelope
+    set?: AgentMemoryWhereUniqueInput | AgentMemoryWhereUniqueInput[]
+    disconnect?: AgentMemoryWhereUniqueInput | AgentMemoryWhereUniqueInput[]
+    delete?: AgentMemoryWhereUniqueInput | AgentMemoryWhereUniqueInput[]
+    connect?: AgentMemoryWhereUniqueInput | AgentMemoryWhereUniqueInput[]
+    update?: AgentMemoryUpdateWithWhereUniqueWithoutUserInput | AgentMemoryUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AgentMemoryUpdateManyWithWhereWithoutUserInput | AgentMemoryUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AgentMemoryScalarWhereInput | AgentMemoryScalarWhereInput[]
+  }
+
+  export type AgentEventUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AgentEventCreateWithoutUserInput, AgentEventUncheckedCreateWithoutUserInput> | AgentEventCreateWithoutUserInput[] | AgentEventUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AgentEventCreateOrConnectWithoutUserInput | AgentEventCreateOrConnectWithoutUserInput[]
+    upsert?: AgentEventUpsertWithWhereUniqueWithoutUserInput | AgentEventUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AgentEventCreateManyUserInputEnvelope
+    set?: AgentEventWhereUniqueInput | AgentEventWhereUniqueInput[]
+    disconnect?: AgentEventWhereUniqueInput | AgentEventWhereUniqueInput[]
+    delete?: AgentEventWhereUniqueInput | AgentEventWhereUniqueInput[]
+    connect?: AgentEventWhereUniqueInput | AgentEventWhereUniqueInput[]
+    update?: AgentEventUpdateWithWhereUniqueWithoutUserInput | AgentEventUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AgentEventUpdateManyWithWhereWithoutUserInput | AgentEventUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AgentEventScalarWhereInput | AgentEventScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutApiKeysInput = {
@@ -15538,6 +18441,34 @@ export namespace Prisma {
     upsert?: SandboxUpsertWithoutUsageLogsInput
     connect?: SandboxWhereUniqueInput
     update?: XOR<XOR<SandboxUpdateToOneWithWhereWithoutUsageLogsInput, SandboxUpdateWithoutUsageLogsInput>, SandboxUncheckedUpdateWithoutUsageLogsInput>
+  }
+
+  export type UserCreateNestedOneWithoutAgentMemoriesInput = {
+    create?: XOR<UserCreateWithoutAgentMemoriesInput, UserUncheckedCreateWithoutAgentMemoriesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAgentMemoriesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutAgentMemoriesNestedInput = {
+    create?: XOR<UserCreateWithoutAgentMemoriesInput, UserUncheckedCreateWithoutAgentMemoriesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAgentMemoriesInput
+    upsert?: UserUpsertWithoutAgentMemoriesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAgentMemoriesInput, UserUpdateWithoutAgentMemoriesInput>, UserUncheckedUpdateWithoutAgentMemoriesInput>
+  }
+
+  export type UserCreateNestedOneWithoutAgentEventsInput = {
+    create?: XOR<UserCreateWithoutAgentEventsInput, UserUncheckedCreateWithoutAgentEventsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAgentEventsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutAgentEventsNestedInput = {
+    create?: XOR<UserCreateWithoutAgentEventsInput, UserUncheckedCreateWithoutAgentEventsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAgentEventsInput
+    upsert?: UserUpsertWithoutAgentEventsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAgentEventsInput, UserUpdateWithoutAgentEventsInput>, UserUncheckedUpdateWithoutAgentEventsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -16161,6 +19092,62 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AgentMemoryCreateWithoutUserInput = {
+    id?: string
+    namespace: string
+    key: string
+    value: string
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgentMemoryUncheckedCreateWithoutUserInput = {
+    id?: string
+    namespace: string
+    key: string
+    value: string
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgentMemoryCreateOrConnectWithoutUserInput = {
+    where: AgentMemoryWhereUniqueInput
+    create: XOR<AgentMemoryCreateWithoutUserInput, AgentMemoryUncheckedCreateWithoutUserInput>
+  }
+
+  export type AgentMemoryCreateManyUserInputEnvelope = {
+    data: AgentMemoryCreateManyUserInput | AgentMemoryCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AgentEventCreateWithoutUserInput = {
+    id?: string
+    namespace: string
+    eventType: string
+    payload: string
+    createdAt?: Date | string
+  }
+
+  export type AgentEventUncheckedCreateWithoutUserInput = {
+    id?: string
+    namespace: string
+    eventType: string
+    payload: string
+    createdAt?: Date | string
+  }
+
+  export type AgentEventCreateOrConnectWithoutUserInput = {
+    where: AgentEventWhereUniqueInput
+    create: XOR<AgentEventCreateWithoutUserInput, AgentEventUncheckedCreateWithoutUserInput>
+  }
+
+  export type AgentEventCreateManyUserInputEnvelope = {
+    data: AgentEventCreateManyUserInput | AgentEventCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ApiKeyUpsertWithWhereUniqueWithoutUserInput = {
     where: ApiKeyWhereUniqueInput
     update: XOR<ApiKeyUpdateWithoutUserInput, ApiKeyUncheckedUpdateWithoutUserInput>
@@ -16223,6 +19210,64 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Sandbox"> | Date | string
   }
 
+  export type AgentMemoryUpsertWithWhereUniqueWithoutUserInput = {
+    where: AgentMemoryWhereUniqueInput
+    update: XOR<AgentMemoryUpdateWithoutUserInput, AgentMemoryUncheckedUpdateWithoutUserInput>
+    create: XOR<AgentMemoryCreateWithoutUserInput, AgentMemoryUncheckedCreateWithoutUserInput>
+  }
+
+  export type AgentMemoryUpdateWithWhereUniqueWithoutUserInput = {
+    where: AgentMemoryWhereUniqueInput
+    data: XOR<AgentMemoryUpdateWithoutUserInput, AgentMemoryUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AgentMemoryUpdateManyWithWhereWithoutUserInput = {
+    where: AgentMemoryScalarWhereInput
+    data: XOR<AgentMemoryUpdateManyMutationInput, AgentMemoryUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type AgentMemoryScalarWhereInput = {
+    AND?: AgentMemoryScalarWhereInput | AgentMemoryScalarWhereInput[]
+    OR?: AgentMemoryScalarWhereInput[]
+    NOT?: AgentMemoryScalarWhereInput | AgentMemoryScalarWhereInput[]
+    id?: StringFilter<"AgentMemory"> | string
+    userId?: StringFilter<"AgentMemory"> | string
+    namespace?: StringFilter<"AgentMemory"> | string
+    key?: StringFilter<"AgentMemory"> | string
+    value?: StringFilter<"AgentMemory"> | string
+    expiresAt?: DateTimeNullableFilter<"AgentMemory"> | Date | string | null
+    createdAt?: DateTimeFilter<"AgentMemory"> | Date | string
+    updatedAt?: DateTimeFilter<"AgentMemory"> | Date | string
+  }
+
+  export type AgentEventUpsertWithWhereUniqueWithoutUserInput = {
+    where: AgentEventWhereUniqueInput
+    update: XOR<AgentEventUpdateWithoutUserInput, AgentEventUncheckedUpdateWithoutUserInput>
+    create: XOR<AgentEventCreateWithoutUserInput, AgentEventUncheckedCreateWithoutUserInput>
+  }
+
+  export type AgentEventUpdateWithWhereUniqueWithoutUserInput = {
+    where: AgentEventWhereUniqueInput
+    data: XOR<AgentEventUpdateWithoutUserInput, AgentEventUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AgentEventUpdateManyWithWhereWithoutUserInput = {
+    where: AgentEventScalarWhereInput
+    data: XOR<AgentEventUpdateManyMutationInput, AgentEventUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type AgentEventScalarWhereInput = {
+    AND?: AgentEventScalarWhereInput | AgentEventScalarWhereInput[]
+    OR?: AgentEventScalarWhereInput[]
+    NOT?: AgentEventScalarWhereInput | AgentEventScalarWhereInput[]
+    id?: StringFilter<"AgentEvent"> | string
+    userId?: StringFilter<"AgentEvent"> | string
+    namespace?: StringFilter<"AgentEvent"> | string
+    eventType?: StringFilter<"AgentEvent"> | string
+    payload?: StringFilter<"AgentEvent"> | string
+    createdAt?: DateTimeFilter<"AgentEvent"> | Date | string
+  }
+
   export type UserCreateWithoutApiKeysInput = {
     id?: string
     email: string
@@ -16230,6 +19275,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     sandboxes?: SandboxCreateNestedManyWithoutUserInput
+    agentMemories?: AgentMemoryCreateNestedManyWithoutUserInput
+    agentEvents?: AgentEventCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApiKeysInput = {
@@ -16239,6 +19286,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     sandboxes?: SandboxUncheckedCreateNestedManyWithoutUserInput
+    agentMemories?: AgentMemoryUncheckedCreateNestedManyWithoutUserInput
+    agentEvents?: AgentEventUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApiKeysInput = {
@@ -16264,6 +19313,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sandboxes?: SandboxUpdateManyWithoutUserNestedInput
+    agentMemories?: AgentMemoryUpdateManyWithoutUserNestedInput
+    agentEvents?: AgentEventUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApiKeysInput = {
@@ -16273,6 +19324,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sandboxes?: SandboxUncheckedUpdateManyWithoutUserNestedInput
+    agentMemories?: AgentMemoryUncheckedUpdateManyWithoutUserNestedInput
+    agentEvents?: AgentEventUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UsageLogCreateWithoutSandboxInput = {
@@ -16310,6 +19363,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
+    agentMemories?: AgentMemoryCreateNestedManyWithoutUserInput
+    agentEvents?: AgentEventCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSandboxesInput = {
@@ -16319,6 +19374,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
+    agentMemories?: AgentMemoryUncheckedCreateNestedManyWithoutUserInput
+    agentEvents?: AgentEventUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSandboxesInput = {
@@ -16373,6 +19430,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
+    agentMemories?: AgentMemoryUpdateManyWithoutUserNestedInput
+    agentEvents?: AgentEventUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSandboxesInput = {
@@ -16382,6 +19441,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+    agentMemories?: AgentMemoryUncheckedUpdateManyWithoutUserNestedInput
+    agentEvents?: AgentEventUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SandboxCreateWithoutUsageLogsInput = {
@@ -16450,6 +19511,126 @@ export namespace Prisma {
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     terminatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCreateWithoutAgentMemoriesInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
+    sandboxes?: SandboxCreateNestedManyWithoutUserInput
+    agentEvents?: AgentEventCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutAgentMemoriesInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
+    sandboxes?: SandboxUncheckedCreateNestedManyWithoutUserInput
+    agentEvents?: AgentEventUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutAgentMemoriesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAgentMemoriesInput, UserUncheckedCreateWithoutAgentMemoriesInput>
+  }
+
+  export type UserUpsertWithoutAgentMemoriesInput = {
+    update: XOR<UserUpdateWithoutAgentMemoriesInput, UserUncheckedUpdateWithoutAgentMemoriesInput>
+    create: XOR<UserCreateWithoutAgentMemoriesInput, UserUncheckedCreateWithoutAgentMemoriesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAgentMemoriesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAgentMemoriesInput, UserUncheckedUpdateWithoutAgentMemoriesInput>
+  }
+
+  export type UserUpdateWithoutAgentMemoriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
+    sandboxes?: SandboxUpdateManyWithoutUserNestedInput
+    agentEvents?: AgentEventUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAgentMemoriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+    sandboxes?: SandboxUncheckedUpdateManyWithoutUserNestedInput
+    agentEvents?: AgentEventUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutAgentEventsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
+    sandboxes?: SandboxCreateNestedManyWithoutUserInput
+    agentMemories?: AgentMemoryCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutAgentEventsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
+    sandboxes?: SandboxUncheckedCreateNestedManyWithoutUserInput
+    agentMemories?: AgentMemoryUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutAgentEventsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAgentEventsInput, UserUncheckedCreateWithoutAgentEventsInput>
+  }
+
+  export type UserUpsertWithoutAgentEventsInput = {
+    update: XOR<UserUpdateWithoutAgentEventsInput, UserUncheckedUpdateWithoutAgentEventsInput>
+    create: XOR<UserCreateWithoutAgentEventsInput, UserUncheckedCreateWithoutAgentEventsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAgentEventsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAgentEventsInput, UserUncheckedUpdateWithoutAgentEventsInput>
+  }
+
+  export type UserUpdateWithoutAgentEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
+    sandboxes?: SandboxUpdateManyWithoutUserNestedInput
+    agentMemories?: AgentMemoryUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAgentEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+    sandboxes?: SandboxUncheckedUpdateManyWithoutUserNestedInput
+    agentMemories?: AgentMemoryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProjectCreateManyWorkspaceInput = {
@@ -16572,6 +19753,24 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type AgentMemoryCreateManyUserInput = {
+    id?: string
+    namespace: string
+    key: string
+    value: string
+    expiresAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgentEventCreateManyUserInput = {
+    id?: string
+    namespace: string
+    eventType: string
+    payload: string
+    createdAt?: Date | string
+  }
+
   export type ApiKeyUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     keyHash?: StringFieldUpdateOperationsInput | string
@@ -16637,6 +19836,60 @@ export namespace Prisma {
     timeoutSecs?: IntFieldUpdateOperationsInput | number
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     terminatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgentMemoryUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namespace?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgentMemoryUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namespace?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgentMemoryUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namespace?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgentEventUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namespace?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    payload?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgentEventUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namespace?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    payload?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgentEventUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namespace?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    payload?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

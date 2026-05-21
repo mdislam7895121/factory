@@ -100,13 +100,15 @@ model PublicProject {
 }
 
 model User {
-  id           String    @id @default(uuid())
-  email        String    @unique
-  passwordHash String
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  apiKeys      ApiKey[]
-  sandboxes    Sandbox[]
+  id            String        @id @default(uuid())
+  email         String        @unique
+  passwordHash  String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  apiKeys       ApiKey[]
+  sandboxes     Sandbox[]
+  agentMemories AgentMemory[]
+  agentEvents   AgentEvent[]
 }
 
 enum SandboxLanguage {
@@ -169,4 +171,36 @@ model UsageLog {
   @@index([userId])
   @@index([sandboxId])
   @@index([createdAt])
+}
+
+// Agent memory: persistent key-value store scoped by user + namespace
+// namespace = agent role (architect, dev, qa, security, monitor, healer, shared)
+model AgentMemory {
+  id        String    @id @default(uuid())
+  userId    String
+  namespace String
+  key       String
+  value     String // JSON-encoded value
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, namespace, key])
+  @@index([userId, namespace])
+  @@index([expiresAt])
+}
+
+// Agent event log: immutable append-only decisions/actions record
+model AgentEvent {
+  id        String   @id @default(uuid())
+  userId    String
+  namespace String
+  eventType String // e.g. "decision", "action", "observation", "error"
+  payload   String // JSON-encoded
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, namespace])
+  @@index([userId, createdAt])
 }
