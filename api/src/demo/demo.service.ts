@@ -215,6 +215,20 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
   font-size:13px;color:var(--fg);cursor:pointer;transition:border-color .15s,background .15s;white-space:nowrap}
 .chip:hover{border-color:var(--accent);background:rgba(108,108,255,.08)}
 .chip:active{opacity:.7}
+/* ---- 12-06: Agent team preview ---- */
+#team-preview{max-width:640px;margin:10px auto 0;padding:0 20px;display:none}
+.tp-header{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.tp-badges{display:flex;flex-wrap:wrap;gap:5px}
+.tp-badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:12px;
+  font-size:11px;font-weight:500;border:1px solid rgba(108,108,255,.3);
+  background:rgba(108,108,255,.06);color:var(--accent)}
+.tp-badge.regulated{border-color:rgba(255,193,7,.4);background:rgba(255,193,7,.06);color:var(--yellow)}
+.tp-warnings{margin-top:7px;display:flex;flex-direction:column;gap:5px}
+.tp-warn{padding:7px 10px;background:rgba(255,193,7,.05);border:1px solid rgba(255,193,7,.2);
+  border-radius:8px;font-size:11px;color:var(--yellow);display:flex;gap:6px;align-items:flex-start}
+.tp-warn .wi{flex-shrink:0}
+.tp-disc{margin-top:4px;font-size:10px;color:var(--muted);font-style:italic;
+  border-left:2px solid rgba(255,193,7,.3);padding-left:5px}
 /* ---- Phase 2: Building ---- */
 .theater-header{padding:14px 16px;display:flex;align-items:center;gap:10px;max-width:900px;margin:0 auto;width:100%;flex-shrink:0}
 .theater-header h2{font-size:17px;font-weight:700;flex:1}
@@ -326,6 +340,11 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
     </div>
   </div>
   <div class="chips">${startersHtml}</div>
+  <div id="team-preview">
+    <div class="tp-header">Specialist agents joining your team:</div>
+    <div class="tp-badges" id="tp-badges"></div>
+    <div class="tp-warnings" id="tp-warnings"></div>
+  </div>
 </div>
 
 <!-- Phase 2: Building (AI Theater) -->
@@ -411,12 +430,52 @@ function showPhase(name) {
   currentPhase = name;
 }
 
-// 11-06: Starter chip click fills prompt
+// ---- 12-06: Agent team preview ----
+var teamPreview = document.getElementById('team-preview');
+var tpBadges = document.getElementById('tp-badges');
+var tpWarnings = document.getElementById('tp-warnings');
+var tpDebounce = null;
+
+function updateTeamPreview(prompt) {
+  if (!prompt || prompt.trim().length < 8) { teamPreview.style.display = 'none'; return; }
+  clearTimeout(tpDebounce);
+  tpDebounce = setTimeout(function() {
+    fetch('/v1/agents/preview-selection', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ prompt: prompt })
+    }).then(function(r) { return r.json(); }).then(function(d) {
+      if (!d.ok) return;
+      var domain = d.domainAgents || [];
+      var warns = d.regulatedWarnings || [];
+      if (!domain.length && !warns.length) { teamPreview.style.display = 'none'; return; }
+      teamPreview.style.display = 'block';
+      tpBadges.innerHTML = domain.map(function(a) {
+        var cls = a.kind === 'REGULATED' ? 'tp-badge regulated' : 'tp-badge';
+        return '<span class="' + cls + '">' + escHtml(a.name) + '</span>';
+      }).join('');
+      tpWarnings.innerHTML = warns.map(function(w) {
+        return '<div class="tp-warn"><span class="wi">⚠️</span>'
+          + '<div>' + escHtml(w.warning)
+          + '<div class="tp-disc">' + escHtml(w.disclaimer) + '</div>'
+          + '</div></div>';
+      }).join('');
+    }).catch(function() {});
+  }, 400);
+}
+
+// 11-06: Starter chip click fills prompt and triggers agent preview
 document.querySelectorAll('.chip').forEach(function(chip) {
   chip.addEventListener('click', function() {
-    document.getElementById('prompt-input').value = chip.dataset.prompt || '';
+    var p = chip.dataset.prompt || '';
+    document.getElementById('prompt-input').value = p;
     document.getElementById('prompt-input').focus();
+    updateTeamPreview(p);
   });
+});
+
+document.getElementById('prompt-input').addEventListener('input', function() {
+  updateTeamPreview(this.value);
 });
 
 // ---- 11-01: Build submit ----

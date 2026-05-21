@@ -18,12 +18,13 @@ import { SecurityAuditModule } from './audit/security-audit.module';
 import { BetaModule } from './beta/beta.module';
 import { LegalModule } from './legal/legal.module';
 import { DemoModule } from './demo/demo.module';
+import { AgentsModule } from './agents/agents.module';
 
 @Module({
   imports: [
     RedisModule, AuthModule, SandboxModule, PreviewModule, RemixModule,
     ActivityStreamModule, SnapshotModule,
-    AdminModule, SecurityAuditModule, BetaModule, LegalModule, DemoModule,
+    AdminModule, SecurityAuditModule, BetaModule, LegalModule, DemoModule, AgentsModule,
   ],
   controllers: [AppController, Serial11Controller],
   providers: [
