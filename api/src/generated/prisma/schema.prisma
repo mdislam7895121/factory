@@ -392,6 +392,80 @@ model AgentActivityEvent {
   @@index([severity, createdAt])
 }
 
+// ── SERIAL 08: Persistent Snapshots + Recovery ───────────────────────────────
+
+enum SnapshotType {
+  MANUAL
+  PRE_DEPLOY
+  PRE_REMIX
+  AUTO_RECOVERY
+  SCHEDULED
+}
+
+enum SnapshotStatus {
+  CREATING
+  READY
+  FAILED
+  RESTORING
+  RESTORED
+  EXPIRED
+}
+
+enum RecoveryEventType {
+  SNAPSHOT_CREATED
+  RESTORE_STARTED
+  RESTORE_SUCCEEDED
+  RESTORE_FAILED
+  RUNTIME_RECOVERED
+  ROLLBACK_TRIGGERED
+}
+
+model ProjectSnapshot {
+  id           String         @id @default(uuid())
+  projectId    String?
+  runtimeId    String?
+  workspaceId  String?
+  ownerUserId  String
+  label        String?
+  reason       String?
+  snapshotType SnapshotType
+  status       SnapshotStatus @default(CREATING)
+  storagePath  String?
+  manifest     String? // JSON — safe metadata only, secrets stripped
+  checksum     String? // SHA-256 of manifest
+  sizeBytes    Int?
+  createdAt    DateTime       @default(now())
+  restoredAt   DateTime?
+  expiresAt    DateTime?
+
+  recoveryEvents RuntimeRecoveryEvent[]
+
+  @@index([projectId, createdAt])
+  @@index([runtimeId, createdAt])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model RuntimeRecoveryEvent {
+  id          String            @id @default(uuid())
+  projectId   String?
+  runtimeId   String?
+  snapshotId  String?
+  eventType   RecoveryEventType
+  status      EventStatus
+  reason      String?
+  metadata    String? // JSON
+  createdAt   DateTime          @default(now())
+  completedAt DateTime?
+
+  snapshot ProjectSnapshot? @relation(fields: [snapshotId], references: [id])
+
+  @@index([projectId, createdAt])
+  @@index([runtimeId, createdAt])
+  @@index([snapshotId])
+  @@index([createdAt])
+}
+
 // ── SERIAL 05: Public Preview Gateway ────────────────────────────────────────
 
 // 05-01: Slug-based aliases for stable preview URLs

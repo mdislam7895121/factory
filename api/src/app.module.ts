@@ -12,9 +12,10 @@ import { SandboxModule } from './sandbox/sandbox.module';
 import { PreviewModule } from './preview/preview.module';
 import { RemixModule } from './remix/remix.module';
 import { ActivityStreamModule } from './activity/activity-stream.module';
+import { SnapshotModule } from './snapshot/snapshot.module';
 
 @Module({
-  imports: [RedisModule, AuthModule, SandboxModule, PreviewModule, RemixModule, ActivityStreamModule],
+  imports: [RedisModule, AuthModule, SandboxModule, PreviewModule, RemixModule, ActivityStreamModule, SnapshotModule],
   controllers: [AppController, Serial11Controller],
   providers: [
     AppService,

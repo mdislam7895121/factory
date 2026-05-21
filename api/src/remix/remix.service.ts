@@ -5,12 +5,14 @@ import {
   Injectable,
   Logger,
   NotFoundException,
+  Optional,
 } from '@nestjs/common';
 import { compare } from 'bcryptjs';
 import { createHash, randomUUID } from 'node:crypto';
-import { RuntimeStatus, RuntimeVisibility, SleepState } from '../generated/prisma';
+import { RuntimeStatus, RuntimeVisibility, SleepState, SnapshotType } from '../generated/prisma';
 import { PrismaService } from '../prisma/prisma.service';
 import { RedisService } from '../lib/redis/redis.service';
+import type { SnapshotService } from '../snapshot/snapshot.service';
 
 const ORCHESTRATOR_URL     = (process.env.ORCHESTRATOR_URL     ?? 'http://localhost:4100').trim();
 const ORCHESTRATOR_API_KEY = (process.env.ORCHESTRATOR_API_KEY ?? '').trim();
@@ -25,8 +27,9 @@ export class RemixService {
   private readonly logger = new Logger(RemixService.name);
 
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly redis:  RedisService,
+    private readonly prisma:     PrismaService,
+    private readonly redis:      RedisService,
+    @Optional() private readonly snapshots?: SnapshotService,
   ) {}
 
   // ── 06-02: Core remix operation ───────────────────────────────────────────
@@ -51,6 +54,17 @@ export class RemixService {
 
     // 06-08: Rate limit check
     await this.checkRateLimits(opts.ownerUserId, opts.ip);
+
+    // 08-05: PRE_REMIX snapshot — capture source state before fork; blocks if it fails
+    if (this.snapshots) {
+      await this.snapshots.createSnapshot({
+        runtimeId:    source.id,
+        projectId:    source.projectId ?? undefined,
+        ownerUserId:  source.ownerUserId,
+        reason:       `pre-remix by ${opts.ownerUserId}`,
+        snapshotType: SnapshotType.PRE_REMIX,
+      });
+    }
 
     // 06-04: Clone metadata (secrets stripped)
     const safeMeta = this.cloneSafeMetadata(source.metadata);

@@ -327,6 +327,38 @@ exports.Prisma.AgentActivityEventScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ProjectSnapshotScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  runtimeId: 'runtimeId',
+  workspaceId: 'workspaceId',
+  ownerUserId: 'ownerUserId',
+  label: 'label',
+  reason: 'reason',
+  snapshotType: 'snapshotType',
+  status: 'status',
+  storagePath: 'storagePath',
+  manifest: 'manifest',
+  checksum: 'checksum',
+  sizeBytes: 'sizeBytes',
+  createdAt: 'createdAt',
+  restoredAt: 'restoredAt',
+  expiresAt: 'expiresAt'
+};
+
+exports.Prisma.RuntimeRecoveryEventScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  runtimeId: 'runtimeId',
+  snapshotId: 'snapshotId',
+  eventType: 'eventType',
+  status: 'status',
+  reason: 'reason',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  completedAt: 'completedAt'
+};
+
 exports.Prisma.PreviewRouteScalarFieldEnum = {
   id: 'id',
   runtimeId: 'runtimeId',
@@ -474,6 +506,32 @@ exports.EventStatus = exports.$Enums.EventStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.SnapshotType = exports.$Enums.SnapshotType = {
+  MANUAL: 'MANUAL',
+  PRE_DEPLOY: 'PRE_DEPLOY',
+  PRE_REMIX: 'PRE_REMIX',
+  AUTO_RECOVERY: 'AUTO_RECOVERY',
+  SCHEDULED: 'SCHEDULED'
+};
+
+exports.SnapshotStatus = exports.$Enums.SnapshotStatus = {
+  CREATING: 'CREATING',
+  READY: 'READY',
+  FAILED: 'FAILED',
+  RESTORING: 'RESTORING',
+  RESTORED: 'RESTORED',
+  EXPIRED: 'EXPIRED'
+};
+
+exports.RecoveryEventType = exports.$Enums.RecoveryEventType = {
+  SNAPSHOT_CREATED: 'SNAPSHOT_CREATED',
+  RESTORE_STARTED: 'RESTORE_STARTED',
+  RESTORE_SUCCEEDED: 'RESTORE_SUCCEEDED',
+  RESTORE_FAILED: 'RESTORE_FAILED',
+  RUNTIME_RECOVERED: 'RUNTIME_RECOVERED',
+  ROLLBACK_TRIGGERED: 'ROLLBACK_TRIGGERED'
+};
+
 exports.LoopRunStatus = exports.$Enums.LoopRunStatus = {
   RUNNING: 'RUNNING',
   HEALTHY: 'HEALTHY',
@@ -500,6 +558,8 @@ exports.Prisma.ModelName = {
   RuntimeInstance: 'RuntimeInstance',
   ProjectFork: 'ProjectFork',
   AgentActivityEvent: 'AgentActivityEvent',
+  ProjectSnapshot: 'ProjectSnapshot',
+  RuntimeRecoveryEvent: 'RuntimeRecoveryEvent',
   PreviewRoute: 'PreviewRoute',
   PreviewAccessLog: 'PreviewAccessLog',
   LoopConfig: 'LoopConfig',

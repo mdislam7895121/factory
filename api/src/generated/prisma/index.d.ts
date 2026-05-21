@@ -99,6 +99,16 @@ export type ProjectFork = $Result.DefaultSelection<Prisma.$ProjectForkPayload>
  */
 export type AgentActivityEvent = $Result.DefaultSelection<Prisma.$AgentActivityEventPayload>
 /**
+ * Model ProjectSnapshot
+ * 
+ */
+export type ProjectSnapshot = $Result.DefaultSelection<Prisma.$ProjectSnapshotPayload>
+/**
+ * Model RuntimeRecoveryEvent
+ * 
+ */
+export type RuntimeRecoveryEvent = $Result.DefaultSelection<Prisma.$RuntimeRecoveryEventPayload>
+/**
  * Model PreviewRoute
  * 
  */
@@ -251,6 +261,41 @@ export const ActivitySeverity: {
 
 export type ActivitySeverity = (typeof ActivitySeverity)[keyof typeof ActivitySeverity]
 
+
+export const SnapshotType: {
+  MANUAL: 'MANUAL',
+  PRE_DEPLOY: 'PRE_DEPLOY',
+  PRE_REMIX: 'PRE_REMIX',
+  AUTO_RECOVERY: 'AUTO_RECOVERY',
+  SCHEDULED: 'SCHEDULED'
+};
+
+export type SnapshotType = (typeof SnapshotType)[keyof typeof SnapshotType]
+
+
+export const SnapshotStatus: {
+  CREATING: 'CREATING',
+  READY: 'READY',
+  FAILED: 'FAILED',
+  RESTORING: 'RESTORING',
+  RESTORED: 'RESTORED',
+  EXPIRED: 'EXPIRED'
+};
+
+export type SnapshotStatus = (typeof SnapshotStatus)[keyof typeof SnapshotStatus]
+
+
+export const RecoveryEventType: {
+  SNAPSHOT_CREATED: 'SNAPSHOT_CREATED',
+  RESTORE_STARTED: 'RESTORE_STARTED',
+  RESTORE_SUCCEEDED: 'RESTORE_SUCCEEDED',
+  RESTORE_FAILED: 'RESTORE_FAILED',
+  RUNTIME_RECOVERED: 'RUNTIME_RECOVERED',
+  ROLLBACK_TRIGGERED: 'ROLLBACK_TRIGGERED'
+};
+
+export type RecoveryEventType = (typeof RecoveryEventType)[keyof typeof RecoveryEventType]
+
 }
 
 export type ProjectStatus = $Enums.ProjectStatus
@@ -300,6 +345,18 @@ export const EventStatus: typeof $Enums.EventStatus
 export type ActivitySeverity = $Enums.ActivitySeverity
 
 export const ActivitySeverity: typeof $Enums.ActivitySeverity
+
+export type SnapshotType = $Enums.SnapshotType
+
+export const SnapshotType: typeof $Enums.SnapshotType
+
+export type SnapshotStatus = $Enums.SnapshotStatus
+
+export const SnapshotStatus: typeof $Enums.SnapshotStatus
+
+export type RecoveryEventType = $Enums.RecoveryEventType
+
+export const RecoveryEventType: typeof $Enums.RecoveryEventType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -587,6 +644,26 @@ export class PrismaClient<
     * ```
     */
   get agentActivityEvent(): Prisma.AgentActivityEventDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.projectSnapshot`: Exposes CRUD operations for the **ProjectSnapshot** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProjectSnapshots
+    * const projectSnapshots = await prisma.projectSnapshot.findMany()
+    * ```
+    */
+  get projectSnapshot(): Prisma.ProjectSnapshotDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.runtimeRecoveryEvent`: Exposes CRUD operations for the **RuntimeRecoveryEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RuntimeRecoveryEvents
+    * const runtimeRecoveryEvents = await prisma.runtimeRecoveryEvent.findMany()
+    * ```
+    */
+  get runtimeRecoveryEvent(): Prisma.RuntimeRecoveryEventDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.previewRoute`: Exposes CRUD operations for the **PreviewRoute** model.
@@ -1078,6 +1155,8 @@ export namespace Prisma {
     RuntimeInstance: 'RuntimeInstance',
     ProjectFork: 'ProjectFork',
     AgentActivityEvent: 'AgentActivityEvent',
+    ProjectSnapshot: 'ProjectSnapshot',
+    RuntimeRecoveryEvent: 'RuntimeRecoveryEvent',
     PreviewRoute: 'PreviewRoute',
     PreviewAccessLog: 'PreviewAccessLog',
     LoopConfig: 'LoopConfig',
@@ -1097,7 +1176,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user" | "apiKey" | "sandbox" | "usageLog" | "agentMemory" | "agentEvent" | "councilSession" | "councilMessage" | "runtimeInstance" | "projectFork" | "agentActivityEvent" | "previewRoute" | "previewAccessLog" | "loopConfig" | "loopRun"
+      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user" | "apiKey" | "sandbox" | "usageLog" | "agentMemory" | "agentEvent" | "councilSession" | "councilMessage" | "runtimeInstance" | "projectFork" | "agentActivityEvent" | "projectSnapshot" | "runtimeRecoveryEvent" | "previewRoute" | "previewAccessLog" | "loopConfig" | "loopRun"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2359,6 +2438,154 @@ export namespace Prisma {
           }
         }
       }
+      ProjectSnapshot: {
+        payload: Prisma.$ProjectSnapshotPayload<ExtArgs>
+        fields: Prisma.ProjectSnapshotFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProjectSnapshotFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectSnapshotPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProjectSnapshotFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectSnapshotPayload>
+          }
+          findFirst: {
+            args: Prisma.ProjectSnapshotFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectSnapshotPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProjectSnapshotFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectSnapshotPayload>
+          }
+          findMany: {
+            args: Prisma.ProjectSnapshotFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectSnapshotPayload>[]
+          }
+          create: {
+            args: Prisma.ProjectSnapshotCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectSnapshotPayload>
+          }
+          createMany: {
+            args: Prisma.ProjectSnapshotCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProjectSnapshotCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectSnapshotPayload>[]
+          }
+          delete: {
+            args: Prisma.ProjectSnapshotDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectSnapshotPayload>
+          }
+          update: {
+            args: Prisma.ProjectSnapshotUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectSnapshotPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProjectSnapshotDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProjectSnapshotUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProjectSnapshotUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectSnapshotPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProjectSnapshotUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectSnapshotPayload>
+          }
+          aggregate: {
+            args: Prisma.ProjectSnapshotAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProjectSnapshot>
+          }
+          groupBy: {
+            args: Prisma.ProjectSnapshotGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProjectSnapshotGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProjectSnapshotCountArgs<ExtArgs>
+            result: $Utils.Optional<ProjectSnapshotCountAggregateOutputType> | number
+          }
+        }
+      }
+      RuntimeRecoveryEvent: {
+        payload: Prisma.$RuntimeRecoveryEventPayload<ExtArgs>
+        fields: Prisma.RuntimeRecoveryEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RuntimeRecoveryEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RuntimeRecoveryEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RuntimeRecoveryEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RuntimeRecoveryEventPayload>
+          }
+          findFirst: {
+            args: Prisma.RuntimeRecoveryEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RuntimeRecoveryEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RuntimeRecoveryEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RuntimeRecoveryEventPayload>
+          }
+          findMany: {
+            args: Prisma.RuntimeRecoveryEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RuntimeRecoveryEventPayload>[]
+          }
+          create: {
+            args: Prisma.RuntimeRecoveryEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RuntimeRecoveryEventPayload>
+          }
+          createMany: {
+            args: Prisma.RuntimeRecoveryEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RuntimeRecoveryEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RuntimeRecoveryEventPayload>[]
+          }
+          delete: {
+            args: Prisma.RuntimeRecoveryEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RuntimeRecoveryEventPayload>
+          }
+          update: {
+            args: Prisma.RuntimeRecoveryEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RuntimeRecoveryEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.RuntimeRecoveryEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RuntimeRecoveryEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RuntimeRecoveryEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RuntimeRecoveryEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.RuntimeRecoveryEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RuntimeRecoveryEventPayload>
+          }
+          aggregate: {
+            args: Prisma.RuntimeRecoveryEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRuntimeRecoveryEvent>
+          }
+          groupBy: {
+            args: Prisma.RuntimeRecoveryEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RuntimeRecoveryEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RuntimeRecoveryEventCountArgs<ExtArgs>
+            result: $Utils.Optional<RuntimeRecoveryEventCountAggregateOutputType> | number
+          }
+        }
+      }
       PreviewRoute: {
         payload: Prisma.$PreviewRoutePayload<ExtArgs>
         fields: Prisma.PreviewRouteFieldRefs
@@ -2780,6 +3007,8 @@ export namespace Prisma {
     runtimeInstance?: RuntimeInstanceOmit
     projectFork?: ProjectForkOmit
     agentActivityEvent?: AgentActivityEventOmit
+    projectSnapshot?: ProjectSnapshotOmit
+    runtimeRecoveryEvent?: RuntimeRecoveryEventOmit
     previewRoute?: PreviewRouteOmit
     previewAccessLog?: PreviewAccessLogOmit
     loopConfig?: LoopConfigOmit
@@ -3056,6 +3285,37 @@ export namespace Prisma {
    */
   export type CouncilSessionCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CouncilMessageWhereInput
+  }
+
+
+  /**
+   * Count Type ProjectSnapshotCountOutputType
+   */
+
+  export type ProjectSnapshotCountOutputType = {
+    recoveryEvents: number
+  }
+
+  export type ProjectSnapshotCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    recoveryEvents?: boolean | ProjectSnapshotCountOutputTypeCountRecoveryEventsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProjectSnapshotCountOutputType without action
+   */
+  export type ProjectSnapshotCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectSnapshotCountOutputType
+     */
+    select?: ProjectSnapshotCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProjectSnapshotCountOutputType without action
+   */
+  export type ProjectSnapshotCountOutputTypeCountRecoveryEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RuntimeRecoveryEventWhereInput
   }
 
 
@@ -22074,6 +22334,2395 @@ export namespace Prisma {
 
 
   /**
+   * Model ProjectSnapshot
+   */
+
+  export type AggregateProjectSnapshot = {
+    _count: ProjectSnapshotCountAggregateOutputType | null
+    _avg: ProjectSnapshotAvgAggregateOutputType | null
+    _sum: ProjectSnapshotSumAggregateOutputType | null
+    _min: ProjectSnapshotMinAggregateOutputType | null
+    _max: ProjectSnapshotMaxAggregateOutputType | null
+  }
+
+  export type ProjectSnapshotAvgAggregateOutputType = {
+    sizeBytes: number | null
+  }
+
+  export type ProjectSnapshotSumAggregateOutputType = {
+    sizeBytes: number | null
+  }
+
+  export type ProjectSnapshotMinAggregateOutputType = {
+    id: string | null
+    projectId: string | null
+    runtimeId: string | null
+    workspaceId: string | null
+    ownerUserId: string | null
+    label: string | null
+    reason: string | null
+    snapshotType: $Enums.SnapshotType | null
+    status: $Enums.SnapshotStatus | null
+    storagePath: string | null
+    manifest: string | null
+    checksum: string | null
+    sizeBytes: number | null
+    createdAt: Date | null
+    restoredAt: Date | null
+    expiresAt: Date | null
+  }
+
+  export type ProjectSnapshotMaxAggregateOutputType = {
+    id: string | null
+    projectId: string | null
+    runtimeId: string | null
+    workspaceId: string | null
+    ownerUserId: string | null
+    label: string | null
+    reason: string | null
+    snapshotType: $Enums.SnapshotType | null
+    status: $Enums.SnapshotStatus | null
+    storagePath: string | null
+    manifest: string | null
+    checksum: string | null
+    sizeBytes: number | null
+    createdAt: Date | null
+    restoredAt: Date | null
+    expiresAt: Date | null
+  }
+
+  export type ProjectSnapshotCountAggregateOutputType = {
+    id: number
+    projectId: number
+    runtimeId: number
+    workspaceId: number
+    ownerUserId: number
+    label: number
+    reason: number
+    snapshotType: number
+    status: number
+    storagePath: number
+    manifest: number
+    checksum: number
+    sizeBytes: number
+    createdAt: number
+    restoredAt: number
+    expiresAt: number
+    _all: number
+  }
+
+
+  export type ProjectSnapshotAvgAggregateInputType = {
+    sizeBytes?: true
+  }
+
+  export type ProjectSnapshotSumAggregateInputType = {
+    sizeBytes?: true
+  }
+
+  export type ProjectSnapshotMinAggregateInputType = {
+    id?: true
+    projectId?: true
+    runtimeId?: true
+    workspaceId?: true
+    ownerUserId?: true
+    label?: true
+    reason?: true
+    snapshotType?: true
+    status?: true
+    storagePath?: true
+    manifest?: true
+    checksum?: true
+    sizeBytes?: true
+    createdAt?: true
+    restoredAt?: true
+    expiresAt?: true
+  }
+
+  export type ProjectSnapshotMaxAggregateInputType = {
+    id?: true
+    projectId?: true
+    runtimeId?: true
+    workspaceId?: true
+    ownerUserId?: true
+    label?: true
+    reason?: true
+    snapshotType?: true
+    status?: true
+    storagePath?: true
+    manifest?: true
+    checksum?: true
+    sizeBytes?: true
+    createdAt?: true
+    restoredAt?: true
+    expiresAt?: true
+  }
+
+  export type ProjectSnapshotCountAggregateInputType = {
+    id?: true
+    projectId?: true
+    runtimeId?: true
+    workspaceId?: true
+    ownerUserId?: true
+    label?: true
+    reason?: true
+    snapshotType?: true
+    status?: true
+    storagePath?: true
+    manifest?: true
+    checksum?: true
+    sizeBytes?: true
+    createdAt?: true
+    restoredAt?: true
+    expiresAt?: true
+    _all?: true
+  }
+
+  export type ProjectSnapshotAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProjectSnapshot to aggregate.
+     */
+    where?: ProjectSnapshotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectSnapshots to fetch.
+     */
+    orderBy?: ProjectSnapshotOrderByWithRelationInput | ProjectSnapshotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProjectSnapshotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectSnapshots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectSnapshots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProjectSnapshots
+    **/
+    _count?: true | ProjectSnapshotCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProjectSnapshotAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProjectSnapshotSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProjectSnapshotMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProjectSnapshotMaxAggregateInputType
+  }
+
+  export type GetProjectSnapshotAggregateType<T extends ProjectSnapshotAggregateArgs> = {
+        [P in keyof T & keyof AggregateProjectSnapshot]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProjectSnapshot[P]>
+      : GetScalarType<T[P], AggregateProjectSnapshot[P]>
+  }
+
+
+
+
+  export type ProjectSnapshotGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProjectSnapshotWhereInput
+    orderBy?: ProjectSnapshotOrderByWithAggregationInput | ProjectSnapshotOrderByWithAggregationInput[]
+    by: ProjectSnapshotScalarFieldEnum[] | ProjectSnapshotScalarFieldEnum
+    having?: ProjectSnapshotScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProjectSnapshotCountAggregateInputType | true
+    _avg?: ProjectSnapshotAvgAggregateInputType
+    _sum?: ProjectSnapshotSumAggregateInputType
+    _min?: ProjectSnapshotMinAggregateInputType
+    _max?: ProjectSnapshotMaxAggregateInputType
+  }
+
+  export type ProjectSnapshotGroupByOutputType = {
+    id: string
+    projectId: string | null
+    runtimeId: string | null
+    workspaceId: string | null
+    ownerUserId: string
+    label: string | null
+    reason: string | null
+    snapshotType: $Enums.SnapshotType
+    status: $Enums.SnapshotStatus
+    storagePath: string | null
+    manifest: string | null
+    checksum: string | null
+    sizeBytes: number | null
+    createdAt: Date
+    restoredAt: Date | null
+    expiresAt: Date | null
+    _count: ProjectSnapshotCountAggregateOutputType | null
+    _avg: ProjectSnapshotAvgAggregateOutputType | null
+    _sum: ProjectSnapshotSumAggregateOutputType | null
+    _min: ProjectSnapshotMinAggregateOutputType | null
+    _max: ProjectSnapshotMaxAggregateOutputType | null
+  }
+
+  type GetProjectSnapshotGroupByPayload<T extends ProjectSnapshotGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProjectSnapshotGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProjectSnapshotGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProjectSnapshotGroupByOutputType[P]>
+            : GetScalarType<T[P], ProjectSnapshotGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProjectSnapshotSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    runtimeId?: boolean
+    workspaceId?: boolean
+    ownerUserId?: boolean
+    label?: boolean
+    reason?: boolean
+    snapshotType?: boolean
+    status?: boolean
+    storagePath?: boolean
+    manifest?: boolean
+    checksum?: boolean
+    sizeBytes?: boolean
+    createdAt?: boolean
+    restoredAt?: boolean
+    expiresAt?: boolean
+    recoveryEvents?: boolean | ProjectSnapshot$recoveryEventsArgs<ExtArgs>
+    _count?: boolean | ProjectSnapshotCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["projectSnapshot"]>
+
+  export type ProjectSnapshotSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    runtimeId?: boolean
+    workspaceId?: boolean
+    ownerUserId?: boolean
+    label?: boolean
+    reason?: boolean
+    snapshotType?: boolean
+    status?: boolean
+    storagePath?: boolean
+    manifest?: boolean
+    checksum?: boolean
+    sizeBytes?: boolean
+    createdAt?: boolean
+    restoredAt?: boolean
+    expiresAt?: boolean
+  }, ExtArgs["result"]["projectSnapshot"]>
+
+  export type ProjectSnapshotSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    runtimeId?: boolean
+    workspaceId?: boolean
+    ownerUserId?: boolean
+    label?: boolean
+    reason?: boolean
+    snapshotType?: boolean
+    status?: boolean
+    storagePath?: boolean
+    manifest?: boolean
+    checksum?: boolean
+    sizeBytes?: boolean
+    createdAt?: boolean
+    restoredAt?: boolean
+    expiresAt?: boolean
+  }, ExtArgs["result"]["projectSnapshot"]>
+
+  export type ProjectSnapshotSelectScalar = {
+    id?: boolean
+    projectId?: boolean
+    runtimeId?: boolean
+    workspaceId?: boolean
+    ownerUserId?: boolean
+    label?: boolean
+    reason?: boolean
+    snapshotType?: boolean
+    status?: boolean
+    storagePath?: boolean
+    manifest?: boolean
+    checksum?: boolean
+    sizeBytes?: boolean
+    createdAt?: boolean
+    restoredAt?: boolean
+    expiresAt?: boolean
+  }
+
+  export type ProjectSnapshotOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "runtimeId" | "workspaceId" | "ownerUserId" | "label" | "reason" | "snapshotType" | "status" | "storagePath" | "manifest" | "checksum" | "sizeBytes" | "createdAt" | "restoredAt" | "expiresAt", ExtArgs["result"]["projectSnapshot"]>
+  export type ProjectSnapshotInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    recoveryEvents?: boolean | ProjectSnapshot$recoveryEventsArgs<ExtArgs>
+    _count?: boolean | ProjectSnapshotCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ProjectSnapshotIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ProjectSnapshotIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ProjectSnapshotPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProjectSnapshot"
+    objects: {
+      recoveryEvents: Prisma.$RuntimeRecoveryEventPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      projectId: string | null
+      runtimeId: string | null
+      workspaceId: string | null
+      ownerUserId: string
+      label: string | null
+      reason: string | null
+      snapshotType: $Enums.SnapshotType
+      status: $Enums.SnapshotStatus
+      storagePath: string | null
+      manifest: string | null
+      checksum: string | null
+      sizeBytes: number | null
+      createdAt: Date
+      restoredAt: Date | null
+      expiresAt: Date | null
+    }, ExtArgs["result"]["projectSnapshot"]>
+    composites: {}
+  }
+
+  type ProjectSnapshotGetPayload<S extends boolean | null | undefined | ProjectSnapshotDefaultArgs> = $Result.GetResult<Prisma.$ProjectSnapshotPayload, S>
+
+  type ProjectSnapshotCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProjectSnapshotFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProjectSnapshotCountAggregateInputType | true
+    }
+
+  export interface ProjectSnapshotDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProjectSnapshot'], meta: { name: 'ProjectSnapshot' } }
+    /**
+     * Find zero or one ProjectSnapshot that matches the filter.
+     * @param {ProjectSnapshotFindUniqueArgs} args - Arguments to find a ProjectSnapshot
+     * @example
+     * // Get one ProjectSnapshot
+     * const projectSnapshot = await prisma.projectSnapshot.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProjectSnapshotFindUniqueArgs>(args: SelectSubset<T, ProjectSnapshotFindUniqueArgs<ExtArgs>>): Prisma__ProjectSnapshotClient<$Result.GetResult<Prisma.$ProjectSnapshotPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProjectSnapshot that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProjectSnapshotFindUniqueOrThrowArgs} args - Arguments to find a ProjectSnapshot
+     * @example
+     * // Get one ProjectSnapshot
+     * const projectSnapshot = await prisma.projectSnapshot.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProjectSnapshotFindUniqueOrThrowArgs>(args: SelectSubset<T, ProjectSnapshotFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProjectSnapshotClient<$Result.GetResult<Prisma.$ProjectSnapshotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProjectSnapshot that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectSnapshotFindFirstArgs} args - Arguments to find a ProjectSnapshot
+     * @example
+     * // Get one ProjectSnapshot
+     * const projectSnapshot = await prisma.projectSnapshot.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProjectSnapshotFindFirstArgs>(args?: SelectSubset<T, ProjectSnapshotFindFirstArgs<ExtArgs>>): Prisma__ProjectSnapshotClient<$Result.GetResult<Prisma.$ProjectSnapshotPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProjectSnapshot that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectSnapshotFindFirstOrThrowArgs} args - Arguments to find a ProjectSnapshot
+     * @example
+     * // Get one ProjectSnapshot
+     * const projectSnapshot = await prisma.projectSnapshot.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProjectSnapshotFindFirstOrThrowArgs>(args?: SelectSubset<T, ProjectSnapshotFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProjectSnapshotClient<$Result.GetResult<Prisma.$ProjectSnapshotPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProjectSnapshots that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectSnapshotFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProjectSnapshots
+     * const projectSnapshots = await prisma.projectSnapshot.findMany()
+     * 
+     * // Get first 10 ProjectSnapshots
+     * const projectSnapshots = await prisma.projectSnapshot.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const projectSnapshotWithIdOnly = await prisma.projectSnapshot.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProjectSnapshotFindManyArgs>(args?: SelectSubset<T, ProjectSnapshotFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProjectSnapshot.
+     * @param {ProjectSnapshotCreateArgs} args - Arguments to create a ProjectSnapshot.
+     * @example
+     * // Create one ProjectSnapshot
+     * const ProjectSnapshot = await prisma.projectSnapshot.create({
+     *   data: {
+     *     // ... data to create a ProjectSnapshot
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProjectSnapshotCreateArgs>(args: SelectSubset<T, ProjectSnapshotCreateArgs<ExtArgs>>): Prisma__ProjectSnapshotClient<$Result.GetResult<Prisma.$ProjectSnapshotPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProjectSnapshots.
+     * @param {ProjectSnapshotCreateManyArgs} args - Arguments to create many ProjectSnapshots.
+     * @example
+     * // Create many ProjectSnapshots
+     * const projectSnapshot = await prisma.projectSnapshot.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProjectSnapshotCreateManyArgs>(args?: SelectSubset<T, ProjectSnapshotCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProjectSnapshots and returns the data saved in the database.
+     * @param {ProjectSnapshotCreateManyAndReturnArgs} args - Arguments to create many ProjectSnapshots.
+     * @example
+     * // Create many ProjectSnapshots
+     * const projectSnapshot = await prisma.projectSnapshot.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProjectSnapshots and only return the `id`
+     * const projectSnapshotWithIdOnly = await prisma.projectSnapshot.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProjectSnapshotCreateManyAndReturnArgs>(args?: SelectSubset<T, ProjectSnapshotCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectSnapshotPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProjectSnapshot.
+     * @param {ProjectSnapshotDeleteArgs} args - Arguments to delete one ProjectSnapshot.
+     * @example
+     * // Delete one ProjectSnapshot
+     * const ProjectSnapshot = await prisma.projectSnapshot.delete({
+     *   where: {
+     *     // ... filter to delete one ProjectSnapshot
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProjectSnapshotDeleteArgs>(args: SelectSubset<T, ProjectSnapshotDeleteArgs<ExtArgs>>): Prisma__ProjectSnapshotClient<$Result.GetResult<Prisma.$ProjectSnapshotPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProjectSnapshot.
+     * @param {ProjectSnapshotUpdateArgs} args - Arguments to update one ProjectSnapshot.
+     * @example
+     * // Update one ProjectSnapshot
+     * const projectSnapshot = await prisma.projectSnapshot.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProjectSnapshotUpdateArgs>(args: SelectSubset<T, ProjectSnapshotUpdateArgs<ExtArgs>>): Prisma__ProjectSnapshotClient<$Result.GetResult<Prisma.$ProjectSnapshotPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProjectSnapshots.
+     * @param {ProjectSnapshotDeleteManyArgs} args - Arguments to filter ProjectSnapshots to delete.
+     * @example
+     * // Delete a few ProjectSnapshots
+     * const { count } = await prisma.projectSnapshot.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProjectSnapshotDeleteManyArgs>(args?: SelectSubset<T, ProjectSnapshotDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProjectSnapshots.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectSnapshotUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProjectSnapshots
+     * const projectSnapshot = await prisma.projectSnapshot.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProjectSnapshotUpdateManyArgs>(args: SelectSubset<T, ProjectSnapshotUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProjectSnapshots and returns the data updated in the database.
+     * @param {ProjectSnapshotUpdateManyAndReturnArgs} args - Arguments to update many ProjectSnapshots.
+     * @example
+     * // Update many ProjectSnapshots
+     * const projectSnapshot = await prisma.projectSnapshot.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProjectSnapshots and only return the `id`
+     * const projectSnapshotWithIdOnly = await prisma.projectSnapshot.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProjectSnapshotUpdateManyAndReturnArgs>(args: SelectSubset<T, ProjectSnapshotUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectSnapshotPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProjectSnapshot.
+     * @param {ProjectSnapshotUpsertArgs} args - Arguments to update or create a ProjectSnapshot.
+     * @example
+     * // Update or create a ProjectSnapshot
+     * const projectSnapshot = await prisma.projectSnapshot.upsert({
+     *   create: {
+     *     // ... data to create a ProjectSnapshot
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProjectSnapshot we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProjectSnapshotUpsertArgs>(args: SelectSubset<T, ProjectSnapshotUpsertArgs<ExtArgs>>): Prisma__ProjectSnapshotClient<$Result.GetResult<Prisma.$ProjectSnapshotPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProjectSnapshots.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectSnapshotCountArgs} args - Arguments to filter ProjectSnapshots to count.
+     * @example
+     * // Count the number of ProjectSnapshots
+     * const count = await prisma.projectSnapshot.count({
+     *   where: {
+     *     // ... the filter for the ProjectSnapshots we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProjectSnapshotCountArgs>(
+      args?: Subset<T, ProjectSnapshotCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProjectSnapshotCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProjectSnapshot.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectSnapshotAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProjectSnapshotAggregateArgs>(args: Subset<T, ProjectSnapshotAggregateArgs>): Prisma.PrismaPromise<GetProjectSnapshotAggregateType<T>>
+
+    /**
+     * Group by ProjectSnapshot.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectSnapshotGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProjectSnapshotGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProjectSnapshotGroupByArgs['orderBy'] }
+        : { orderBy?: ProjectSnapshotGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProjectSnapshotGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProjectSnapshotGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProjectSnapshot model
+   */
+  readonly fields: ProjectSnapshotFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProjectSnapshot.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProjectSnapshotClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    recoveryEvents<T extends ProjectSnapshot$recoveryEventsArgs<ExtArgs> = {}>(args?: Subset<T, ProjectSnapshot$recoveryEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RuntimeRecoveryEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProjectSnapshot model
+   */
+  interface ProjectSnapshotFieldRefs {
+    readonly id: FieldRef<"ProjectSnapshot", 'String'>
+    readonly projectId: FieldRef<"ProjectSnapshot", 'String'>
+    readonly runtimeId: FieldRef<"ProjectSnapshot", 'String'>
+    readonly workspaceId: FieldRef<"ProjectSnapshot", 'String'>
+    readonly ownerUserId: FieldRef<"ProjectSnapshot", 'String'>
+    readonly label: FieldRef<"ProjectSnapshot", 'String'>
+    readonly reason: FieldRef<"ProjectSnapshot", 'String'>
+    readonly snapshotType: FieldRef<"ProjectSnapshot", 'SnapshotType'>
+    readonly status: FieldRef<"ProjectSnapshot", 'SnapshotStatus'>
+    readonly storagePath: FieldRef<"ProjectSnapshot", 'String'>
+    readonly manifest: FieldRef<"ProjectSnapshot", 'String'>
+    readonly checksum: FieldRef<"ProjectSnapshot", 'String'>
+    readonly sizeBytes: FieldRef<"ProjectSnapshot", 'Int'>
+    readonly createdAt: FieldRef<"ProjectSnapshot", 'DateTime'>
+    readonly restoredAt: FieldRef<"ProjectSnapshot", 'DateTime'>
+    readonly expiresAt: FieldRef<"ProjectSnapshot", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProjectSnapshot findUnique
+   */
+  export type ProjectSnapshotFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectSnapshot
+     */
+    select?: ProjectSnapshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectSnapshot
+     */
+    omit?: ProjectSnapshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectSnapshotInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectSnapshot to fetch.
+     */
+    where: ProjectSnapshotWhereUniqueInput
+  }
+
+  /**
+   * ProjectSnapshot findUniqueOrThrow
+   */
+  export type ProjectSnapshotFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectSnapshot
+     */
+    select?: ProjectSnapshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectSnapshot
+     */
+    omit?: ProjectSnapshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectSnapshotInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectSnapshot to fetch.
+     */
+    where: ProjectSnapshotWhereUniqueInput
+  }
+
+  /**
+   * ProjectSnapshot findFirst
+   */
+  export type ProjectSnapshotFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectSnapshot
+     */
+    select?: ProjectSnapshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectSnapshot
+     */
+    omit?: ProjectSnapshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectSnapshotInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectSnapshot to fetch.
+     */
+    where?: ProjectSnapshotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectSnapshots to fetch.
+     */
+    orderBy?: ProjectSnapshotOrderByWithRelationInput | ProjectSnapshotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProjectSnapshots.
+     */
+    cursor?: ProjectSnapshotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectSnapshots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectSnapshots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProjectSnapshots.
+     */
+    distinct?: ProjectSnapshotScalarFieldEnum | ProjectSnapshotScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectSnapshot findFirstOrThrow
+   */
+  export type ProjectSnapshotFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectSnapshot
+     */
+    select?: ProjectSnapshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectSnapshot
+     */
+    omit?: ProjectSnapshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectSnapshotInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectSnapshot to fetch.
+     */
+    where?: ProjectSnapshotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectSnapshots to fetch.
+     */
+    orderBy?: ProjectSnapshotOrderByWithRelationInput | ProjectSnapshotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProjectSnapshots.
+     */
+    cursor?: ProjectSnapshotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectSnapshots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectSnapshots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProjectSnapshots.
+     */
+    distinct?: ProjectSnapshotScalarFieldEnum | ProjectSnapshotScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectSnapshot findMany
+   */
+  export type ProjectSnapshotFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectSnapshot
+     */
+    select?: ProjectSnapshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectSnapshot
+     */
+    omit?: ProjectSnapshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectSnapshotInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectSnapshots to fetch.
+     */
+    where?: ProjectSnapshotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectSnapshots to fetch.
+     */
+    orderBy?: ProjectSnapshotOrderByWithRelationInput | ProjectSnapshotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProjectSnapshots.
+     */
+    cursor?: ProjectSnapshotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectSnapshots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectSnapshots.
+     */
+    skip?: number
+    distinct?: ProjectSnapshotScalarFieldEnum | ProjectSnapshotScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectSnapshot create
+   */
+  export type ProjectSnapshotCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectSnapshot
+     */
+    select?: ProjectSnapshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectSnapshot
+     */
+    omit?: ProjectSnapshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectSnapshotInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProjectSnapshot.
+     */
+    data: XOR<ProjectSnapshotCreateInput, ProjectSnapshotUncheckedCreateInput>
+  }
+
+  /**
+   * ProjectSnapshot createMany
+   */
+  export type ProjectSnapshotCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProjectSnapshots.
+     */
+    data: ProjectSnapshotCreateManyInput | ProjectSnapshotCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProjectSnapshot createManyAndReturn
+   */
+  export type ProjectSnapshotCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectSnapshot
+     */
+    select?: ProjectSnapshotSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectSnapshot
+     */
+    omit?: ProjectSnapshotOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProjectSnapshots.
+     */
+    data: ProjectSnapshotCreateManyInput | ProjectSnapshotCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProjectSnapshot update
+   */
+  export type ProjectSnapshotUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectSnapshot
+     */
+    select?: ProjectSnapshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectSnapshot
+     */
+    omit?: ProjectSnapshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectSnapshotInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProjectSnapshot.
+     */
+    data: XOR<ProjectSnapshotUpdateInput, ProjectSnapshotUncheckedUpdateInput>
+    /**
+     * Choose, which ProjectSnapshot to update.
+     */
+    where: ProjectSnapshotWhereUniqueInput
+  }
+
+  /**
+   * ProjectSnapshot updateMany
+   */
+  export type ProjectSnapshotUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProjectSnapshots.
+     */
+    data: XOR<ProjectSnapshotUpdateManyMutationInput, ProjectSnapshotUncheckedUpdateManyInput>
+    /**
+     * Filter which ProjectSnapshots to update
+     */
+    where?: ProjectSnapshotWhereInput
+    /**
+     * Limit how many ProjectSnapshots to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectSnapshot updateManyAndReturn
+   */
+  export type ProjectSnapshotUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectSnapshot
+     */
+    select?: ProjectSnapshotSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectSnapshot
+     */
+    omit?: ProjectSnapshotOmit<ExtArgs> | null
+    /**
+     * The data used to update ProjectSnapshots.
+     */
+    data: XOR<ProjectSnapshotUpdateManyMutationInput, ProjectSnapshotUncheckedUpdateManyInput>
+    /**
+     * Filter which ProjectSnapshots to update
+     */
+    where?: ProjectSnapshotWhereInput
+    /**
+     * Limit how many ProjectSnapshots to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectSnapshot upsert
+   */
+  export type ProjectSnapshotUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectSnapshot
+     */
+    select?: ProjectSnapshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectSnapshot
+     */
+    omit?: ProjectSnapshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectSnapshotInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProjectSnapshot to update in case it exists.
+     */
+    where: ProjectSnapshotWhereUniqueInput
+    /**
+     * In case the ProjectSnapshot found by the `where` argument doesn't exist, create a new ProjectSnapshot with this data.
+     */
+    create: XOR<ProjectSnapshotCreateInput, ProjectSnapshotUncheckedCreateInput>
+    /**
+     * In case the ProjectSnapshot was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProjectSnapshotUpdateInput, ProjectSnapshotUncheckedUpdateInput>
+  }
+
+  /**
+   * ProjectSnapshot delete
+   */
+  export type ProjectSnapshotDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectSnapshot
+     */
+    select?: ProjectSnapshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectSnapshot
+     */
+    omit?: ProjectSnapshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectSnapshotInclude<ExtArgs> | null
+    /**
+     * Filter which ProjectSnapshot to delete.
+     */
+    where: ProjectSnapshotWhereUniqueInput
+  }
+
+  /**
+   * ProjectSnapshot deleteMany
+   */
+  export type ProjectSnapshotDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProjectSnapshots to delete
+     */
+    where?: ProjectSnapshotWhereInput
+    /**
+     * Limit how many ProjectSnapshots to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectSnapshot.recoveryEvents
+   */
+  export type ProjectSnapshot$recoveryEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RuntimeRecoveryEvent
+     */
+    select?: RuntimeRecoveryEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RuntimeRecoveryEvent
+     */
+    omit?: RuntimeRecoveryEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RuntimeRecoveryEventInclude<ExtArgs> | null
+    where?: RuntimeRecoveryEventWhereInput
+    orderBy?: RuntimeRecoveryEventOrderByWithRelationInput | RuntimeRecoveryEventOrderByWithRelationInput[]
+    cursor?: RuntimeRecoveryEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RuntimeRecoveryEventScalarFieldEnum | RuntimeRecoveryEventScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectSnapshot without action
+   */
+  export type ProjectSnapshotDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectSnapshot
+     */
+    select?: ProjectSnapshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectSnapshot
+     */
+    omit?: ProjectSnapshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectSnapshotInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RuntimeRecoveryEvent
+   */
+
+  export type AggregateRuntimeRecoveryEvent = {
+    _count: RuntimeRecoveryEventCountAggregateOutputType | null
+    _min: RuntimeRecoveryEventMinAggregateOutputType | null
+    _max: RuntimeRecoveryEventMaxAggregateOutputType | null
+  }
+
+  export type RuntimeRecoveryEventMinAggregateOutputType = {
+    id: string | null
+    projectId: string | null
+    runtimeId: string | null
+    snapshotId: string | null
+    eventType: $Enums.RecoveryEventType | null
+    status: $Enums.EventStatus | null
+    reason: string | null
+    metadata: string | null
+    createdAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type RuntimeRecoveryEventMaxAggregateOutputType = {
+    id: string | null
+    projectId: string | null
+    runtimeId: string | null
+    snapshotId: string | null
+    eventType: $Enums.RecoveryEventType | null
+    status: $Enums.EventStatus | null
+    reason: string | null
+    metadata: string | null
+    createdAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type RuntimeRecoveryEventCountAggregateOutputType = {
+    id: number
+    projectId: number
+    runtimeId: number
+    snapshotId: number
+    eventType: number
+    status: number
+    reason: number
+    metadata: number
+    createdAt: number
+    completedAt: number
+    _all: number
+  }
+
+
+  export type RuntimeRecoveryEventMinAggregateInputType = {
+    id?: true
+    projectId?: true
+    runtimeId?: true
+    snapshotId?: true
+    eventType?: true
+    status?: true
+    reason?: true
+    metadata?: true
+    createdAt?: true
+    completedAt?: true
+  }
+
+  export type RuntimeRecoveryEventMaxAggregateInputType = {
+    id?: true
+    projectId?: true
+    runtimeId?: true
+    snapshotId?: true
+    eventType?: true
+    status?: true
+    reason?: true
+    metadata?: true
+    createdAt?: true
+    completedAt?: true
+  }
+
+  export type RuntimeRecoveryEventCountAggregateInputType = {
+    id?: true
+    projectId?: true
+    runtimeId?: true
+    snapshotId?: true
+    eventType?: true
+    status?: true
+    reason?: true
+    metadata?: true
+    createdAt?: true
+    completedAt?: true
+    _all?: true
+  }
+
+  export type RuntimeRecoveryEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RuntimeRecoveryEvent to aggregate.
+     */
+    where?: RuntimeRecoveryEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RuntimeRecoveryEvents to fetch.
+     */
+    orderBy?: RuntimeRecoveryEventOrderByWithRelationInput | RuntimeRecoveryEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RuntimeRecoveryEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RuntimeRecoveryEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RuntimeRecoveryEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RuntimeRecoveryEvents
+    **/
+    _count?: true | RuntimeRecoveryEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RuntimeRecoveryEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RuntimeRecoveryEventMaxAggregateInputType
+  }
+
+  export type GetRuntimeRecoveryEventAggregateType<T extends RuntimeRecoveryEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateRuntimeRecoveryEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRuntimeRecoveryEvent[P]>
+      : GetScalarType<T[P], AggregateRuntimeRecoveryEvent[P]>
+  }
+
+
+
+
+  export type RuntimeRecoveryEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RuntimeRecoveryEventWhereInput
+    orderBy?: RuntimeRecoveryEventOrderByWithAggregationInput | RuntimeRecoveryEventOrderByWithAggregationInput[]
+    by: RuntimeRecoveryEventScalarFieldEnum[] | RuntimeRecoveryEventScalarFieldEnum
+    having?: RuntimeRecoveryEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RuntimeRecoveryEventCountAggregateInputType | true
+    _min?: RuntimeRecoveryEventMinAggregateInputType
+    _max?: RuntimeRecoveryEventMaxAggregateInputType
+  }
+
+  export type RuntimeRecoveryEventGroupByOutputType = {
+    id: string
+    projectId: string | null
+    runtimeId: string | null
+    snapshotId: string | null
+    eventType: $Enums.RecoveryEventType
+    status: $Enums.EventStatus
+    reason: string | null
+    metadata: string | null
+    createdAt: Date
+    completedAt: Date | null
+    _count: RuntimeRecoveryEventCountAggregateOutputType | null
+    _min: RuntimeRecoveryEventMinAggregateOutputType | null
+    _max: RuntimeRecoveryEventMaxAggregateOutputType | null
+  }
+
+  type GetRuntimeRecoveryEventGroupByPayload<T extends RuntimeRecoveryEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RuntimeRecoveryEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RuntimeRecoveryEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RuntimeRecoveryEventGroupByOutputType[P]>
+            : GetScalarType<T[P], RuntimeRecoveryEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RuntimeRecoveryEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    runtimeId?: boolean
+    snapshotId?: boolean
+    eventType?: boolean
+    status?: boolean
+    reason?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    completedAt?: boolean
+    snapshot?: boolean | RuntimeRecoveryEvent$snapshotArgs<ExtArgs>
+  }, ExtArgs["result"]["runtimeRecoveryEvent"]>
+
+  export type RuntimeRecoveryEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    runtimeId?: boolean
+    snapshotId?: boolean
+    eventType?: boolean
+    status?: boolean
+    reason?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    completedAt?: boolean
+    snapshot?: boolean | RuntimeRecoveryEvent$snapshotArgs<ExtArgs>
+  }, ExtArgs["result"]["runtimeRecoveryEvent"]>
+
+  export type RuntimeRecoveryEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    runtimeId?: boolean
+    snapshotId?: boolean
+    eventType?: boolean
+    status?: boolean
+    reason?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    completedAt?: boolean
+    snapshot?: boolean | RuntimeRecoveryEvent$snapshotArgs<ExtArgs>
+  }, ExtArgs["result"]["runtimeRecoveryEvent"]>
+
+  export type RuntimeRecoveryEventSelectScalar = {
+    id?: boolean
+    projectId?: boolean
+    runtimeId?: boolean
+    snapshotId?: boolean
+    eventType?: boolean
+    status?: boolean
+    reason?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    completedAt?: boolean
+  }
+
+  export type RuntimeRecoveryEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "runtimeId" | "snapshotId" | "eventType" | "status" | "reason" | "metadata" | "createdAt" | "completedAt", ExtArgs["result"]["runtimeRecoveryEvent"]>
+  export type RuntimeRecoveryEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    snapshot?: boolean | RuntimeRecoveryEvent$snapshotArgs<ExtArgs>
+  }
+  export type RuntimeRecoveryEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    snapshot?: boolean | RuntimeRecoveryEvent$snapshotArgs<ExtArgs>
+  }
+  export type RuntimeRecoveryEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    snapshot?: boolean | RuntimeRecoveryEvent$snapshotArgs<ExtArgs>
+  }
+
+  export type $RuntimeRecoveryEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RuntimeRecoveryEvent"
+    objects: {
+      snapshot: Prisma.$ProjectSnapshotPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      projectId: string | null
+      runtimeId: string | null
+      snapshotId: string | null
+      eventType: $Enums.RecoveryEventType
+      status: $Enums.EventStatus
+      reason: string | null
+      metadata: string | null
+      createdAt: Date
+      completedAt: Date | null
+    }, ExtArgs["result"]["runtimeRecoveryEvent"]>
+    composites: {}
+  }
+
+  type RuntimeRecoveryEventGetPayload<S extends boolean | null | undefined | RuntimeRecoveryEventDefaultArgs> = $Result.GetResult<Prisma.$RuntimeRecoveryEventPayload, S>
+
+  type RuntimeRecoveryEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RuntimeRecoveryEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RuntimeRecoveryEventCountAggregateInputType | true
+    }
+
+  export interface RuntimeRecoveryEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RuntimeRecoveryEvent'], meta: { name: 'RuntimeRecoveryEvent' } }
+    /**
+     * Find zero or one RuntimeRecoveryEvent that matches the filter.
+     * @param {RuntimeRecoveryEventFindUniqueArgs} args - Arguments to find a RuntimeRecoveryEvent
+     * @example
+     * // Get one RuntimeRecoveryEvent
+     * const runtimeRecoveryEvent = await prisma.runtimeRecoveryEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RuntimeRecoveryEventFindUniqueArgs>(args: SelectSubset<T, RuntimeRecoveryEventFindUniqueArgs<ExtArgs>>): Prisma__RuntimeRecoveryEventClient<$Result.GetResult<Prisma.$RuntimeRecoveryEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RuntimeRecoveryEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RuntimeRecoveryEventFindUniqueOrThrowArgs} args - Arguments to find a RuntimeRecoveryEvent
+     * @example
+     * // Get one RuntimeRecoveryEvent
+     * const runtimeRecoveryEvent = await prisma.runtimeRecoveryEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RuntimeRecoveryEventFindUniqueOrThrowArgs>(args: SelectSubset<T, RuntimeRecoveryEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RuntimeRecoveryEventClient<$Result.GetResult<Prisma.$RuntimeRecoveryEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RuntimeRecoveryEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RuntimeRecoveryEventFindFirstArgs} args - Arguments to find a RuntimeRecoveryEvent
+     * @example
+     * // Get one RuntimeRecoveryEvent
+     * const runtimeRecoveryEvent = await prisma.runtimeRecoveryEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RuntimeRecoveryEventFindFirstArgs>(args?: SelectSubset<T, RuntimeRecoveryEventFindFirstArgs<ExtArgs>>): Prisma__RuntimeRecoveryEventClient<$Result.GetResult<Prisma.$RuntimeRecoveryEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RuntimeRecoveryEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RuntimeRecoveryEventFindFirstOrThrowArgs} args - Arguments to find a RuntimeRecoveryEvent
+     * @example
+     * // Get one RuntimeRecoveryEvent
+     * const runtimeRecoveryEvent = await prisma.runtimeRecoveryEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RuntimeRecoveryEventFindFirstOrThrowArgs>(args?: SelectSubset<T, RuntimeRecoveryEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__RuntimeRecoveryEventClient<$Result.GetResult<Prisma.$RuntimeRecoveryEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RuntimeRecoveryEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RuntimeRecoveryEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RuntimeRecoveryEvents
+     * const runtimeRecoveryEvents = await prisma.runtimeRecoveryEvent.findMany()
+     * 
+     * // Get first 10 RuntimeRecoveryEvents
+     * const runtimeRecoveryEvents = await prisma.runtimeRecoveryEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const runtimeRecoveryEventWithIdOnly = await prisma.runtimeRecoveryEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RuntimeRecoveryEventFindManyArgs>(args?: SelectSubset<T, RuntimeRecoveryEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RuntimeRecoveryEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RuntimeRecoveryEvent.
+     * @param {RuntimeRecoveryEventCreateArgs} args - Arguments to create a RuntimeRecoveryEvent.
+     * @example
+     * // Create one RuntimeRecoveryEvent
+     * const RuntimeRecoveryEvent = await prisma.runtimeRecoveryEvent.create({
+     *   data: {
+     *     // ... data to create a RuntimeRecoveryEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends RuntimeRecoveryEventCreateArgs>(args: SelectSubset<T, RuntimeRecoveryEventCreateArgs<ExtArgs>>): Prisma__RuntimeRecoveryEventClient<$Result.GetResult<Prisma.$RuntimeRecoveryEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RuntimeRecoveryEvents.
+     * @param {RuntimeRecoveryEventCreateManyArgs} args - Arguments to create many RuntimeRecoveryEvents.
+     * @example
+     * // Create many RuntimeRecoveryEvents
+     * const runtimeRecoveryEvent = await prisma.runtimeRecoveryEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RuntimeRecoveryEventCreateManyArgs>(args?: SelectSubset<T, RuntimeRecoveryEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RuntimeRecoveryEvents and returns the data saved in the database.
+     * @param {RuntimeRecoveryEventCreateManyAndReturnArgs} args - Arguments to create many RuntimeRecoveryEvents.
+     * @example
+     * // Create many RuntimeRecoveryEvents
+     * const runtimeRecoveryEvent = await prisma.runtimeRecoveryEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RuntimeRecoveryEvents and only return the `id`
+     * const runtimeRecoveryEventWithIdOnly = await prisma.runtimeRecoveryEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RuntimeRecoveryEventCreateManyAndReturnArgs>(args?: SelectSubset<T, RuntimeRecoveryEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RuntimeRecoveryEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RuntimeRecoveryEvent.
+     * @param {RuntimeRecoveryEventDeleteArgs} args - Arguments to delete one RuntimeRecoveryEvent.
+     * @example
+     * // Delete one RuntimeRecoveryEvent
+     * const RuntimeRecoveryEvent = await prisma.runtimeRecoveryEvent.delete({
+     *   where: {
+     *     // ... filter to delete one RuntimeRecoveryEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RuntimeRecoveryEventDeleteArgs>(args: SelectSubset<T, RuntimeRecoveryEventDeleteArgs<ExtArgs>>): Prisma__RuntimeRecoveryEventClient<$Result.GetResult<Prisma.$RuntimeRecoveryEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RuntimeRecoveryEvent.
+     * @param {RuntimeRecoveryEventUpdateArgs} args - Arguments to update one RuntimeRecoveryEvent.
+     * @example
+     * // Update one RuntimeRecoveryEvent
+     * const runtimeRecoveryEvent = await prisma.runtimeRecoveryEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RuntimeRecoveryEventUpdateArgs>(args: SelectSubset<T, RuntimeRecoveryEventUpdateArgs<ExtArgs>>): Prisma__RuntimeRecoveryEventClient<$Result.GetResult<Prisma.$RuntimeRecoveryEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RuntimeRecoveryEvents.
+     * @param {RuntimeRecoveryEventDeleteManyArgs} args - Arguments to filter RuntimeRecoveryEvents to delete.
+     * @example
+     * // Delete a few RuntimeRecoveryEvents
+     * const { count } = await prisma.runtimeRecoveryEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RuntimeRecoveryEventDeleteManyArgs>(args?: SelectSubset<T, RuntimeRecoveryEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RuntimeRecoveryEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RuntimeRecoveryEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RuntimeRecoveryEvents
+     * const runtimeRecoveryEvent = await prisma.runtimeRecoveryEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RuntimeRecoveryEventUpdateManyArgs>(args: SelectSubset<T, RuntimeRecoveryEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RuntimeRecoveryEvents and returns the data updated in the database.
+     * @param {RuntimeRecoveryEventUpdateManyAndReturnArgs} args - Arguments to update many RuntimeRecoveryEvents.
+     * @example
+     * // Update many RuntimeRecoveryEvents
+     * const runtimeRecoveryEvent = await prisma.runtimeRecoveryEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RuntimeRecoveryEvents and only return the `id`
+     * const runtimeRecoveryEventWithIdOnly = await prisma.runtimeRecoveryEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RuntimeRecoveryEventUpdateManyAndReturnArgs>(args: SelectSubset<T, RuntimeRecoveryEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RuntimeRecoveryEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RuntimeRecoveryEvent.
+     * @param {RuntimeRecoveryEventUpsertArgs} args - Arguments to update or create a RuntimeRecoveryEvent.
+     * @example
+     * // Update or create a RuntimeRecoveryEvent
+     * const runtimeRecoveryEvent = await prisma.runtimeRecoveryEvent.upsert({
+     *   create: {
+     *     // ... data to create a RuntimeRecoveryEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RuntimeRecoveryEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RuntimeRecoveryEventUpsertArgs>(args: SelectSubset<T, RuntimeRecoveryEventUpsertArgs<ExtArgs>>): Prisma__RuntimeRecoveryEventClient<$Result.GetResult<Prisma.$RuntimeRecoveryEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RuntimeRecoveryEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RuntimeRecoveryEventCountArgs} args - Arguments to filter RuntimeRecoveryEvents to count.
+     * @example
+     * // Count the number of RuntimeRecoveryEvents
+     * const count = await prisma.runtimeRecoveryEvent.count({
+     *   where: {
+     *     // ... the filter for the RuntimeRecoveryEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends RuntimeRecoveryEventCountArgs>(
+      args?: Subset<T, RuntimeRecoveryEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RuntimeRecoveryEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RuntimeRecoveryEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RuntimeRecoveryEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RuntimeRecoveryEventAggregateArgs>(args: Subset<T, RuntimeRecoveryEventAggregateArgs>): Prisma.PrismaPromise<GetRuntimeRecoveryEventAggregateType<T>>
+
+    /**
+     * Group by RuntimeRecoveryEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RuntimeRecoveryEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RuntimeRecoveryEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RuntimeRecoveryEventGroupByArgs['orderBy'] }
+        : { orderBy?: RuntimeRecoveryEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RuntimeRecoveryEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRuntimeRecoveryEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RuntimeRecoveryEvent model
+   */
+  readonly fields: RuntimeRecoveryEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RuntimeRecoveryEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RuntimeRecoveryEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    snapshot<T extends RuntimeRecoveryEvent$snapshotArgs<ExtArgs> = {}>(args?: Subset<T, RuntimeRecoveryEvent$snapshotArgs<ExtArgs>>): Prisma__ProjectSnapshotClient<$Result.GetResult<Prisma.$ProjectSnapshotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RuntimeRecoveryEvent model
+   */
+  interface RuntimeRecoveryEventFieldRefs {
+    readonly id: FieldRef<"RuntimeRecoveryEvent", 'String'>
+    readonly projectId: FieldRef<"RuntimeRecoveryEvent", 'String'>
+    readonly runtimeId: FieldRef<"RuntimeRecoveryEvent", 'String'>
+    readonly snapshotId: FieldRef<"RuntimeRecoveryEvent", 'String'>
+    readonly eventType: FieldRef<"RuntimeRecoveryEvent", 'RecoveryEventType'>
+    readonly status: FieldRef<"RuntimeRecoveryEvent", 'EventStatus'>
+    readonly reason: FieldRef<"RuntimeRecoveryEvent", 'String'>
+    readonly metadata: FieldRef<"RuntimeRecoveryEvent", 'String'>
+    readonly createdAt: FieldRef<"RuntimeRecoveryEvent", 'DateTime'>
+    readonly completedAt: FieldRef<"RuntimeRecoveryEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RuntimeRecoveryEvent findUnique
+   */
+  export type RuntimeRecoveryEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RuntimeRecoveryEvent
+     */
+    select?: RuntimeRecoveryEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RuntimeRecoveryEvent
+     */
+    omit?: RuntimeRecoveryEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RuntimeRecoveryEventInclude<ExtArgs> | null
+    /**
+     * Filter, which RuntimeRecoveryEvent to fetch.
+     */
+    where: RuntimeRecoveryEventWhereUniqueInput
+  }
+
+  /**
+   * RuntimeRecoveryEvent findUniqueOrThrow
+   */
+  export type RuntimeRecoveryEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RuntimeRecoveryEvent
+     */
+    select?: RuntimeRecoveryEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RuntimeRecoveryEvent
+     */
+    omit?: RuntimeRecoveryEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RuntimeRecoveryEventInclude<ExtArgs> | null
+    /**
+     * Filter, which RuntimeRecoveryEvent to fetch.
+     */
+    where: RuntimeRecoveryEventWhereUniqueInput
+  }
+
+  /**
+   * RuntimeRecoveryEvent findFirst
+   */
+  export type RuntimeRecoveryEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RuntimeRecoveryEvent
+     */
+    select?: RuntimeRecoveryEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RuntimeRecoveryEvent
+     */
+    omit?: RuntimeRecoveryEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RuntimeRecoveryEventInclude<ExtArgs> | null
+    /**
+     * Filter, which RuntimeRecoveryEvent to fetch.
+     */
+    where?: RuntimeRecoveryEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RuntimeRecoveryEvents to fetch.
+     */
+    orderBy?: RuntimeRecoveryEventOrderByWithRelationInput | RuntimeRecoveryEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RuntimeRecoveryEvents.
+     */
+    cursor?: RuntimeRecoveryEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RuntimeRecoveryEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RuntimeRecoveryEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RuntimeRecoveryEvents.
+     */
+    distinct?: RuntimeRecoveryEventScalarFieldEnum | RuntimeRecoveryEventScalarFieldEnum[]
+  }
+
+  /**
+   * RuntimeRecoveryEvent findFirstOrThrow
+   */
+  export type RuntimeRecoveryEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RuntimeRecoveryEvent
+     */
+    select?: RuntimeRecoveryEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RuntimeRecoveryEvent
+     */
+    omit?: RuntimeRecoveryEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RuntimeRecoveryEventInclude<ExtArgs> | null
+    /**
+     * Filter, which RuntimeRecoveryEvent to fetch.
+     */
+    where?: RuntimeRecoveryEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RuntimeRecoveryEvents to fetch.
+     */
+    orderBy?: RuntimeRecoveryEventOrderByWithRelationInput | RuntimeRecoveryEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RuntimeRecoveryEvents.
+     */
+    cursor?: RuntimeRecoveryEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RuntimeRecoveryEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RuntimeRecoveryEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RuntimeRecoveryEvents.
+     */
+    distinct?: RuntimeRecoveryEventScalarFieldEnum | RuntimeRecoveryEventScalarFieldEnum[]
+  }
+
+  /**
+   * RuntimeRecoveryEvent findMany
+   */
+  export type RuntimeRecoveryEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RuntimeRecoveryEvent
+     */
+    select?: RuntimeRecoveryEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RuntimeRecoveryEvent
+     */
+    omit?: RuntimeRecoveryEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RuntimeRecoveryEventInclude<ExtArgs> | null
+    /**
+     * Filter, which RuntimeRecoveryEvents to fetch.
+     */
+    where?: RuntimeRecoveryEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RuntimeRecoveryEvents to fetch.
+     */
+    orderBy?: RuntimeRecoveryEventOrderByWithRelationInput | RuntimeRecoveryEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RuntimeRecoveryEvents.
+     */
+    cursor?: RuntimeRecoveryEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RuntimeRecoveryEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RuntimeRecoveryEvents.
+     */
+    skip?: number
+    distinct?: RuntimeRecoveryEventScalarFieldEnum | RuntimeRecoveryEventScalarFieldEnum[]
+  }
+
+  /**
+   * RuntimeRecoveryEvent create
+   */
+  export type RuntimeRecoveryEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RuntimeRecoveryEvent
+     */
+    select?: RuntimeRecoveryEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RuntimeRecoveryEvent
+     */
+    omit?: RuntimeRecoveryEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RuntimeRecoveryEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RuntimeRecoveryEvent.
+     */
+    data: XOR<RuntimeRecoveryEventCreateInput, RuntimeRecoveryEventUncheckedCreateInput>
+  }
+
+  /**
+   * RuntimeRecoveryEvent createMany
+   */
+  export type RuntimeRecoveryEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RuntimeRecoveryEvents.
+     */
+    data: RuntimeRecoveryEventCreateManyInput | RuntimeRecoveryEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RuntimeRecoveryEvent createManyAndReturn
+   */
+  export type RuntimeRecoveryEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RuntimeRecoveryEvent
+     */
+    select?: RuntimeRecoveryEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RuntimeRecoveryEvent
+     */
+    omit?: RuntimeRecoveryEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many RuntimeRecoveryEvents.
+     */
+    data: RuntimeRecoveryEventCreateManyInput | RuntimeRecoveryEventCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RuntimeRecoveryEventIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RuntimeRecoveryEvent update
+   */
+  export type RuntimeRecoveryEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RuntimeRecoveryEvent
+     */
+    select?: RuntimeRecoveryEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RuntimeRecoveryEvent
+     */
+    omit?: RuntimeRecoveryEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RuntimeRecoveryEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RuntimeRecoveryEvent.
+     */
+    data: XOR<RuntimeRecoveryEventUpdateInput, RuntimeRecoveryEventUncheckedUpdateInput>
+    /**
+     * Choose, which RuntimeRecoveryEvent to update.
+     */
+    where: RuntimeRecoveryEventWhereUniqueInput
+  }
+
+  /**
+   * RuntimeRecoveryEvent updateMany
+   */
+  export type RuntimeRecoveryEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RuntimeRecoveryEvents.
+     */
+    data: XOR<RuntimeRecoveryEventUpdateManyMutationInput, RuntimeRecoveryEventUncheckedUpdateManyInput>
+    /**
+     * Filter which RuntimeRecoveryEvents to update
+     */
+    where?: RuntimeRecoveryEventWhereInput
+    /**
+     * Limit how many RuntimeRecoveryEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RuntimeRecoveryEvent updateManyAndReturn
+   */
+  export type RuntimeRecoveryEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RuntimeRecoveryEvent
+     */
+    select?: RuntimeRecoveryEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RuntimeRecoveryEvent
+     */
+    omit?: RuntimeRecoveryEventOmit<ExtArgs> | null
+    /**
+     * The data used to update RuntimeRecoveryEvents.
+     */
+    data: XOR<RuntimeRecoveryEventUpdateManyMutationInput, RuntimeRecoveryEventUncheckedUpdateManyInput>
+    /**
+     * Filter which RuntimeRecoveryEvents to update
+     */
+    where?: RuntimeRecoveryEventWhereInput
+    /**
+     * Limit how many RuntimeRecoveryEvents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RuntimeRecoveryEventIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RuntimeRecoveryEvent upsert
+   */
+  export type RuntimeRecoveryEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RuntimeRecoveryEvent
+     */
+    select?: RuntimeRecoveryEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RuntimeRecoveryEvent
+     */
+    omit?: RuntimeRecoveryEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RuntimeRecoveryEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RuntimeRecoveryEvent to update in case it exists.
+     */
+    where: RuntimeRecoveryEventWhereUniqueInput
+    /**
+     * In case the RuntimeRecoveryEvent found by the `where` argument doesn't exist, create a new RuntimeRecoveryEvent with this data.
+     */
+    create: XOR<RuntimeRecoveryEventCreateInput, RuntimeRecoveryEventUncheckedCreateInput>
+    /**
+     * In case the RuntimeRecoveryEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RuntimeRecoveryEventUpdateInput, RuntimeRecoveryEventUncheckedUpdateInput>
+  }
+
+  /**
+   * RuntimeRecoveryEvent delete
+   */
+  export type RuntimeRecoveryEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RuntimeRecoveryEvent
+     */
+    select?: RuntimeRecoveryEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RuntimeRecoveryEvent
+     */
+    omit?: RuntimeRecoveryEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RuntimeRecoveryEventInclude<ExtArgs> | null
+    /**
+     * Filter which RuntimeRecoveryEvent to delete.
+     */
+    where: RuntimeRecoveryEventWhereUniqueInput
+  }
+
+  /**
+   * RuntimeRecoveryEvent deleteMany
+   */
+  export type RuntimeRecoveryEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RuntimeRecoveryEvents to delete
+     */
+    where?: RuntimeRecoveryEventWhereInput
+    /**
+     * Limit how many RuntimeRecoveryEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RuntimeRecoveryEvent.snapshot
+   */
+  export type RuntimeRecoveryEvent$snapshotArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectSnapshot
+     */
+    select?: ProjectSnapshotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectSnapshot
+     */
+    omit?: ProjectSnapshotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectSnapshotInclude<ExtArgs> | null
+    where?: ProjectSnapshotWhereInput
+  }
+
+  /**
+   * RuntimeRecoveryEvent without action
+   */
+  export type RuntimeRecoveryEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RuntimeRecoveryEvent
+     */
+    select?: RuntimeRecoveryEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RuntimeRecoveryEvent
+     */
+    omit?: RuntimeRecoveryEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RuntimeRecoveryEventInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model PreviewRoute
    */
 
@@ -26795,6 +29444,44 @@ export namespace Prisma {
   export type AgentActivityEventScalarFieldEnum = (typeof AgentActivityEventScalarFieldEnum)[keyof typeof AgentActivityEventScalarFieldEnum]
 
 
+  export const ProjectSnapshotScalarFieldEnum: {
+    id: 'id',
+    projectId: 'projectId',
+    runtimeId: 'runtimeId',
+    workspaceId: 'workspaceId',
+    ownerUserId: 'ownerUserId',
+    label: 'label',
+    reason: 'reason',
+    snapshotType: 'snapshotType',
+    status: 'status',
+    storagePath: 'storagePath',
+    manifest: 'manifest',
+    checksum: 'checksum',
+    sizeBytes: 'sizeBytes',
+    createdAt: 'createdAt',
+    restoredAt: 'restoredAt',
+    expiresAt: 'expiresAt'
+  };
+
+  export type ProjectSnapshotScalarFieldEnum = (typeof ProjectSnapshotScalarFieldEnum)[keyof typeof ProjectSnapshotScalarFieldEnum]
+
+
+  export const RuntimeRecoveryEventScalarFieldEnum: {
+    id: 'id',
+    projectId: 'projectId',
+    runtimeId: 'runtimeId',
+    snapshotId: 'snapshotId',
+    eventType: 'eventType',
+    status: 'status',
+    reason: 'reason',
+    metadata: 'metadata',
+    createdAt: 'createdAt',
+    completedAt: 'completedAt'
+  };
+
+  export type RuntimeRecoveryEventScalarFieldEnum = (typeof RuntimeRecoveryEventScalarFieldEnum)[keyof typeof RuntimeRecoveryEventScalarFieldEnum]
+
+
   export const PreviewRouteScalarFieldEnum: {
     id: 'id',
     runtimeId: 'runtimeId',
@@ -27098,6 +29785,48 @@ export namespace Prisma {
    * Reference to a field of type 'EventStatus[]'
    */
   export type ListEnumEventStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SnapshotType'
+   */
+  export type EnumSnapshotTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SnapshotType'>
+    
+
+
+  /**
+   * Reference to a field of type 'SnapshotType[]'
+   */
+  export type ListEnumSnapshotTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SnapshotType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SnapshotStatus'
+   */
+  export type EnumSnapshotStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SnapshotStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SnapshotStatus[]'
+   */
+  export type ListEnumSnapshotStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SnapshotStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'RecoveryEventType'
+   */
+  export type EnumRecoveryEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RecoveryEventType'>
+    
+
+
+  /**
+   * Reference to a field of type 'RecoveryEventType[]'
+   */
+  export type ListEnumRecoveryEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RecoveryEventType[]'>
     
 
 
@@ -28424,6 +31153,198 @@ export namespace Prisma {
     completedAt?: DateTimeNullableWithAggregatesFilter<"AgentActivityEvent"> | Date | string | null
     durationMs?: IntNullableWithAggregatesFilter<"AgentActivityEvent"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"AgentActivityEvent"> | Date | string
+  }
+
+  export type ProjectSnapshotWhereInput = {
+    AND?: ProjectSnapshotWhereInput | ProjectSnapshotWhereInput[]
+    OR?: ProjectSnapshotWhereInput[]
+    NOT?: ProjectSnapshotWhereInput | ProjectSnapshotWhereInput[]
+    id?: StringFilter<"ProjectSnapshot"> | string
+    projectId?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    runtimeId?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    workspaceId?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    ownerUserId?: StringFilter<"ProjectSnapshot"> | string
+    label?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    reason?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    snapshotType?: EnumSnapshotTypeFilter<"ProjectSnapshot"> | $Enums.SnapshotType
+    status?: EnumSnapshotStatusFilter<"ProjectSnapshot"> | $Enums.SnapshotStatus
+    storagePath?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    manifest?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    checksum?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    sizeBytes?: IntNullableFilter<"ProjectSnapshot"> | number | null
+    createdAt?: DateTimeFilter<"ProjectSnapshot"> | Date | string
+    restoredAt?: DateTimeNullableFilter<"ProjectSnapshot"> | Date | string | null
+    expiresAt?: DateTimeNullableFilter<"ProjectSnapshot"> | Date | string | null
+    recoveryEvents?: RuntimeRecoveryEventListRelationFilter
+  }
+
+  export type ProjectSnapshotOrderByWithRelationInput = {
+    id?: SortOrder
+    projectId?: SortOrderInput | SortOrder
+    runtimeId?: SortOrderInput | SortOrder
+    workspaceId?: SortOrderInput | SortOrder
+    ownerUserId?: SortOrder
+    label?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    snapshotType?: SortOrder
+    status?: SortOrder
+    storagePath?: SortOrderInput | SortOrder
+    manifest?: SortOrderInput | SortOrder
+    checksum?: SortOrderInput | SortOrder
+    sizeBytes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    restoredAt?: SortOrderInput | SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    recoveryEvents?: RuntimeRecoveryEventOrderByRelationAggregateInput
+  }
+
+  export type ProjectSnapshotWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProjectSnapshotWhereInput | ProjectSnapshotWhereInput[]
+    OR?: ProjectSnapshotWhereInput[]
+    NOT?: ProjectSnapshotWhereInput | ProjectSnapshotWhereInput[]
+    projectId?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    runtimeId?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    workspaceId?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    ownerUserId?: StringFilter<"ProjectSnapshot"> | string
+    label?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    reason?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    snapshotType?: EnumSnapshotTypeFilter<"ProjectSnapshot"> | $Enums.SnapshotType
+    status?: EnumSnapshotStatusFilter<"ProjectSnapshot"> | $Enums.SnapshotStatus
+    storagePath?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    manifest?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    checksum?: StringNullableFilter<"ProjectSnapshot"> | string | null
+    sizeBytes?: IntNullableFilter<"ProjectSnapshot"> | number | null
+    createdAt?: DateTimeFilter<"ProjectSnapshot"> | Date | string
+    restoredAt?: DateTimeNullableFilter<"ProjectSnapshot"> | Date | string | null
+    expiresAt?: DateTimeNullableFilter<"ProjectSnapshot"> | Date | string | null
+    recoveryEvents?: RuntimeRecoveryEventListRelationFilter
+  }, "id">
+
+  export type ProjectSnapshotOrderByWithAggregationInput = {
+    id?: SortOrder
+    projectId?: SortOrderInput | SortOrder
+    runtimeId?: SortOrderInput | SortOrder
+    workspaceId?: SortOrderInput | SortOrder
+    ownerUserId?: SortOrder
+    label?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    snapshotType?: SortOrder
+    status?: SortOrder
+    storagePath?: SortOrderInput | SortOrder
+    manifest?: SortOrderInput | SortOrder
+    checksum?: SortOrderInput | SortOrder
+    sizeBytes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    restoredAt?: SortOrderInput | SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    _count?: ProjectSnapshotCountOrderByAggregateInput
+    _avg?: ProjectSnapshotAvgOrderByAggregateInput
+    _max?: ProjectSnapshotMaxOrderByAggregateInput
+    _min?: ProjectSnapshotMinOrderByAggregateInput
+    _sum?: ProjectSnapshotSumOrderByAggregateInput
+  }
+
+  export type ProjectSnapshotScalarWhereWithAggregatesInput = {
+    AND?: ProjectSnapshotScalarWhereWithAggregatesInput | ProjectSnapshotScalarWhereWithAggregatesInput[]
+    OR?: ProjectSnapshotScalarWhereWithAggregatesInput[]
+    NOT?: ProjectSnapshotScalarWhereWithAggregatesInput | ProjectSnapshotScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProjectSnapshot"> | string
+    projectId?: StringNullableWithAggregatesFilter<"ProjectSnapshot"> | string | null
+    runtimeId?: StringNullableWithAggregatesFilter<"ProjectSnapshot"> | string | null
+    workspaceId?: StringNullableWithAggregatesFilter<"ProjectSnapshot"> | string | null
+    ownerUserId?: StringWithAggregatesFilter<"ProjectSnapshot"> | string
+    label?: StringNullableWithAggregatesFilter<"ProjectSnapshot"> | string | null
+    reason?: StringNullableWithAggregatesFilter<"ProjectSnapshot"> | string | null
+    snapshotType?: EnumSnapshotTypeWithAggregatesFilter<"ProjectSnapshot"> | $Enums.SnapshotType
+    status?: EnumSnapshotStatusWithAggregatesFilter<"ProjectSnapshot"> | $Enums.SnapshotStatus
+    storagePath?: StringNullableWithAggregatesFilter<"ProjectSnapshot"> | string | null
+    manifest?: StringNullableWithAggregatesFilter<"ProjectSnapshot"> | string | null
+    checksum?: StringNullableWithAggregatesFilter<"ProjectSnapshot"> | string | null
+    sizeBytes?: IntNullableWithAggregatesFilter<"ProjectSnapshot"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"ProjectSnapshot"> | Date | string
+    restoredAt?: DateTimeNullableWithAggregatesFilter<"ProjectSnapshot"> | Date | string | null
+    expiresAt?: DateTimeNullableWithAggregatesFilter<"ProjectSnapshot"> | Date | string | null
+  }
+
+  export type RuntimeRecoveryEventWhereInput = {
+    AND?: RuntimeRecoveryEventWhereInput | RuntimeRecoveryEventWhereInput[]
+    OR?: RuntimeRecoveryEventWhereInput[]
+    NOT?: RuntimeRecoveryEventWhereInput | RuntimeRecoveryEventWhereInput[]
+    id?: StringFilter<"RuntimeRecoveryEvent"> | string
+    projectId?: StringNullableFilter<"RuntimeRecoveryEvent"> | string | null
+    runtimeId?: StringNullableFilter<"RuntimeRecoveryEvent"> | string | null
+    snapshotId?: StringNullableFilter<"RuntimeRecoveryEvent"> | string | null
+    eventType?: EnumRecoveryEventTypeFilter<"RuntimeRecoveryEvent"> | $Enums.RecoveryEventType
+    status?: EnumEventStatusFilter<"RuntimeRecoveryEvent"> | $Enums.EventStatus
+    reason?: StringNullableFilter<"RuntimeRecoveryEvent"> | string | null
+    metadata?: StringNullableFilter<"RuntimeRecoveryEvent"> | string | null
+    createdAt?: DateTimeFilter<"RuntimeRecoveryEvent"> | Date | string
+    completedAt?: DateTimeNullableFilter<"RuntimeRecoveryEvent"> | Date | string | null
+    snapshot?: XOR<ProjectSnapshotNullableScalarRelationFilter, ProjectSnapshotWhereInput> | null
+  }
+
+  export type RuntimeRecoveryEventOrderByWithRelationInput = {
+    id?: SortOrder
+    projectId?: SortOrderInput | SortOrder
+    runtimeId?: SortOrderInput | SortOrder
+    snapshotId?: SortOrderInput | SortOrder
+    eventType?: SortOrder
+    status?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    snapshot?: ProjectSnapshotOrderByWithRelationInput
+  }
+
+  export type RuntimeRecoveryEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RuntimeRecoveryEventWhereInput | RuntimeRecoveryEventWhereInput[]
+    OR?: RuntimeRecoveryEventWhereInput[]
+    NOT?: RuntimeRecoveryEventWhereInput | RuntimeRecoveryEventWhereInput[]
+    projectId?: StringNullableFilter<"RuntimeRecoveryEvent"> | string | null
+    runtimeId?: StringNullableFilter<"RuntimeRecoveryEvent"> | string | null
+    snapshotId?: StringNullableFilter<"RuntimeRecoveryEvent"> | string | null
+    eventType?: EnumRecoveryEventTypeFilter<"RuntimeRecoveryEvent"> | $Enums.RecoveryEventType
+    status?: EnumEventStatusFilter<"RuntimeRecoveryEvent"> | $Enums.EventStatus
+    reason?: StringNullableFilter<"RuntimeRecoveryEvent"> | string | null
+    metadata?: StringNullableFilter<"RuntimeRecoveryEvent"> | string | null
+    createdAt?: DateTimeFilter<"RuntimeRecoveryEvent"> | Date | string
+    completedAt?: DateTimeNullableFilter<"RuntimeRecoveryEvent"> | Date | string | null
+    snapshot?: XOR<ProjectSnapshotNullableScalarRelationFilter, ProjectSnapshotWhereInput> | null
+  }, "id">
+
+  export type RuntimeRecoveryEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    projectId?: SortOrderInput | SortOrder
+    runtimeId?: SortOrderInput | SortOrder
+    snapshotId?: SortOrderInput | SortOrder
+    eventType?: SortOrder
+    status?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    _count?: RuntimeRecoveryEventCountOrderByAggregateInput
+    _max?: RuntimeRecoveryEventMaxOrderByAggregateInput
+    _min?: RuntimeRecoveryEventMinOrderByAggregateInput
+  }
+
+  export type RuntimeRecoveryEventScalarWhereWithAggregatesInput = {
+    AND?: RuntimeRecoveryEventScalarWhereWithAggregatesInput | RuntimeRecoveryEventScalarWhereWithAggregatesInput[]
+    OR?: RuntimeRecoveryEventScalarWhereWithAggregatesInput[]
+    NOT?: RuntimeRecoveryEventScalarWhereWithAggregatesInput | RuntimeRecoveryEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"RuntimeRecoveryEvent"> | string
+    projectId?: StringNullableWithAggregatesFilter<"RuntimeRecoveryEvent"> | string | null
+    runtimeId?: StringNullableWithAggregatesFilter<"RuntimeRecoveryEvent"> | string | null
+    snapshotId?: StringNullableWithAggregatesFilter<"RuntimeRecoveryEvent"> | string | null
+    eventType?: EnumRecoveryEventTypeWithAggregatesFilter<"RuntimeRecoveryEvent"> | $Enums.RecoveryEventType
+    status?: EnumEventStatusWithAggregatesFilter<"RuntimeRecoveryEvent"> | $Enums.EventStatus
+    reason?: StringNullableWithAggregatesFilter<"RuntimeRecoveryEvent"> | string | null
+    metadata?: StringNullableWithAggregatesFilter<"RuntimeRecoveryEvent"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"RuntimeRecoveryEvent"> | Date | string
+    completedAt?: DateTimeNullableWithAggregatesFilter<"RuntimeRecoveryEvent"> | Date | string | null
   }
 
   export type PreviewRouteWhereInput = {
@@ -30209,6 +33130,233 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ProjectSnapshotCreateInput = {
+    id?: string
+    projectId?: string | null
+    runtimeId?: string | null
+    workspaceId?: string | null
+    ownerUserId: string
+    label?: string | null
+    reason?: string | null
+    snapshotType: $Enums.SnapshotType
+    status?: $Enums.SnapshotStatus
+    storagePath?: string | null
+    manifest?: string | null
+    checksum?: string | null
+    sizeBytes?: number | null
+    createdAt?: Date | string
+    restoredAt?: Date | string | null
+    expiresAt?: Date | string | null
+    recoveryEvents?: RuntimeRecoveryEventCreateNestedManyWithoutSnapshotInput
+  }
+
+  export type ProjectSnapshotUncheckedCreateInput = {
+    id?: string
+    projectId?: string | null
+    runtimeId?: string | null
+    workspaceId?: string | null
+    ownerUserId: string
+    label?: string | null
+    reason?: string | null
+    snapshotType: $Enums.SnapshotType
+    status?: $Enums.SnapshotStatus
+    storagePath?: string | null
+    manifest?: string | null
+    checksum?: string | null
+    sizeBytes?: number | null
+    createdAt?: Date | string
+    restoredAt?: Date | string | null
+    expiresAt?: Date | string | null
+    recoveryEvents?: RuntimeRecoveryEventUncheckedCreateNestedManyWithoutSnapshotInput
+  }
+
+  export type ProjectSnapshotUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    runtimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    workspaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshotType?: EnumSnapshotTypeFieldUpdateOperationsInput | $Enums.SnapshotType
+    status?: EnumSnapshotStatusFieldUpdateOperationsInput | $Enums.SnapshotStatus
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    manifest?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeBytes?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    restoredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recoveryEvents?: RuntimeRecoveryEventUpdateManyWithoutSnapshotNestedInput
+  }
+
+  export type ProjectSnapshotUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    runtimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    workspaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshotType?: EnumSnapshotTypeFieldUpdateOperationsInput | $Enums.SnapshotType
+    status?: EnumSnapshotStatusFieldUpdateOperationsInput | $Enums.SnapshotStatus
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    manifest?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeBytes?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    restoredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recoveryEvents?: RuntimeRecoveryEventUncheckedUpdateManyWithoutSnapshotNestedInput
+  }
+
+  export type ProjectSnapshotCreateManyInput = {
+    id?: string
+    projectId?: string | null
+    runtimeId?: string | null
+    workspaceId?: string | null
+    ownerUserId: string
+    label?: string | null
+    reason?: string | null
+    snapshotType: $Enums.SnapshotType
+    status?: $Enums.SnapshotStatus
+    storagePath?: string | null
+    manifest?: string | null
+    checksum?: string | null
+    sizeBytes?: number | null
+    createdAt?: Date | string
+    restoredAt?: Date | string | null
+    expiresAt?: Date | string | null
+  }
+
+  export type ProjectSnapshotUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    runtimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    workspaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshotType?: EnumSnapshotTypeFieldUpdateOperationsInput | $Enums.SnapshotType
+    status?: EnumSnapshotStatusFieldUpdateOperationsInput | $Enums.SnapshotStatus
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    manifest?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeBytes?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    restoredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ProjectSnapshotUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    runtimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    workspaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshotType?: EnumSnapshotTypeFieldUpdateOperationsInput | $Enums.SnapshotType
+    status?: EnumSnapshotStatusFieldUpdateOperationsInput | $Enums.SnapshotStatus
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    manifest?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeBytes?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    restoredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type RuntimeRecoveryEventCreateInput = {
+    id?: string
+    projectId?: string | null
+    runtimeId?: string | null
+    eventType: $Enums.RecoveryEventType
+    status: $Enums.EventStatus
+    reason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+    snapshot?: ProjectSnapshotCreateNestedOneWithoutRecoveryEventsInput
+  }
+
+  export type RuntimeRecoveryEventUncheckedCreateInput = {
+    id?: string
+    projectId?: string | null
+    runtimeId?: string | null
+    snapshotId?: string | null
+    eventType: $Enums.RecoveryEventType
+    status: $Enums.EventStatus
+    reason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type RuntimeRecoveryEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    runtimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    eventType?: EnumRecoveryEventTypeFieldUpdateOperationsInput | $Enums.RecoveryEventType
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    snapshot?: ProjectSnapshotUpdateOneWithoutRecoveryEventsNestedInput
+  }
+
+  export type RuntimeRecoveryEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    runtimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    eventType?: EnumRecoveryEventTypeFieldUpdateOperationsInput | $Enums.RecoveryEventType
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type RuntimeRecoveryEventCreateManyInput = {
+    id?: string
+    projectId?: string | null
+    runtimeId?: string | null
+    snapshotId?: string | null
+    eventType: $Enums.RecoveryEventType
+    status: $Enums.EventStatus
+    reason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type RuntimeRecoveryEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    runtimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    eventType?: EnumRecoveryEventTypeFieldUpdateOperationsInput | $Enums.RecoveryEventType
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type RuntimeRecoveryEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    runtimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshotId?: NullableStringFieldUpdateOperationsInput | string | null
+    eventType?: EnumRecoveryEventTypeFieldUpdateOperationsInput | $Enums.RecoveryEventType
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type PreviewRouteCreateInput = {
     id?: string
     runtimeId: string
@@ -31758,6 +34906,176 @@ export namespace Prisma {
     _max?: NestedEnumEventStatusFilter<$PrismaModel>
   }
 
+  export type EnumSnapshotTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.SnapshotType | EnumSnapshotTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SnapshotType[] | ListEnumSnapshotTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SnapshotType[] | ListEnumSnapshotTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSnapshotTypeFilter<$PrismaModel> | $Enums.SnapshotType
+  }
+
+  export type EnumSnapshotStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SnapshotStatus | EnumSnapshotStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SnapshotStatus[] | ListEnumSnapshotStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SnapshotStatus[] | ListEnumSnapshotStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSnapshotStatusFilter<$PrismaModel> | $Enums.SnapshotStatus
+  }
+
+  export type RuntimeRecoveryEventListRelationFilter = {
+    every?: RuntimeRecoveryEventWhereInput
+    some?: RuntimeRecoveryEventWhereInput
+    none?: RuntimeRecoveryEventWhereInput
+  }
+
+  export type RuntimeRecoveryEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProjectSnapshotCountOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    runtimeId?: SortOrder
+    workspaceId?: SortOrder
+    ownerUserId?: SortOrder
+    label?: SortOrder
+    reason?: SortOrder
+    snapshotType?: SortOrder
+    status?: SortOrder
+    storagePath?: SortOrder
+    manifest?: SortOrder
+    checksum?: SortOrder
+    sizeBytes?: SortOrder
+    createdAt?: SortOrder
+    restoredAt?: SortOrder
+    expiresAt?: SortOrder
+  }
+
+  export type ProjectSnapshotAvgOrderByAggregateInput = {
+    sizeBytes?: SortOrder
+  }
+
+  export type ProjectSnapshotMaxOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    runtimeId?: SortOrder
+    workspaceId?: SortOrder
+    ownerUserId?: SortOrder
+    label?: SortOrder
+    reason?: SortOrder
+    snapshotType?: SortOrder
+    status?: SortOrder
+    storagePath?: SortOrder
+    manifest?: SortOrder
+    checksum?: SortOrder
+    sizeBytes?: SortOrder
+    createdAt?: SortOrder
+    restoredAt?: SortOrder
+    expiresAt?: SortOrder
+  }
+
+  export type ProjectSnapshotMinOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    runtimeId?: SortOrder
+    workspaceId?: SortOrder
+    ownerUserId?: SortOrder
+    label?: SortOrder
+    reason?: SortOrder
+    snapshotType?: SortOrder
+    status?: SortOrder
+    storagePath?: SortOrder
+    manifest?: SortOrder
+    checksum?: SortOrder
+    sizeBytes?: SortOrder
+    createdAt?: SortOrder
+    restoredAt?: SortOrder
+    expiresAt?: SortOrder
+  }
+
+  export type ProjectSnapshotSumOrderByAggregateInput = {
+    sizeBytes?: SortOrder
+  }
+
+  export type EnumSnapshotTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SnapshotType | EnumSnapshotTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SnapshotType[] | ListEnumSnapshotTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SnapshotType[] | ListEnumSnapshotTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSnapshotTypeWithAggregatesFilter<$PrismaModel> | $Enums.SnapshotType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSnapshotTypeFilter<$PrismaModel>
+    _max?: NestedEnumSnapshotTypeFilter<$PrismaModel>
+  }
+
+  export type EnumSnapshotStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SnapshotStatus | EnumSnapshotStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SnapshotStatus[] | ListEnumSnapshotStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SnapshotStatus[] | ListEnumSnapshotStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSnapshotStatusWithAggregatesFilter<$PrismaModel> | $Enums.SnapshotStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSnapshotStatusFilter<$PrismaModel>
+    _max?: NestedEnumSnapshotStatusFilter<$PrismaModel>
+  }
+
+  export type EnumRecoveryEventTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecoveryEventType | EnumRecoveryEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RecoveryEventType[] | ListEnumRecoveryEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RecoveryEventType[] | ListEnumRecoveryEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRecoveryEventTypeFilter<$PrismaModel> | $Enums.RecoveryEventType
+  }
+
+  export type ProjectSnapshotNullableScalarRelationFilter = {
+    is?: ProjectSnapshotWhereInput | null
+    isNot?: ProjectSnapshotWhereInput | null
+  }
+
+  export type RuntimeRecoveryEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    runtimeId?: SortOrder
+    snapshotId?: SortOrder
+    eventType?: SortOrder
+    status?: SortOrder
+    reason?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type RuntimeRecoveryEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    runtimeId?: SortOrder
+    snapshotId?: SortOrder
+    eventType?: SortOrder
+    status?: SortOrder
+    reason?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type RuntimeRecoveryEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    runtimeId?: SortOrder
+    snapshotId?: SortOrder
+    eventType?: SortOrder
+    status?: SortOrder
+    reason?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type EnumRecoveryEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecoveryEventType | EnumRecoveryEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RecoveryEventType[] | ListEnumRecoveryEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RecoveryEventType[] | ListEnumRecoveryEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRecoveryEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.RecoveryEventType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRecoveryEventTypeFilter<$PrismaModel>
+    _max?: NestedEnumRecoveryEventTypeFilter<$PrismaModel>
+  }
+
   export type PreviewRouteCountOrderByAggregateInput = {
     id?: SortOrder
     runtimeId?: SortOrder
@@ -32594,6 +35912,76 @@ export namespace Prisma {
     set?: $Enums.EventStatus
   }
 
+  export type RuntimeRecoveryEventCreateNestedManyWithoutSnapshotInput = {
+    create?: XOR<RuntimeRecoveryEventCreateWithoutSnapshotInput, RuntimeRecoveryEventUncheckedCreateWithoutSnapshotInput> | RuntimeRecoveryEventCreateWithoutSnapshotInput[] | RuntimeRecoveryEventUncheckedCreateWithoutSnapshotInput[]
+    connectOrCreate?: RuntimeRecoveryEventCreateOrConnectWithoutSnapshotInput | RuntimeRecoveryEventCreateOrConnectWithoutSnapshotInput[]
+    createMany?: RuntimeRecoveryEventCreateManySnapshotInputEnvelope
+    connect?: RuntimeRecoveryEventWhereUniqueInput | RuntimeRecoveryEventWhereUniqueInput[]
+  }
+
+  export type RuntimeRecoveryEventUncheckedCreateNestedManyWithoutSnapshotInput = {
+    create?: XOR<RuntimeRecoveryEventCreateWithoutSnapshotInput, RuntimeRecoveryEventUncheckedCreateWithoutSnapshotInput> | RuntimeRecoveryEventCreateWithoutSnapshotInput[] | RuntimeRecoveryEventUncheckedCreateWithoutSnapshotInput[]
+    connectOrCreate?: RuntimeRecoveryEventCreateOrConnectWithoutSnapshotInput | RuntimeRecoveryEventCreateOrConnectWithoutSnapshotInput[]
+    createMany?: RuntimeRecoveryEventCreateManySnapshotInputEnvelope
+    connect?: RuntimeRecoveryEventWhereUniqueInput | RuntimeRecoveryEventWhereUniqueInput[]
+  }
+
+  export type EnumSnapshotTypeFieldUpdateOperationsInput = {
+    set?: $Enums.SnapshotType
+  }
+
+  export type EnumSnapshotStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SnapshotStatus
+  }
+
+  export type RuntimeRecoveryEventUpdateManyWithoutSnapshotNestedInput = {
+    create?: XOR<RuntimeRecoveryEventCreateWithoutSnapshotInput, RuntimeRecoveryEventUncheckedCreateWithoutSnapshotInput> | RuntimeRecoveryEventCreateWithoutSnapshotInput[] | RuntimeRecoveryEventUncheckedCreateWithoutSnapshotInput[]
+    connectOrCreate?: RuntimeRecoveryEventCreateOrConnectWithoutSnapshotInput | RuntimeRecoveryEventCreateOrConnectWithoutSnapshotInput[]
+    upsert?: RuntimeRecoveryEventUpsertWithWhereUniqueWithoutSnapshotInput | RuntimeRecoveryEventUpsertWithWhereUniqueWithoutSnapshotInput[]
+    createMany?: RuntimeRecoveryEventCreateManySnapshotInputEnvelope
+    set?: RuntimeRecoveryEventWhereUniqueInput | RuntimeRecoveryEventWhereUniqueInput[]
+    disconnect?: RuntimeRecoveryEventWhereUniqueInput | RuntimeRecoveryEventWhereUniqueInput[]
+    delete?: RuntimeRecoveryEventWhereUniqueInput | RuntimeRecoveryEventWhereUniqueInput[]
+    connect?: RuntimeRecoveryEventWhereUniqueInput | RuntimeRecoveryEventWhereUniqueInput[]
+    update?: RuntimeRecoveryEventUpdateWithWhereUniqueWithoutSnapshotInput | RuntimeRecoveryEventUpdateWithWhereUniqueWithoutSnapshotInput[]
+    updateMany?: RuntimeRecoveryEventUpdateManyWithWhereWithoutSnapshotInput | RuntimeRecoveryEventUpdateManyWithWhereWithoutSnapshotInput[]
+    deleteMany?: RuntimeRecoveryEventScalarWhereInput | RuntimeRecoveryEventScalarWhereInput[]
+  }
+
+  export type RuntimeRecoveryEventUncheckedUpdateManyWithoutSnapshotNestedInput = {
+    create?: XOR<RuntimeRecoveryEventCreateWithoutSnapshotInput, RuntimeRecoveryEventUncheckedCreateWithoutSnapshotInput> | RuntimeRecoveryEventCreateWithoutSnapshotInput[] | RuntimeRecoveryEventUncheckedCreateWithoutSnapshotInput[]
+    connectOrCreate?: RuntimeRecoveryEventCreateOrConnectWithoutSnapshotInput | RuntimeRecoveryEventCreateOrConnectWithoutSnapshotInput[]
+    upsert?: RuntimeRecoveryEventUpsertWithWhereUniqueWithoutSnapshotInput | RuntimeRecoveryEventUpsertWithWhereUniqueWithoutSnapshotInput[]
+    createMany?: RuntimeRecoveryEventCreateManySnapshotInputEnvelope
+    set?: RuntimeRecoveryEventWhereUniqueInput | RuntimeRecoveryEventWhereUniqueInput[]
+    disconnect?: RuntimeRecoveryEventWhereUniqueInput | RuntimeRecoveryEventWhereUniqueInput[]
+    delete?: RuntimeRecoveryEventWhereUniqueInput | RuntimeRecoveryEventWhereUniqueInput[]
+    connect?: RuntimeRecoveryEventWhereUniqueInput | RuntimeRecoveryEventWhereUniqueInput[]
+    update?: RuntimeRecoveryEventUpdateWithWhereUniqueWithoutSnapshotInput | RuntimeRecoveryEventUpdateWithWhereUniqueWithoutSnapshotInput[]
+    updateMany?: RuntimeRecoveryEventUpdateManyWithWhereWithoutSnapshotInput | RuntimeRecoveryEventUpdateManyWithWhereWithoutSnapshotInput[]
+    deleteMany?: RuntimeRecoveryEventScalarWhereInput | RuntimeRecoveryEventScalarWhereInput[]
+  }
+
+  export type ProjectSnapshotCreateNestedOneWithoutRecoveryEventsInput = {
+    create?: XOR<ProjectSnapshotCreateWithoutRecoveryEventsInput, ProjectSnapshotUncheckedCreateWithoutRecoveryEventsInput>
+    connectOrCreate?: ProjectSnapshotCreateOrConnectWithoutRecoveryEventsInput
+    connect?: ProjectSnapshotWhereUniqueInput
+  }
+
+  export type EnumRecoveryEventTypeFieldUpdateOperationsInput = {
+    set?: $Enums.RecoveryEventType
+  }
+
+  export type ProjectSnapshotUpdateOneWithoutRecoveryEventsNestedInput = {
+    create?: XOR<ProjectSnapshotCreateWithoutRecoveryEventsInput, ProjectSnapshotUncheckedCreateWithoutRecoveryEventsInput>
+    connectOrCreate?: ProjectSnapshotCreateOrConnectWithoutRecoveryEventsInput
+    upsert?: ProjectSnapshotUpsertWithoutRecoveryEventsInput
+    disconnect?: ProjectSnapshotWhereInput | boolean
+    delete?: ProjectSnapshotWhereInput | boolean
+    connect?: ProjectSnapshotWhereUniqueInput
+    update?: XOR<XOR<ProjectSnapshotUpdateToOneWithWhereWithoutRecoveryEventsInput, ProjectSnapshotUpdateWithoutRecoveryEventsInput>, ProjectSnapshotUncheckedUpdateWithoutRecoveryEventsInput>
+  }
+
   export type LoopRunCreateNestedManyWithoutConfigInput = {
     create?: XOR<LoopRunCreateWithoutConfigInput, LoopRunUncheckedCreateWithoutConfigInput> | LoopRunCreateWithoutConfigInput[] | LoopRunUncheckedCreateWithoutConfigInput[]
     connectOrCreate?: LoopRunCreateOrConnectWithoutConfigInput | LoopRunCreateOrConnectWithoutConfigInput[]
@@ -33070,6 +36458,57 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumEventStatusFilter<$PrismaModel>
     _max?: NestedEnumEventStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSnapshotTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.SnapshotType | EnumSnapshotTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SnapshotType[] | ListEnumSnapshotTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SnapshotType[] | ListEnumSnapshotTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSnapshotTypeFilter<$PrismaModel> | $Enums.SnapshotType
+  }
+
+  export type NestedEnumSnapshotStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SnapshotStatus | EnumSnapshotStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SnapshotStatus[] | ListEnumSnapshotStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SnapshotStatus[] | ListEnumSnapshotStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSnapshotStatusFilter<$PrismaModel> | $Enums.SnapshotStatus
+  }
+
+  export type NestedEnumSnapshotTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SnapshotType | EnumSnapshotTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SnapshotType[] | ListEnumSnapshotTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SnapshotType[] | ListEnumSnapshotTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSnapshotTypeWithAggregatesFilter<$PrismaModel> | $Enums.SnapshotType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSnapshotTypeFilter<$PrismaModel>
+    _max?: NestedEnumSnapshotTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSnapshotStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SnapshotStatus | EnumSnapshotStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SnapshotStatus[] | ListEnumSnapshotStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SnapshotStatus[] | ListEnumSnapshotStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSnapshotStatusWithAggregatesFilter<$PrismaModel> | $Enums.SnapshotStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSnapshotStatusFilter<$PrismaModel>
+    _max?: NestedEnumSnapshotStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumRecoveryEventTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecoveryEventType | EnumRecoveryEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RecoveryEventType[] | ListEnumRecoveryEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RecoveryEventType[] | ListEnumRecoveryEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRecoveryEventTypeFilter<$PrismaModel> | $Enums.RecoveryEventType
+  }
+
+  export type NestedEnumRecoveryEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecoveryEventType | EnumRecoveryEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RecoveryEventType[] | ListEnumRecoveryEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RecoveryEventType[] | ListEnumRecoveryEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRecoveryEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.RecoveryEventType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRecoveryEventTypeFilter<$PrismaModel>
+    _max?: NestedEnumRecoveryEventTypeFilter<$PrismaModel>
   }
 
   export type NestedEnumLoopRunStatusFilter<$PrismaModel = never> = {
@@ -34329,6 +37768,164 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type RuntimeRecoveryEventCreateWithoutSnapshotInput = {
+    id?: string
+    projectId?: string | null
+    runtimeId?: string | null
+    eventType: $Enums.RecoveryEventType
+    status: $Enums.EventStatus
+    reason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type RuntimeRecoveryEventUncheckedCreateWithoutSnapshotInput = {
+    id?: string
+    projectId?: string | null
+    runtimeId?: string | null
+    eventType: $Enums.RecoveryEventType
+    status: $Enums.EventStatus
+    reason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type RuntimeRecoveryEventCreateOrConnectWithoutSnapshotInput = {
+    where: RuntimeRecoveryEventWhereUniqueInput
+    create: XOR<RuntimeRecoveryEventCreateWithoutSnapshotInput, RuntimeRecoveryEventUncheckedCreateWithoutSnapshotInput>
+  }
+
+  export type RuntimeRecoveryEventCreateManySnapshotInputEnvelope = {
+    data: RuntimeRecoveryEventCreateManySnapshotInput | RuntimeRecoveryEventCreateManySnapshotInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RuntimeRecoveryEventUpsertWithWhereUniqueWithoutSnapshotInput = {
+    where: RuntimeRecoveryEventWhereUniqueInput
+    update: XOR<RuntimeRecoveryEventUpdateWithoutSnapshotInput, RuntimeRecoveryEventUncheckedUpdateWithoutSnapshotInput>
+    create: XOR<RuntimeRecoveryEventCreateWithoutSnapshotInput, RuntimeRecoveryEventUncheckedCreateWithoutSnapshotInput>
+  }
+
+  export type RuntimeRecoveryEventUpdateWithWhereUniqueWithoutSnapshotInput = {
+    where: RuntimeRecoveryEventWhereUniqueInput
+    data: XOR<RuntimeRecoveryEventUpdateWithoutSnapshotInput, RuntimeRecoveryEventUncheckedUpdateWithoutSnapshotInput>
+  }
+
+  export type RuntimeRecoveryEventUpdateManyWithWhereWithoutSnapshotInput = {
+    where: RuntimeRecoveryEventScalarWhereInput
+    data: XOR<RuntimeRecoveryEventUpdateManyMutationInput, RuntimeRecoveryEventUncheckedUpdateManyWithoutSnapshotInput>
+  }
+
+  export type RuntimeRecoveryEventScalarWhereInput = {
+    AND?: RuntimeRecoveryEventScalarWhereInput | RuntimeRecoveryEventScalarWhereInput[]
+    OR?: RuntimeRecoveryEventScalarWhereInput[]
+    NOT?: RuntimeRecoveryEventScalarWhereInput | RuntimeRecoveryEventScalarWhereInput[]
+    id?: StringFilter<"RuntimeRecoveryEvent"> | string
+    projectId?: StringNullableFilter<"RuntimeRecoveryEvent"> | string | null
+    runtimeId?: StringNullableFilter<"RuntimeRecoveryEvent"> | string | null
+    snapshotId?: StringNullableFilter<"RuntimeRecoveryEvent"> | string | null
+    eventType?: EnumRecoveryEventTypeFilter<"RuntimeRecoveryEvent"> | $Enums.RecoveryEventType
+    status?: EnumEventStatusFilter<"RuntimeRecoveryEvent"> | $Enums.EventStatus
+    reason?: StringNullableFilter<"RuntimeRecoveryEvent"> | string | null
+    metadata?: StringNullableFilter<"RuntimeRecoveryEvent"> | string | null
+    createdAt?: DateTimeFilter<"RuntimeRecoveryEvent"> | Date | string
+    completedAt?: DateTimeNullableFilter<"RuntimeRecoveryEvent"> | Date | string | null
+  }
+
+  export type ProjectSnapshotCreateWithoutRecoveryEventsInput = {
+    id?: string
+    projectId?: string | null
+    runtimeId?: string | null
+    workspaceId?: string | null
+    ownerUserId: string
+    label?: string | null
+    reason?: string | null
+    snapshotType: $Enums.SnapshotType
+    status?: $Enums.SnapshotStatus
+    storagePath?: string | null
+    manifest?: string | null
+    checksum?: string | null
+    sizeBytes?: number | null
+    createdAt?: Date | string
+    restoredAt?: Date | string | null
+    expiresAt?: Date | string | null
+  }
+
+  export type ProjectSnapshotUncheckedCreateWithoutRecoveryEventsInput = {
+    id?: string
+    projectId?: string | null
+    runtimeId?: string | null
+    workspaceId?: string | null
+    ownerUserId: string
+    label?: string | null
+    reason?: string | null
+    snapshotType: $Enums.SnapshotType
+    status?: $Enums.SnapshotStatus
+    storagePath?: string | null
+    manifest?: string | null
+    checksum?: string | null
+    sizeBytes?: number | null
+    createdAt?: Date | string
+    restoredAt?: Date | string | null
+    expiresAt?: Date | string | null
+  }
+
+  export type ProjectSnapshotCreateOrConnectWithoutRecoveryEventsInput = {
+    where: ProjectSnapshotWhereUniqueInput
+    create: XOR<ProjectSnapshotCreateWithoutRecoveryEventsInput, ProjectSnapshotUncheckedCreateWithoutRecoveryEventsInput>
+  }
+
+  export type ProjectSnapshotUpsertWithoutRecoveryEventsInput = {
+    update: XOR<ProjectSnapshotUpdateWithoutRecoveryEventsInput, ProjectSnapshotUncheckedUpdateWithoutRecoveryEventsInput>
+    create: XOR<ProjectSnapshotCreateWithoutRecoveryEventsInput, ProjectSnapshotUncheckedCreateWithoutRecoveryEventsInput>
+    where?: ProjectSnapshotWhereInput
+  }
+
+  export type ProjectSnapshotUpdateToOneWithWhereWithoutRecoveryEventsInput = {
+    where?: ProjectSnapshotWhereInput
+    data: XOR<ProjectSnapshotUpdateWithoutRecoveryEventsInput, ProjectSnapshotUncheckedUpdateWithoutRecoveryEventsInput>
+  }
+
+  export type ProjectSnapshotUpdateWithoutRecoveryEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    runtimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    workspaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshotType?: EnumSnapshotTypeFieldUpdateOperationsInput | $Enums.SnapshotType
+    status?: EnumSnapshotStatusFieldUpdateOperationsInput | $Enums.SnapshotStatus
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    manifest?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeBytes?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    restoredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ProjectSnapshotUncheckedUpdateWithoutRecoveryEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    runtimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    workspaceId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshotType?: EnumSnapshotTypeFieldUpdateOperationsInput | $Enums.SnapshotType
+    status?: EnumSnapshotStatusFieldUpdateOperationsInput | $Enums.SnapshotStatus
+    storagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    manifest?: NullableStringFieldUpdateOperationsInput | string | null
+    checksum?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeBytes?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    restoredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type LoopRunCreateWithoutConfigInput = {
     id?: string
     status?: $Enums.LoopRunStatus
@@ -34974,6 +38571,54 @@ export namespace Prisma {
     inputTokens?: IntFieldUpdateOperationsInput | number
     outTokens?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RuntimeRecoveryEventCreateManySnapshotInput = {
+    id?: string
+    projectId?: string | null
+    runtimeId?: string | null
+    eventType: $Enums.RecoveryEventType
+    status: $Enums.EventStatus
+    reason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type RuntimeRecoveryEventUpdateWithoutSnapshotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    runtimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    eventType?: EnumRecoveryEventTypeFieldUpdateOperationsInput | $Enums.RecoveryEventType
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type RuntimeRecoveryEventUncheckedUpdateWithoutSnapshotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    runtimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    eventType?: EnumRecoveryEventTypeFieldUpdateOperationsInput | $Enums.RecoveryEventType
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type RuntimeRecoveryEventUncheckedUpdateManyWithoutSnapshotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
+    runtimeId?: NullableStringFieldUpdateOperationsInput | string | null
+    eventType?: EnumRecoveryEventTypeFieldUpdateOperationsInput | $Enums.RecoveryEventType
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type LoopRunCreateManyConfigInput = {

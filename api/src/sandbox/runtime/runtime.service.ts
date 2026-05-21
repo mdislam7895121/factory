@@ -5,6 +5,7 @@ import {
   Logger,
   NotFoundException,
   OnModuleInit,
+  Optional,
 } from '@nestjs/common';
 import { compare, hash } from 'bcryptjs';
 import { randomUUID } from 'node:crypto';
@@ -12,9 +13,11 @@ import {
   RuntimeStatus,
   RuntimeVisibility,
   SleepState,
+  SnapshotType,
 } from '../../generated/prisma';
 import { PrismaService } from '../../prisma/prisma.service';
 import { RedisService } from '../../lib/redis/redis.service';
+import type { SnapshotService } from '../../snapshot/snapshot.service';
 
 const ORCHESTRATOR_URL = (process.env.ORCHESTRATOR_URL ?? 'http://localhost:4100').trim();
 const IDLE_TTL_SEC  = parseInt(process.env.RUNTIME_IDLE_TTL_SEC  ?? '300',  10);
@@ -27,8 +30,9 @@ export class RuntimeService implements OnModuleInit {
   private readonly logger = new Logger(RuntimeService.name);
 
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly redis: RedisService,
+    private readonly prisma:    PrismaService,
+    private readonly redis:     RedisService,
+    @Optional() private readonly snapshots?: SnapshotService,
   ) {}
 
   onModuleInit() {
@@ -229,6 +233,17 @@ export class RuntimeService implements OnModuleInit {
     if (!AUTO_RECOVERY || runtime.recoveryCount >= MAX_RECOVERIES) {
       this.logger.warn({ id, count: runtime.recoveryCount }, 'recovery denied (limit or disabled)');
       return null;
+    }
+
+    // 08-05: AUTO_RECOVERY snapshot — capture state before attempting restart (non-blocking)
+    if (this.snapshots) {
+      await this.snapshots.createSnapshot({
+        runtimeId:    id,
+        projectId:    runtime.projectId ?? undefined,
+        ownerUserId:  runtime.ownerUserId,
+        reason,
+        snapshotType: SnapshotType.AUTO_RECOVERY,
+      }).catch((err) => this.logger.warn({ id, err: String(err) }, 'pre-recovery snapshot failed (non-fatal)'));
     }
 
     const events: { at: string; reason: string; success: boolean }[] = runtime.recoveryEvents
