@@ -18,6 +18,9 @@ import {
 import { PrismaService } from '../../prisma/prisma.service';
 import { RedisService } from '../../lib/redis/redis.service';
 import type { SnapshotService } from '../../snapshot/snapshot.service';
+import type { SecurityAuditService } from '../../audit/security-audit.service';
+import type { QuotaService } from '../../quota/quota.service';
+import type { KillSwitchService } from '../../kill-switch/kill-switch.service';
 
 const ORCHESTRATOR_URL = (process.env.ORCHESTRATOR_URL ?? 'http://localhost:4100').trim();
 const IDLE_TTL_SEC  = parseInt(process.env.RUNTIME_IDLE_TTL_SEC  ?? '300',  10);
@@ -32,7 +35,10 @@ export class RuntimeService implements OnModuleInit {
   constructor(
     private readonly prisma:    PrismaService,
     private readonly redis:     RedisService,
-    @Optional() private readonly snapshots?: SnapshotService,
+    @Optional() private readonly snapshots?:   SnapshotService,
+    @Optional() private readonly audit?:       SecurityAuditService,
+    @Optional() private readonly quota?:       QuotaService,
+    @Optional() private readonly killSwitch?:  KillSwitchService,
   ) {}
 
   onModuleInit() {
@@ -53,6 +59,11 @@ export class RuntimeService implements OnModuleInit {
     metadata?: Record<string, unknown>;
     expiresInSec?: number;
   }) {
+    // 10-04: Kill switch check
+    await this.killSwitch?.assertNotBlocked('runtime_create', 'Runtime creation is temporarily disabled.');
+    // 10-03: Quota check
+    await this.quota?.checkRuntimeQuota(input.ownerUserId);
+
     const id = randomUUID();
     // 04-06: stable preview URL assigned at creation, never changes
     const previewUrl = this.buildPreviewUrl(id);
@@ -124,10 +135,13 @@ export class RuntimeService implements OnModuleInit {
     const runtime = await this.getOwnedOrThrow(id, requesterId);
     await this.haltContainer(runtime.containerId);
     await this.redis.client.del(`${this.redis.prefix}:runtime:heartbeat:${id}`).catch(() => {});
-    return this.prisma.runtimeInstance.update({
+    const updated = await this.prisma.runtimeInstance.update({
       where: { id },
       data: { status: RuntimeStatus.TERMINATED, sleepState: SleepState.AWAKE, containerId: null },
     });
+    // 10-06: Audit dangerous action
+    void this.audit?.log({ actorUserId: requesterId, action: 'RUNTIME_TERMINATE', targetType: 'runtime', targetId: id });
+    return updated;
   }
 
   // ── 04-03: Detached access tracking ──────────────────────────────────────
@@ -303,10 +317,13 @@ export class RuntimeService implements OnModuleInit {
       passwordHash = await hash(password, 10);
     }
 
-    return this.prisma.runtimeInstance.update({
+    const result = await this.prisma.runtimeInstance.update({
       where: { id },
       data: { visibility, passwordHash },
     });
+    // 10-06: Audit visibility change
+    void this.audit?.log({ actorUserId: requesterId, action: 'VISIBILITY_CHANGE', targetType: 'runtime', targetId: id, metadata: { visibility } });
+    return result;
   }
 
   // ── 04-06: Stable URL helpers ─────────────────────────────────────────────

@@ -13,6 +13,8 @@ import { RuntimeStatus, RuntimeVisibility, SleepState, SnapshotType } from '../g
 import { PrismaService } from '../prisma/prisma.service';
 import { RedisService } from '../lib/redis/redis.service';
 import type { SnapshotService } from '../snapshot/snapshot.service';
+import type { QuotaService } from '../quota/quota.service';
+import type { KillSwitchService } from '../kill-switch/kill-switch.service';
 
 const ORCHESTRATOR_URL     = (process.env.ORCHESTRATOR_URL     ?? 'http://localhost:4100').trim();
 const ORCHESTRATOR_API_KEY = (process.env.ORCHESTRATOR_API_KEY ?? '').trim();
@@ -27,9 +29,11 @@ export class RemixService {
   private readonly logger = new Logger(RemixService.name);
 
   constructor(
-    private readonly prisma:     PrismaService,
-    private readonly redis:      RedisService,
-    @Optional() private readonly snapshots?: SnapshotService,
+    private readonly prisma:      PrismaService,
+    private readonly redis:       RedisService,
+    @Optional() private readonly snapshots?:  SnapshotService,
+    @Optional() private readonly quota?:      QuotaService,
+    @Optional() private readonly killSwitch?: KillSwitchService,
   ) {}
 
   // ── 06-02: Core remix operation ───────────────────────────────────────────
@@ -48,6 +52,11 @@ export class RemixService {
     if (!source || source.status === RuntimeStatus.TERMINATED) {
       throw new NotFoundException('source runtime not found');
     }
+
+    // 10-04: Kill switch check
+    await this.killSwitch?.assertNotBlocked('remix', 'Remix is temporarily disabled.');
+    // 10-03: Quota check
+    await this.quota?.checkRemixQuota(opts.ownerUserId);
 
     // 06-07: Validate remix is allowed
     await this.assertRemixAllowed(source, opts.ownerUserId, opts.password);

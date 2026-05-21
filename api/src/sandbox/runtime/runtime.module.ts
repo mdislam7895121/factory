@@ -4,9 +4,12 @@ import { RuntimeService } from './runtime.service';
 import { RuntimeController } from './runtime.controller';
 import { RuntimeHealthScheduler } from './runtime-health.scheduler';
 import { SnapshotModule } from '../../snapshot/snapshot.module';
+import { SecurityAuditModule } from '../../audit/security-audit.module';
+import { QuotaModule } from '../../quota/quota.module';
+import { KillSwitchModule } from '../../kill-switch/kill-switch.module';
 
 @Module({
-  imports:     [SnapshotModule],
+  imports: [SnapshotModule, SecurityAuditModule, QuotaModule, KillSwitchModule],
   controllers: [RuntimeController],
   providers:   [PrismaService, RuntimeService, RuntimeHealthScheduler],
   exports:     [RuntimeService],

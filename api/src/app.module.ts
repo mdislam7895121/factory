@@ -13,9 +13,17 @@ import { PreviewModule } from './preview/preview.module';
 import { RemixModule } from './remix/remix.module';
 import { ActivityStreamModule } from './activity/activity-stream.module';
 import { SnapshotModule } from './snapshot/snapshot.module';
+import { AdminModule } from './admin/admin.module';
+import { SecurityAuditModule } from './audit/security-audit.module';
+import { BetaModule } from './beta/beta.module';
+import { LegalModule } from './legal/legal.module';
 
 @Module({
-  imports: [RedisModule, AuthModule, SandboxModule, PreviewModule, RemixModule, ActivityStreamModule, SnapshotModule],
+  imports: [
+    RedisModule, AuthModule, SandboxModule, PreviewModule, RemixModule,
+    ActivityStreamModule, SnapshotModule,
+    AdminModule, SecurityAuditModule, BetaModule, LegalModule,
+  ],
   controllers: [AppController, Serial11Controller],
   providers: [
     AppService,

@@ -414,6 +414,51 @@ function createRateLimitMiddleware(redis: RedisService): RequestHandler {
   };
 }
 
+// ── SERIAL 10: Preview Abuse Guard middleware ─────────────────────────────────
+
+function createPreviewAbuseGuard(redis: RedisService): RequestHandler {
+  const dailyLimit  = parseInt(process.env.ABUSE_PREVIEW_DAILY_LIMIT  ?? '500',  10);
+  const banThreshold = parseInt(process.env.ABUSE_PREVIEW_BAN_THRESHOLD ?? '1000', 10);
+  const banTtlSec   = parseInt(process.env.ABUSE_BAN_TTL_SEC           ?? '3600', 10);
+
+  return (req: Request, res: Response, next: NextFunction): void => {
+    const forwarded = req.headers['x-forwarded-for'];
+    const raw = (
+      (Array.isArray(forwarded) ? forwarded[0] : forwarded)?.split(',')[0]?.trim() ||
+      req.ip ||
+      req.socket.remoteAddress ||
+      'unknown'
+    ).trim();
+    const ipHash = require('node:crypto').createHash('sha256').update(raw).digest('hex').slice(0, 32) as string;
+    const prefix = (redis as RedisService & { prefix: string }).prefix;
+
+    void (async () => {
+      // Check active ban
+      const banned = await redis.client.get(`${prefix}:abuse:ip:${ipHash}:ban`).catch(() => null);
+      if (banned) {
+        res.status(429).json({ ok: false, error: 'TEMPORARILY_BANNED', message: 'Too many requests. Try again later.' });
+        return;
+      }
+
+      // Increment daily counter
+      const dayKey = `${prefix}:abuse:ip:${ipHash}:${new Date().toISOString().slice(0, 10)}`;
+      const count  = await redis.client.incr(dayKey).catch(() => 0);
+      if (count === 1) redis.client.expire(dayKey, 86_400).catch(() => {});
+
+      if (count > banThreshold) {
+        await redis.client.set(`${prefix}:abuse:ip:${ipHash}:ban`, '1', 'EX', banTtlSec).catch(() => {});
+        res.status(429).json({ ok: false, error: 'TEMPORARILY_BANNED', message: 'Abuse threshold exceeded. Banned for 1 hour.' });
+        return;
+      }
+      if (count > dailyLimit) {
+        res.status(429).json({ ok: false, error: 'RATE_LIMITED', message: 'Daily preview limit exceeded.' });
+        return;
+      }
+      next();
+    })();
+  };
+}
+
 // ── SERIAL 05: Preview Gateway middleware ─────────────────────────────────────
 
 function createPreviewMiddleware(
@@ -569,12 +614,16 @@ async function bootstrap() {
 
   app.use(createRateLimitMiddleware(app.get(RedisService)));
 
+  // 10-02: Abuse guard — applied to all /p routes before proxy
+  const redisService   = app.get(RedisService);
+  const expressApp = app.getHttpAdapter().getInstance() as unknown as Express;
+  expressApp.use('/p', createPreviewAbuseGuard(redisService));
+
   // 05-01 / 05-02 / 05-03 / 05-04 / 05-07 / 05-08 / 05-09: Preview gateway
   const previewService = app.get(PreviewService);
   const previewLogService = app.get(PreviewLogService);
   const previewTokenService = app.get(PreviewTokenService);
   const runtimeService = app.get(RuntimeService);
-  const expressApp = app.getHttpAdapter().getInstance() as unknown as Express;
   expressApp.use('/p', createPreviewMiddleware(previewService, previewLogService));
 
   // 05-06: WebSocket upgrade proxy for /p/:id[/*]

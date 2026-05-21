@@ -3,6 +3,7 @@ import {
   Injectable,
   Logger,
   NotFoundException,
+  Optional,
 } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import {
@@ -17,6 +18,7 @@ import type { ProjectSnapshot } from '../generated/prisma';
 import { PrismaService } from '../prisma/prisma.service';
 import { ActivityStreamService } from '../activity/activity-stream.service';
 import { MetadataSnapshotAdapter } from './runtime-snapshot.adapter';
+import type { SecurityAuditService } from '../audit/security-audit.service';
 
 const AUTO_RESTORE_ENABLED      = (process.env.AUTO_RESTORE_ENABLED      ?? 'false') === 'true';
 const AUTO_RESTORE_MAX_ATTEMPTS = parseInt(process.env.AUTO_RESTORE_MAX_ATTEMPTS ?? '2', 10);
@@ -38,6 +40,7 @@ export class SnapshotService {
     private readonly prisma:    PrismaService,
     private readonly activity:  ActivityStreamService,
     private readonly adapter:   MetadataSnapshotAdapter,
+    @Optional() private readonly auditService?: SecurityAuditService,
   ) {}
 
   // 08-02: Create + persist snapshot — returns READY snapshot or throws
@@ -206,6 +209,15 @@ export class SnapshotService {
         projectId: snapshot.projectId ?? undefined,
         runtimeId: snapshot.runtimeId,
         metadata:  { snapshotId },
+      });
+
+      // 10-06: Audit dangerous restore action
+      void this.auditService?.log({
+        actorUserId: requesterId,
+        action:      'SNAPSHOT_RESTORE',
+        targetType:  'snapshot',
+        targetId:    snapshotId,
+        metadata:    { runtimeId: snapshot.runtimeId },
       });
 
       this.logger.log({ snapshotId, runtimeId: snapshot.runtimeId }, 'snapshot restored');

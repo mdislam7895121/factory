@@ -466,6 +466,25 @@ model RuntimeRecoveryEvent {
   @@index([createdAt])
 }
 
+// ── SERIAL 10: Public Beta Launch Gate ───────────────────────────────────────
+
+// 10-06: Immutable audit trail for dangerous / admin actions
+model SecurityAuditEvent {
+  id          String   @id @default(uuid())
+  actorUserId String?
+  action      String
+  targetType  String?
+  targetId    String?
+  metadata    String?  // JSON — secrets stripped
+  ipHash      String?
+  createdAt   DateTime @default(now())
+
+  @@index([actorUserId, createdAt])
+  @@index([action, createdAt])
+  @@index([targetType, targetId])
+  @@index([createdAt])
+}
+
 // ── SERIAL 09: Mobile Viral Preview Experience ───────────────────────────────
 
 // 09-07: Abuse report — rate-limited, hashed IP, no moderation engine yet

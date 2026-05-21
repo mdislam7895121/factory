@@ -359,6 +359,17 @@ exports.Prisma.RuntimeRecoveryEventScalarFieldEnum = {
   completedAt: 'completedAt'
 };
 
+exports.Prisma.SecurityAuditEventScalarFieldEnum = {
+  id: 'id',
+  actorUserId: 'actorUserId',
+  action: 'action',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  metadata: 'metadata',
+  ipHash: 'ipHash',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.PreviewAbuseReportScalarFieldEnum = {
   id: 'id',
   previewId: 'previewId',
@@ -570,6 +581,7 @@ exports.Prisma.ModelName = {
   AgentActivityEvent: 'AgentActivityEvent',
   ProjectSnapshot: 'ProjectSnapshot',
   RuntimeRecoveryEvent: 'RuntimeRecoveryEvent',
+  SecurityAuditEvent: 'SecurityAuditEvent',
   PreviewAbuseReport: 'PreviewAbuseReport',
   PreviewRoute: 'PreviewRoute',
   PreviewAccessLog: 'PreviewAccessLog',
