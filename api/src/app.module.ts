@@ -17,12 +17,13 @@ import { AdminModule } from './admin/admin.module';
 import { SecurityAuditModule } from './audit/security-audit.module';
 import { BetaModule } from './beta/beta.module';
 import { LegalModule } from './legal/legal.module';
+import { DemoModule } from './demo/demo.module';
 
 @Module({
   imports: [
     RedisModule, AuthModule, SandboxModule, PreviewModule, RemixModule,
     ActivityStreamModule, SnapshotModule,
-    AdminModule, SecurityAuditModule, BetaModule, LegalModule,
+    AdminModule, SecurityAuditModule, BetaModule, LegalModule, DemoModule,
   ],
   controllers: [AppController, Serial11Controller],
   providers: [
