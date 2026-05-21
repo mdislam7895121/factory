@@ -107,8 +107,9 @@ model User {
   updatedAt    DateTime   @updatedAt
   apiKeys       ApiKey[]
   sandboxes     Sandbox[]
-  agentMemories AgentMemory[]
-  agentEvents   AgentEvent[]
+  agentMemories   AgentMemory[]
+  agentEvents     AgentEvent[]
+  councilSessions CouncilSession[]
 }
 
 enum SandboxLanguage {
@@ -203,4 +204,44 @@ model AgentEvent {
 
   @@index([userId, namespace])
   @@index([userId, createdAt])
+}
+
+enum CouncilStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+// One council session = one task handed to the multi-agent panel
+model CouncilSession {
+  id          String        @id @default(uuid())
+  userId      String
+  task        String        // The goal/problem statement
+  context     String?       // JSON — extra context (repo info, prior state, etc.)
+  status      CouncilStatus @default(PENDING)
+  result      String?       // JSON — synthesised final output
+  errorMsg    String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  messages    CouncilMessage[]
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([status])
+}
+
+// Individual agent turn within a session
+model CouncilMessage {
+  id          String   @id @default(uuid())
+  sessionId   String
+  agentRole   String   // architect | dev-1 | dev-2 | dev-3 | qa | security
+  round       Int
+  content     String   // Full LLM response text
+  inputTokens Int      @default(0)
+  outTokens   Int      @default(0)
+  createdAt   DateTime @default(now())
+  session     CouncilSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, round])
 }

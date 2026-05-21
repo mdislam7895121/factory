@@ -73,6 +73,16 @@ export type AgentMemory = $Result.DefaultSelection<Prisma.$AgentMemoryPayload>
  * 
  */
 export type AgentEvent = $Result.DefaultSelection<Prisma.$AgentEventPayload>
+/**
+ * Model CouncilSession
+ * 
+ */
+export type CouncilSession = $Result.DefaultSelection<Prisma.$CouncilSessionPayload>
+/**
+ * Model CouncilMessage
+ * 
+ */
+export type CouncilMessage = $Result.DefaultSelection<Prisma.$CouncilMessagePayload>
 
 /**
  * Enums
@@ -116,6 +126,16 @@ export const SandboxStatus: {
 
 export type SandboxStatus = (typeof SandboxStatus)[keyof typeof SandboxStatus]
 
+
+export const CouncilStatus: {
+  PENDING: 'PENDING',
+  RUNNING: 'RUNNING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+export type CouncilStatus = (typeof CouncilStatus)[keyof typeof CouncilStatus]
+
 }
 
 export type ProjectStatus = $Enums.ProjectStatus
@@ -133,6 +153,10 @@ export const SandboxLanguage: typeof $Enums.SandboxLanguage
 export type SandboxStatus = $Enums.SandboxStatus
 
 export const SandboxStatus: typeof $Enums.SandboxStatus
+
+export type CouncilStatus = $Enums.CouncilStatus
+
+export const CouncilStatus: typeof $Enums.CouncilStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -370,6 +394,26 @@ export class PrismaClient<
     * ```
     */
   get agentEvent(): Prisma.AgentEventDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.councilSession`: Exposes CRUD operations for the **CouncilSession** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CouncilSessions
+    * const councilSessions = await prisma.councilSession.findMany()
+    * ```
+    */
+  get councilSession(): Prisma.CouncilSessionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.councilMessage`: Exposes CRUD operations for the **CouncilMessage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CouncilMessages
+    * const councilMessages = await prisma.councilMessage.findMany()
+    * ```
+    */
+  get councilMessage(): Prisma.CouncilMessageDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -815,7 +859,9 @@ export namespace Prisma {
     Sandbox: 'Sandbox',
     UsageLog: 'UsageLog',
     AgentMemory: 'AgentMemory',
-    AgentEvent: 'AgentEvent'
+    AgentEvent: 'AgentEvent',
+    CouncilSession: 'CouncilSession',
+    CouncilMessage: 'CouncilMessage'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -831,7 +877,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user" | "apiKey" | "sandbox" | "usageLog" | "agentMemory" | "agentEvent"
+      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user" | "apiKey" | "sandbox" | "usageLog" | "agentMemory" | "agentEvent" | "councilSession" | "councilMessage"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1723,6 +1769,154 @@ export namespace Prisma {
           }
         }
       }
+      CouncilSession: {
+        payload: Prisma.$CouncilSessionPayload<ExtArgs>
+        fields: Prisma.CouncilSessionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CouncilSessionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilSessionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CouncilSessionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilSessionPayload>
+          }
+          findFirst: {
+            args: Prisma.CouncilSessionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilSessionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CouncilSessionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilSessionPayload>
+          }
+          findMany: {
+            args: Prisma.CouncilSessionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilSessionPayload>[]
+          }
+          create: {
+            args: Prisma.CouncilSessionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilSessionPayload>
+          }
+          createMany: {
+            args: Prisma.CouncilSessionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CouncilSessionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilSessionPayload>[]
+          }
+          delete: {
+            args: Prisma.CouncilSessionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilSessionPayload>
+          }
+          update: {
+            args: Prisma.CouncilSessionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilSessionPayload>
+          }
+          deleteMany: {
+            args: Prisma.CouncilSessionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CouncilSessionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CouncilSessionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilSessionPayload>[]
+          }
+          upsert: {
+            args: Prisma.CouncilSessionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilSessionPayload>
+          }
+          aggregate: {
+            args: Prisma.CouncilSessionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCouncilSession>
+          }
+          groupBy: {
+            args: Prisma.CouncilSessionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CouncilSessionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CouncilSessionCountArgs<ExtArgs>
+            result: $Utils.Optional<CouncilSessionCountAggregateOutputType> | number
+          }
+        }
+      }
+      CouncilMessage: {
+        payload: Prisma.$CouncilMessagePayload<ExtArgs>
+        fields: Prisma.CouncilMessageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CouncilMessageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMessagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CouncilMessageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMessagePayload>
+          }
+          findFirst: {
+            args: Prisma.CouncilMessageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMessagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CouncilMessageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMessagePayload>
+          }
+          findMany: {
+            args: Prisma.CouncilMessageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMessagePayload>[]
+          }
+          create: {
+            args: Prisma.CouncilMessageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMessagePayload>
+          }
+          createMany: {
+            args: Prisma.CouncilMessageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CouncilMessageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMessagePayload>[]
+          }
+          delete: {
+            args: Prisma.CouncilMessageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMessagePayload>
+          }
+          update: {
+            args: Prisma.CouncilMessageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMessagePayload>
+          }
+          deleteMany: {
+            args: Prisma.CouncilMessageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CouncilMessageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CouncilMessageUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMessagePayload>[]
+          }
+          upsert: {
+            args: Prisma.CouncilMessageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CouncilMessagePayload>
+          }
+          aggregate: {
+            args: Prisma.CouncilMessageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCouncilMessage>
+          }
+          groupBy: {
+            args: Prisma.CouncilMessageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CouncilMessageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CouncilMessageCountArgs<ExtArgs>
+            result: $Utils.Optional<CouncilMessageCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1843,6 +2037,8 @@ export namespace Prisma {
     usageLog?: UsageLogOmit
     agentMemory?: AgentMemoryOmit
     agentEvent?: AgentEventOmit
+    councilSession?: CouncilSessionOmit
+    councilMessage?: CouncilMessageOmit
   }
 
   /* Types for Logging */
@@ -1989,6 +2185,7 @@ export namespace Prisma {
     sandboxes: number
     agentMemories: number
     agentEvents: number
+    councilSessions: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1996,6 +2193,7 @@ export namespace Prisma {
     sandboxes?: boolean | UserCountOutputTypeCountSandboxesArgs
     agentMemories?: boolean | UserCountOutputTypeCountAgentMemoriesArgs
     agentEvents?: boolean | UserCountOutputTypeCountAgentEventsArgs
+    councilSessions?: boolean | UserCountOutputTypeCountCouncilSessionsArgs
   }
 
   // Custom InputTypes
@@ -2037,6 +2235,13 @@ export namespace Prisma {
     where?: AgentEventWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCouncilSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CouncilSessionWhereInput
+  }
+
 
   /**
    * Count Type SandboxCountOutputType
@@ -2066,6 +2271,37 @@ export namespace Prisma {
    */
   export type SandboxCountOutputTypeCountUsageLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UsageLogWhereInput
+  }
+
+
+  /**
+   * Count Type CouncilSessionCountOutputType
+   */
+
+  export type CouncilSessionCountOutputType = {
+    messages: number
+  }
+
+  export type CouncilSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    messages?: boolean | CouncilSessionCountOutputTypeCountMessagesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CouncilSessionCountOutputType without action
+   */
+  export type CouncilSessionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilSessionCountOutputType
+     */
+    select?: CouncilSessionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CouncilSessionCountOutputType without action
+   */
+  export type CouncilSessionCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CouncilMessageWhereInput
   }
 
 
@@ -8637,6 +8873,7 @@ export namespace Prisma {
     sandboxes?: boolean | User$sandboxesArgs<ExtArgs>
     agentMemories?: boolean | User$agentMemoriesArgs<ExtArgs>
     agentEvents?: boolean | User$agentEventsArgs<ExtArgs>
+    councilSessions?: boolean | User$councilSessionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -8670,6 +8907,7 @@ export namespace Prisma {
     sandboxes?: boolean | User$sandboxesArgs<ExtArgs>
     agentMemories?: boolean | User$agentMemoriesArgs<ExtArgs>
     agentEvents?: boolean | User$agentEventsArgs<ExtArgs>
+    councilSessions?: boolean | User$councilSessionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8682,6 +8920,7 @@ export namespace Prisma {
       sandboxes: Prisma.$SandboxPayload<ExtArgs>[]
       agentMemories: Prisma.$AgentMemoryPayload<ExtArgs>[]
       agentEvents: Prisma.$AgentEventPayload<ExtArgs>[]
+      councilSessions: Prisma.$CouncilSessionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9087,6 +9326,7 @@ export namespace Prisma {
     sandboxes<T extends User$sandboxesArgs<ExtArgs> = {}>(args?: Subset<T, User$sandboxesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SandboxPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     agentMemories<T extends User$agentMemoriesArgs<ExtArgs> = {}>(args?: Subset<T, User$agentMemoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgentMemoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     agentEvents<T extends User$agentEventsArgs<ExtArgs> = {}>(args?: Subset<T, User$agentEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgentEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    councilSessions<T extends User$councilSessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$councilSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9602,6 +9842,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AgentEventScalarFieldEnum | AgentEventScalarFieldEnum[]
+  }
+
+  /**
+   * User.councilSessions
+   */
+  export type User$councilSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilSession
+     */
+    select?: CouncilSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilSession
+     */
+    omit?: CouncilSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilSessionInclude<ExtArgs> | null
+    where?: CouncilSessionWhereInput
+    orderBy?: CouncilSessionOrderByWithRelationInput | CouncilSessionOrderByWithRelationInput[]
+    cursor?: CouncilSessionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CouncilSessionScalarFieldEnum | CouncilSessionScalarFieldEnum[]
   }
 
   /**
@@ -15202,6 +15466,2285 @@ export namespace Prisma {
 
 
   /**
+   * Model CouncilSession
+   */
+
+  export type AggregateCouncilSession = {
+    _count: CouncilSessionCountAggregateOutputType | null
+    _min: CouncilSessionMinAggregateOutputType | null
+    _max: CouncilSessionMaxAggregateOutputType | null
+  }
+
+  export type CouncilSessionMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    task: string | null
+    context: string | null
+    status: $Enums.CouncilStatus | null
+    result: string | null
+    errorMsg: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CouncilSessionMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    task: string | null
+    context: string | null
+    status: $Enums.CouncilStatus | null
+    result: string | null
+    errorMsg: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CouncilSessionCountAggregateOutputType = {
+    id: number
+    userId: number
+    task: number
+    context: number
+    status: number
+    result: number
+    errorMsg: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CouncilSessionMinAggregateInputType = {
+    id?: true
+    userId?: true
+    task?: true
+    context?: true
+    status?: true
+    result?: true
+    errorMsg?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CouncilSessionMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    task?: true
+    context?: true
+    status?: true
+    result?: true
+    errorMsg?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CouncilSessionCountAggregateInputType = {
+    id?: true
+    userId?: true
+    task?: true
+    context?: true
+    status?: true
+    result?: true
+    errorMsg?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CouncilSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CouncilSession to aggregate.
+     */
+    where?: CouncilSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CouncilSessions to fetch.
+     */
+    orderBy?: CouncilSessionOrderByWithRelationInput | CouncilSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CouncilSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CouncilSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CouncilSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CouncilSessions
+    **/
+    _count?: true | CouncilSessionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CouncilSessionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CouncilSessionMaxAggregateInputType
+  }
+
+  export type GetCouncilSessionAggregateType<T extends CouncilSessionAggregateArgs> = {
+        [P in keyof T & keyof AggregateCouncilSession]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCouncilSession[P]>
+      : GetScalarType<T[P], AggregateCouncilSession[P]>
+  }
+
+
+
+
+  export type CouncilSessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CouncilSessionWhereInput
+    orderBy?: CouncilSessionOrderByWithAggregationInput | CouncilSessionOrderByWithAggregationInput[]
+    by: CouncilSessionScalarFieldEnum[] | CouncilSessionScalarFieldEnum
+    having?: CouncilSessionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CouncilSessionCountAggregateInputType | true
+    _min?: CouncilSessionMinAggregateInputType
+    _max?: CouncilSessionMaxAggregateInputType
+  }
+
+  export type CouncilSessionGroupByOutputType = {
+    id: string
+    userId: string
+    task: string
+    context: string | null
+    status: $Enums.CouncilStatus
+    result: string | null
+    errorMsg: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: CouncilSessionCountAggregateOutputType | null
+    _min: CouncilSessionMinAggregateOutputType | null
+    _max: CouncilSessionMaxAggregateOutputType | null
+  }
+
+  type GetCouncilSessionGroupByPayload<T extends CouncilSessionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CouncilSessionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CouncilSessionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CouncilSessionGroupByOutputType[P]>
+            : GetScalarType<T[P], CouncilSessionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CouncilSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    task?: boolean
+    context?: boolean
+    status?: boolean
+    result?: boolean
+    errorMsg?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    messages?: boolean | CouncilSession$messagesArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    _count?: boolean | CouncilSessionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["councilSession"]>
+
+  export type CouncilSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    task?: boolean
+    context?: boolean
+    status?: boolean
+    result?: boolean
+    errorMsg?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["councilSession"]>
+
+  export type CouncilSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    task?: boolean
+    context?: boolean
+    status?: boolean
+    result?: boolean
+    errorMsg?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["councilSession"]>
+
+  export type CouncilSessionSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    task?: boolean
+    context?: boolean
+    status?: boolean
+    result?: boolean
+    errorMsg?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CouncilSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "task" | "context" | "status" | "result" | "errorMsg" | "createdAt" | "updatedAt", ExtArgs["result"]["councilSession"]>
+  export type CouncilSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    messages?: boolean | CouncilSession$messagesArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    _count?: boolean | CouncilSessionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CouncilSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CouncilSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $CouncilSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CouncilSession"
+    objects: {
+      messages: Prisma.$CouncilMessagePayload<ExtArgs>[]
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      task: string
+      context: string | null
+      status: $Enums.CouncilStatus
+      result: string | null
+      errorMsg: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["councilSession"]>
+    composites: {}
+  }
+
+  type CouncilSessionGetPayload<S extends boolean | null | undefined | CouncilSessionDefaultArgs> = $Result.GetResult<Prisma.$CouncilSessionPayload, S>
+
+  type CouncilSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CouncilSessionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CouncilSessionCountAggregateInputType | true
+    }
+
+  export interface CouncilSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CouncilSession'], meta: { name: 'CouncilSession' } }
+    /**
+     * Find zero or one CouncilSession that matches the filter.
+     * @param {CouncilSessionFindUniqueArgs} args - Arguments to find a CouncilSession
+     * @example
+     * // Get one CouncilSession
+     * const councilSession = await prisma.councilSession.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CouncilSessionFindUniqueArgs>(args: SelectSubset<T, CouncilSessionFindUniqueArgs<ExtArgs>>): Prisma__CouncilSessionClient<$Result.GetResult<Prisma.$CouncilSessionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CouncilSession that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CouncilSessionFindUniqueOrThrowArgs} args - Arguments to find a CouncilSession
+     * @example
+     * // Get one CouncilSession
+     * const councilSession = await prisma.councilSession.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CouncilSessionFindUniqueOrThrowArgs>(args: SelectSubset<T, CouncilSessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CouncilSessionClient<$Result.GetResult<Prisma.$CouncilSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CouncilSession that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilSessionFindFirstArgs} args - Arguments to find a CouncilSession
+     * @example
+     * // Get one CouncilSession
+     * const councilSession = await prisma.councilSession.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CouncilSessionFindFirstArgs>(args?: SelectSubset<T, CouncilSessionFindFirstArgs<ExtArgs>>): Prisma__CouncilSessionClient<$Result.GetResult<Prisma.$CouncilSessionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CouncilSession that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilSessionFindFirstOrThrowArgs} args - Arguments to find a CouncilSession
+     * @example
+     * // Get one CouncilSession
+     * const councilSession = await prisma.councilSession.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CouncilSessionFindFirstOrThrowArgs>(args?: SelectSubset<T, CouncilSessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__CouncilSessionClient<$Result.GetResult<Prisma.$CouncilSessionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CouncilSessions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilSessionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CouncilSessions
+     * const councilSessions = await prisma.councilSession.findMany()
+     * 
+     * // Get first 10 CouncilSessions
+     * const councilSessions = await prisma.councilSession.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const councilSessionWithIdOnly = await prisma.councilSession.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CouncilSessionFindManyArgs>(args?: SelectSubset<T, CouncilSessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CouncilSession.
+     * @param {CouncilSessionCreateArgs} args - Arguments to create a CouncilSession.
+     * @example
+     * // Create one CouncilSession
+     * const CouncilSession = await prisma.councilSession.create({
+     *   data: {
+     *     // ... data to create a CouncilSession
+     *   }
+     * })
+     * 
+     */
+    create<T extends CouncilSessionCreateArgs>(args: SelectSubset<T, CouncilSessionCreateArgs<ExtArgs>>): Prisma__CouncilSessionClient<$Result.GetResult<Prisma.$CouncilSessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CouncilSessions.
+     * @param {CouncilSessionCreateManyArgs} args - Arguments to create many CouncilSessions.
+     * @example
+     * // Create many CouncilSessions
+     * const councilSession = await prisma.councilSession.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CouncilSessionCreateManyArgs>(args?: SelectSubset<T, CouncilSessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CouncilSessions and returns the data saved in the database.
+     * @param {CouncilSessionCreateManyAndReturnArgs} args - Arguments to create many CouncilSessions.
+     * @example
+     * // Create many CouncilSessions
+     * const councilSession = await prisma.councilSession.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CouncilSessions and only return the `id`
+     * const councilSessionWithIdOnly = await prisma.councilSession.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CouncilSessionCreateManyAndReturnArgs>(args?: SelectSubset<T, CouncilSessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilSessionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CouncilSession.
+     * @param {CouncilSessionDeleteArgs} args - Arguments to delete one CouncilSession.
+     * @example
+     * // Delete one CouncilSession
+     * const CouncilSession = await prisma.councilSession.delete({
+     *   where: {
+     *     // ... filter to delete one CouncilSession
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CouncilSessionDeleteArgs>(args: SelectSubset<T, CouncilSessionDeleteArgs<ExtArgs>>): Prisma__CouncilSessionClient<$Result.GetResult<Prisma.$CouncilSessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CouncilSession.
+     * @param {CouncilSessionUpdateArgs} args - Arguments to update one CouncilSession.
+     * @example
+     * // Update one CouncilSession
+     * const councilSession = await prisma.councilSession.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CouncilSessionUpdateArgs>(args: SelectSubset<T, CouncilSessionUpdateArgs<ExtArgs>>): Prisma__CouncilSessionClient<$Result.GetResult<Prisma.$CouncilSessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CouncilSessions.
+     * @param {CouncilSessionDeleteManyArgs} args - Arguments to filter CouncilSessions to delete.
+     * @example
+     * // Delete a few CouncilSessions
+     * const { count } = await prisma.councilSession.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CouncilSessionDeleteManyArgs>(args?: SelectSubset<T, CouncilSessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CouncilSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilSessionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CouncilSessions
+     * const councilSession = await prisma.councilSession.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CouncilSessionUpdateManyArgs>(args: SelectSubset<T, CouncilSessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CouncilSessions and returns the data updated in the database.
+     * @param {CouncilSessionUpdateManyAndReturnArgs} args - Arguments to update many CouncilSessions.
+     * @example
+     * // Update many CouncilSessions
+     * const councilSession = await prisma.councilSession.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CouncilSessions and only return the `id`
+     * const councilSessionWithIdOnly = await prisma.councilSession.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CouncilSessionUpdateManyAndReturnArgs>(args: SelectSubset<T, CouncilSessionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilSessionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CouncilSession.
+     * @param {CouncilSessionUpsertArgs} args - Arguments to update or create a CouncilSession.
+     * @example
+     * // Update or create a CouncilSession
+     * const councilSession = await prisma.councilSession.upsert({
+     *   create: {
+     *     // ... data to create a CouncilSession
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CouncilSession we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CouncilSessionUpsertArgs>(args: SelectSubset<T, CouncilSessionUpsertArgs<ExtArgs>>): Prisma__CouncilSessionClient<$Result.GetResult<Prisma.$CouncilSessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CouncilSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilSessionCountArgs} args - Arguments to filter CouncilSessions to count.
+     * @example
+     * // Count the number of CouncilSessions
+     * const count = await prisma.councilSession.count({
+     *   where: {
+     *     // ... the filter for the CouncilSessions we want to count
+     *   }
+     * })
+    **/
+    count<T extends CouncilSessionCountArgs>(
+      args?: Subset<T, CouncilSessionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CouncilSessionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CouncilSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilSessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CouncilSessionAggregateArgs>(args: Subset<T, CouncilSessionAggregateArgs>): Prisma.PrismaPromise<GetCouncilSessionAggregateType<T>>
+
+    /**
+     * Group by CouncilSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilSessionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CouncilSessionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CouncilSessionGroupByArgs['orderBy'] }
+        : { orderBy?: CouncilSessionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CouncilSessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCouncilSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CouncilSession model
+   */
+  readonly fields: CouncilSessionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CouncilSession.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CouncilSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    messages<T extends CouncilSession$messagesArgs<ExtArgs> = {}>(args?: Subset<T, CouncilSession$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CouncilSession model
+   */
+  interface CouncilSessionFieldRefs {
+    readonly id: FieldRef<"CouncilSession", 'String'>
+    readonly userId: FieldRef<"CouncilSession", 'String'>
+    readonly task: FieldRef<"CouncilSession", 'String'>
+    readonly context: FieldRef<"CouncilSession", 'String'>
+    readonly status: FieldRef<"CouncilSession", 'CouncilStatus'>
+    readonly result: FieldRef<"CouncilSession", 'String'>
+    readonly errorMsg: FieldRef<"CouncilSession", 'String'>
+    readonly createdAt: FieldRef<"CouncilSession", 'DateTime'>
+    readonly updatedAt: FieldRef<"CouncilSession", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CouncilSession findUnique
+   */
+  export type CouncilSessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilSession
+     */
+    select?: CouncilSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilSession
+     */
+    omit?: CouncilSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which CouncilSession to fetch.
+     */
+    where: CouncilSessionWhereUniqueInput
+  }
+
+  /**
+   * CouncilSession findUniqueOrThrow
+   */
+  export type CouncilSessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilSession
+     */
+    select?: CouncilSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilSession
+     */
+    omit?: CouncilSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which CouncilSession to fetch.
+     */
+    where: CouncilSessionWhereUniqueInput
+  }
+
+  /**
+   * CouncilSession findFirst
+   */
+  export type CouncilSessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilSession
+     */
+    select?: CouncilSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilSession
+     */
+    omit?: CouncilSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which CouncilSession to fetch.
+     */
+    where?: CouncilSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CouncilSessions to fetch.
+     */
+    orderBy?: CouncilSessionOrderByWithRelationInput | CouncilSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CouncilSessions.
+     */
+    cursor?: CouncilSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CouncilSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CouncilSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CouncilSessions.
+     */
+    distinct?: CouncilSessionScalarFieldEnum | CouncilSessionScalarFieldEnum[]
+  }
+
+  /**
+   * CouncilSession findFirstOrThrow
+   */
+  export type CouncilSessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilSession
+     */
+    select?: CouncilSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilSession
+     */
+    omit?: CouncilSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which CouncilSession to fetch.
+     */
+    where?: CouncilSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CouncilSessions to fetch.
+     */
+    orderBy?: CouncilSessionOrderByWithRelationInput | CouncilSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CouncilSessions.
+     */
+    cursor?: CouncilSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CouncilSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CouncilSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CouncilSessions.
+     */
+    distinct?: CouncilSessionScalarFieldEnum | CouncilSessionScalarFieldEnum[]
+  }
+
+  /**
+   * CouncilSession findMany
+   */
+  export type CouncilSessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilSession
+     */
+    select?: CouncilSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilSession
+     */
+    omit?: CouncilSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which CouncilSessions to fetch.
+     */
+    where?: CouncilSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CouncilSessions to fetch.
+     */
+    orderBy?: CouncilSessionOrderByWithRelationInput | CouncilSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CouncilSessions.
+     */
+    cursor?: CouncilSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CouncilSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CouncilSessions.
+     */
+    skip?: number
+    distinct?: CouncilSessionScalarFieldEnum | CouncilSessionScalarFieldEnum[]
+  }
+
+  /**
+   * CouncilSession create
+   */
+  export type CouncilSessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilSession
+     */
+    select?: CouncilSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilSession
+     */
+    omit?: CouncilSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilSessionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CouncilSession.
+     */
+    data: XOR<CouncilSessionCreateInput, CouncilSessionUncheckedCreateInput>
+  }
+
+  /**
+   * CouncilSession createMany
+   */
+  export type CouncilSessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CouncilSessions.
+     */
+    data: CouncilSessionCreateManyInput | CouncilSessionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CouncilSession createManyAndReturn
+   */
+  export type CouncilSessionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilSession
+     */
+    select?: CouncilSessionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilSession
+     */
+    omit?: CouncilSessionOmit<ExtArgs> | null
+    /**
+     * The data used to create many CouncilSessions.
+     */
+    data: CouncilSessionCreateManyInput | CouncilSessionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilSessionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CouncilSession update
+   */
+  export type CouncilSessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilSession
+     */
+    select?: CouncilSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilSession
+     */
+    omit?: CouncilSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilSessionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CouncilSession.
+     */
+    data: XOR<CouncilSessionUpdateInput, CouncilSessionUncheckedUpdateInput>
+    /**
+     * Choose, which CouncilSession to update.
+     */
+    where: CouncilSessionWhereUniqueInput
+  }
+
+  /**
+   * CouncilSession updateMany
+   */
+  export type CouncilSessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CouncilSessions.
+     */
+    data: XOR<CouncilSessionUpdateManyMutationInput, CouncilSessionUncheckedUpdateManyInput>
+    /**
+     * Filter which CouncilSessions to update
+     */
+    where?: CouncilSessionWhereInput
+    /**
+     * Limit how many CouncilSessions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CouncilSession updateManyAndReturn
+   */
+  export type CouncilSessionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilSession
+     */
+    select?: CouncilSessionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilSession
+     */
+    omit?: CouncilSessionOmit<ExtArgs> | null
+    /**
+     * The data used to update CouncilSessions.
+     */
+    data: XOR<CouncilSessionUpdateManyMutationInput, CouncilSessionUncheckedUpdateManyInput>
+    /**
+     * Filter which CouncilSessions to update
+     */
+    where?: CouncilSessionWhereInput
+    /**
+     * Limit how many CouncilSessions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilSessionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CouncilSession upsert
+   */
+  export type CouncilSessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilSession
+     */
+    select?: CouncilSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilSession
+     */
+    omit?: CouncilSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilSessionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CouncilSession to update in case it exists.
+     */
+    where: CouncilSessionWhereUniqueInput
+    /**
+     * In case the CouncilSession found by the `where` argument doesn't exist, create a new CouncilSession with this data.
+     */
+    create: XOR<CouncilSessionCreateInput, CouncilSessionUncheckedCreateInput>
+    /**
+     * In case the CouncilSession was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CouncilSessionUpdateInput, CouncilSessionUncheckedUpdateInput>
+  }
+
+  /**
+   * CouncilSession delete
+   */
+  export type CouncilSessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilSession
+     */
+    select?: CouncilSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilSession
+     */
+    omit?: CouncilSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilSessionInclude<ExtArgs> | null
+    /**
+     * Filter which CouncilSession to delete.
+     */
+    where: CouncilSessionWhereUniqueInput
+  }
+
+  /**
+   * CouncilSession deleteMany
+   */
+  export type CouncilSessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CouncilSessions to delete
+     */
+    where?: CouncilSessionWhereInput
+    /**
+     * Limit how many CouncilSessions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CouncilSession.messages
+   */
+  export type CouncilSession$messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMessage
+     */
+    select?: CouncilMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMessage
+     */
+    omit?: CouncilMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMessageInclude<ExtArgs> | null
+    where?: CouncilMessageWhereInput
+    orderBy?: CouncilMessageOrderByWithRelationInput | CouncilMessageOrderByWithRelationInput[]
+    cursor?: CouncilMessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CouncilMessageScalarFieldEnum | CouncilMessageScalarFieldEnum[]
+  }
+
+  /**
+   * CouncilSession without action
+   */
+  export type CouncilSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilSession
+     */
+    select?: CouncilSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilSession
+     */
+    omit?: CouncilSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilSessionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CouncilMessage
+   */
+
+  export type AggregateCouncilMessage = {
+    _count: CouncilMessageCountAggregateOutputType | null
+    _avg: CouncilMessageAvgAggregateOutputType | null
+    _sum: CouncilMessageSumAggregateOutputType | null
+    _min: CouncilMessageMinAggregateOutputType | null
+    _max: CouncilMessageMaxAggregateOutputType | null
+  }
+
+  export type CouncilMessageAvgAggregateOutputType = {
+    round: number | null
+    inputTokens: number | null
+    outTokens: number | null
+  }
+
+  export type CouncilMessageSumAggregateOutputType = {
+    round: number | null
+    inputTokens: number | null
+    outTokens: number | null
+  }
+
+  export type CouncilMessageMinAggregateOutputType = {
+    id: string | null
+    sessionId: string | null
+    agentRole: string | null
+    round: number | null
+    content: string | null
+    inputTokens: number | null
+    outTokens: number | null
+    createdAt: Date | null
+  }
+
+  export type CouncilMessageMaxAggregateOutputType = {
+    id: string | null
+    sessionId: string | null
+    agentRole: string | null
+    round: number | null
+    content: string | null
+    inputTokens: number | null
+    outTokens: number | null
+    createdAt: Date | null
+  }
+
+  export type CouncilMessageCountAggregateOutputType = {
+    id: number
+    sessionId: number
+    agentRole: number
+    round: number
+    content: number
+    inputTokens: number
+    outTokens: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CouncilMessageAvgAggregateInputType = {
+    round?: true
+    inputTokens?: true
+    outTokens?: true
+  }
+
+  export type CouncilMessageSumAggregateInputType = {
+    round?: true
+    inputTokens?: true
+    outTokens?: true
+  }
+
+  export type CouncilMessageMinAggregateInputType = {
+    id?: true
+    sessionId?: true
+    agentRole?: true
+    round?: true
+    content?: true
+    inputTokens?: true
+    outTokens?: true
+    createdAt?: true
+  }
+
+  export type CouncilMessageMaxAggregateInputType = {
+    id?: true
+    sessionId?: true
+    agentRole?: true
+    round?: true
+    content?: true
+    inputTokens?: true
+    outTokens?: true
+    createdAt?: true
+  }
+
+  export type CouncilMessageCountAggregateInputType = {
+    id?: true
+    sessionId?: true
+    agentRole?: true
+    round?: true
+    content?: true
+    inputTokens?: true
+    outTokens?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CouncilMessageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CouncilMessage to aggregate.
+     */
+    where?: CouncilMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CouncilMessages to fetch.
+     */
+    orderBy?: CouncilMessageOrderByWithRelationInput | CouncilMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CouncilMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CouncilMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CouncilMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CouncilMessages
+    **/
+    _count?: true | CouncilMessageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CouncilMessageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CouncilMessageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CouncilMessageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CouncilMessageMaxAggregateInputType
+  }
+
+  export type GetCouncilMessageAggregateType<T extends CouncilMessageAggregateArgs> = {
+        [P in keyof T & keyof AggregateCouncilMessage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCouncilMessage[P]>
+      : GetScalarType<T[P], AggregateCouncilMessage[P]>
+  }
+
+
+
+
+  export type CouncilMessageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CouncilMessageWhereInput
+    orderBy?: CouncilMessageOrderByWithAggregationInput | CouncilMessageOrderByWithAggregationInput[]
+    by: CouncilMessageScalarFieldEnum[] | CouncilMessageScalarFieldEnum
+    having?: CouncilMessageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CouncilMessageCountAggregateInputType | true
+    _avg?: CouncilMessageAvgAggregateInputType
+    _sum?: CouncilMessageSumAggregateInputType
+    _min?: CouncilMessageMinAggregateInputType
+    _max?: CouncilMessageMaxAggregateInputType
+  }
+
+  export type CouncilMessageGroupByOutputType = {
+    id: string
+    sessionId: string
+    agentRole: string
+    round: number
+    content: string
+    inputTokens: number
+    outTokens: number
+    createdAt: Date
+    _count: CouncilMessageCountAggregateOutputType | null
+    _avg: CouncilMessageAvgAggregateOutputType | null
+    _sum: CouncilMessageSumAggregateOutputType | null
+    _min: CouncilMessageMinAggregateOutputType | null
+    _max: CouncilMessageMaxAggregateOutputType | null
+  }
+
+  type GetCouncilMessageGroupByPayload<T extends CouncilMessageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CouncilMessageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CouncilMessageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CouncilMessageGroupByOutputType[P]>
+            : GetScalarType<T[P], CouncilMessageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CouncilMessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sessionId?: boolean
+    agentRole?: boolean
+    round?: boolean
+    content?: boolean
+    inputTokens?: boolean
+    outTokens?: boolean
+    createdAt?: boolean
+    session?: boolean | CouncilSessionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["councilMessage"]>
+
+  export type CouncilMessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sessionId?: boolean
+    agentRole?: boolean
+    round?: boolean
+    content?: boolean
+    inputTokens?: boolean
+    outTokens?: boolean
+    createdAt?: boolean
+    session?: boolean | CouncilSessionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["councilMessage"]>
+
+  export type CouncilMessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sessionId?: boolean
+    agentRole?: boolean
+    round?: boolean
+    content?: boolean
+    inputTokens?: boolean
+    outTokens?: boolean
+    createdAt?: boolean
+    session?: boolean | CouncilSessionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["councilMessage"]>
+
+  export type CouncilMessageSelectScalar = {
+    id?: boolean
+    sessionId?: boolean
+    agentRole?: boolean
+    round?: boolean
+    content?: boolean
+    inputTokens?: boolean
+    outTokens?: boolean
+    createdAt?: boolean
+  }
+
+  export type CouncilMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionId" | "agentRole" | "round" | "content" | "inputTokens" | "outTokens" | "createdAt", ExtArgs["result"]["councilMessage"]>
+  export type CouncilMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | CouncilSessionDefaultArgs<ExtArgs>
+  }
+  export type CouncilMessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | CouncilSessionDefaultArgs<ExtArgs>
+  }
+  export type CouncilMessageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | CouncilSessionDefaultArgs<ExtArgs>
+  }
+
+  export type $CouncilMessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CouncilMessage"
+    objects: {
+      session: Prisma.$CouncilSessionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      sessionId: string
+      agentRole: string
+      round: number
+      content: string
+      inputTokens: number
+      outTokens: number
+      createdAt: Date
+    }, ExtArgs["result"]["councilMessage"]>
+    composites: {}
+  }
+
+  type CouncilMessageGetPayload<S extends boolean | null | undefined | CouncilMessageDefaultArgs> = $Result.GetResult<Prisma.$CouncilMessagePayload, S>
+
+  type CouncilMessageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CouncilMessageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CouncilMessageCountAggregateInputType | true
+    }
+
+  export interface CouncilMessageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CouncilMessage'], meta: { name: 'CouncilMessage' } }
+    /**
+     * Find zero or one CouncilMessage that matches the filter.
+     * @param {CouncilMessageFindUniqueArgs} args - Arguments to find a CouncilMessage
+     * @example
+     * // Get one CouncilMessage
+     * const councilMessage = await prisma.councilMessage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CouncilMessageFindUniqueArgs>(args: SelectSubset<T, CouncilMessageFindUniqueArgs<ExtArgs>>): Prisma__CouncilMessageClient<$Result.GetResult<Prisma.$CouncilMessagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CouncilMessage that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CouncilMessageFindUniqueOrThrowArgs} args - Arguments to find a CouncilMessage
+     * @example
+     * // Get one CouncilMessage
+     * const councilMessage = await prisma.councilMessage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CouncilMessageFindUniqueOrThrowArgs>(args: SelectSubset<T, CouncilMessageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CouncilMessageClient<$Result.GetResult<Prisma.$CouncilMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CouncilMessage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilMessageFindFirstArgs} args - Arguments to find a CouncilMessage
+     * @example
+     * // Get one CouncilMessage
+     * const councilMessage = await prisma.councilMessage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CouncilMessageFindFirstArgs>(args?: SelectSubset<T, CouncilMessageFindFirstArgs<ExtArgs>>): Prisma__CouncilMessageClient<$Result.GetResult<Prisma.$CouncilMessagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CouncilMessage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilMessageFindFirstOrThrowArgs} args - Arguments to find a CouncilMessage
+     * @example
+     * // Get one CouncilMessage
+     * const councilMessage = await prisma.councilMessage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CouncilMessageFindFirstOrThrowArgs>(args?: SelectSubset<T, CouncilMessageFindFirstOrThrowArgs<ExtArgs>>): Prisma__CouncilMessageClient<$Result.GetResult<Prisma.$CouncilMessagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CouncilMessages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilMessageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CouncilMessages
+     * const councilMessages = await prisma.councilMessage.findMany()
+     * 
+     * // Get first 10 CouncilMessages
+     * const councilMessages = await prisma.councilMessage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const councilMessageWithIdOnly = await prisma.councilMessage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CouncilMessageFindManyArgs>(args?: SelectSubset<T, CouncilMessageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CouncilMessage.
+     * @param {CouncilMessageCreateArgs} args - Arguments to create a CouncilMessage.
+     * @example
+     * // Create one CouncilMessage
+     * const CouncilMessage = await prisma.councilMessage.create({
+     *   data: {
+     *     // ... data to create a CouncilMessage
+     *   }
+     * })
+     * 
+     */
+    create<T extends CouncilMessageCreateArgs>(args: SelectSubset<T, CouncilMessageCreateArgs<ExtArgs>>): Prisma__CouncilMessageClient<$Result.GetResult<Prisma.$CouncilMessagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CouncilMessages.
+     * @param {CouncilMessageCreateManyArgs} args - Arguments to create many CouncilMessages.
+     * @example
+     * // Create many CouncilMessages
+     * const councilMessage = await prisma.councilMessage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CouncilMessageCreateManyArgs>(args?: SelectSubset<T, CouncilMessageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CouncilMessages and returns the data saved in the database.
+     * @param {CouncilMessageCreateManyAndReturnArgs} args - Arguments to create many CouncilMessages.
+     * @example
+     * // Create many CouncilMessages
+     * const councilMessage = await prisma.councilMessage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CouncilMessages and only return the `id`
+     * const councilMessageWithIdOnly = await prisma.councilMessage.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CouncilMessageCreateManyAndReturnArgs>(args?: SelectSubset<T, CouncilMessageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilMessagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CouncilMessage.
+     * @param {CouncilMessageDeleteArgs} args - Arguments to delete one CouncilMessage.
+     * @example
+     * // Delete one CouncilMessage
+     * const CouncilMessage = await prisma.councilMessage.delete({
+     *   where: {
+     *     // ... filter to delete one CouncilMessage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CouncilMessageDeleteArgs>(args: SelectSubset<T, CouncilMessageDeleteArgs<ExtArgs>>): Prisma__CouncilMessageClient<$Result.GetResult<Prisma.$CouncilMessagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CouncilMessage.
+     * @param {CouncilMessageUpdateArgs} args - Arguments to update one CouncilMessage.
+     * @example
+     * // Update one CouncilMessage
+     * const councilMessage = await prisma.councilMessage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CouncilMessageUpdateArgs>(args: SelectSubset<T, CouncilMessageUpdateArgs<ExtArgs>>): Prisma__CouncilMessageClient<$Result.GetResult<Prisma.$CouncilMessagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CouncilMessages.
+     * @param {CouncilMessageDeleteManyArgs} args - Arguments to filter CouncilMessages to delete.
+     * @example
+     * // Delete a few CouncilMessages
+     * const { count } = await prisma.councilMessage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CouncilMessageDeleteManyArgs>(args?: SelectSubset<T, CouncilMessageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CouncilMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilMessageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CouncilMessages
+     * const councilMessage = await prisma.councilMessage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CouncilMessageUpdateManyArgs>(args: SelectSubset<T, CouncilMessageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CouncilMessages and returns the data updated in the database.
+     * @param {CouncilMessageUpdateManyAndReturnArgs} args - Arguments to update many CouncilMessages.
+     * @example
+     * // Update many CouncilMessages
+     * const councilMessage = await prisma.councilMessage.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CouncilMessages and only return the `id`
+     * const councilMessageWithIdOnly = await prisma.councilMessage.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CouncilMessageUpdateManyAndReturnArgs>(args: SelectSubset<T, CouncilMessageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouncilMessagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CouncilMessage.
+     * @param {CouncilMessageUpsertArgs} args - Arguments to update or create a CouncilMessage.
+     * @example
+     * // Update or create a CouncilMessage
+     * const councilMessage = await prisma.councilMessage.upsert({
+     *   create: {
+     *     // ... data to create a CouncilMessage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CouncilMessage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CouncilMessageUpsertArgs>(args: SelectSubset<T, CouncilMessageUpsertArgs<ExtArgs>>): Prisma__CouncilMessageClient<$Result.GetResult<Prisma.$CouncilMessagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CouncilMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilMessageCountArgs} args - Arguments to filter CouncilMessages to count.
+     * @example
+     * // Count the number of CouncilMessages
+     * const count = await prisma.councilMessage.count({
+     *   where: {
+     *     // ... the filter for the CouncilMessages we want to count
+     *   }
+     * })
+    **/
+    count<T extends CouncilMessageCountArgs>(
+      args?: Subset<T, CouncilMessageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CouncilMessageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CouncilMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilMessageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CouncilMessageAggregateArgs>(args: Subset<T, CouncilMessageAggregateArgs>): Prisma.PrismaPromise<GetCouncilMessageAggregateType<T>>
+
+    /**
+     * Group by CouncilMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CouncilMessageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CouncilMessageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CouncilMessageGroupByArgs['orderBy'] }
+        : { orderBy?: CouncilMessageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CouncilMessageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCouncilMessageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CouncilMessage model
+   */
+  readonly fields: CouncilMessageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CouncilMessage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CouncilMessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    session<T extends CouncilSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CouncilSessionDefaultArgs<ExtArgs>>): Prisma__CouncilSessionClient<$Result.GetResult<Prisma.$CouncilSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CouncilMessage model
+   */
+  interface CouncilMessageFieldRefs {
+    readonly id: FieldRef<"CouncilMessage", 'String'>
+    readonly sessionId: FieldRef<"CouncilMessage", 'String'>
+    readonly agentRole: FieldRef<"CouncilMessage", 'String'>
+    readonly round: FieldRef<"CouncilMessage", 'Int'>
+    readonly content: FieldRef<"CouncilMessage", 'String'>
+    readonly inputTokens: FieldRef<"CouncilMessage", 'Int'>
+    readonly outTokens: FieldRef<"CouncilMessage", 'Int'>
+    readonly createdAt: FieldRef<"CouncilMessage", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CouncilMessage findUnique
+   */
+  export type CouncilMessageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMessage
+     */
+    select?: CouncilMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMessage
+     */
+    omit?: CouncilMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which CouncilMessage to fetch.
+     */
+    where: CouncilMessageWhereUniqueInput
+  }
+
+  /**
+   * CouncilMessage findUniqueOrThrow
+   */
+  export type CouncilMessageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMessage
+     */
+    select?: CouncilMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMessage
+     */
+    omit?: CouncilMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which CouncilMessage to fetch.
+     */
+    where: CouncilMessageWhereUniqueInput
+  }
+
+  /**
+   * CouncilMessage findFirst
+   */
+  export type CouncilMessageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMessage
+     */
+    select?: CouncilMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMessage
+     */
+    omit?: CouncilMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which CouncilMessage to fetch.
+     */
+    where?: CouncilMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CouncilMessages to fetch.
+     */
+    orderBy?: CouncilMessageOrderByWithRelationInput | CouncilMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CouncilMessages.
+     */
+    cursor?: CouncilMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CouncilMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CouncilMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CouncilMessages.
+     */
+    distinct?: CouncilMessageScalarFieldEnum | CouncilMessageScalarFieldEnum[]
+  }
+
+  /**
+   * CouncilMessage findFirstOrThrow
+   */
+  export type CouncilMessageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMessage
+     */
+    select?: CouncilMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMessage
+     */
+    omit?: CouncilMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which CouncilMessage to fetch.
+     */
+    where?: CouncilMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CouncilMessages to fetch.
+     */
+    orderBy?: CouncilMessageOrderByWithRelationInput | CouncilMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CouncilMessages.
+     */
+    cursor?: CouncilMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CouncilMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CouncilMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CouncilMessages.
+     */
+    distinct?: CouncilMessageScalarFieldEnum | CouncilMessageScalarFieldEnum[]
+  }
+
+  /**
+   * CouncilMessage findMany
+   */
+  export type CouncilMessageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMessage
+     */
+    select?: CouncilMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMessage
+     */
+    omit?: CouncilMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which CouncilMessages to fetch.
+     */
+    where?: CouncilMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CouncilMessages to fetch.
+     */
+    orderBy?: CouncilMessageOrderByWithRelationInput | CouncilMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CouncilMessages.
+     */
+    cursor?: CouncilMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CouncilMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CouncilMessages.
+     */
+    skip?: number
+    distinct?: CouncilMessageScalarFieldEnum | CouncilMessageScalarFieldEnum[]
+  }
+
+  /**
+   * CouncilMessage create
+   */
+  export type CouncilMessageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMessage
+     */
+    select?: CouncilMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMessage
+     */
+    omit?: CouncilMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CouncilMessage.
+     */
+    data: XOR<CouncilMessageCreateInput, CouncilMessageUncheckedCreateInput>
+  }
+
+  /**
+   * CouncilMessage createMany
+   */
+  export type CouncilMessageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CouncilMessages.
+     */
+    data: CouncilMessageCreateManyInput | CouncilMessageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CouncilMessage createManyAndReturn
+   */
+  export type CouncilMessageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMessage
+     */
+    select?: CouncilMessageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMessage
+     */
+    omit?: CouncilMessageOmit<ExtArgs> | null
+    /**
+     * The data used to create many CouncilMessages.
+     */
+    data: CouncilMessageCreateManyInput | CouncilMessageCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMessageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CouncilMessage update
+   */
+  export type CouncilMessageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMessage
+     */
+    select?: CouncilMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMessage
+     */
+    omit?: CouncilMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CouncilMessage.
+     */
+    data: XOR<CouncilMessageUpdateInput, CouncilMessageUncheckedUpdateInput>
+    /**
+     * Choose, which CouncilMessage to update.
+     */
+    where: CouncilMessageWhereUniqueInput
+  }
+
+  /**
+   * CouncilMessage updateMany
+   */
+  export type CouncilMessageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CouncilMessages.
+     */
+    data: XOR<CouncilMessageUpdateManyMutationInput, CouncilMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which CouncilMessages to update
+     */
+    where?: CouncilMessageWhereInput
+    /**
+     * Limit how many CouncilMessages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CouncilMessage updateManyAndReturn
+   */
+  export type CouncilMessageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMessage
+     */
+    select?: CouncilMessageSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMessage
+     */
+    omit?: CouncilMessageOmit<ExtArgs> | null
+    /**
+     * The data used to update CouncilMessages.
+     */
+    data: XOR<CouncilMessageUpdateManyMutationInput, CouncilMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which CouncilMessages to update
+     */
+    where?: CouncilMessageWhereInput
+    /**
+     * Limit how many CouncilMessages to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMessageIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CouncilMessage upsert
+   */
+  export type CouncilMessageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMessage
+     */
+    select?: CouncilMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMessage
+     */
+    omit?: CouncilMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMessageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CouncilMessage to update in case it exists.
+     */
+    where: CouncilMessageWhereUniqueInput
+    /**
+     * In case the CouncilMessage found by the `where` argument doesn't exist, create a new CouncilMessage with this data.
+     */
+    create: XOR<CouncilMessageCreateInput, CouncilMessageUncheckedCreateInput>
+    /**
+     * In case the CouncilMessage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CouncilMessageUpdateInput, CouncilMessageUncheckedUpdateInput>
+  }
+
+  /**
+   * CouncilMessage delete
+   */
+  export type CouncilMessageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMessage
+     */
+    select?: CouncilMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMessage
+     */
+    omit?: CouncilMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMessageInclude<ExtArgs> | null
+    /**
+     * Filter which CouncilMessage to delete.
+     */
+    where: CouncilMessageWhereUniqueInput
+  }
+
+  /**
+   * CouncilMessage deleteMany
+   */
+  export type CouncilMessageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CouncilMessages to delete
+     */
+    where?: CouncilMessageWhereInput
+    /**
+     * Limit how many CouncilMessages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CouncilMessage without action
+   */
+  export type CouncilMessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CouncilMessage
+     */
+    select?: CouncilMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CouncilMessage
+     */
+    omit?: CouncilMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CouncilMessageInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -15376,6 +17919,35 @@ export namespace Prisma {
   export type AgentEventScalarFieldEnum = (typeof AgentEventScalarFieldEnum)[keyof typeof AgentEventScalarFieldEnum]
 
 
+  export const CouncilSessionScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    task: 'task',
+    context: 'context',
+    status: 'status',
+    result: 'result',
+    errorMsg: 'errorMsg',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CouncilSessionScalarFieldEnum = (typeof CouncilSessionScalarFieldEnum)[keyof typeof CouncilSessionScalarFieldEnum]
+
+
+  export const CouncilMessageScalarFieldEnum: {
+    id: 'id',
+    sessionId: 'sessionId',
+    agentRole: 'agentRole',
+    round: 'round',
+    content: 'content',
+    inputTokens: 'inputTokens',
+    outTokens: 'outTokens',
+    createdAt: 'createdAt'
+  };
+
+  export type CouncilMessageScalarFieldEnum = (typeof CouncilMessageScalarFieldEnum)[keyof typeof CouncilMessageScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -15521,6 +18093,20 @@ export namespace Prisma {
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CouncilStatus'
+   */
+  export type EnumCouncilStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CouncilStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'CouncilStatus[]'
+   */
+  export type ListEnumCouncilStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CouncilStatus[]'>
     
   /**
    * Deep Input Types
@@ -15940,6 +18526,7 @@ export namespace Prisma {
     sandboxes?: SandboxListRelationFilter
     agentMemories?: AgentMemoryListRelationFilter
     agentEvents?: AgentEventListRelationFilter
+    councilSessions?: CouncilSessionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -15952,6 +18539,7 @@ export namespace Prisma {
     sandboxes?: SandboxOrderByRelationAggregateInput
     agentMemories?: AgentMemoryOrderByRelationAggregateInput
     agentEvents?: AgentEventOrderByRelationAggregateInput
+    councilSessions?: CouncilSessionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -15967,6 +18555,7 @@ export namespace Prisma {
     sandboxes?: SandboxListRelationFilter
     agentMemories?: AgentMemoryListRelationFilter
     agentEvents?: AgentEventListRelationFilter
+    councilSessions?: CouncilSessionListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -16342,6 +18931,156 @@ export namespace Prisma {
     eventType?: StringWithAggregatesFilter<"AgentEvent"> | string
     payload?: StringWithAggregatesFilter<"AgentEvent"> | string
     createdAt?: DateTimeWithAggregatesFilter<"AgentEvent"> | Date | string
+  }
+
+  export type CouncilSessionWhereInput = {
+    AND?: CouncilSessionWhereInput | CouncilSessionWhereInput[]
+    OR?: CouncilSessionWhereInput[]
+    NOT?: CouncilSessionWhereInput | CouncilSessionWhereInput[]
+    id?: StringFilter<"CouncilSession"> | string
+    userId?: StringFilter<"CouncilSession"> | string
+    task?: StringFilter<"CouncilSession"> | string
+    context?: StringNullableFilter<"CouncilSession"> | string | null
+    status?: EnumCouncilStatusFilter<"CouncilSession"> | $Enums.CouncilStatus
+    result?: StringNullableFilter<"CouncilSession"> | string | null
+    errorMsg?: StringNullableFilter<"CouncilSession"> | string | null
+    createdAt?: DateTimeFilter<"CouncilSession"> | Date | string
+    updatedAt?: DateTimeFilter<"CouncilSession"> | Date | string
+    messages?: CouncilMessageListRelationFilter
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type CouncilSessionOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    task?: SortOrder
+    context?: SortOrderInput | SortOrder
+    status?: SortOrder
+    result?: SortOrderInput | SortOrder
+    errorMsg?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    messages?: CouncilMessageOrderByRelationAggregateInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type CouncilSessionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CouncilSessionWhereInput | CouncilSessionWhereInput[]
+    OR?: CouncilSessionWhereInput[]
+    NOT?: CouncilSessionWhereInput | CouncilSessionWhereInput[]
+    userId?: StringFilter<"CouncilSession"> | string
+    task?: StringFilter<"CouncilSession"> | string
+    context?: StringNullableFilter<"CouncilSession"> | string | null
+    status?: EnumCouncilStatusFilter<"CouncilSession"> | $Enums.CouncilStatus
+    result?: StringNullableFilter<"CouncilSession"> | string | null
+    errorMsg?: StringNullableFilter<"CouncilSession"> | string | null
+    createdAt?: DateTimeFilter<"CouncilSession"> | Date | string
+    updatedAt?: DateTimeFilter<"CouncilSession"> | Date | string
+    messages?: CouncilMessageListRelationFilter
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type CouncilSessionOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    task?: SortOrder
+    context?: SortOrderInput | SortOrder
+    status?: SortOrder
+    result?: SortOrderInput | SortOrder
+    errorMsg?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CouncilSessionCountOrderByAggregateInput
+    _max?: CouncilSessionMaxOrderByAggregateInput
+    _min?: CouncilSessionMinOrderByAggregateInput
+  }
+
+  export type CouncilSessionScalarWhereWithAggregatesInput = {
+    AND?: CouncilSessionScalarWhereWithAggregatesInput | CouncilSessionScalarWhereWithAggregatesInput[]
+    OR?: CouncilSessionScalarWhereWithAggregatesInput[]
+    NOT?: CouncilSessionScalarWhereWithAggregatesInput | CouncilSessionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CouncilSession"> | string
+    userId?: StringWithAggregatesFilter<"CouncilSession"> | string
+    task?: StringWithAggregatesFilter<"CouncilSession"> | string
+    context?: StringNullableWithAggregatesFilter<"CouncilSession"> | string | null
+    status?: EnumCouncilStatusWithAggregatesFilter<"CouncilSession"> | $Enums.CouncilStatus
+    result?: StringNullableWithAggregatesFilter<"CouncilSession"> | string | null
+    errorMsg?: StringNullableWithAggregatesFilter<"CouncilSession"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"CouncilSession"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CouncilSession"> | Date | string
+  }
+
+  export type CouncilMessageWhereInput = {
+    AND?: CouncilMessageWhereInput | CouncilMessageWhereInput[]
+    OR?: CouncilMessageWhereInput[]
+    NOT?: CouncilMessageWhereInput | CouncilMessageWhereInput[]
+    id?: StringFilter<"CouncilMessage"> | string
+    sessionId?: StringFilter<"CouncilMessage"> | string
+    agentRole?: StringFilter<"CouncilMessage"> | string
+    round?: IntFilter<"CouncilMessage"> | number
+    content?: StringFilter<"CouncilMessage"> | string
+    inputTokens?: IntFilter<"CouncilMessage"> | number
+    outTokens?: IntFilter<"CouncilMessage"> | number
+    createdAt?: DateTimeFilter<"CouncilMessage"> | Date | string
+    session?: XOR<CouncilSessionScalarRelationFilter, CouncilSessionWhereInput>
+  }
+
+  export type CouncilMessageOrderByWithRelationInput = {
+    id?: SortOrder
+    sessionId?: SortOrder
+    agentRole?: SortOrder
+    round?: SortOrder
+    content?: SortOrder
+    inputTokens?: SortOrder
+    outTokens?: SortOrder
+    createdAt?: SortOrder
+    session?: CouncilSessionOrderByWithRelationInput
+  }
+
+  export type CouncilMessageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CouncilMessageWhereInput | CouncilMessageWhereInput[]
+    OR?: CouncilMessageWhereInput[]
+    NOT?: CouncilMessageWhereInput | CouncilMessageWhereInput[]
+    sessionId?: StringFilter<"CouncilMessage"> | string
+    agentRole?: StringFilter<"CouncilMessage"> | string
+    round?: IntFilter<"CouncilMessage"> | number
+    content?: StringFilter<"CouncilMessage"> | string
+    inputTokens?: IntFilter<"CouncilMessage"> | number
+    outTokens?: IntFilter<"CouncilMessage"> | number
+    createdAt?: DateTimeFilter<"CouncilMessage"> | Date | string
+    session?: XOR<CouncilSessionScalarRelationFilter, CouncilSessionWhereInput>
+  }, "id">
+
+  export type CouncilMessageOrderByWithAggregationInput = {
+    id?: SortOrder
+    sessionId?: SortOrder
+    agentRole?: SortOrder
+    round?: SortOrder
+    content?: SortOrder
+    inputTokens?: SortOrder
+    outTokens?: SortOrder
+    createdAt?: SortOrder
+    _count?: CouncilMessageCountOrderByAggregateInput
+    _avg?: CouncilMessageAvgOrderByAggregateInput
+    _max?: CouncilMessageMaxOrderByAggregateInput
+    _min?: CouncilMessageMinOrderByAggregateInput
+    _sum?: CouncilMessageSumOrderByAggregateInput
+  }
+
+  export type CouncilMessageScalarWhereWithAggregatesInput = {
+    AND?: CouncilMessageScalarWhereWithAggregatesInput | CouncilMessageScalarWhereWithAggregatesInput[]
+    OR?: CouncilMessageScalarWhereWithAggregatesInput[]
+    NOT?: CouncilMessageScalarWhereWithAggregatesInput | CouncilMessageScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CouncilMessage"> | string
+    sessionId?: StringWithAggregatesFilter<"CouncilMessage"> | string
+    agentRole?: StringWithAggregatesFilter<"CouncilMessage"> | string
+    round?: IntWithAggregatesFilter<"CouncilMessage"> | number
+    content?: StringWithAggregatesFilter<"CouncilMessage"> | string
+    inputTokens?: IntWithAggregatesFilter<"CouncilMessage"> | number
+    outTokens?: IntWithAggregatesFilter<"CouncilMessage"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"CouncilMessage"> | Date | string
   }
 
   export type HealthCheckCreateInput = {
@@ -16801,6 +19540,7 @@ export namespace Prisma {
     sandboxes?: SandboxCreateNestedManyWithoutUserInput
     agentMemories?: AgentMemoryCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventCreateNestedManyWithoutUserInput
+    councilSessions?: CouncilSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -16813,6 +19553,7 @@ export namespace Prisma {
     sandboxes?: SandboxUncheckedCreateNestedManyWithoutUserInput
     agentMemories?: AgentMemoryUncheckedCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventUncheckedCreateNestedManyWithoutUserInput
+    councilSessions?: CouncilSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -16825,6 +19566,7 @@ export namespace Prisma {
     sandboxes?: SandboxUpdateManyWithoutUserNestedInput
     agentMemories?: AgentMemoryUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUpdateManyWithoutUserNestedInput
+    councilSessions?: CouncilSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -16837,6 +19579,7 @@ export namespace Prisma {
     sandboxes?: SandboxUncheckedUpdateManyWithoutUserNestedInput
     agentMemories?: AgentMemoryUncheckedUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUncheckedUpdateManyWithoutUserNestedInput
+    councilSessions?: CouncilSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -17237,6 +19980,169 @@ export namespace Prisma {
     namespace?: StringFieldUpdateOperationsInput | string
     eventType?: StringFieldUpdateOperationsInput | string
     payload?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilSessionCreateInput = {
+    id?: string
+    task: string
+    context?: string | null
+    status?: $Enums.CouncilStatus
+    result?: string | null
+    errorMsg?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    messages?: CouncilMessageCreateNestedManyWithoutSessionInput
+    user: UserCreateNestedOneWithoutCouncilSessionsInput
+  }
+
+  export type CouncilSessionUncheckedCreateInput = {
+    id?: string
+    userId: string
+    task: string
+    context?: string | null
+    status?: $Enums.CouncilStatus
+    result?: string | null
+    errorMsg?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    messages?: CouncilMessageUncheckedCreateNestedManyWithoutSessionInput
+  }
+
+  export type CouncilSessionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    task?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCouncilStatusFieldUpdateOperationsInput | $Enums.CouncilStatus
+    result?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: CouncilMessageUpdateManyWithoutSessionNestedInput
+    user?: UserUpdateOneRequiredWithoutCouncilSessionsNestedInput
+  }
+
+  export type CouncilSessionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    task?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCouncilStatusFieldUpdateOperationsInput | $Enums.CouncilStatus
+    result?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: CouncilMessageUncheckedUpdateManyWithoutSessionNestedInput
+  }
+
+  export type CouncilSessionCreateManyInput = {
+    id?: string
+    userId: string
+    task: string
+    context?: string | null
+    status?: $Enums.CouncilStatus
+    result?: string | null
+    errorMsg?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CouncilSessionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    task?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCouncilStatusFieldUpdateOperationsInput | $Enums.CouncilStatus
+    result?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilSessionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    task?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCouncilStatusFieldUpdateOperationsInput | $Enums.CouncilStatus
+    result?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilMessageCreateInput = {
+    id?: string
+    agentRole: string
+    round: number
+    content: string
+    inputTokens?: number
+    outTokens?: number
+    createdAt?: Date | string
+    session: CouncilSessionCreateNestedOneWithoutMessagesInput
+  }
+
+  export type CouncilMessageUncheckedCreateInput = {
+    id?: string
+    sessionId: string
+    agentRole: string
+    round: number
+    content: string
+    inputTokens?: number
+    outTokens?: number
+    createdAt?: Date | string
+  }
+
+  export type CouncilMessageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agentRole?: StringFieldUpdateOperationsInput | string
+    round?: IntFieldUpdateOperationsInput | number
+    content?: StringFieldUpdateOperationsInput | string
+    inputTokens?: IntFieldUpdateOperationsInput | number
+    outTokens?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    session?: CouncilSessionUpdateOneRequiredWithoutMessagesNestedInput
+  }
+
+  export type CouncilMessageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    agentRole?: StringFieldUpdateOperationsInput | string
+    round?: IntFieldUpdateOperationsInput | number
+    content?: StringFieldUpdateOperationsInput | string
+    inputTokens?: IntFieldUpdateOperationsInput | number
+    outTokens?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilMessageCreateManyInput = {
+    id?: string
+    sessionId: string
+    agentRole: string
+    round: number
+    content: string
+    inputTokens?: number
+    outTokens?: number
+    createdAt?: Date | string
+  }
+
+  export type CouncilMessageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agentRole?: StringFieldUpdateOperationsInput | string
+    round?: IntFieldUpdateOperationsInput | number
+    content?: StringFieldUpdateOperationsInput | string
+    inputTokens?: IntFieldUpdateOperationsInput | number
+    outTokens?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilMessageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    agentRole?: StringFieldUpdateOperationsInput | string
+    round?: IntFieldUpdateOperationsInput | number
+    content?: StringFieldUpdateOperationsInput | string
+    inputTokens?: IntFieldUpdateOperationsInput | number
+    outTokens?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -17656,6 +20562,12 @@ export namespace Prisma {
     none?: AgentEventWhereInput
   }
 
+  export type CouncilSessionListRelationFilter = {
+    every?: CouncilSessionWhereInput
+    some?: CouncilSessionWhereInput
+    none?: CouncilSessionWhereInput
+  }
+
   export type ApiKeyOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -17669,6 +20581,10 @@ export namespace Prisma {
   }
 
   export type AgentEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CouncilSessionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -18019,6 +20935,119 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type EnumCouncilStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CouncilStatus | EnumCouncilStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CouncilStatus[] | ListEnumCouncilStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CouncilStatus[] | ListEnumCouncilStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCouncilStatusFilter<$PrismaModel> | $Enums.CouncilStatus
+  }
+
+  export type CouncilMessageListRelationFilter = {
+    every?: CouncilMessageWhereInput
+    some?: CouncilMessageWhereInput
+    none?: CouncilMessageWhereInput
+  }
+
+  export type CouncilMessageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CouncilSessionCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    task?: SortOrder
+    context?: SortOrder
+    status?: SortOrder
+    result?: SortOrder
+    errorMsg?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CouncilSessionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    task?: SortOrder
+    context?: SortOrder
+    status?: SortOrder
+    result?: SortOrder
+    errorMsg?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CouncilSessionMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    task?: SortOrder
+    context?: SortOrder
+    status?: SortOrder
+    result?: SortOrder
+    errorMsg?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumCouncilStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CouncilStatus | EnumCouncilStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CouncilStatus[] | ListEnumCouncilStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CouncilStatus[] | ListEnumCouncilStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCouncilStatusWithAggregatesFilter<$PrismaModel> | $Enums.CouncilStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCouncilStatusFilter<$PrismaModel>
+    _max?: NestedEnumCouncilStatusFilter<$PrismaModel>
+  }
+
+  export type CouncilSessionScalarRelationFilter = {
+    is?: CouncilSessionWhereInput
+    isNot?: CouncilSessionWhereInput
+  }
+
+  export type CouncilMessageCountOrderByAggregateInput = {
+    id?: SortOrder
+    sessionId?: SortOrder
+    agentRole?: SortOrder
+    round?: SortOrder
+    content?: SortOrder
+    inputTokens?: SortOrder
+    outTokens?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CouncilMessageAvgOrderByAggregateInput = {
+    round?: SortOrder
+    inputTokens?: SortOrder
+    outTokens?: SortOrder
+  }
+
+  export type CouncilMessageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    sessionId?: SortOrder
+    agentRole?: SortOrder
+    round?: SortOrder
+    content?: SortOrder
+    inputTokens?: SortOrder
+    outTokens?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CouncilMessageMinOrderByAggregateInput = {
+    id?: SortOrder
+    sessionId?: SortOrder
+    agentRole?: SortOrder
+    round?: SortOrder
+    content?: SortOrder
+    inputTokens?: SortOrder
+    outTokens?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CouncilMessageSumOrderByAggregateInput = {
+    round?: SortOrder
+    inputTokens?: SortOrder
+    outTokens?: SortOrder
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -18187,6 +21216,13 @@ export namespace Prisma {
     connect?: AgentEventWhereUniqueInput | AgentEventWhereUniqueInput[]
   }
 
+  export type CouncilSessionCreateNestedManyWithoutUserInput = {
+    create?: XOR<CouncilSessionCreateWithoutUserInput, CouncilSessionUncheckedCreateWithoutUserInput> | CouncilSessionCreateWithoutUserInput[] | CouncilSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CouncilSessionCreateOrConnectWithoutUserInput | CouncilSessionCreateOrConnectWithoutUserInput[]
+    createMany?: CouncilSessionCreateManyUserInputEnvelope
+    connect?: CouncilSessionWhereUniqueInput | CouncilSessionWhereUniqueInput[]
+  }
+
   export type ApiKeyUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<ApiKeyCreateWithoutUserInput, ApiKeyUncheckedCreateWithoutUserInput> | ApiKeyCreateWithoutUserInput[] | ApiKeyUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ApiKeyCreateOrConnectWithoutUserInput | ApiKeyCreateOrConnectWithoutUserInput[]
@@ -18213,6 +21249,13 @@ export namespace Prisma {
     connectOrCreate?: AgentEventCreateOrConnectWithoutUserInput | AgentEventCreateOrConnectWithoutUserInput[]
     createMany?: AgentEventCreateManyUserInputEnvelope
     connect?: AgentEventWhereUniqueInput | AgentEventWhereUniqueInput[]
+  }
+
+  export type CouncilSessionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<CouncilSessionCreateWithoutUserInput, CouncilSessionUncheckedCreateWithoutUserInput> | CouncilSessionCreateWithoutUserInput[] | CouncilSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CouncilSessionCreateOrConnectWithoutUserInput | CouncilSessionCreateOrConnectWithoutUserInput[]
+    createMany?: CouncilSessionCreateManyUserInputEnvelope
+    connect?: CouncilSessionWhereUniqueInput | CouncilSessionWhereUniqueInput[]
   }
 
   export type ApiKeyUpdateManyWithoutUserNestedInput = {
@@ -18271,6 +21314,20 @@ export namespace Prisma {
     deleteMany?: AgentEventScalarWhereInput | AgentEventScalarWhereInput[]
   }
 
+  export type CouncilSessionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<CouncilSessionCreateWithoutUserInput, CouncilSessionUncheckedCreateWithoutUserInput> | CouncilSessionCreateWithoutUserInput[] | CouncilSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CouncilSessionCreateOrConnectWithoutUserInput | CouncilSessionCreateOrConnectWithoutUserInput[]
+    upsert?: CouncilSessionUpsertWithWhereUniqueWithoutUserInput | CouncilSessionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: CouncilSessionCreateManyUserInputEnvelope
+    set?: CouncilSessionWhereUniqueInput | CouncilSessionWhereUniqueInput[]
+    disconnect?: CouncilSessionWhereUniqueInput | CouncilSessionWhereUniqueInput[]
+    delete?: CouncilSessionWhereUniqueInput | CouncilSessionWhereUniqueInput[]
+    connect?: CouncilSessionWhereUniqueInput | CouncilSessionWhereUniqueInput[]
+    update?: CouncilSessionUpdateWithWhereUniqueWithoutUserInput | CouncilSessionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: CouncilSessionUpdateManyWithWhereWithoutUserInput | CouncilSessionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: CouncilSessionScalarWhereInput | CouncilSessionScalarWhereInput[]
+  }
+
   export type ApiKeyUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ApiKeyCreateWithoutUserInput, ApiKeyUncheckedCreateWithoutUserInput> | ApiKeyCreateWithoutUserInput[] | ApiKeyUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ApiKeyCreateOrConnectWithoutUserInput | ApiKeyCreateOrConnectWithoutUserInput[]
@@ -18325,6 +21382,20 @@ export namespace Prisma {
     update?: AgentEventUpdateWithWhereUniqueWithoutUserInput | AgentEventUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: AgentEventUpdateManyWithWhereWithoutUserInput | AgentEventUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: AgentEventScalarWhereInput | AgentEventScalarWhereInput[]
+  }
+
+  export type CouncilSessionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<CouncilSessionCreateWithoutUserInput, CouncilSessionUncheckedCreateWithoutUserInput> | CouncilSessionCreateWithoutUserInput[] | CouncilSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CouncilSessionCreateOrConnectWithoutUserInput | CouncilSessionCreateOrConnectWithoutUserInput[]
+    upsert?: CouncilSessionUpsertWithWhereUniqueWithoutUserInput | CouncilSessionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: CouncilSessionCreateManyUserInputEnvelope
+    set?: CouncilSessionWhereUniqueInput | CouncilSessionWhereUniqueInput[]
+    disconnect?: CouncilSessionWhereUniqueInput | CouncilSessionWhereUniqueInput[]
+    delete?: CouncilSessionWhereUniqueInput | CouncilSessionWhereUniqueInput[]
+    connect?: CouncilSessionWhereUniqueInput | CouncilSessionWhereUniqueInput[]
+    update?: CouncilSessionUpdateWithWhereUniqueWithoutUserInput | CouncilSessionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: CouncilSessionUpdateManyWithWhereWithoutUserInput | CouncilSessionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: CouncilSessionScalarWhereInput | CouncilSessionScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutApiKeysInput = {
@@ -18469,6 +21540,80 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutAgentEventsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAgentEventsInput, UserUpdateWithoutAgentEventsInput>, UserUncheckedUpdateWithoutAgentEventsInput>
+  }
+
+  export type CouncilMessageCreateNestedManyWithoutSessionInput = {
+    create?: XOR<CouncilMessageCreateWithoutSessionInput, CouncilMessageUncheckedCreateWithoutSessionInput> | CouncilMessageCreateWithoutSessionInput[] | CouncilMessageUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: CouncilMessageCreateOrConnectWithoutSessionInput | CouncilMessageCreateOrConnectWithoutSessionInput[]
+    createMany?: CouncilMessageCreateManySessionInputEnvelope
+    connect?: CouncilMessageWhereUniqueInput | CouncilMessageWhereUniqueInput[]
+  }
+
+  export type UserCreateNestedOneWithoutCouncilSessionsInput = {
+    create?: XOR<UserCreateWithoutCouncilSessionsInput, UserUncheckedCreateWithoutCouncilSessionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCouncilSessionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CouncilMessageUncheckedCreateNestedManyWithoutSessionInput = {
+    create?: XOR<CouncilMessageCreateWithoutSessionInput, CouncilMessageUncheckedCreateWithoutSessionInput> | CouncilMessageCreateWithoutSessionInput[] | CouncilMessageUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: CouncilMessageCreateOrConnectWithoutSessionInput | CouncilMessageCreateOrConnectWithoutSessionInput[]
+    createMany?: CouncilMessageCreateManySessionInputEnvelope
+    connect?: CouncilMessageWhereUniqueInput | CouncilMessageWhereUniqueInput[]
+  }
+
+  export type EnumCouncilStatusFieldUpdateOperationsInput = {
+    set?: $Enums.CouncilStatus
+  }
+
+  export type CouncilMessageUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<CouncilMessageCreateWithoutSessionInput, CouncilMessageUncheckedCreateWithoutSessionInput> | CouncilMessageCreateWithoutSessionInput[] | CouncilMessageUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: CouncilMessageCreateOrConnectWithoutSessionInput | CouncilMessageCreateOrConnectWithoutSessionInput[]
+    upsert?: CouncilMessageUpsertWithWhereUniqueWithoutSessionInput | CouncilMessageUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: CouncilMessageCreateManySessionInputEnvelope
+    set?: CouncilMessageWhereUniqueInput | CouncilMessageWhereUniqueInput[]
+    disconnect?: CouncilMessageWhereUniqueInput | CouncilMessageWhereUniqueInput[]
+    delete?: CouncilMessageWhereUniqueInput | CouncilMessageWhereUniqueInput[]
+    connect?: CouncilMessageWhereUniqueInput | CouncilMessageWhereUniqueInput[]
+    update?: CouncilMessageUpdateWithWhereUniqueWithoutSessionInput | CouncilMessageUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: CouncilMessageUpdateManyWithWhereWithoutSessionInput | CouncilMessageUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: CouncilMessageScalarWhereInput | CouncilMessageScalarWhereInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutCouncilSessionsNestedInput = {
+    create?: XOR<UserCreateWithoutCouncilSessionsInput, UserUncheckedCreateWithoutCouncilSessionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCouncilSessionsInput
+    upsert?: UserUpsertWithoutCouncilSessionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCouncilSessionsInput, UserUpdateWithoutCouncilSessionsInput>, UserUncheckedUpdateWithoutCouncilSessionsInput>
+  }
+
+  export type CouncilMessageUncheckedUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<CouncilMessageCreateWithoutSessionInput, CouncilMessageUncheckedCreateWithoutSessionInput> | CouncilMessageCreateWithoutSessionInput[] | CouncilMessageUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: CouncilMessageCreateOrConnectWithoutSessionInput | CouncilMessageCreateOrConnectWithoutSessionInput[]
+    upsert?: CouncilMessageUpsertWithWhereUniqueWithoutSessionInput | CouncilMessageUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: CouncilMessageCreateManySessionInputEnvelope
+    set?: CouncilMessageWhereUniqueInput | CouncilMessageWhereUniqueInput[]
+    disconnect?: CouncilMessageWhereUniqueInput | CouncilMessageWhereUniqueInput[]
+    delete?: CouncilMessageWhereUniqueInput | CouncilMessageWhereUniqueInput[]
+    connect?: CouncilMessageWhereUniqueInput | CouncilMessageWhereUniqueInput[]
+    update?: CouncilMessageUpdateWithWhereUniqueWithoutSessionInput | CouncilMessageUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: CouncilMessageUpdateManyWithWhereWithoutSessionInput | CouncilMessageUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: CouncilMessageScalarWhereInput | CouncilMessageScalarWhereInput[]
+  }
+
+  export type CouncilSessionCreateNestedOneWithoutMessagesInput = {
+    create?: XOR<CouncilSessionCreateWithoutMessagesInput, CouncilSessionUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: CouncilSessionCreateOrConnectWithoutMessagesInput
+    connect?: CouncilSessionWhereUniqueInput
+  }
+
+  export type CouncilSessionUpdateOneRequiredWithoutMessagesNestedInput = {
+    create?: XOR<CouncilSessionCreateWithoutMessagesInput, CouncilSessionUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: CouncilSessionCreateOrConnectWithoutMessagesInput
+    upsert?: CouncilSessionUpsertWithoutMessagesInput
+    connect?: CouncilSessionWhereUniqueInput
+    update?: XOR<XOR<CouncilSessionUpdateToOneWithWhereWithoutMessagesInput, CouncilSessionUpdateWithoutMessagesInput>, CouncilSessionUncheckedUpdateWithoutMessagesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -18754,6 +21899,23 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type NestedEnumCouncilStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CouncilStatus | EnumCouncilStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CouncilStatus[] | ListEnumCouncilStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CouncilStatus[] | ListEnumCouncilStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCouncilStatusFilter<$PrismaModel> | $Enums.CouncilStatus
+  }
+
+  export type NestedEnumCouncilStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CouncilStatus | EnumCouncilStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CouncilStatus[] | ListEnumCouncilStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CouncilStatus[] | ListEnumCouncilStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCouncilStatusWithAggregatesFilter<$PrismaModel> | $Enums.CouncilStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCouncilStatusFilter<$PrismaModel>
+    _max?: NestedEnumCouncilStatusFilter<$PrismaModel>
   }
 
   export type ProjectCreateWithoutWorkspaceInput = {
@@ -19148,6 +22310,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CouncilSessionCreateWithoutUserInput = {
+    id?: string
+    task: string
+    context?: string | null
+    status?: $Enums.CouncilStatus
+    result?: string | null
+    errorMsg?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    messages?: CouncilMessageCreateNestedManyWithoutSessionInput
+  }
+
+  export type CouncilSessionUncheckedCreateWithoutUserInput = {
+    id?: string
+    task: string
+    context?: string | null
+    status?: $Enums.CouncilStatus
+    result?: string | null
+    errorMsg?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    messages?: CouncilMessageUncheckedCreateNestedManyWithoutSessionInput
+  }
+
+  export type CouncilSessionCreateOrConnectWithoutUserInput = {
+    where: CouncilSessionWhereUniqueInput
+    create: XOR<CouncilSessionCreateWithoutUserInput, CouncilSessionUncheckedCreateWithoutUserInput>
+  }
+
+  export type CouncilSessionCreateManyUserInputEnvelope = {
+    data: CouncilSessionCreateManyUserInput | CouncilSessionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ApiKeyUpsertWithWhereUniqueWithoutUserInput = {
     where: ApiKeyWhereUniqueInput
     update: XOR<ApiKeyUpdateWithoutUserInput, ApiKeyUncheckedUpdateWithoutUserInput>
@@ -19268,6 +22464,37 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"AgentEvent"> | Date | string
   }
 
+  export type CouncilSessionUpsertWithWhereUniqueWithoutUserInput = {
+    where: CouncilSessionWhereUniqueInput
+    update: XOR<CouncilSessionUpdateWithoutUserInput, CouncilSessionUncheckedUpdateWithoutUserInput>
+    create: XOR<CouncilSessionCreateWithoutUserInput, CouncilSessionUncheckedCreateWithoutUserInput>
+  }
+
+  export type CouncilSessionUpdateWithWhereUniqueWithoutUserInput = {
+    where: CouncilSessionWhereUniqueInput
+    data: XOR<CouncilSessionUpdateWithoutUserInput, CouncilSessionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type CouncilSessionUpdateManyWithWhereWithoutUserInput = {
+    where: CouncilSessionScalarWhereInput
+    data: XOR<CouncilSessionUpdateManyMutationInput, CouncilSessionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type CouncilSessionScalarWhereInput = {
+    AND?: CouncilSessionScalarWhereInput | CouncilSessionScalarWhereInput[]
+    OR?: CouncilSessionScalarWhereInput[]
+    NOT?: CouncilSessionScalarWhereInput | CouncilSessionScalarWhereInput[]
+    id?: StringFilter<"CouncilSession"> | string
+    userId?: StringFilter<"CouncilSession"> | string
+    task?: StringFilter<"CouncilSession"> | string
+    context?: StringNullableFilter<"CouncilSession"> | string | null
+    status?: EnumCouncilStatusFilter<"CouncilSession"> | $Enums.CouncilStatus
+    result?: StringNullableFilter<"CouncilSession"> | string | null
+    errorMsg?: StringNullableFilter<"CouncilSession"> | string | null
+    createdAt?: DateTimeFilter<"CouncilSession"> | Date | string
+    updatedAt?: DateTimeFilter<"CouncilSession"> | Date | string
+  }
+
   export type UserCreateWithoutApiKeysInput = {
     id?: string
     email: string
@@ -19277,6 +22504,7 @@ export namespace Prisma {
     sandboxes?: SandboxCreateNestedManyWithoutUserInput
     agentMemories?: AgentMemoryCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventCreateNestedManyWithoutUserInput
+    councilSessions?: CouncilSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApiKeysInput = {
@@ -19288,6 +22516,7 @@ export namespace Prisma {
     sandboxes?: SandboxUncheckedCreateNestedManyWithoutUserInput
     agentMemories?: AgentMemoryUncheckedCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventUncheckedCreateNestedManyWithoutUserInput
+    councilSessions?: CouncilSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApiKeysInput = {
@@ -19315,6 +22544,7 @@ export namespace Prisma {
     sandboxes?: SandboxUpdateManyWithoutUserNestedInput
     agentMemories?: AgentMemoryUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUpdateManyWithoutUserNestedInput
+    councilSessions?: CouncilSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApiKeysInput = {
@@ -19326,6 +22556,7 @@ export namespace Prisma {
     sandboxes?: SandboxUncheckedUpdateManyWithoutUserNestedInput
     agentMemories?: AgentMemoryUncheckedUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUncheckedUpdateManyWithoutUserNestedInput
+    councilSessions?: CouncilSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UsageLogCreateWithoutSandboxInput = {
@@ -19365,6 +22596,7 @@ export namespace Prisma {
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     agentMemories?: AgentMemoryCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventCreateNestedManyWithoutUserInput
+    councilSessions?: CouncilSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSandboxesInput = {
@@ -19376,6 +22608,7 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     agentMemories?: AgentMemoryUncheckedCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventUncheckedCreateNestedManyWithoutUserInput
+    councilSessions?: CouncilSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSandboxesInput = {
@@ -19432,6 +22665,7 @@ export namespace Prisma {
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     agentMemories?: AgentMemoryUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUpdateManyWithoutUserNestedInput
+    councilSessions?: CouncilSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSandboxesInput = {
@@ -19443,6 +22677,7 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     agentMemories?: AgentMemoryUncheckedUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUncheckedUpdateManyWithoutUserNestedInput
+    councilSessions?: CouncilSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SandboxCreateWithoutUsageLogsInput = {
@@ -19522,6 +22757,7 @@ export namespace Prisma {
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     sandboxes?: SandboxCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventCreateNestedManyWithoutUserInput
+    councilSessions?: CouncilSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAgentMemoriesInput = {
@@ -19533,6 +22769,7 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     sandboxes?: SandboxUncheckedCreateNestedManyWithoutUserInput
     agentEvents?: AgentEventUncheckedCreateNestedManyWithoutUserInput
+    councilSessions?: CouncilSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAgentMemoriesInput = {
@@ -19560,6 +22797,7 @@ export namespace Prisma {
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     sandboxes?: SandboxUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUpdateManyWithoutUserNestedInput
+    councilSessions?: CouncilSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAgentMemoriesInput = {
@@ -19571,6 +22809,7 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     sandboxes?: SandboxUncheckedUpdateManyWithoutUserNestedInput
     agentEvents?: AgentEventUncheckedUpdateManyWithoutUserNestedInput
+    councilSessions?: CouncilSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAgentEventsInput = {
@@ -19582,6 +22821,7 @@ export namespace Prisma {
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     sandboxes?: SandboxCreateNestedManyWithoutUserInput
     agentMemories?: AgentMemoryCreateNestedManyWithoutUserInput
+    councilSessions?: CouncilSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAgentEventsInput = {
@@ -19593,6 +22833,7 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     sandboxes?: SandboxUncheckedCreateNestedManyWithoutUserInput
     agentMemories?: AgentMemoryUncheckedCreateNestedManyWithoutUserInput
+    councilSessions?: CouncilSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAgentEventsInput = {
@@ -19620,6 +22861,7 @@ export namespace Prisma {
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     sandboxes?: SandboxUpdateManyWithoutUserNestedInput
     agentMemories?: AgentMemoryUpdateManyWithoutUserNestedInput
+    councilSessions?: CouncilSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAgentEventsInput = {
@@ -19631,6 +22873,195 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     sandboxes?: SandboxUncheckedUpdateManyWithoutUserNestedInput
     agentMemories?: AgentMemoryUncheckedUpdateManyWithoutUserNestedInput
+    councilSessions?: CouncilSessionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type CouncilMessageCreateWithoutSessionInput = {
+    id?: string
+    agentRole: string
+    round: number
+    content: string
+    inputTokens?: number
+    outTokens?: number
+    createdAt?: Date | string
+  }
+
+  export type CouncilMessageUncheckedCreateWithoutSessionInput = {
+    id?: string
+    agentRole: string
+    round: number
+    content: string
+    inputTokens?: number
+    outTokens?: number
+    createdAt?: Date | string
+  }
+
+  export type CouncilMessageCreateOrConnectWithoutSessionInput = {
+    where: CouncilMessageWhereUniqueInput
+    create: XOR<CouncilMessageCreateWithoutSessionInput, CouncilMessageUncheckedCreateWithoutSessionInput>
+  }
+
+  export type CouncilMessageCreateManySessionInputEnvelope = {
+    data: CouncilMessageCreateManySessionInput | CouncilMessageCreateManySessionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserCreateWithoutCouncilSessionsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
+    sandboxes?: SandboxCreateNestedManyWithoutUserInput
+    agentMemories?: AgentMemoryCreateNestedManyWithoutUserInput
+    agentEvents?: AgentEventCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCouncilSessionsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
+    sandboxes?: SandboxUncheckedCreateNestedManyWithoutUserInput
+    agentMemories?: AgentMemoryUncheckedCreateNestedManyWithoutUserInput
+    agentEvents?: AgentEventUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCouncilSessionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCouncilSessionsInput, UserUncheckedCreateWithoutCouncilSessionsInput>
+  }
+
+  export type CouncilMessageUpsertWithWhereUniqueWithoutSessionInput = {
+    where: CouncilMessageWhereUniqueInput
+    update: XOR<CouncilMessageUpdateWithoutSessionInput, CouncilMessageUncheckedUpdateWithoutSessionInput>
+    create: XOR<CouncilMessageCreateWithoutSessionInput, CouncilMessageUncheckedCreateWithoutSessionInput>
+  }
+
+  export type CouncilMessageUpdateWithWhereUniqueWithoutSessionInput = {
+    where: CouncilMessageWhereUniqueInput
+    data: XOR<CouncilMessageUpdateWithoutSessionInput, CouncilMessageUncheckedUpdateWithoutSessionInput>
+  }
+
+  export type CouncilMessageUpdateManyWithWhereWithoutSessionInput = {
+    where: CouncilMessageScalarWhereInput
+    data: XOR<CouncilMessageUpdateManyMutationInput, CouncilMessageUncheckedUpdateManyWithoutSessionInput>
+  }
+
+  export type CouncilMessageScalarWhereInput = {
+    AND?: CouncilMessageScalarWhereInput | CouncilMessageScalarWhereInput[]
+    OR?: CouncilMessageScalarWhereInput[]
+    NOT?: CouncilMessageScalarWhereInput | CouncilMessageScalarWhereInput[]
+    id?: StringFilter<"CouncilMessage"> | string
+    sessionId?: StringFilter<"CouncilMessage"> | string
+    agentRole?: StringFilter<"CouncilMessage"> | string
+    round?: IntFilter<"CouncilMessage"> | number
+    content?: StringFilter<"CouncilMessage"> | string
+    inputTokens?: IntFilter<"CouncilMessage"> | number
+    outTokens?: IntFilter<"CouncilMessage"> | number
+    createdAt?: DateTimeFilter<"CouncilMessage"> | Date | string
+  }
+
+  export type UserUpsertWithoutCouncilSessionsInput = {
+    update: XOR<UserUpdateWithoutCouncilSessionsInput, UserUncheckedUpdateWithoutCouncilSessionsInput>
+    create: XOR<UserCreateWithoutCouncilSessionsInput, UserUncheckedCreateWithoutCouncilSessionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCouncilSessionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCouncilSessionsInput, UserUncheckedUpdateWithoutCouncilSessionsInput>
+  }
+
+  export type UserUpdateWithoutCouncilSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
+    sandboxes?: SandboxUpdateManyWithoutUserNestedInput
+    agentMemories?: AgentMemoryUpdateManyWithoutUserNestedInput
+    agentEvents?: AgentEventUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCouncilSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+    sandboxes?: SandboxUncheckedUpdateManyWithoutUserNestedInput
+    agentMemories?: AgentMemoryUncheckedUpdateManyWithoutUserNestedInput
+    agentEvents?: AgentEventUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type CouncilSessionCreateWithoutMessagesInput = {
+    id?: string
+    task: string
+    context?: string | null
+    status?: $Enums.CouncilStatus
+    result?: string | null
+    errorMsg?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutCouncilSessionsInput
+  }
+
+  export type CouncilSessionUncheckedCreateWithoutMessagesInput = {
+    id?: string
+    userId: string
+    task: string
+    context?: string | null
+    status?: $Enums.CouncilStatus
+    result?: string | null
+    errorMsg?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CouncilSessionCreateOrConnectWithoutMessagesInput = {
+    where: CouncilSessionWhereUniqueInput
+    create: XOR<CouncilSessionCreateWithoutMessagesInput, CouncilSessionUncheckedCreateWithoutMessagesInput>
+  }
+
+  export type CouncilSessionUpsertWithoutMessagesInput = {
+    update: XOR<CouncilSessionUpdateWithoutMessagesInput, CouncilSessionUncheckedUpdateWithoutMessagesInput>
+    create: XOR<CouncilSessionCreateWithoutMessagesInput, CouncilSessionUncheckedCreateWithoutMessagesInput>
+    where?: CouncilSessionWhereInput
+  }
+
+  export type CouncilSessionUpdateToOneWithWhereWithoutMessagesInput = {
+    where?: CouncilSessionWhereInput
+    data: XOR<CouncilSessionUpdateWithoutMessagesInput, CouncilSessionUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type CouncilSessionUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    task?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCouncilStatusFieldUpdateOperationsInput | $Enums.CouncilStatus
+    result?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutCouncilSessionsNestedInput
+  }
+
+  export type CouncilSessionUncheckedUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    task?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCouncilStatusFieldUpdateOperationsInput | $Enums.CouncilStatus
+    result?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectCreateManyWorkspaceInput = {
@@ -19771,6 +23202,17 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type CouncilSessionCreateManyUserInput = {
+    id?: string
+    task: string
+    context?: string | null
+    status?: $Enums.CouncilStatus
+    result?: string | null
+    errorMsg?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ApiKeyUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     keyHash?: StringFieldUpdateOperationsInput | string
@@ -19893,6 +23335,41 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CouncilSessionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    task?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCouncilStatusFieldUpdateOperationsInput | $Enums.CouncilStatus
+    result?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: CouncilMessageUpdateManyWithoutSessionNestedInput
+  }
+
+  export type CouncilSessionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    task?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCouncilStatusFieldUpdateOperationsInput | $Enums.CouncilStatus
+    result?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: CouncilMessageUncheckedUpdateManyWithoutSessionNestedInput
+  }
+
+  export type CouncilSessionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    task?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCouncilStatusFieldUpdateOperationsInput | $Enums.CouncilStatus
+    result?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMsg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UsageLogCreateManySandboxInput = {
     id?: string
     userId: string
@@ -19926,6 +23403,46 @@ export namespace Prisma {
     durationSecs?: IntFieldUpdateOperationsInput | number
     billedAmount?: FloatFieldUpdateOperationsInput | number
     language?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilMessageCreateManySessionInput = {
+    id?: string
+    agentRole: string
+    round: number
+    content: string
+    inputTokens?: number
+    outTokens?: number
+    createdAt?: Date | string
+  }
+
+  export type CouncilMessageUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agentRole?: StringFieldUpdateOperationsInput | string
+    round?: IntFieldUpdateOperationsInput | number
+    content?: StringFieldUpdateOperationsInput | string
+    inputTokens?: IntFieldUpdateOperationsInput | number
+    outTokens?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilMessageUncheckedUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agentRole?: StringFieldUpdateOperationsInput | string
+    round?: IntFieldUpdateOperationsInput | number
+    content?: StringFieldUpdateOperationsInput | string
+    inputTokens?: IntFieldUpdateOperationsInput | number
+    outTokens?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CouncilMessageUncheckedUpdateManyWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    agentRole?: StringFieldUpdateOperationsInput | string
+    round?: IntFieldUpdateOperationsInput | number
+    content?: StringFieldUpdateOperationsInput | string
+    inputTokens?: IntFieldUpdateOperationsInput | number
+    outTokens?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

@@ -12,6 +12,8 @@ import { BillingController } from './billing.controller';
 import { MemoryService } from './memory.service';
 import { MemoryController } from './memory.controller';
 import { MemoryTtlScheduler } from './memory-ttl.scheduler';
+import { CouncilService } from './council/council.service';
+import { CouncilController } from './council/council.controller';
 
 @Module({
   controllers: [
@@ -20,6 +22,7 @@ import { MemoryTtlScheduler } from './memory-ttl.scheduler';
     UsageController,
     BillingController,
     MemoryController,
+    CouncilController,
   ],
   providers: [
     PrismaService,
@@ -30,7 +33,8 @@ import { MemoryTtlScheduler } from './memory-ttl.scheduler';
     BillingService,
     MemoryService,
     MemoryTtlScheduler,
+    CouncilService,
   ],
-  exports: [ApiKeyService, SandboxService, UsageService, MemoryService],
+  exports: [ApiKeyService, SandboxService, UsageService, MemoryService, CouncilService],
 })
 export class SandboxModule {}

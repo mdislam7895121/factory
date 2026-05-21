@@ -245,6 +245,29 @@ exports.Prisma.AgentEventScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.CouncilSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  task: 'task',
+  context: 'context',
+  status: 'status',
+  result: 'result',
+  errorMsg: 'errorMsg',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CouncilMessageScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  agentRole: 'agentRole',
+  round: 'round',
+  content: 'content',
+  inputTokens: 'inputTokens',
+  outTokens: 'outTokens',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -286,6 +309,13 @@ exports.SandboxStatus = exports.$Enums.SandboxStatus = {
   FAILED: 'FAILED'
 };
 
+exports.CouncilStatus = exports.$Enums.CouncilStatus = {
+  PENDING: 'PENDING',
+  RUNNING: 'RUNNING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
 exports.Prisma.ModelName = {
   HealthCheck: 'HealthCheck',
   Template: 'Template',
@@ -298,7 +328,9 @@ exports.Prisma.ModelName = {
   Sandbox: 'Sandbox',
   UsageLog: 'UsageLog',
   AgentMemory: 'AgentMemory',
-  AgentEvent: 'AgentEvent'
+  AgentEvent: 'AgentEvent',
+  CouncilSession: 'CouncilSession',
+  CouncilMessage: 'CouncilMessage'
 };
 
 /**
