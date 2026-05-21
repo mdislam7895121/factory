@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { timingSafeEqual } from 'node:crypto';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {
@@ -355,6 +356,14 @@ function createRateLimitMiddleware(): RequestHandler {
 
   const buckets = new Map<string, { count: number; resetAt: number }>();
 
+  // Periodic cleanup every 60s — not just on rate-limited responses
+  setInterval(() => {
+    const now = Date.now();
+    for (const [k, v] of buckets) {
+      if (now >= v.resetAt) buckets.delete(k);
+    }
+  }, 60_000).unref();
+
   return (req: Request, res: Response, next: NextFunction) => {
     const now = Date.now();
     const route = normalizePath(req.path || req.url || '/');
@@ -370,8 +379,16 @@ function createRateLimitMiddleware(): RequestHandler {
         : routeKey === 'logs-stream'
           ? logsStreamMax
           : defaultMax;
-    const client = (req.ip || req.socket.remoteAddress || 'unknown').trim();
-    const key = `${client}:${routeKey}`;
+
+    // Respect X-Forwarded-For when behind a trusted proxy
+    const forwarded = req.headers['x-forwarded-for'];
+    const clientIp = (
+      (Array.isArray(forwarded) ? forwarded[0] : forwarded)?.split(',')[0]?.trim() ||
+      req.ip ||
+      req.socket.remoteAddress ||
+      'unknown'
+    ).trim();
+    const key = `${clientIp}:${routeKey}`;
 
     const existing = buckets.get(key);
     const bucket =
@@ -383,29 +400,12 @@ function createRateLimitMiddleware(): RequestHandler {
     buckets.set(key, bucket);
 
     res.setHeader('X-RateLimit-Limit', String(max));
-    res.setHeader(
-      'X-RateLimit-Remaining',
-      String(Math.max(max - bucket.count, 0)),
-    );
-    res.setHeader(
-      'X-RateLimit-Reset',
-      String(Math.ceil(bucket.resetAt / 1000)),
-    );
+    res.setHeader('X-RateLimit-Remaining', String(Math.max(max - bucket.count, 0)));
+    res.setHeader('X-RateLimit-Reset', String(Math.ceil(bucket.resetAt / 1000)));
 
     if (bucket.count > max) {
-      res.status(429).json({
-        ok: false,
-        error: 'TOO_MANY_REQUESTS',
-      });
+      res.status(429).json({ ok: false, error: 'TOO_MANY_REQUESTS' });
       return;
-    }
-
-    if (buckets.size > 5000) {
-      for (const [bucketKey, value] of buckets) {
-        if (now >= value.resetAt) {
-          buckets.delete(bucketKey);
-        }
-      }
     }
 
     next();
@@ -464,7 +464,14 @@ async function bootstrap() {
           : Array.isArray(headerValue)
             ? (headerValue[0] || '').trim()
             : '';
-      if (providedToken !== debugToken) {
+      try {
+        const a = Buffer.from(providedToken.padEnd(64).slice(0, 64));
+        const b = Buffer.from(debugToken.padEnd(64).slice(0, 64));
+        if (!timingSafeEqual(a, b) || providedToken !== debugToken) {
+          res.status(403).json({ ok: false, error: 'FORBIDDEN' });
+          return;
+        }
+      } catch {
         res.status(403).json({ ok: false, error: 'FORBIDDEN' });
         return;
       }
