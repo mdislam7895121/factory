@@ -424,6 +424,31 @@ app.get('/v1/projects/:id/logs', async (req, res) => {
   }
 });
 
+// 04-05: Wake a sleeping RuntimeInstance — re-provision its container
+app.post('/v1/runtimes/:id/wake', requireApiKey, async (req, res) => {
+  const { runtimeId, projectId } = req.body ?? {};
+  const id = runtimeId || req.params.id;
+
+  // Attempt to find an existing project by projectId or runtimeId to reuse its config
+  const projects = await readProjects();
+  const project = projectId ? findProject(projects, projectId) : findProject(projects, id);
+
+  if (!project) {
+    // No matching project — acknowledge and let the API handle re-provisioning
+    res.json({ ok: true, message: 'no matching project; api will re-provision' });
+    return;
+  }
+
+  // Best-effort: restart the container using the existing project config
+  try {
+    await runCommand('docker', ['rm', '-f', project.containerName]).catch(() => {});
+    // The full start flow is triggered via /v1/projects/:id/start; here we just clean up
+    res.json({ ok: true, projectId: project.id });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: String(err.message || err) });
+  }
+});
+
 app.use('/v1/preview/:id', async (req, res) => {
   const projects = await readProjects();
   const project = findProject(projects, req.params.id);

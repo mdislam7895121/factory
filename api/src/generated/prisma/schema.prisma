@@ -255,6 +255,63 @@ enum LoopRunStatus {
   FAILED
 }
 
+// ── SERIAL 04: Detached Runtime Cloud ────────────────────────────────────────
+
+enum RuntimeStatus {
+  PROVISIONING
+  RUNNING
+  STOPPED
+  CRASHED
+  SLEEPING
+  TERMINATED
+}
+
+enum RuntimeVisibility {
+  PRIVATE
+  PUBLIC
+  PASSWORD
+  TEAM
+}
+
+enum SleepState {
+  AWAKE
+  IDLE
+  SLEEPING
+  WAKING
+}
+
+// Persistent runtime registry — survives API restarts, creator disconnects
+model RuntimeInstance {
+  id              String            @id @default(uuid())
+  projectId       String?
+  workspaceId     String?
+  ownerUserId     String
+  runtimeType     String            @default("docker")
+  containerId     String?
+  previewUrl      String? // stable; never changes after first assignment
+  internalPort    Int?
+  externalPort    Int?
+  status          RuntimeStatus     @default(PROVISIONING)
+  visibility      RuntimeVisibility @default(PRIVATE)
+  sleepState      SleepState        @default(AWAKE)
+  recoveryCount   Int               @default(0)
+  recoveryEvents  String? // JSON: [{at, reason, success}]
+  passwordHash    String? // bcrypt hash for PASSWORD visibility
+  metadata        String? // JSON: arbitrary runtime metadata
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  lastAccessAt    DateTime?
+  lastHeartbeatAt DateTime?
+  expiresAt       DateTime?
+
+  @@index([projectId])
+  @@index([workspaceId])
+  @@index([ownerUserId])
+  @@index([status])
+  @@index([lastHeartbeatAt])
+  @@index([status, lastHeartbeatAt])
+}
+
 // User-registered continuous monitoring loop
 model LoopConfig {
   id           String    @id @default(uuid())

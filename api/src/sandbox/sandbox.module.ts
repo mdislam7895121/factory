@@ -16,8 +16,10 @@ import { CouncilService } from './council/council.service';
 import { CouncilController } from './council/council.controller';
 import { LoopService } from './loop/loop.service';
 import { LoopController } from './loop/loop.controller';
+import { RuntimeModule } from './runtime/runtime.module';
 
 @Module({
+  imports: [RuntimeModule],
   controllers: [
     SandboxController,
     ApiKeyController,

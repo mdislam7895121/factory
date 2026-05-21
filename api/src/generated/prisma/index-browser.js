@@ -268,6 +268,30 @@ exports.Prisma.CouncilMessageScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.RuntimeInstanceScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  workspaceId: 'workspaceId',
+  ownerUserId: 'ownerUserId',
+  runtimeType: 'runtimeType',
+  containerId: 'containerId',
+  previewUrl: 'previewUrl',
+  internalPort: 'internalPort',
+  externalPort: 'externalPort',
+  status: 'status',
+  visibility: 'visibility',
+  sleepState: 'sleepState',
+  recoveryCount: 'recoveryCount',
+  recoveryEvents: 'recoveryEvents',
+  passwordHash: 'passwordHash',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  lastAccessAt: 'lastAccessAt',
+  lastHeartbeatAt: 'lastHeartbeatAt',
+  expiresAt: 'expiresAt'
+};
+
 exports.Prisma.LoopConfigScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -343,6 +367,29 @@ exports.CouncilStatus = exports.$Enums.CouncilStatus = {
   FAILED: 'FAILED'
 };
 
+exports.RuntimeStatus = exports.$Enums.RuntimeStatus = {
+  PROVISIONING: 'PROVISIONING',
+  RUNNING: 'RUNNING',
+  STOPPED: 'STOPPED',
+  CRASHED: 'CRASHED',
+  SLEEPING: 'SLEEPING',
+  TERMINATED: 'TERMINATED'
+};
+
+exports.RuntimeVisibility = exports.$Enums.RuntimeVisibility = {
+  PRIVATE: 'PRIVATE',
+  PUBLIC: 'PUBLIC',
+  PASSWORD: 'PASSWORD',
+  TEAM: 'TEAM'
+};
+
+exports.SleepState = exports.$Enums.SleepState = {
+  AWAKE: 'AWAKE',
+  IDLE: 'IDLE',
+  SLEEPING: 'SLEEPING',
+  WAKING: 'WAKING'
+};
+
 exports.LoopRunStatus = exports.$Enums.LoopRunStatus = {
   RUNNING: 'RUNNING',
   HEALTHY: 'HEALTHY',
@@ -366,6 +413,7 @@ exports.Prisma.ModelName = {
   AgentEvent: 'AgentEvent',
   CouncilSession: 'CouncilSession',
   CouncilMessage: 'CouncilMessage',
+  RuntimeInstance: 'RuntimeInstance',
   LoopConfig: 'LoopConfig',
   LoopRun: 'LoopRun'
 };
