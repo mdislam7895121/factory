@@ -298,6 +298,9 @@ model RuntimeInstance {
   recoveryEvents  String?           // JSON: [{at, reason, success}]
   passwordHash    String?           // bcrypt hash for PASSWORD visibility
   metadata        String?           // JSON: arbitrary runtime metadata
+  allowRemix      Boolean           @default(false) // 06-07: opt-in remix
+  sourceId        String?           // 06-03: parent runtimeId for lineage
+  remixNote       String?           // 06-03: remix description / prompt delta
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   lastAccessAt    DateTime?
@@ -310,6 +313,28 @@ model RuntimeInstance {
   @@index([status])
   @@index([lastHeartbeatAt])
   @@index([status, lastHeartbeatAt])
+  @@index([sourceId])
+}
+
+// ── SERIAL 06: Remix / Fork Engine ───────────────────────────────────────────
+
+// 06-01: Fork ancestry — tracks every remix event
+model ProjectFork {
+  id                   String            @id @default(uuid())
+  sourceProjectId      String?
+  forkProjectId        String?
+  sourceRuntimeId      String
+  forkRuntimeId        String
+  sourcePreviewRouteId String?
+  forkPreviewRouteId   String?
+  ownerUserId          String
+  remixPrompt          String?
+  visibility           RuntimeVisibility @default(PRIVATE)
+  createdAt            DateTime          @default(now())
+
+  @@index([sourceRuntimeId])
+  @@index([forkRuntimeId])
+  @@index([ownerUserId])
 }
 
 // ── SERIAL 05: Public Preview Gateway ────────────────────────────────────────

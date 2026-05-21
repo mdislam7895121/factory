@@ -89,6 +89,11 @@ export type CouncilMessage = $Result.DefaultSelection<Prisma.$CouncilMessagePayl
  */
 export type RuntimeInstance = $Result.DefaultSelection<Prisma.$RuntimeInstancePayload>
 /**
+ * Model ProjectFork
+ * 
+ */
+export type ProjectFork = $Result.DefaultSelection<Prisma.$ProjectForkPayload>
+/**
  * Model PreviewRoute
  * 
  */
@@ -508,6 +513,16 @@ export class PrismaClient<
     * ```
     */
   get runtimeInstance(): Prisma.RuntimeInstanceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.projectFork`: Exposes CRUD operations for the **ProjectFork** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProjectForks
+    * const projectForks = await prisma.projectFork.findMany()
+    * ```
+    */
+  get projectFork(): Prisma.ProjectForkDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.previewRoute`: Exposes CRUD operations for the **PreviewRoute** model.
@@ -997,6 +1012,7 @@ export namespace Prisma {
     CouncilSession: 'CouncilSession',
     CouncilMessage: 'CouncilMessage',
     RuntimeInstance: 'RuntimeInstance',
+    ProjectFork: 'ProjectFork',
     PreviewRoute: 'PreviewRoute',
     PreviewAccessLog: 'PreviewAccessLog',
     LoopConfig: 'LoopConfig',
@@ -1016,7 +1032,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user" | "apiKey" | "sandbox" | "usageLog" | "agentMemory" | "agentEvent" | "councilSession" | "councilMessage" | "runtimeInstance" | "previewRoute" | "previewAccessLog" | "loopConfig" | "loopRun"
+      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user" | "apiKey" | "sandbox" | "usageLog" | "agentMemory" | "agentEvent" | "councilSession" | "councilMessage" | "runtimeInstance" | "projectFork" | "previewRoute" | "previewAccessLog" | "loopConfig" | "loopRun"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2130,6 +2146,80 @@ export namespace Prisma {
           }
         }
       }
+      ProjectFork: {
+        payload: Prisma.$ProjectForkPayload<ExtArgs>
+        fields: Prisma.ProjectForkFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProjectForkFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectForkPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProjectForkFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectForkPayload>
+          }
+          findFirst: {
+            args: Prisma.ProjectForkFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectForkPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProjectForkFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectForkPayload>
+          }
+          findMany: {
+            args: Prisma.ProjectForkFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectForkPayload>[]
+          }
+          create: {
+            args: Prisma.ProjectForkCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectForkPayload>
+          }
+          createMany: {
+            args: Prisma.ProjectForkCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProjectForkCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectForkPayload>[]
+          }
+          delete: {
+            args: Prisma.ProjectForkDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectForkPayload>
+          }
+          update: {
+            args: Prisma.ProjectForkUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectForkPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProjectForkDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProjectForkUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProjectForkUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectForkPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProjectForkUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectForkPayload>
+          }
+          aggregate: {
+            args: Prisma.ProjectForkAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProjectFork>
+          }
+          groupBy: {
+            args: Prisma.ProjectForkGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProjectForkGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProjectForkCountArgs<ExtArgs>
+            result: $Utils.Optional<ProjectForkCountAggregateOutputType> | number
+          }
+        }
+      }
       PreviewRoute: {
         payload: Prisma.$PreviewRoutePayload<ExtArgs>
         fields: Prisma.PreviewRouteFieldRefs
@@ -2549,6 +2639,7 @@ export namespace Prisma {
     councilSession?: CouncilSessionOmit
     councilMessage?: CouncilMessageOmit
     runtimeInstance?: RuntimeInstanceOmit
+    projectFork?: ProjectForkOmit
     previewRoute?: PreviewRouteOmit
     previewAccessLog?: PreviewAccessLogOmit
     loopConfig?: LoopConfigOmit
@@ -18367,6 +18458,9 @@ export namespace Prisma {
     recoveryEvents: string | null
     passwordHash: string | null
     metadata: string | null
+    allowRemix: boolean | null
+    sourceId: string | null
+    remixNote: string | null
     createdAt: Date | null
     updatedAt: Date | null
     lastAccessAt: Date | null
@@ -18391,6 +18485,9 @@ export namespace Prisma {
     recoveryEvents: string | null
     passwordHash: string | null
     metadata: string | null
+    allowRemix: boolean | null
+    sourceId: string | null
+    remixNote: string | null
     createdAt: Date | null
     updatedAt: Date | null
     lastAccessAt: Date | null
@@ -18415,6 +18512,9 @@ export namespace Prisma {
     recoveryEvents: number
     passwordHash: number
     metadata: number
+    allowRemix: number
+    sourceId: number
+    remixNote: number
     createdAt: number
     updatedAt: number
     lastAccessAt: number
@@ -18453,6 +18553,9 @@ export namespace Prisma {
     recoveryEvents?: true
     passwordHash?: true
     metadata?: true
+    allowRemix?: true
+    sourceId?: true
+    remixNote?: true
     createdAt?: true
     updatedAt?: true
     lastAccessAt?: true
@@ -18477,6 +18580,9 @@ export namespace Prisma {
     recoveryEvents?: true
     passwordHash?: true
     metadata?: true
+    allowRemix?: true
+    sourceId?: true
+    remixNote?: true
     createdAt?: true
     updatedAt?: true
     lastAccessAt?: true
@@ -18501,6 +18607,9 @@ export namespace Prisma {
     recoveryEvents?: true
     passwordHash?: true
     metadata?: true
+    allowRemix?: true
+    sourceId?: true
+    remixNote?: true
     createdAt?: true
     updatedAt?: true
     lastAccessAt?: true
@@ -18612,6 +18721,9 @@ export namespace Prisma {
     recoveryEvents: string | null
     passwordHash: string | null
     metadata: string | null
+    allowRemix: boolean
+    sourceId: string | null
+    remixNote: string | null
     createdAt: Date
     updatedAt: Date
     lastAccessAt: Date | null
@@ -18655,6 +18767,9 @@ export namespace Prisma {
     recoveryEvents?: boolean
     passwordHash?: boolean
     metadata?: boolean
+    allowRemix?: boolean
+    sourceId?: boolean
+    remixNote?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     lastAccessAt?: boolean
@@ -18679,6 +18794,9 @@ export namespace Prisma {
     recoveryEvents?: boolean
     passwordHash?: boolean
     metadata?: boolean
+    allowRemix?: boolean
+    sourceId?: boolean
+    remixNote?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     lastAccessAt?: boolean
@@ -18703,6 +18821,9 @@ export namespace Prisma {
     recoveryEvents?: boolean
     passwordHash?: boolean
     metadata?: boolean
+    allowRemix?: boolean
+    sourceId?: boolean
+    remixNote?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     lastAccessAt?: boolean
@@ -18727,6 +18848,9 @@ export namespace Prisma {
     recoveryEvents?: boolean
     passwordHash?: boolean
     metadata?: boolean
+    allowRemix?: boolean
+    sourceId?: boolean
+    remixNote?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     lastAccessAt?: boolean
@@ -18734,7 +18858,7 @@ export namespace Prisma {
     expiresAt?: boolean
   }
 
-  export type RuntimeInstanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "workspaceId" | "ownerUserId" | "runtimeType" | "containerId" | "previewUrl" | "internalPort" | "externalPort" | "status" | "visibility" | "sleepState" | "recoveryCount" | "recoveryEvents" | "passwordHash" | "metadata" | "createdAt" | "updatedAt" | "lastAccessAt" | "lastHeartbeatAt" | "expiresAt", ExtArgs["result"]["runtimeInstance"]>
+  export type RuntimeInstanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "workspaceId" | "ownerUserId" | "runtimeType" | "containerId" | "previewUrl" | "internalPort" | "externalPort" | "status" | "visibility" | "sleepState" | "recoveryCount" | "recoveryEvents" | "passwordHash" | "metadata" | "allowRemix" | "sourceId" | "remixNote" | "createdAt" | "updatedAt" | "lastAccessAt" | "lastHeartbeatAt" | "expiresAt", ExtArgs["result"]["runtimeInstance"]>
 
   export type $RuntimeInstancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "RuntimeInstance"
@@ -18756,6 +18880,9 @@ export namespace Prisma {
       recoveryEvents: string | null
       passwordHash: string | null
       metadata: string | null
+      allowRemix: boolean
+      sourceId: string | null
+      remixNote: string | null
       createdAt: Date
       updatedAt: Date
       lastAccessAt: Date | null
@@ -19200,6 +19327,9 @@ export namespace Prisma {
     readonly recoveryEvents: FieldRef<"RuntimeInstance", 'String'>
     readonly passwordHash: FieldRef<"RuntimeInstance", 'String'>
     readonly metadata: FieldRef<"RuntimeInstance", 'String'>
+    readonly allowRemix: FieldRef<"RuntimeInstance", 'Boolean'>
+    readonly sourceId: FieldRef<"RuntimeInstance", 'String'>
+    readonly remixNote: FieldRef<"RuntimeInstance", 'String'>
     readonly createdAt: FieldRef<"RuntimeInstance", 'DateTime'>
     readonly updatedAt: FieldRef<"RuntimeInstance", 'DateTime'>
     readonly lastAccessAt: FieldRef<"RuntimeInstance", 'DateTime'>
@@ -19568,6 +19698,1079 @@ export namespace Prisma {
      * Omit specific fields from the RuntimeInstance
      */
     omit?: RuntimeInstanceOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProjectFork
+   */
+
+  export type AggregateProjectFork = {
+    _count: ProjectForkCountAggregateOutputType | null
+    _min: ProjectForkMinAggregateOutputType | null
+    _max: ProjectForkMaxAggregateOutputType | null
+  }
+
+  export type ProjectForkMinAggregateOutputType = {
+    id: string | null
+    sourceProjectId: string | null
+    forkProjectId: string | null
+    sourceRuntimeId: string | null
+    forkRuntimeId: string | null
+    sourcePreviewRouteId: string | null
+    forkPreviewRouteId: string | null
+    ownerUserId: string | null
+    remixPrompt: string | null
+    visibility: $Enums.RuntimeVisibility | null
+    createdAt: Date | null
+  }
+
+  export type ProjectForkMaxAggregateOutputType = {
+    id: string | null
+    sourceProjectId: string | null
+    forkProjectId: string | null
+    sourceRuntimeId: string | null
+    forkRuntimeId: string | null
+    sourcePreviewRouteId: string | null
+    forkPreviewRouteId: string | null
+    ownerUserId: string | null
+    remixPrompt: string | null
+    visibility: $Enums.RuntimeVisibility | null
+    createdAt: Date | null
+  }
+
+  export type ProjectForkCountAggregateOutputType = {
+    id: number
+    sourceProjectId: number
+    forkProjectId: number
+    sourceRuntimeId: number
+    forkRuntimeId: number
+    sourcePreviewRouteId: number
+    forkPreviewRouteId: number
+    ownerUserId: number
+    remixPrompt: number
+    visibility: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ProjectForkMinAggregateInputType = {
+    id?: true
+    sourceProjectId?: true
+    forkProjectId?: true
+    sourceRuntimeId?: true
+    forkRuntimeId?: true
+    sourcePreviewRouteId?: true
+    forkPreviewRouteId?: true
+    ownerUserId?: true
+    remixPrompt?: true
+    visibility?: true
+    createdAt?: true
+  }
+
+  export type ProjectForkMaxAggregateInputType = {
+    id?: true
+    sourceProjectId?: true
+    forkProjectId?: true
+    sourceRuntimeId?: true
+    forkRuntimeId?: true
+    sourcePreviewRouteId?: true
+    forkPreviewRouteId?: true
+    ownerUserId?: true
+    remixPrompt?: true
+    visibility?: true
+    createdAt?: true
+  }
+
+  export type ProjectForkCountAggregateInputType = {
+    id?: true
+    sourceProjectId?: true
+    forkProjectId?: true
+    sourceRuntimeId?: true
+    forkRuntimeId?: true
+    sourcePreviewRouteId?: true
+    forkPreviewRouteId?: true
+    ownerUserId?: true
+    remixPrompt?: true
+    visibility?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ProjectForkAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProjectFork to aggregate.
+     */
+    where?: ProjectForkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectForks to fetch.
+     */
+    orderBy?: ProjectForkOrderByWithRelationInput | ProjectForkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProjectForkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectForks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectForks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProjectForks
+    **/
+    _count?: true | ProjectForkCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProjectForkMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProjectForkMaxAggregateInputType
+  }
+
+  export type GetProjectForkAggregateType<T extends ProjectForkAggregateArgs> = {
+        [P in keyof T & keyof AggregateProjectFork]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProjectFork[P]>
+      : GetScalarType<T[P], AggregateProjectFork[P]>
+  }
+
+
+
+
+  export type ProjectForkGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProjectForkWhereInput
+    orderBy?: ProjectForkOrderByWithAggregationInput | ProjectForkOrderByWithAggregationInput[]
+    by: ProjectForkScalarFieldEnum[] | ProjectForkScalarFieldEnum
+    having?: ProjectForkScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProjectForkCountAggregateInputType | true
+    _min?: ProjectForkMinAggregateInputType
+    _max?: ProjectForkMaxAggregateInputType
+  }
+
+  export type ProjectForkGroupByOutputType = {
+    id: string
+    sourceProjectId: string | null
+    forkProjectId: string | null
+    sourceRuntimeId: string
+    forkRuntimeId: string
+    sourcePreviewRouteId: string | null
+    forkPreviewRouteId: string | null
+    ownerUserId: string
+    remixPrompt: string | null
+    visibility: $Enums.RuntimeVisibility
+    createdAt: Date
+    _count: ProjectForkCountAggregateOutputType | null
+    _min: ProjectForkMinAggregateOutputType | null
+    _max: ProjectForkMaxAggregateOutputType | null
+  }
+
+  type GetProjectForkGroupByPayload<T extends ProjectForkGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProjectForkGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProjectForkGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProjectForkGroupByOutputType[P]>
+            : GetScalarType<T[P], ProjectForkGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProjectForkSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sourceProjectId?: boolean
+    forkProjectId?: boolean
+    sourceRuntimeId?: boolean
+    forkRuntimeId?: boolean
+    sourcePreviewRouteId?: boolean
+    forkPreviewRouteId?: boolean
+    ownerUserId?: boolean
+    remixPrompt?: boolean
+    visibility?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["projectFork"]>
+
+  export type ProjectForkSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sourceProjectId?: boolean
+    forkProjectId?: boolean
+    sourceRuntimeId?: boolean
+    forkRuntimeId?: boolean
+    sourcePreviewRouteId?: boolean
+    forkPreviewRouteId?: boolean
+    ownerUserId?: boolean
+    remixPrompt?: boolean
+    visibility?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["projectFork"]>
+
+  export type ProjectForkSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sourceProjectId?: boolean
+    forkProjectId?: boolean
+    sourceRuntimeId?: boolean
+    forkRuntimeId?: boolean
+    sourcePreviewRouteId?: boolean
+    forkPreviewRouteId?: boolean
+    ownerUserId?: boolean
+    remixPrompt?: boolean
+    visibility?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["projectFork"]>
+
+  export type ProjectForkSelectScalar = {
+    id?: boolean
+    sourceProjectId?: boolean
+    forkProjectId?: boolean
+    sourceRuntimeId?: boolean
+    forkRuntimeId?: boolean
+    sourcePreviewRouteId?: boolean
+    forkPreviewRouteId?: boolean
+    ownerUserId?: boolean
+    remixPrompt?: boolean
+    visibility?: boolean
+    createdAt?: boolean
+  }
+
+  export type ProjectForkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sourceProjectId" | "forkProjectId" | "sourceRuntimeId" | "forkRuntimeId" | "sourcePreviewRouteId" | "forkPreviewRouteId" | "ownerUserId" | "remixPrompt" | "visibility" | "createdAt", ExtArgs["result"]["projectFork"]>
+
+  export type $ProjectForkPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProjectFork"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      sourceProjectId: string | null
+      forkProjectId: string | null
+      sourceRuntimeId: string
+      forkRuntimeId: string
+      sourcePreviewRouteId: string | null
+      forkPreviewRouteId: string | null
+      ownerUserId: string
+      remixPrompt: string | null
+      visibility: $Enums.RuntimeVisibility
+      createdAt: Date
+    }, ExtArgs["result"]["projectFork"]>
+    composites: {}
+  }
+
+  type ProjectForkGetPayload<S extends boolean | null | undefined | ProjectForkDefaultArgs> = $Result.GetResult<Prisma.$ProjectForkPayload, S>
+
+  type ProjectForkCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProjectForkFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProjectForkCountAggregateInputType | true
+    }
+
+  export interface ProjectForkDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProjectFork'], meta: { name: 'ProjectFork' } }
+    /**
+     * Find zero or one ProjectFork that matches the filter.
+     * @param {ProjectForkFindUniqueArgs} args - Arguments to find a ProjectFork
+     * @example
+     * // Get one ProjectFork
+     * const projectFork = await prisma.projectFork.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProjectForkFindUniqueArgs>(args: SelectSubset<T, ProjectForkFindUniqueArgs<ExtArgs>>): Prisma__ProjectForkClient<$Result.GetResult<Prisma.$ProjectForkPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProjectFork that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProjectForkFindUniqueOrThrowArgs} args - Arguments to find a ProjectFork
+     * @example
+     * // Get one ProjectFork
+     * const projectFork = await prisma.projectFork.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProjectForkFindUniqueOrThrowArgs>(args: SelectSubset<T, ProjectForkFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProjectForkClient<$Result.GetResult<Prisma.$ProjectForkPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProjectFork that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectForkFindFirstArgs} args - Arguments to find a ProjectFork
+     * @example
+     * // Get one ProjectFork
+     * const projectFork = await prisma.projectFork.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProjectForkFindFirstArgs>(args?: SelectSubset<T, ProjectForkFindFirstArgs<ExtArgs>>): Prisma__ProjectForkClient<$Result.GetResult<Prisma.$ProjectForkPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProjectFork that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectForkFindFirstOrThrowArgs} args - Arguments to find a ProjectFork
+     * @example
+     * // Get one ProjectFork
+     * const projectFork = await prisma.projectFork.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProjectForkFindFirstOrThrowArgs>(args?: SelectSubset<T, ProjectForkFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProjectForkClient<$Result.GetResult<Prisma.$ProjectForkPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProjectForks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectForkFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProjectForks
+     * const projectForks = await prisma.projectFork.findMany()
+     * 
+     * // Get first 10 ProjectForks
+     * const projectForks = await prisma.projectFork.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const projectForkWithIdOnly = await prisma.projectFork.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProjectForkFindManyArgs>(args?: SelectSubset<T, ProjectForkFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectForkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProjectFork.
+     * @param {ProjectForkCreateArgs} args - Arguments to create a ProjectFork.
+     * @example
+     * // Create one ProjectFork
+     * const ProjectFork = await prisma.projectFork.create({
+     *   data: {
+     *     // ... data to create a ProjectFork
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProjectForkCreateArgs>(args: SelectSubset<T, ProjectForkCreateArgs<ExtArgs>>): Prisma__ProjectForkClient<$Result.GetResult<Prisma.$ProjectForkPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProjectForks.
+     * @param {ProjectForkCreateManyArgs} args - Arguments to create many ProjectForks.
+     * @example
+     * // Create many ProjectForks
+     * const projectFork = await prisma.projectFork.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProjectForkCreateManyArgs>(args?: SelectSubset<T, ProjectForkCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProjectForks and returns the data saved in the database.
+     * @param {ProjectForkCreateManyAndReturnArgs} args - Arguments to create many ProjectForks.
+     * @example
+     * // Create many ProjectForks
+     * const projectFork = await prisma.projectFork.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProjectForks and only return the `id`
+     * const projectForkWithIdOnly = await prisma.projectFork.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProjectForkCreateManyAndReturnArgs>(args?: SelectSubset<T, ProjectForkCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectForkPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProjectFork.
+     * @param {ProjectForkDeleteArgs} args - Arguments to delete one ProjectFork.
+     * @example
+     * // Delete one ProjectFork
+     * const ProjectFork = await prisma.projectFork.delete({
+     *   where: {
+     *     // ... filter to delete one ProjectFork
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProjectForkDeleteArgs>(args: SelectSubset<T, ProjectForkDeleteArgs<ExtArgs>>): Prisma__ProjectForkClient<$Result.GetResult<Prisma.$ProjectForkPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProjectFork.
+     * @param {ProjectForkUpdateArgs} args - Arguments to update one ProjectFork.
+     * @example
+     * // Update one ProjectFork
+     * const projectFork = await prisma.projectFork.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProjectForkUpdateArgs>(args: SelectSubset<T, ProjectForkUpdateArgs<ExtArgs>>): Prisma__ProjectForkClient<$Result.GetResult<Prisma.$ProjectForkPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProjectForks.
+     * @param {ProjectForkDeleteManyArgs} args - Arguments to filter ProjectForks to delete.
+     * @example
+     * // Delete a few ProjectForks
+     * const { count } = await prisma.projectFork.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProjectForkDeleteManyArgs>(args?: SelectSubset<T, ProjectForkDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProjectForks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectForkUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProjectForks
+     * const projectFork = await prisma.projectFork.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProjectForkUpdateManyArgs>(args: SelectSubset<T, ProjectForkUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProjectForks and returns the data updated in the database.
+     * @param {ProjectForkUpdateManyAndReturnArgs} args - Arguments to update many ProjectForks.
+     * @example
+     * // Update many ProjectForks
+     * const projectFork = await prisma.projectFork.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProjectForks and only return the `id`
+     * const projectForkWithIdOnly = await prisma.projectFork.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProjectForkUpdateManyAndReturnArgs>(args: SelectSubset<T, ProjectForkUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectForkPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProjectFork.
+     * @param {ProjectForkUpsertArgs} args - Arguments to update or create a ProjectFork.
+     * @example
+     * // Update or create a ProjectFork
+     * const projectFork = await prisma.projectFork.upsert({
+     *   create: {
+     *     // ... data to create a ProjectFork
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProjectFork we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProjectForkUpsertArgs>(args: SelectSubset<T, ProjectForkUpsertArgs<ExtArgs>>): Prisma__ProjectForkClient<$Result.GetResult<Prisma.$ProjectForkPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProjectForks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectForkCountArgs} args - Arguments to filter ProjectForks to count.
+     * @example
+     * // Count the number of ProjectForks
+     * const count = await prisma.projectFork.count({
+     *   where: {
+     *     // ... the filter for the ProjectForks we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProjectForkCountArgs>(
+      args?: Subset<T, ProjectForkCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProjectForkCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProjectFork.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectForkAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProjectForkAggregateArgs>(args: Subset<T, ProjectForkAggregateArgs>): Prisma.PrismaPromise<GetProjectForkAggregateType<T>>
+
+    /**
+     * Group by ProjectFork.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectForkGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProjectForkGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProjectForkGroupByArgs['orderBy'] }
+        : { orderBy?: ProjectForkGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProjectForkGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProjectForkGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProjectFork model
+   */
+  readonly fields: ProjectForkFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProjectFork.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProjectForkClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProjectFork model
+   */
+  interface ProjectForkFieldRefs {
+    readonly id: FieldRef<"ProjectFork", 'String'>
+    readonly sourceProjectId: FieldRef<"ProjectFork", 'String'>
+    readonly forkProjectId: FieldRef<"ProjectFork", 'String'>
+    readonly sourceRuntimeId: FieldRef<"ProjectFork", 'String'>
+    readonly forkRuntimeId: FieldRef<"ProjectFork", 'String'>
+    readonly sourcePreviewRouteId: FieldRef<"ProjectFork", 'String'>
+    readonly forkPreviewRouteId: FieldRef<"ProjectFork", 'String'>
+    readonly ownerUserId: FieldRef<"ProjectFork", 'String'>
+    readonly remixPrompt: FieldRef<"ProjectFork", 'String'>
+    readonly visibility: FieldRef<"ProjectFork", 'RuntimeVisibility'>
+    readonly createdAt: FieldRef<"ProjectFork", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProjectFork findUnique
+   */
+  export type ProjectForkFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectFork
+     */
+    select?: ProjectForkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectFork
+     */
+    omit?: ProjectForkOmit<ExtArgs> | null
+    /**
+     * Filter, which ProjectFork to fetch.
+     */
+    where: ProjectForkWhereUniqueInput
+  }
+
+  /**
+   * ProjectFork findUniqueOrThrow
+   */
+  export type ProjectForkFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectFork
+     */
+    select?: ProjectForkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectFork
+     */
+    omit?: ProjectForkOmit<ExtArgs> | null
+    /**
+     * Filter, which ProjectFork to fetch.
+     */
+    where: ProjectForkWhereUniqueInput
+  }
+
+  /**
+   * ProjectFork findFirst
+   */
+  export type ProjectForkFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectFork
+     */
+    select?: ProjectForkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectFork
+     */
+    omit?: ProjectForkOmit<ExtArgs> | null
+    /**
+     * Filter, which ProjectFork to fetch.
+     */
+    where?: ProjectForkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectForks to fetch.
+     */
+    orderBy?: ProjectForkOrderByWithRelationInput | ProjectForkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProjectForks.
+     */
+    cursor?: ProjectForkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectForks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectForks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProjectForks.
+     */
+    distinct?: ProjectForkScalarFieldEnum | ProjectForkScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectFork findFirstOrThrow
+   */
+  export type ProjectForkFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectFork
+     */
+    select?: ProjectForkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectFork
+     */
+    omit?: ProjectForkOmit<ExtArgs> | null
+    /**
+     * Filter, which ProjectFork to fetch.
+     */
+    where?: ProjectForkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectForks to fetch.
+     */
+    orderBy?: ProjectForkOrderByWithRelationInput | ProjectForkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProjectForks.
+     */
+    cursor?: ProjectForkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectForks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectForks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProjectForks.
+     */
+    distinct?: ProjectForkScalarFieldEnum | ProjectForkScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectFork findMany
+   */
+  export type ProjectForkFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectFork
+     */
+    select?: ProjectForkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectFork
+     */
+    omit?: ProjectForkOmit<ExtArgs> | null
+    /**
+     * Filter, which ProjectForks to fetch.
+     */
+    where?: ProjectForkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectForks to fetch.
+     */
+    orderBy?: ProjectForkOrderByWithRelationInput | ProjectForkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProjectForks.
+     */
+    cursor?: ProjectForkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectForks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectForks.
+     */
+    skip?: number
+    distinct?: ProjectForkScalarFieldEnum | ProjectForkScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectFork create
+   */
+  export type ProjectForkCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectFork
+     */
+    select?: ProjectForkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectFork
+     */
+    omit?: ProjectForkOmit<ExtArgs> | null
+    /**
+     * The data needed to create a ProjectFork.
+     */
+    data: XOR<ProjectForkCreateInput, ProjectForkUncheckedCreateInput>
+  }
+
+  /**
+   * ProjectFork createMany
+   */
+  export type ProjectForkCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProjectForks.
+     */
+    data: ProjectForkCreateManyInput | ProjectForkCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProjectFork createManyAndReturn
+   */
+  export type ProjectForkCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectFork
+     */
+    select?: ProjectForkSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectFork
+     */
+    omit?: ProjectForkOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProjectForks.
+     */
+    data: ProjectForkCreateManyInput | ProjectForkCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProjectFork update
+   */
+  export type ProjectForkUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectFork
+     */
+    select?: ProjectForkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectFork
+     */
+    omit?: ProjectForkOmit<ExtArgs> | null
+    /**
+     * The data needed to update a ProjectFork.
+     */
+    data: XOR<ProjectForkUpdateInput, ProjectForkUncheckedUpdateInput>
+    /**
+     * Choose, which ProjectFork to update.
+     */
+    where: ProjectForkWhereUniqueInput
+  }
+
+  /**
+   * ProjectFork updateMany
+   */
+  export type ProjectForkUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProjectForks.
+     */
+    data: XOR<ProjectForkUpdateManyMutationInput, ProjectForkUncheckedUpdateManyInput>
+    /**
+     * Filter which ProjectForks to update
+     */
+    where?: ProjectForkWhereInput
+    /**
+     * Limit how many ProjectForks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectFork updateManyAndReturn
+   */
+  export type ProjectForkUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectFork
+     */
+    select?: ProjectForkSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectFork
+     */
+    omit?: ProjectForkOmit<ExtArgs> | null
+    /**
+     * The data used to update ProjectForks.
+     */
+    data: XOR<ProjectForkUpdateManyMutationInput, ProjectForkUncheckedUpdateManyInput>
+    /**
+     * Filter which ProjectForks to update
+     */
+    where?: ProjectForkWhereInput
+    /**
+     * Limit how many ProjectForks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectFork upsert
+   */
+  export type ProjectForkUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectFork
+     */
+    select?: ProjectForkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectFork
+     */
+    omit?: ProjectForkOmit<ExtArgs> | null
+    /**
+     * The filter to search for the ProjectFork to update in case it exists.
+     */
+    where: ProjectForkWhereUniqueInput
+    /**
+     * In case the ProjectFork found by the `where` argument doesn't exist, create a new ProjectFork with this data.
+     */
+    create: XOR<ProjectForkCreateInput, ProjectForkUncheckedCreateInput>
+    /**
+     * In case the ProjectFork was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProjectForkUpdateInput, ProjectForkUncheckedUpdateInput>
+  }
+
+  /**
+   * ProjectFork delete
+   */
+  export type ProjectForkDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectFork
+     */
+    select?: ProjectForkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectFork
+     */
+    omit?: ProjectForkOmit<ExtArgs> | null
+    /**
+     * Filter which ProjectFork to delete.
+     */
+    where: ProjectForkWhereUniqueInput
+  }
+
+  /**
+   * ProjectFork deleteMany
+   */
+  export type ProjectForkDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProjectForks to delete
+     */
+    where?: ProjectForkWhereInput
+    /**
+     * Limit how many ProjectForks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectFork without action
+   */
+  export type ProjectForkDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectFork
+     */
+    select?: ProjectForkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectFork
+     */
+    omit?: ProjectForkOmit<ExtArgs> | null
   }
 
 
@@ -24242,6 +25445,9 @@ export namespace Prisma {
     recoveryEvents: 'recoveryEvents',
     passwordHash: 'passwordHash',
     metadata: 'metadata',
+    allowRemix: 'allowRemix',
+    sourceId: 'sourceId',
+    remixNote: 'remixNote',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     lastAccessAt: 'lastAccessAt',
@@ -24250,6 +25456,23 @@ export namespace Prisma {
   };
 
   export type RuntimeInstanceScalarFieldEnum = (typeof RuntimeInstanceScalarFieldEnum)[keyof typeof RuntimeInstanceScalarFieldEnum]
+
+
+  export const ProjectForkScalarFieldEnum: {
+    id: 'id',
+    sourceProjectId: 'sourceProjectId',
+    forkProjectId: 'forkProjectId',
+    sourceRuntimeId: 'sourceRuntimeId',
+    forkRuntimeId: 'forkRuntimeId',
+    sourcePreviewRouteId: 'sourcePreviewRouteId',
+    forkPreviewRouteId: 'forkPreviewRouteId',
+    ownerUserId: 'ownerUserId',
+    remixPrompt: 'remixPrompt',
+    visibility: 'visibility',
+    createdAt: 'createdAt'
+  };
+
+  export type ProjectForkScalarFieldEnum = (typeof ProjectForkScalarFieldEnum)[keyof typeof ProjectForkScalarFieldEnum]
 
 
   export const PreviewRouteScalarFieldEnum: {
@@ -25526,6 +26749,9 @@ export namespace Prisma {
     recoveryEvents?: StringNullableFilter<"RuntimeInstance"> | string | null
     passwordHash?: StringNullableFilter<"RuntimeInstance"> | string | null
     metadata?: StringNullableFilter<"RuntimeInstance"> | string | null
+    allowRemix?: BoolFilter<"RuntimeInstance"> | boolean
+    sourceId?: StringNullableFilter<"RuntimeInstance"> | string | null
+    remixNote?: StringNullableFilter<"RuntimeInstance"> | string | null
     createdAt?: DateTimeFilter<"RuntimeInstance"> | Date | string
     updatedAt?: DateTimeFilter<"RuntimeInstance"> | Date | string
     lastAccessAt?: DateTimeNullableFilter<"RuntimeInstance"> | Date | string | null
@@ -25550,6 +26776,9 @@ export namespace Prisma {
     recoveryEvents?: SortOrderInput | SortOrder
     passwordHash?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    allowRemix?: SortOrder
+    sourceId?: SortOrderInput | SortOrder
+    remixNote?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     lastAccessAt?: SortOrderInput | SortOrder
@@ -25577,6 +26806,9 @@ export namespace Prisma {
     recoveryEvents?: StringNullableFilter<"RuntimeInstance"> | string | null
     passwordHash?: StringNullableFilter<"RuntimeInstance"> | string | null
     metadata?: StringNullableFilter<"RuntimeInstance"> | string | null
+    allowRemix?: BoolFilter<"RuntimeInstance"> | boolean
+    sourceId?: StringNullableFilter<"RuntimeInstance"> | string | null
+    remixNote?: StringNullableFilter<"RuntimeInstance"> | string | null
     createdAt?: DateTimeFilter<"RuntimeInstance"> | Date | string
     updatedAt?: DateTimeFilter<"RuntimeInstance"> | Date | string
     lastAccessAt?: DateTimeNullableFilter<"RuntimeInstance"> | Date | string | null
@@ -25601,6 +26833,9 @@ export namespace Prisma {
     recoveryEvents?: SortOrderInput | SortOrder
     passwordHash?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    allowRemix?: SortOrder
+    sourceId?: SortOrderInput | SortOrder
+    remixNote?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     lastAccessAt?: SortOrderInput | SortOrder
@@ -25633,11 +26868,96 @@ export namespace Prisma {
     recoveryEvents?: StringNullableWithAggregatesFilter<"RuntimeInstance"> | string | null
     passwordHash?: StringNullableWithAggregatesFilter<"RuntimeInstance"> | string | null
     metadata?: StringNullableWithAggregatesFilter<"RuntimeInstance"> | string | null
+    allowRemix?: BoolWithAggregatesFilter<"RuntimeInstance"> | boolean
+    sourceId?: StringNullableWithAggregatesFilter<"RuntimeInstance"> | string | null
+    remixNote?: StringNullableWithAggregatesFilter<"RuntimeInstance"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"RuntimeInstance"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"RuntimeInstance"> | Date | string
     lastAccessAt?: DateTimeNullableWithAggregatesFilter<"RuntimeInstance"> | Date | string | null
     lastHeartbeatAt?: DateTimeNullableWithAggregatesFilter<"RuntimeInstance"> | Date | string | null
     expiresAt?: DateTimeNullableWithAggregatesFilter<"RuntimeInstance"> | Date | string | null
+  }
+
+  export type ProjectForkWhereInput = {
+    AND?: ProjectForkWhereInput | ProjectForkWhereInput[]
+    OR?: ProjectForkWhereInput[]
+    NOT?: ProjectForkWhereInput | ProjectForkWhereInput[]
+    id?: StringFilter<"ProjectFork"> | string
+    sourceProjectId?: StringNullableFilter<"ProjectFork"> | string | null
+    forkProjectId?: StringNullableFilter<"ProjectFork"> | string | null
+    sourceRuntimeId?: StringFilter<"ProjectFork"> | string
+    forkRuntimeId?: StringFilter<"ProjectFork"> | string
+    sourcePreviewRouteId?: StringNullableFilter<"ProjectFork"> | string | null
+    forkPreviewRouteId?: StringNullableFilter<"ProjectFork"> | string | null
+    ownerUserId?: StringFilter<"ProjectFork"> | string
+    remixPrompt?: StringNullableFilter<"ProjectFork"> | string | null
+    visibility?: EnumRuntimeVisibilityFilter<"ProjectFork"> | $Enums.RuntimeVisibility
+    createdAt?: DateTimeFilter<"ProjectFork"> | Date | string
+  }
+
+  export type ProjectForkOrderByWithRelationInput = {
+    id?: SortOrder
+    sourceProjectId?: SortOrderInput | SortOrder
+    forkProjectId?: SortOrderInput | SortOrder
+    sourceRuntimeId?: SortOrder
+    forkRuntimeId?: SortOrder
+    sourcePreviewRouteId?: SortOrderInput | SortOrder
+    forkPreviewRouteId?: SortOrderInput | SortOrder
+    ownerUserId?: SortOrder
+    remixPrompt?: SortOrderInput | SortOrder
+    visibility?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProjectForkWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProjectForkWhereInput | ProjectForkWhereInput[]
+    OR?: ProjectForkWhereInput[]
+    NOT?: ProjectForkWhereInput | ProjectForkWhereInput[]
+    sourceProjectId?: StringNullableFilter<"ProjectFork"> | string | null
+    forkProjectId?: StringNullableFilter<"ProjectFork"> | string | null
+    sourceRuntimeId?: StringFilter<"ProjectFork"> | string
+    forkRuntimeId?: StringFilter<"ProjectFork"> | string
+    sourcePreviewRouteId?: StringNullableFilter<"ProjectFork"> | string | null
+    forkPreviewRouteId?: StringNullableFilter<"ProjectFork"> | string | null
+    ownerUserId?: StringFilter<"ProjectFork"> | string
+    remixPrompt?: StringNullableFilter<"ProjectFork"> | string | null
+    visibility?: EnumRuntimeVisibilityFilter<"ProjectFork"> | $Enums.RuntimeVisibility
+    createdAt?: DateTimeFilter<"ProjectFork"> | Date | string
+  }, "id">
+
+  export type ProjectForkOrderByWithAggregationInput = {
+    id?: SortOrder
+    sourceProjectId?: SortOrderInput | SortOrder
+    forkProjectId?: SortOrderInput | SortOrder
+    sourceRuntimeId?: SortOrder
+    forkRuntimeId?: SortOrder
+    sourcePreviewRouteId?: SortOrderInput | SortOrder
+    forkPreviewRouteId?: SortOrderInput | SortOrder
+    ownerUserId?: SortOrder
+    remixPrompt?: SortOrderInput | SortOrder
+    visibility?: SortOrder
+    createdAt?: SortOrder
+    _count?: ProjectForkCountOrderByAggregateInput
+    _max?: ProjectForkMaxOrderByAggregateInput
+    _min?: ProjectForkMinOrderByAggregateInput
+  }
+
+  export type ProjectForkScalarWhereWithAggregatesInput = {
+    AND?: ProjectForkScalarWhereWithAggregatesInput | ProjectForkScalarWhereWithAggregatesInput[]
+    OR?: ProjectForkScalarWhereWithAggregatesInput[]
+    NOT?: ProjectForkScalarWhereWithAggregatesInput | ProjectForkScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProjectFork"> | string
+    sourceProjectId?: StringNullableWithAggregatesFilter<"ProjectFork"> | string | null
+    forkProjectId?: StringNullableWithAggregatesFilter<"ProjectFork"> | string | null
+    sourceRuntimeId?: StringWithAggregatesFilter<"ProjectFork"> | string
+    forkRuntimeId?: StringWithAggregatesFilter<"ProjectFork"> | string
+    sourcePreviewRouteId?: StringNullableWithAggregatesFilter<"ProjectFork"> | string | null
+    forkPreviewRouteId?: StringNullableWithAggregatesFilter<"ProjectFork"> | string | null
+    ownerUserId?: StringWithAggregatesFilter<"ProjectFork"> | string
+    remixPrompt?: StringNullableWithAggregatesFilter<"ProjectFork"> | string | null
+    visibility?: EnumRuntimeVisibilityWithAggregatesFilter<"ProjectFork"> | $Enums.RuntimeVisibility
+    createdAt?: DateTimeWithAggregatesFilter<"ProjectFork"> | Date | string
   }
 
   export type PreviewRouteWhereInput = {
@@ -27027,6 +28347,9 @@ export namespace Prisma {
     recoveryEvents?: string | null
     passwordHash?: string | null
     metadata?: string | null
+    allowRemix?: boolean
+    sourceId?: string | null
+    remixNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     lastAccessAt?: Date | string | null
@@ -27051,6 +28374,9 @@ export namespace Prisma {
     recoveryEvents?: string | null
     passwordHash?: string | null
     metadata?: string | null
+    allowRemix?: boolean
+    sourceId?: string | null
+    remixNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     lastAccessAt?: Date | string | null
@@ -27075,6 +28401,9 @@ export namespace Prisma {
     recoveryEvents?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    allowRemix?: BoolFieldUpdateOperationsInput | boolean
+    sourceId?: NullableStringFieldUpdateOperationsInput | string | null
+    remixNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lastAccessAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -27099,6 +28428,9 @@ export namespace Prisma {
     recoveryEvents?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    allowRemix?: BoolFieldUpdateOperationsInput | boolean
+    sourceId?: NullableStringFieldUpdateOperationsInput | string | null
+    remixNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lastAccessAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -27123,6 +28455,9 @@ export namespace Prisma {
     recoveryEvents?: string | null
     passwordHash?: string | null
     metadata?: string | null
+    allowRemix?: boolean
+    sourceId?: string | null
+    remixNote?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     lastAccessAt?: Date | string | null
@@ -27147,6 +28482,9 @@ export namespace Prisma {
     recoveryEvents?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    allowRemix?: BoolFieldUpdateOperationsInput | boolean
+    sourceId?: NullableStringFieldUpdateOperationsInput | string | null
+    remixNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lastAccessAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -27171,11 +28509,112 @@ export namespace Prisma {
     recoveryEvents?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    allowRemix?: BoolFieldUpdateOperationsInput | boolean
+    sourceId?: NullableStringFieldUpdateOperationsInput | string | null
+    remixNote?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lastAccessAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastHeartbeatAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ProjectForkCreateInput = {
+    id?: string
+    sourceProjectId?: string | null
+    forkProjectId?: string | null
+    sourceRuntimeId: string
+    forkRuntimeId: string
+    sourcePreviewRouteId?: string | null
+    forkPreviewRouteId?: string | null
+    ownerUserId: string
+    remixPrompt?: string | null
+    visibility?: $Enums.RuntimeVisibility
+    createdAt?: Date | string
+  }
+
+  export type ProjectForkUncheckedCreateInput = {
+    id?: string
+    sourceProjectId?: string | null
+    forkProjectId?: string | null
+    sourceRuntimeId: string
+    forkRuntimeId: string
+    sourcePreviewRouteId?: string | null
+    forkPreviewRouteId?: string | null
+    ownerUserId: string
+    remixPrompt?: string | null
+    visibility?: $Enums.RuntimeVisibility
+    createdAt?: Date | string
+  }
+
+  export type ProjectForkUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sourceProjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    forkProjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceRuntimeId?: StringFieldUpdateOperationsInput | string
+    forkRuntimeId?: StringFieldUpdateOperationsInput | string
+    sourcePreviewRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    forkPreviewRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: StringFieldUpdateOperationsInput | string
+    remixPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumRuntimeVisibilityFieldUpdateOperationsInput | $Enums.RuntimeVisibility
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectForkUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sourceProjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    forkProjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceRuntimeId?: StringFieldUpdateOperationsInput | string
+    forkRuntimeId?: StringFieldUpdateOperationsInput | string
+    sourcePreviewRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    forkPreviewRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: StringFieldUpdateOperationsInput | string
+    remixPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumRuntimeVisibilityFieldUpdateOperationsInput | $Enums.RuntimeVisibility
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectForkCreateManyInput = {
+    id?: string
+    sourceProjectId?: string | null
+    forkProjectId?: string | null
+    sourceRuntimeId: string
+    forkRuntimeId: string
+    sourcePreviewRouteId?: string | null
+    forkPreviewRouteId?: string | null
+    ownerUserId: string
+    remixPrompt?: string | null
+    visibility?: $Enums.RuntimeVisibility
+    createdAt?: Date | string
+  }
+
+  export type ProjectForkUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sourceProjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    forkProjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceRuntimeId?: StringFieldUpdateOperationsInput | string
+    forkRuntimeId?: StringFieldUpdateOperationsInput | string
+    sourcePreviewRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    forkPreviewRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: StringFieldUpdateOperationsInput | string
+    remixPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumRuntimeVisibilityFieldUpdateOperationsInput | $Enums.RuntimeVisibility
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectForkUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sourceProjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    forkProjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceRuntimeId?: StringFieldUpdateOperationsInput | string
+    forkRuntimeId?: StringFieldUpdateOperationsInput | string
+    sourcePreviewRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    forkPreviewRouteId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerUserId?: StringFieldUpdateOperationsInput | string
+    remixPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumRuntimeVisibilityFieldUpdateOperationsInput | $Enums.RuntimeVisibility
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PreviewRouteCreateInput = {
@@ -28466,6 +29905,9 @@ export namespace Prisma {
     recoveryEvents?: SortOrder
     passwordHash?: SortOrder
     metadata?: SortOrder
+    allowRemix?: SortOrder
+    sourceId?: SortOrder
+    remixNote?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     lastAccessAt?: SortOrder
@@ -28496,6 +29938,9 @@ export namespace Prisma {
     recoveryEvents?: SortOrder
     passwordHash?: SortOrder
     metadata?: SortOrder
+    allowRemix?: SortOrder
+    sourceId?: SortOrder
+    remixNote?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     lastAccessAt?: SortOrder
@@ -28520,6 +29965,9 @@ export namespace Prisma {
     recoveryEvents?: SortOrder
     passwordHash?: SortOrder
     metadata?: SortOrder
+    allowRemix?: SortOrder
+    sourceId?: SortOrder
+    remixNote?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     lastAccessAt?: SortOrder
@@ -28561,6 +30009,48 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumSleepStateFilter<$PrismaModel>
     _max?: NestedEnumSleepStateFilter<$PrismaModel>
+  }
+
+  export type ProjectForkCountOrderByAggregateInput = {
+    id?: SortOrder
+    sourceProjectId?: SortOrder
+    forkProjectId?: SortOrder
+    sourceRuntimeId?: SortOrder
+    forkRuntimeId?: SortOrder
+    sourcePreviewRouteId?: SortOrder
+    forkPreviewRouteId?: SortOrder
+    ownerUserId?: SortOrder
+    remixPrompt?: SortOrder
+    visibility?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProjectForkMaxOrderByAggregateInput = {
+    id?: SortOrder
+    sourceProjectId?: SortOrder
+    forkProjectId?: SortOrder
+    sourceRuntimeId?: SortOrder
+    forkRuntimeId?: SortOrder
+    sourcePreviewRouteId?: SortOrder
+    forkPreviewRouteId?: SortOrder
+    ownerUserId?: SortOrder
+    remixPrompt?: SortOrder
+    visibility?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProjectForkMinOrderByAggregateInput = {
+    id?: SortOrder
+    sourceProjectId?: SortOrder
+    forkProjectId?: SortOrder
+    sourceRuntimeId?: SortOrder
+    forkRuntimeId?: SortOrder
+    sourcePreviewRouteId?: SortOrder
+    forkPreviewRouteId?: SortOrder
+    ownerUserId?: SortOrder
+    remixPrompt?: SortOrder
+    visibility?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type PreviewRouteCountOrderByAggregateInput = {

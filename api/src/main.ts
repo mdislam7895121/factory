@@ -426,6 +426,14 @@ function createPreviewMiddleware(
     if (!m) { next(); return; }
     const [, runtimeId, upstream = '/'] = m;
 
+    // Skip API sub-paths — let NestJS controllers handle them
+    const subpath = upstream.split('?')[0];
+    const API_SUBPATHS = ['/token', '/check', '/remix'];
+    if (API_SUBPATHS.some((p) => subpath === p || subpath.startsWith(p + '/'))) {
+      next();
+      return;
+    }
+
     void (async () => {
       try {
         const runtime = await previewService.resolve(runtimeId);

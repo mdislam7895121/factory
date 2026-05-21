@@ -285,11 +285,28 @@ exports.Prisma.RuntimeInstanceScalarFieldEnum = {
   recoveryEvents: 'recoveryEvents',
   passwordHash: 'passwordHash',
   metadata: 'metadata',
+  allowRemix: 'allowRemix',
+  sourceId: 'sourceId',
+  remixNote: 'remixNote',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   lastAccessAt: 'lastAccessAt',
   lastHeartbeatAt: 'lastHeartbeatAt',
   expiresAt: 'expiresAt'
+};
+
+exports.Prisma.ProjectForkScalarFieldEnum = {
+  id: 'id',
+  sourceProjectId: 'sourceProjectId',
+  forkProjectId: 'forkProjectId',
+  sourceRuntimeId: 'sourceRuntimeId',
+  forkRuntimeId: 'forkRuntimeId',
+  sourcePreviewRouteId: 'sourcePreviewRouteId',
+  forkPreviewRouteId: 'forkPreviewRouteId',
+  ownerUserId: 'ownerUserId',
+  remixPrompt: 'remixPrompt',
+  visibility: 'visibility',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.PreviewRouteScalarFieldEnum = {
@@ -435,6 +452,7 @@ exports.Prisma.ModelName = {
   CouncilSession: 'CouncilSession',
   CouncilMessage: 'CouncilMessage',
   RuntimeInstance: 'RuntimeInstance',
+  ProjectFork: 'ProjectFork',
   PreviewRoute: 'PreviewRoute',
   PreviewAccessLog: 'PreviewAccessLog',
   LoopConfig: 'LoopConfig',

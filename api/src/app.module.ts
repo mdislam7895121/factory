@@ -10,9 +10,10 @@ import { WorkspaceService } from './serial15/workspace.service';
 import { ProjectService } from './serial15/project.service';
 import { SandboxModule } from './sandbox/sandbox.module';
 import { PreviewModule } from './preview/preview.module';
+import { RemixModule } from './remix/remix.module';
 
 @Module({
-  imports: [RedisModule, AuthModule, SandboxModule, PreviewModule],
+  imports: [RedisModule, AuthModule, SandboxModule, PreviewModule, RemixModule],
   controllers: [AppController, Serial11Controller],
   providers: [
     AppService,
