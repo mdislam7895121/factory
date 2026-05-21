@@ -109,6 +109,11 @@ export type ProjectSnapshot = $Result.DefaultSelection<Prisma.$ProjectSnapshotPa
  */
 export type RuntimeRecoveryEvent = $Result.DefaultSelection<Prisma.$RuntimeRecoveryEventPayload>
 /**
+ * Model PreviewAbuseReport
+ * 
+ */
+export type PreviewAbuseReport = $Result.DefaultSelection<Prisma.$PreviewAbuseReportPayload>
+/**
  * Model PreviewRoute
  * 
  */
@@ -666,6 +671,16 @@ export class PrismaClient<
   get runtimeRecoveryEvent(): Prisma.RuntimeRecoveryEventDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.previewAbuseReport`: Exposes CRUD operations for the **PreviewAbuseReport** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PreviewAbuseReports
+    * const previewAbuseReports = await prisma.previewAbuseReport.findMany()
+    * ```
+    */
+  get previewAbuseReport(): Prisma.PreviewAbuseReportDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.previewRoute`: Exposes CRUD operations for the **PreviewRoute** model.
     * Example usage:
     * ```ts
@@ -1157,6 +1172,7 @@ export namespace Prisma {
     AgentActivityEvent: 'AgentActivityEvent',
     ProjectSnapshot: 'ProjectSnapshot',
     RuntimeRecoveryEvent: 'RuntimeRecoveryEvent',
+    PreviewAbuseReport: 'PreviewAbuseReport',
     PreviewRoute: 'PreviewRoute',
     PreviewAccessLog: 'PreviewAccessLog',
     LoopConfig: 'LoopConfig',
@@ -1176,7 +1192,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user" | "apiKey" | "sandbox" | "usageLog" | "agentMemory" | "agentEvent" | "councilSession" | "councilMessage" | "runtimeInstance" | "projectFork" | "agentActivityEvent" | "projectSnapshot" | "runtimeRecoveryEvent" | "previewRoute" | "previewAccessLog" | "loopConfig" | "loopRun"
+      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user" | "apiKey" | "sandbox" | "usageLog" | "agentMemory" | "agentEvent" | "councilSession" | "councilMessage" | "runtimeInstance" | "projectFork" | "agentActivityEvent" | "projectSnapshot" | "runtimeRecoveryEvent" | "previewAbuseReport" | "previewRoute" | "previewAccessLog" | "loopConfig" | "loopRun"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2586,6 +2602,80 @@ export namespace Prisma {
           }
         }
       }
+      PreviewAbuseReport: {
+        payload: Prisma.$PreviewAbuseReportPayload<ExtArgs>
+        fields: Prisma.PreviewAbuseReportFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PreviewAbuseReportFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAbuseReportPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PreviewAbuseReportFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAbuseReportPayload>
+          }
+          findFirst: {
+            args: Prisma.PreviewAbuseReportFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAbuseReportPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PreviewAbuseReportFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAbuseReportPayload>
+          }
+          findMany: {
+            args: Prisma.PreviewAbuseReportFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAbuseReportPayload>[]
+          }
+          create: {
+            args: Prisma.PreviewAbuseReportCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAbuseReportPayload>
+          }
+          createMany: {
+            args: Prisma.PreviewAbuseReportCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PreviewAbuseReportCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAbuseReportPayload>[]
+          }
+          delete: {
+            args: Prisma.PreviewAbuseReportDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAbuseReportPayload>
+          }
+          update: {
+            args: Prisma.PreviewAbuseReportUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAbuseReportPayload>
+          }
+          deleteMany: {
+            args: Prisma.PreviewAbuseReportDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PreviewAbuseReportUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PreviewAbuseReportUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAbuseReportPayload>[]
+          }
+          upsert: {
+            args: Prisma.PreviewAbuseReportUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAbuseReportPayload>
+          }
+          aggregate: {
+            args: Prisma.PreviewAbuseReportAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePreviewAbuseReport>
+          }
+          groupBy: {
+            args: Prisma.PreviewAbuseReportGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PreviewAbuseReportGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PreviewAbuseReportCountArgs<ExtArgs>
+            result: $Utils.Optional<PreviewAbuseReportCountAggregateOutputType> | number
+          }
+        }
+      }
       PreviewRoute: {
         payload: Prisma.$PreviewRoutePayload<ExtArgs>
         fields: Prisma.PreviewRouteFieldRefs
@@ -3009,6 +3099,7 @@ export namespace Prisma {
     agentActivityEvent?: AgentActivityEventOmit
     projectSnapshot?: ProjectSnapshotOmit
     runtimeRecoveryEvent?: RuntimeRecoveryEventOmit
+    previewAbuseReport?: PreviewAbuseReportOmit
     previewRoute?: PreviewRouteOmit
     previewAccessLog?: PreviewAccessLogOmit
     loopConfig?: LoopConfigOmit
@@ -24723,6 +24814,1027 @@ export namespace Prisma {
 
 
   /**
+   * Model PreviewAbuseReport
+   */
+
+  export type AggregatePreviewAbuseReport = {
+    _count: PreviewAbuseReportCountAggregateOutputType | null
+    _min: PreviewAbuseReportMinAggregateOutputType | null
+    _max: PreviewAbuseReportMaxAggregateOutputType | null
+  }
+
+  export type PreviewAbuseReportMinAggregateOutputType = {
+    id: string | null
+    previewId: string | null
+    reason: string | null
+    message: string | null
+    ipHash: string | null
+    userId: string | null
+    createdAt: Date | null
+  }
+
+  export type PreviewAbuseReportMaxAggregateOutputType = {
+    id: string | null
+    previewId: string | null
+    reason: string | null
+    message: string | null
+    ipHash: string | null
+    userId: string | null
+    createdAt: Date | null
+  }
+
+  export type PreviewAbuseReportCountAggregateOutputType = {
+    id: number
+    previewId: number
+    reason: number
+    message: number
+    ipHash: number
+    userId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type PreviewAbuseReportMinAggregateInputType = {
+    id?: true
+    previewId?: true
+    reason?: true
+    message?: true
+    ipHash?: true
+    userId?: true
+    createdAt?: true
+  }
+
+  export type PreviewAbuseReportMaxAggregateInputType = {
+    id?: true
+    previewId?: true
+    reason?: true
+    message?: true
+    ipHash?: true
+    userId?: true
+    createdAt?: true
+  }
+
+  export type PreviewAbuseReportCountAggregateInputType = {
+    id?: true
+    previewId?: true
+    reason?: true
+    message?: true
+    ipHash?: true
+    userId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type PreviewAbuseReportAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PreviewAbuseReport to aggregate.
+     */
+    where?: PreviewAbuseReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreviewAbuseReports to fetch.
+     */
+    orderBy?: PreviewAbuseReportOrderByWithRelationInput | PreviewAbuseReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PreviewAbuseReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreviewAbuseReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreviewAbuseReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PreviewAbuseReports
+    **/
+    _count?: true | PreviewAbuseReportCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PreviewAbuseReportMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PreviewAbuseReportMaxAggregateInputType
+  }
+
+  export type GetPreviewAbuseReportAggregateType<T extends PreviewAbuseReportAggregateArgs> = {
+        [P in keyof T & keyof AggregatePreviewAbuseReport]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePreviewAbuseReport[P]>
+      : GetScalarType<T[P], AggregatePreviewAbuseReport[P]>
+  }
+
+
+
+
+  export type PreviewAbuseReportGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PreviewAbuseReportWhereInput
+    orderBy?: PreviewAbuseReportOrderByWithAggregationInput | PreviewAbuseReportOrderByWithAggregationInput[]
+    by: PreviewAbuseReportScalarFieldEnum[] | PreviewAbuseReportScalarFieldEnum
+    having?: PreviewAbuseReportScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PreviewAbuseReportCountAggregateInputType | true
+    _min?: PreviewAbuseReportMinAggregateInputType
+    _max?: PreviewAbuseReportMaxAggregateInputType
+  }
+
+  export type PreviewAbuseReportGroupByOutputType = {
+    id: string
+    previewId: string
+    reason: string
+    message: string | null
+    ipHash: string
+    userId: string | null
+    createdAt: Date
+    _count: PreviewAbuseReportCountAggregateOutputType | null
+    _min: PreviewAbuseReportMinAggregateOutputType | null
+    _max: PreviewAbuseReportMaxAggregateOutputType | null
+  }
+
+  type GetPreviewAbuseReportGroupByPayload<T extends PreviewAbuseReportGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PreviewAbuseReportGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PreviewAbuseReportGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PreviewAbuseReportGroupByOutputType[P]>
+            : GetScalarType<T[P], PreviewAbuseReportGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PreviewAbuseReportSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    previewId?: boolean
+    reason?: boolean
+    message?: boolean
+    ipHash?: boolean
+    userId?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["previewAbuseReport"]>
+
+  export type PreviewAbuseReportSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    previewId?: boolean
+    reason?: boolean
+    message?: boolean
+    ipHash?: boolean
+    userId?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["previewAbuseReport"]>
+
+  export type PreviewAbuseReportSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    previewId?: boolean
+    reason?: boolean
+    message?: boolean
+    ipHash?: boolean
+    userId?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["previewAbuseReport"]>
+
+  export type PreviewAbuseReportSelectScalar = {
+    id?: boolean
+    previewId?: boolean
+    reason?: boolean
+    message?: boolean
+    ipHash?: boolean
+    userId?: boolean
+    createdAt?: boolean
+  }
+
+  export type PreviewAbuseReportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "previewId" | "reason" | "message" | "ipHash" | "userId" | "createdAt", ExtArgs["result"]["previewAbuseReport"]>
+
+  export type $PreviewAbuseReportPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PreviewAbuseReport"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      previewId: string
+      reason: string
+      message: string | null
+      ipHash: string
+      userId: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["previewAbuseReport"]>
+    composites: {}
+  }
+
+  type PreviewAbuseReportGetPayload<S extends boolean | null | undefined | PreviewAbuseReportDefaultArgs> = $Result.GetResult<Prisma.$PreviewAbuseReportPayload, S>
+
+  type PreviewAbuseReportCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PreviewAbuseReportFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PreviewAbuseReportCountAggregateInputType | true
+    }
+
+  export interface PreviewAbuseReportDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PreviewAbuseReport'], meta: { name: 'PreviewAbuseReport' } }
+    /**
+     * Find zero or one PreviewAbuseReport that matches the filter.
+     * @param {PreviewAbuseReportFindUniqueArgs} args - Arguments to find a PreviewAbuseReport
+     * @example
+     * // Get one PreviewAbuseReport
+     * const previewAbuseReport = await prisma.previewAbuseReport.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PreviewAbuseReportFindUniqueArgs>(args: SelectSubset<T, PreviewAbuseReportFindUniqueArgs<ExtArgs>>): Prisma__PreviewAbuseReportClient<$Result.GetResult<Prisma.$PreviewAbuseReportPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PreviewAbuseReport that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PreviewAbuseReportFindUniqueOrThrowArgs} args - Arguments to find a PreviewAbuseReport
+     * @example
+     * // Get one PreviewAbuseReport
+     * const previewAbuseReport = await prisma.previewAbuseReport.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PreviewAbuseReportFindUniqueOrThrowArgs>(args: SelectSubset<T, PreviewAbuseReportFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PreviewAbuseReportClient<$Result.GetResult<Prisma.$PreviewAbuseReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PreviewAbuseReport that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewAbuseReportFindFirstArgs} args - Arguments to find a PreviewAbuseReport
+     * @example
+     * // Get one PreviewAbuseReport
+     * const previewAbuseReport = await prisma.previewAbuseReport.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PreviewAbuseReportFindFirstArgs>(args?: SelectSubset<T, PreviewAbuseReportFindFirstArgs<ExtArgs>>): Prisma__PreviewAbuseReportClient<$Result.GetResult<Prisma.$PreviewAbuseReportPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PreviewAbuseReport that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewAbuseReportFindFirstOrThrowArgs} args - Arguments to find a PreviewAbuseReport
+     * @example
+     * // Get one PreviewAbuseReport
+     * const previewAbuseReport = await prisma.previewAbuseReport.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PreviewAbuseReportFindFirstOrThrowArgs>(args?: SelectSubset<T, PreviewAbuseReportFindFirstOrThrowArgs<ExtArgs>>): Prisma__PreviewAbuseReportClient<$Result.GetResult<Prisma.$PreviewAbuseReportPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PreviewAbuseReports that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewAbuseReportFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PreviewAbuseReports
+     * const previewAbuseReports = await prisma.previewAbuseReport.findMany()
+     * 
+     * // Get first 10 PreviewAbuseReports
+     * const previewAbuseReports = await prisma.previewAbuseReport.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const previewAbuseReportWithIdOnly = await prisma.previewAbuseReport.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PreviewAbuseReportFindManyArgs>(args?: SelectSubset<T, PreviewAbuseReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreviewAbuseReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PreviewAbuseReport.
+     * @param {PreviewAbuseReportCreateArgs} args - Arguments to create a PreviewAbuseReport.
+     * @example
+     * // Create one PreviewAbuseReport
+     * const PreviewAbuseReport = await prisma.previewAbuseReport.create({
+     *   data: {
+     *     // ... data to create a PreviewAbuseReport
+     *   }
+     * })
+     * 
+     */
+    create<T extends PreviewAbuseReportCreateArgs>(args: SelectSubset<T, PreviewAbuseReportCreateArgs<ExtArgs>>): Prisma__PreviewAbuseReportClient<$Result.GetResult<Prisma.$PreviewAbuseReportPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PreviewAbuseReports.
+     * @param {PreviewAbuseReportCreateManyArgs} args - Arguments to create many PreviewAbuseReports.
+     * @example
+     * // Create many PreviewAbuseReports
+     * const previewAbuseReport = await prisma.previewAbuseReport.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PreviewAbuseReportCreateManyArgs>(args?: SelectSubset<T, PreviewAbuseReportCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PreviewAbuseReports and returns the data saved in the database.
+     * @param {PreviewAbuseReportCreateManyAndReturnArgs} args - Arguments to create many PreviewAbuseReports.
+     * @example
+     * // Create many PreviewAbuseReports
+     * const previewAbuseReport = await prisma.previewAbuseReport.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PreviewAbuseReports and only return the `id`
+     * const previewAbuseReportWithIdOnly = await prisma.previewAbuseReport.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PreviewAbuseReportCreateManyAndReturnArgs>(args?: SelectSubset<T, PreviewAbuseReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreviewAbuseReportPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PreviewAbuseReport.
+     * @param {PreviewAbuseReportDeleteArgs} args - Arguments to delete one PreviewAbuseReport.
+     * @example
+     * // Delete one PreviewAbuseReport
+     * const PreviewAbuseReport = await prisma.previewAbuseReport.delete({
+     *   where: {
+     *     // ... filter to delete one PreviewAbuseReport
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PreviewAbuseReportDeleteArgs>(args: SelectSubset<T, PreviewAbuseReportDeleteArgs<ExtArgs>>): Prisma__PreviewAbuseReportClient<$Result.GetResult<Prisma.$PreviewAbuseReportPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PreviewAbuseReport.
+     * @param {PreviewAbuseReportUpdateArgs} args - Arguments to update one PreviewAbuseReport.
+     * @example
+     * // Update one PreviewAbuseReport
+     * const previewAbuseReport = await prisma.previewAbuseReport.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PreviewAbuseReportUpdateArgs>(args: SelectSubset<T, PreviewAbuseReportUpdateArgs<ExtArgs>>): Prisma__PreviewAbuseReportClient<$Result.GetResult<Prisma.$PreviewAbuseReportPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PreviewAbuseReports.
+     * @param {PreviewAbuseReportDeleteManyArgs} args - Arguments to filter PreviewAbuseReports to delete.
+     * @example
+     * // Delete a few PreviewAbuseReports
+     * const { count } = await prisma.previewAbuseReport.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PreviewAbuseReportDeleteManyArgs>(args?: SelectSubset<T, PreviewAbuseReportDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PreviewAbuseReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewAbuseReportUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PreviewAbuseReports
+     * const previewAbuseReport = await prisma.previewAbuseReport.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PreviewAbuseReportUpdateManyArgs>(args: SelectSubset<T, PreviewAbuseReportUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PreviewAbuseReports and returns the data updated in the database.
+     * @param {PreviewAbuseReportUpdateManyAndReturnArgs} args - Arguments to update many PreviewAbuseReports.
+     * @example
+     * // Update many PreviewAbuseReports
+     * const previewAbuseReport = await prisma.previewAbuseReport.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PreviewAbuseReports and only return the `id`
+     * const previewAbuseReportWithIdOnly = await prisma.previewAbuseReport.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PreviewAbuseReportUpdateManyAndReturnArgs>(args: SelectSubset<T, PreviewAbuseReportUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreviewAbuseReportPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PreviewAbuseReport.
+     * @param {PreviewAbuseReportUpsertArgs} args - Arguments to update or create a PreviewAbuseReport.
+     * @example
+     * // Update or create a PreviewAbuseReport
+     * const previewAbuseReport = await prisma.previewAbuseReport.upsert({
+     *   create: {
+     *     // ... data to create a PreviewAbuseReport
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PreviewAbuseReport we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PreviewAbuseReportUpsertArgs>(args: SelectSubset<T, PreviewAbuseReportUpsertArgs<ExtArgs>>): Prisma__PreviewAbuseReportClient<$Result.GetResult<Prisma.$PreviewAbuseReportPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PreviewAbuseReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewAbuseReportCountArgs} args - Arguments to filter PreviewAbuseReports to count.
+     * @example
+     * // Count the number of PreviewAbuseReports
+     * const count = await prisma.previewAbuseReport.count({
+     *   where: {
+     *     // ... the filter for the PreviewAbuseReports we want to count
+     *   }
+     * })
+    **/
+    count<T extends PreviewAbuseReportCountArgs>(
+      args?: Subset<T, PreviewAbuseReportCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PreviewAbuseReportCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PreviewAbuseReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewAbuseReportAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PreviewAbuseReportAggregateArgs>(args: Subset<T, PreviewAbuseReportAggregateArgs>): Prisma.PrismaPromise<GetPreviewAbuseReportAggregateType<T>>
+
+    /**
+     * Group by PreviewAbuseReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewAbuseReportGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PreviewAbuseReportGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PreviewAbuseReportGroupByArgs['orderBy'] }
+        : { orderBy?: PreviewAbuseReportGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PreviewAbuseReportGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPreviewAbuseReportGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PreviewAbuseReport model
+   */
+  readonly fields: PreviewAbuseReportFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PreviewAbuseReport.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PreviewAbuseReportClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PreviewAbuseReport model
+   */
+  interface PreviewAbuseReportFieldRefs {
+    readonly id: FieldRef<"PreviewAbuseReport", 'String'>
+    readonly previewId: FieldRef<"PreviewAbuseReport", 'String'>
+    readonly reason: FieldRef<"PreviewAbuseReport", 'String'>
+    readonly message: FieldRef<"PreviewAbuseReport", 'String'>
+    readonly ipHash: FieldRef<"PreviewAbuseReport", 'String'>
+    readonly userId: FieldRef<"PreviewAbuseReport", 'String'>
+    readonly createdAt: FieldRef<"PreviewAbuseReport", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PreviewAbuseReport findUnique
+   */
+  export type PreviewAbuseReportFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAbuseReport
+     */
+    select?: PreviewAbuseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAbuseReport
+     */
+    omit?: PreviewAbuseReportOmit<ExtArgs> | null
+    /**
+     * Filter, which PreviewAbuseReport to fetch.
+     */
+    where: PreviewAbuseReportWhereUniqueInput
+  }
+
+  /**
+   * PreviewAbuseReport findUniqueOrThrow
+   */
+  export type PreviewAbuseReportFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAbuseReport
+     */
+    select?: PreviewAbuseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAbuseReport
+     */
+    omit?: PreviewAbuseReportOmit<ExtArgs> | null
+    /**
+     * Filter, which PreviewAbuseReport to fetch.
+     */
+    where: PreviewAbuseReportWhereUniqueInput
+  }
+
+  /**
+   * PreviewAbuseReport findFirst
+   */
+  export type PreviewAbuseReportFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAbuseReport
+     */
+    select?: PreviewAbuseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAbuseReport
+     */
+    omit?: PreviewAbuseReportOmit<ExtArgs> | null
+    /**
+     * Filter, which PreviewAbuseReport to fetch.
+     */
+    where?: PreviewAbuseReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreviewAbuseReports to fetch.
+     */
+    orderBy?: PreviewAbuseReportOrderByWithRelationInput | PreviewAbuseReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PreviewAbuseReports.
+     */
+    cursor?: PreviewAbuseReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreviewAbuseReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreviewAbuseReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PreviewAbuseReports.
+     */
+    distinct?: PreviewAbuseReportScalarFieldEnum | PreviewAbuseReportScalarFieldEnum[]
+  }
+
+  /**
+   * PreviewAbuseReport findFirstOrThrow
+   */
+  export type PreviewAbuseReportFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAbuseReport
+     */
+    select?: PreviewAbuseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAbuseReport
+     */
+    omit?: PreviewAbuseReportOmit<ExtArgs> | null
+    /**
+     * Filter, which PreviewAbuseReport to fetch.
+     */
+    where?: PreviewAbuseReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreviewAbuseReports to fetch.
+     */
+    orderBy?: PreviewAbuseReportOrderByWithRelationInput | PreviewAbuseReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PreviewAbuseReports.
+     */
+    cursor?: PreviewAbuseReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreviewAbuseReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreviewAbuseReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PreviewAbuseReports.
+     */
+    distinct?: PreviewAbuseReportScalarFieldEnum | PreviewAbuseReportScalarFieldEnum[]
+  }
+
+  /**
+   * PreviewAbuseReport findMany
+   */
+  export type PreviewAbuseReportFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAbuseReport
+     */
+    select?: PreviewAbuseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAbuseReport
+     */
+    omit?: PreviewAbuseReportOmit<ExtArgs> | null
+    /**
+     * Filter, which PreviewAbuseReports to fetch.
+     */
+    where?: PreviewAbuseReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreviewAbuseReports to fetch.
+     */
+    orderBy?: PreviewAbuseReportOrderByWithRelationInput | PreviewAbuseReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PreviewAbuseReports.
+     */
+    cursor?: PreviewAbuseReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreviewAbuseReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreviewAbuseReports.
+     */
+    skip?: number
+    distinct?: PreviewAbuseReportScalarFieldEnum | PreviewAbuseReportScalarFieldEnum[]
+  }
+
+  /**
+   * PreviewAbuseReport create
+   */
+  export type PreviewAbuseReportCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAbuseReport
+     */
+    select?: PreviewAbuseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAbuseReport
+     */
+    omit?: PreviewAbuseReportOmit<ExtArgs> | null
+    /**
+     * The data needed to create a PreviewAbuseReport.
+     */
+    data: XOR<PreviewAbuseReportCreateInput, PreviewAbuseReportUncheckedCreateInput>
+  }
+
+  /**
+   * PreviewAbuseReport createMany
+   */
+  export type PreviewAbuseReportCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PreviewAbuseReports.
+     */
+    data: PreviewAbuseReportCreateManyInput | PreviewAbuseReportCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PreviewAbuseReport createManyAndReturn
+   */
+  export type PreviewAbuseReportCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAbuseReport
+     */
+    select?: PreviewAbuseReportSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAbuseReport
+     */
+    omit?: PreviewAbuseReportOmit<ExtArgs> | null
+    /**
+     * The data used to create many PreviewAbuseReports.
+     */
+    data: PreviewAbuseReportCreateManyInput | PreviewAbuseReportCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PreviewAbuseReport update
+   */
+  export type PreviewAbuseReportUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAbuseReport
+     */
+    select?: PreviewAbuseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAbuseReport
+     */
+    omit?: PreviewAbuseReportOmit<ExtArgs> | null
+    /**
+     * The data needed to update a PreviewAbuseReport.
+     */
+    data: XOR<PreviewAbuseReportUpdateInput, PreviewAbuseReportUncheckedUpdateInput>
+    /**
+     * Choose, which PreviewAbuseReport to update.
+     */
+    where: PreviewAbuseReportWhereUniqueInput
+  }
+
+  /**
+   * PreviewAbuseReport updateMany
+   */
+  export type PreviewAbuseReportUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PreviewAbuseReports.
+     */
+    data: XOR<PreviewAbuseReportUpdateManyMutationInput, PreviewAbuseReportUncheckedUpdateManyInput>
+    /**
+     * Filter which PreviewAbuseReports to update
+     */
+    where?: PreviewAbuseReportWhereInput
+    /**
+     * Limit how many PreviewAbuseReports to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PreviewAbuseReport updateManyAndReturn
+   */
+  export type PreviewAbuseReportUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAbuseReport
+     */
+    select?: PreviewAbuseReportSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAbuseReport
+     */
+    omit?: PreviewAbuseReportOmit<ExtArgs> | null
+    /**
+     * The data used to update PreviewAbuseReports.
+     */
+    data: XOR<PreviewAbuseReportUpdateManyMutationInput, PreviewAbuseReportUncheckedUpdateManyInput>
+    /**
+     * Filter which PreviewAbuseReports to update
+     */
+    where?: PreviewAbuseReportWhereInput
+    /**
+     * Limit how many PreviewAbuseReports to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PreviewAbuseReport upsert
+   */
+  export type PreviewAbuseReportUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAbuseReport
+     */
+    select?: PreviewAbuseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAbuseReport
+     */
+    omit?: PreviewAbuseReportOmit<ExtArgs> | null
+    /**
+     * The filter to search for the PreviewAbuseReport to update in case it exists.
+     */
+    where: PreviewAbuseReportWhereUniqueInput
+    /**
+     * In case the PreviewAbuseReport found by the `where` argument doesn't exist, create a new PreviewAbuseReport with this data.
+     */
+    create: XOR<PreviewAbuseReportCreateInput, PreviewAbuseReportUncheckedCreateInput>
+    /**
+     * In case the PreviewAbuseReport was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PreviewAbuseReportUpdateInput, PreviewAbuseReportUncheckedUpdateInput>
+  }
+
+  /**
+   * PreviewAbuseReport delete
+   */
+  export type PreviewAbuseReportDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAbuseReport
+     */
+    select?: PreviewAbuseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAbuseReport
+     */
+    omit?: PreviewAbuseReportOmit<ExtArgs> | null
+    /**
+     * Filter which PreviewAbuseReport to delete.
+     */
+    where: PreviewAbuseReportWhereUniqueInput
+  }
+
+  /**
+   * PreviewAbuseReport deleteMany
+   */
+  export type PreviewAbuseReportDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PreviewAbuseReports to delete
+     */
+    where?: PreviewAbuseReportWhereInput
+    /**
+     * Limit how many PreviewAbuseReports to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PreviewAbuseReport without action
+   */
+  export type PreviewAbuseReportDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAbuseReport
+     */
+    select?: PreviewAbuseReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAbuseReport
+     */
+    omit?: PreviewAbuseReportOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model PreviewRoute
    */
 
@@ -29482,6 +30594,19 @@ export namespace Prisma {
   export type RuntimeRecoveryEventScalarFieldEnum = (typeof RuntimeRecoveryEventScalarFieldEnum)[keyof typeof RuntimeRecoveryEventScalarFieldEnum]
 
 
+  export const PreviewAbuseReportScalarFieldEnum: {
+    id: 'id',
+    previewId: 'previewId',
+    reason: 'reason',
+    message: 'message',
+    ipHash: 'ipHash',
+    userId: 'userId',
+    createdAt: 'createdAt'
+  };
+
+  export type PreviewAbuseReportScalarFieldEnum = (typeof PreviewAbuseReportScalarFieldEnum)[keyof typeof PreviewAbuseReportScalarFieldEnum]
+
+
   export const PreviewRouteScalarFieldEnum: {
     id: 'id',
     runtimeId: 'runtimeId',
@@ -31345,6 +32470,68 @@ export namespace Prisma {
     metadata?: StringNullableWithAggregatesFilter<"RuntimeRecoveryEvent"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"RuntimeRecoveryEvent"> | Date | string
     completedAt?: DateTimeNullableWithAggregatesFilter<"RuntimeRecoveryEvent"> | Date | string | null
+  }
+
+  export type PreviewAbuseReportWhereInput = {
+    AND?: PreviewAbuseReportWhereInput | PreviewAbuseReportWhereInput[]
+    OR?: PreviewAbuseReportWhereInput[]
+    NOT?: PreviewAbuseReportWhereInput | PreviewAbuseReportWhereInput[]
+    id?: StringFilter<"PreviewAbuseReport"> | string
+    previewId?: StringFilter<"PreviewAbuseReport"> | string
+    reason?: StringFilter<"PreviewAbuseReport"> | string
+    message?: StringNullableFilter<"PreviewAbuseReport"> | string | null
+    ipHash?: StringFilter<"PreviewAbuseReport"> | string
+    userId?: StringNullableFilter<"PreviewAbuseReport"> | string | null
+    createdAt?: DateTimeFilter<"PreviewAbuseReport"> | Date | string
+  }
+
+  export type PreviewAbuseReportOrderByWithRelationInput = {
+    id?: SortOrder
+    previewId?: SortOrder
+    reason?: SortOrder
+    message?: SortOrderInput | SortOrder
+    ipHash?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PreviewAbuseReportWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PreviewAbuseReportWhereInput | PreviewAbuseReportWhereInput[]
+    OR?: PreviewAbuseReportWhereInput[]
+    NOT?: PreviewAbuseReportWhereInput | PreviewAbuseReportWhereInput[]
+    previewId?: StringFilter<"PreviewAbuseReport"> | string
+    reason?: StringFilter<"PreviewAbuseReport"> | string
+    message?: StringNullableFilter<"PreviewAbuseReport"> | string | null
+    ipHash?: StringFilter<"PreviewAbuseReport"> | string
+    userId?: StringNullableFilter<"PreviewAbuseReport"> | string | null
+    createdAt?: DateTimeFilter<"PreviewAbuseReport"> | Date | string
+  }, "id">
+
+  export type PreviewAbuseReportOrderByWithAggregationInput = {
+    id?: SortOrder
+    previewId?: SortOrder
+    reason?: SortOrder
+    message?: SortOrderInput | SortOrder
+    ipHash?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: PreviewAbuseReportCountOrderByAggregateInput
+    _max?: PreviewAbuseReportMaxOrderByAggregateInput
+    _min?: PreviewAbuseReportMinOrderByAggregateInput
+  }
+
+  export type PreviewAbuseReportScalarWhereWithAggregatesInput = {
+    AND?: PreviewAbuseReportScalarWhereWithAggregatesInput | PreviewAbuseReportScalarWhereWithAggregatesInput[]
+    OR?: PreviewAbuseReportScalarWhereWithAggregatesInput[]
+    NOT?: PreviewAbuseReportScalarWhereWithAggregatesInput | PreviewAbuseReportScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PreviewAbuseReport"> | string
+    previewId?: StringWithAggregatesFilter<"PreviewAbuseReport"> | string
+    reason?: StringWithAggregatesFilter<"PreviewAbuseReport"> | string
+    message?: StringNullableWithAggregatesFilter<"PreviewAbuseReport"> | string | null
+    ipHash?: StringWithAggregatesFilter<"PreviewAbuseReport"> | string
+    userId?: StringNullableWithAggregatesFilter<"PreviewAbuseReport"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"PreviewAbuseReport"> | Date | string
   }
 
   export type PreviewRouteWhereInput = {
@@ -33357,6 +34544,76 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type PreviewAbuseReportCreateInput = {
+    id?: string
+    previewId: string
+    reason: string
+    message?: string | null
+    ipHash: string
+    userId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type PreviewAbuseReportUncheckedCreateInput = {
+    id?: string
+    previewId: string
+    reason: string
+    message?: string | null
+    ipHash: string
+    userId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type PreviewAbuseReportUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    previewId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    ipHash?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PreviewAbuseReportUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    previewId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    ipHash?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PreviewAbuseReportCreateManyInput = {
+    id?: string
+    previewId: string
+    reason: string
+    message?: string | null
+    ipHash: string
+    userId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type PreviewAbuseReportUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    previewId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    ipHash?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PreviewAbuseReportUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    previewId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    ipHash?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type PreviewRouteCreateInput = {
     id?: string
     runtimeId: string
@@ -35074,6 +36331,36 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRecoveryEventTypeFilter<$PrismaModel>
     _max?: NestedEnumRecoveryEventTypeFilter<$PrismaModel>
+  }
+
+  export type PreviewAbuseReportCountOrderByAggregateInput = {
+    id?: SortOrder
+    previewId?: SortOrder
+    reason?: SortOrder
+    message?: SortOrder
+    ipHash?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PreviewAbuseReportMaxOrderByAggregateInput = {
+    id?: SortOrder
+    previewId?: SortOrder
+    reason?: SortOrder
+    message?: SortOrder
+    ipHash?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PreviewAbuseReportMinOrderByAggregateInput = {
+    id?: SortOrder
+    previewId?: SortOrder
+    reason?: SortOrder
+    message?: SortOrder
+    ipHash?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type PreviewRouteCountOrderByAggregateInput = {

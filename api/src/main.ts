@@ -428,7 +428,8 @@ function createPreviewMiddleware(
 
     // Skip API sub-paths — let NestJS controllers handle them
     const subpath = upstream.split('?')[0];
-    const API_SUBPATHS = ['/token', '/check', '/remix'];
+    // 09-01/02/07: add shell, qr, share, report to bypass list
+    const API_SUBPATHS = ['/token', '/check', '/remix', '/shell', '/qr', '/share', '/report'];
     if (API_SUBPATHS.some((p) => subpath === p || subpath.startsWith(p + '/'))) {
       next();
       return;

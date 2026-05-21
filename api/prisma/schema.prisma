@@ -466,6 +466,22 @@ model RuntimeRecoveryEvent {
   @@index([createdAt])
 }
 
+// ── SERIAL 09: Mobile Viral Preview Experience ───────────────────────────────
+
+// 09-07: Abuse report — rate-limited, hashed IP, no moderation engine yet
+model PreviewAbuseReport {
+  id        String   @id @default(uuid())
+  previewId String
+  reason    String
+  message   String?
+  ipHash    String
+  userId    String?
+  createdAt DateTime @default(now())
+
+  @@index([previewId, createdAt])
+  @@index([createdAt])
+}
+
 // ── SERIAL 05: Public Preview Gateway ────────────────────────────────────────
 
 // 05-01: Slug-based aliases for stable preview URLs
