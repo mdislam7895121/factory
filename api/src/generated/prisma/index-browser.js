@@ -309,6 +309,24 @@ exports.Prisma.ProjectForkScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.AgentActivityEventScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  runtimeId: 'runtimeId',
+  workspaceId: 'workspaceId',
+  agentType: 'agentType',
+  eventType: 'eventType',
+  title: 'title',
+  message: 'message',
+  metadata: 'metadata',
+  severity: 'severity',
+  status: 'status',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  durationMs: 'durationMs',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.PreviewRouteScalarFieldEnum = {
   id: 'id',
   runtimeId: 'runtimeId',
@@ -428,6 +446,34 @@ exports.SleepState = exports.$Enums.SleepState = {
   WAKING: 'WAKING'
 };
 
+exports.AgentType = exports.$Enums.AgentType = {
+  PLANNER: 'PLANNER',
+  ARCHITECT: 'ARCHITECT',
+  FRONTEND: 'FRONTEND',
+  BACKEND: 'BACKEND',
+  DATABASE: 'DATABASE',
+  QA: 'QA',
+  DEVOPS: 'DEVOPS',
+  SECURITY: 'SECURITY',
+  HEALER: 'HEALER',
+  OBSERVER: 'OBSERVER'
+};
+
+exports.ActivitySeverity = exports.$Enums.ActivitySeverity = {
+  INFO: 'INFO',
+  WARNING: 'WARNING',
+  ERROR: 'ERROR',
+  CRITICAL: 'CRITICAL'
+};
+
+exports.EventStatus = exports.$Enums.EventStatus = {
+  PENDING: 'PENDING',
+  RUNNING: 'RUNNING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
+};
+
 exports.LoopRunStatus = exports.$Enums.LoopRunStatus = {
   RUNNING: 'RUNNING',
   HEALTHY: 'HEALTHY',
@@ -453,6 +499,7 @@ exports.Prisma.ModelName = {
   CouncilMessage: 'CouncilMessage',
   RuntimeInstance: 'RuntimeInstance',
   ProjectFork: 'ProjectFork',
+  AgentActivityEvent: 'AgentActivityEvent',
   PreviewRoute: 'PreviewRoute',
   PreviewAccessLog: 'PreviewAccessLog',
   LoopConfig: 'LoopConfig',

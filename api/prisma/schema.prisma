@@ -337,6 +337,61 @@ model ProjectFork {
   @@index([ownerUserId])
 }
 
+// ── SERIAL 07: Live AI Company Stream ────────────────────────────────────────
+
+enum AgentType {
+  PLANNER
+  ARCHITECT
+  FRONTEND
+  BACKEND
+  DATABASE
+  QA
+  DEVOPS
+  SECURITY
+  HEALER
+  OBSERVER
+}
+
+enum EventStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+
+enum ActivitySeverity {
+  INFO
+  WARNING
+  ERROR
+  CRITICAL
+}
+
+// 07-01: Persistent AI orchestration event stream
+model AgentActivityEvent {
+  id          String           @id @default(uuid())
+  projectId   String?
+  runtimeId   String?
+  workspaceId String?
+  agentType   AgentType
+  eventType   String
+  title       String
+  message     String?
+  metadata    String?          // JSON — secrets stripped before persist
+  severity    ActivitySeverity @default(INFO)
+  status      EventStatus      @default(PENDING)
+  startedAt   DateTime?
+  completedAt DateTime?
+  durationMs  Int?
+  createdAt   DateTime         @default(now())
+
+  @@index([projectId,  createdAt])
+  @@index([runtimeId,  createdAt])
+  @@index([agentType])
+  @@index([createdAt])
+  @@index([severity,   createdAt])
+}
+
 // ── SERIAL 05: Public Preview Gateway ────────────────────────────────────────
 
 // 05-01: Slug-based aliases for stable preview URLs

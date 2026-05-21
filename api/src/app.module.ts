@@ -11,9 +11,10 @@ import { ProjectService } from './serial15/project.service';
 import { SandboxModule } from './sandbox/sandbox.module';
 import { PreviewModule } from './preview/preview.module';
 import { RemixModule } from './remix/remix.module';
+import { ActivityStreamModule } from './activity/activity-stream.module';
 
 @Module({
-  imports: [RedisModule, AuthModule, SandboxModule, PreviewModule, RemixModule],
+  imports: [RedisModule, AuthModule, SandboxModule, PreviewModule, RemixModule, ActivityStreamModule],
   controllers: [AppController, Serial11Controller],
   providers: [
     AppService,
