@@ -292,6 +292,27 @@ exports.Prisma.RuntimeInstanceScalarFieldEnum = {
   expiresAt: 'expiresAt'
 };
 
+exports.Prisma.PreviewRouteScalarFieldEnum = {
+  id: 'id',
+  runtimeId: 'runtimeId',
+  slug: 'slug',
+  visibility: 'visibility',
+  passwordHash: 'passwordHash',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PreviewAccessLogScalarFieldEnum = {
+  id: 'id',
+  runtimeId: 'runtimeId',
+  ipHash: 'ipHash',
+  uaHash: 'uaHash',
+  path: 'path',
+  statusCode: 'statusCode',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.LoopConfigScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -414,6 +435,8 @@ exports.Prisma.ModelName = {
   CouncilSession: 'CouncilSession',
   CouncilMessage: 'CouncilMessage',
   RuntimeInstance: 'RuntimeInstance',
+  PreviewRoute: 'PreviewRoute',
+  PreviewAccessLog: 'PreviewAccessLog',
   LoopConfig: 'LoopConfig',
   LoopRun: 'LoopRun'
 };

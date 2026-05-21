@@ -89,6 +89,16 @@ export type CouncilMessage = $Result.DefaultSelection<Prisma.$CouncilMessagePayl
  */
 export type RuntimeInstance = $Result.DefaultSelection<Prisma.$RuntimeInstancePayload>
 /**
+ * Model PreviewRoute
+ * 
+ */
+export type PreviewRoute = $Result.DefaultSelection<Prisma.$PreviewRoutePayload>
+/**
+ * Model PreviewAccessLog
+ * 
+ */
+export type PreviewAccessLog = $Result.DefaultSelection<Prisma.$PreviewAccessLogPayload>
+/**
  * Model LoopConfig
  * 
  */
@@ -498,6 +508,26 @@ export class PrismaClient<
     * ```
     */
   get runtimeInstance(): Prisma.RuntimeInstanceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.previewRoute`: Exposes CRUD operations for the **PreviewRoute** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PreviewRoutes
+    * const previewRoutes = await prisma.previewRoute.findMany()
+    * ```
+    */
+  get previewRoute(): Prisma.PreviewRouteDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.previewAccessLog`: Exposes CRUD operations for the **PreviewAccessLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PreviewAccessLogs
+    * const previewAccessLogs = await prisma.previewAccessLog.findMany()
+    * ```
+    */
+  get previewAccessLog(): Prisma.PreviewAccessLogDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.loopConfig`: Exposes CRUD operations for the **LoopConfig** model.
@@ -967,6 +997,8 @@ export namespace Prisma {
     CouncilSession: 'CouncilSession',
     CouncilMessage: 'CouncilMessage',
     RuntimeInstance: 'RuntimeInstance',
+    PreviewRoute: 'PreviewRoute',
+    PreviewAccessLog: 'PreviewAccessLog',
     LoopConfig: 'LoopConfig',
     LoopRun: 'LoopRun'
   };
@@ -984,7 +1016,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user" | "apiKey" | "sandbox" | "usageLog" | "agentMemory" | "agentEvent" | "councilSession" | "councilMessage" | "runtimeInstance" | "loopConfig" | "loopRun"
+      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user" | "apiKey" | "sandbox" | "usageLog" | "agentMemory" | "agentEvent" | "councilSession" | "councilMessage" | "runtimeInstance" | "previewRoute" | "previewAccessLog" | "loopConfig" | "loopRun"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2098,6 +2130,154 @@ export namespace Prisma {
           }
         }
       }
+      PreviewRoute: {
+        payload: Prisma.$PreviewRoutePayload<ExtArgs>
+        fields: Prisma.PreviewRouteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PreviewRouteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewRoutePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PreviewRouteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewRoutePayload>
+          }
+          findFirst: {
+            args: Prisma.PreviewRouteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewRoutePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PreviewRouteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewRoutePayload>
+          }
+          findMany: {
+            args: Prisma.PreviewRouteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewRoutePayload>[]
+          }
+          create: {
+            args: Prisma.PreviewRouteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewRoutePayload>
+          }
+          createMany: {
+            args: Prisma.PreviewRouteCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PreviewRouteCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewRoutePayload>[]
+          }
+          delete: {
+            args: Prisma.PreviewRouteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewRoutePayload>
+          }
+          update: {
+            args: Prisma.PreviewRouteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewRoutePayload>
+          }
+          deleteMany: {
+            args: Prisma.PreviewRouteDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PreviewRouteUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PreviewRouteUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewRoutePayload>[]
+          }
+          upsert: {
+            args: Prisma.PreviewRouteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewRoutePayload>
+          }
+          aggregate: {
+            args: Prisma.PreviewRouteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePreviewRoute>
+          }
+          groupBy: {
+            args: Prisma.PreviewRouteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PreviewRouteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PreviewRouteCountArgs<ExtArgs>
+            result: $Utils.Optional<PreviewRouteCountAggregateOutputType> | number
+          }
+        }
+      }
+      PreviewAccessLog: {
+        payload: Prisma.$PreviewAccessLogPayload<ExtArgs>
+        fields: Prisma.PreviewAccessLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PreviewAccessLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAccessLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PreviewAccessLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAccessLogPayload>
+          }
+          findFirst: {
+            args: Prisma.PreviewAccessLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAccessLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PreviewAccessLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAccessLogPayload>
+          }
+          findMany: {
+            args: Prisma.PreviewAccessLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAccessLogPayload>[]
+          }
+          create: {
+            args: Prisma.PreviewAccessLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAccessLogPayload>
+          }
+          createMany: {
+            args: Prisma.PreviewAccessLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PreviewAccessLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAccessLogPayload>[]
+          }
+          delete: {
+            args: Prisma.PreviewAccessLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAccessLogPayload>
+          }
+          update: {
+            args: Prisma.PreviewAccessLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAccessLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.PreviewAccessLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PreviewAccessLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PreviewAccessLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAccessLogPayload>[]
+          }
+          upsert: {
+            args: Prisma.PreviewAccessLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreviewAccessLogPayload>
+          }
+          aggregate: {
+            args: Prisma.PreviewAccessLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePreviewAccessLog>
+          }
+          groupBy: {
+            args: Prisma.PreviewAccessLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PreviewAccessLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PreviewAccessLogCountArgs<ExtArgs>
+            result: $Utils.Optional<PreviewAccessLogCountAggregateOutputType> | number
+          }
+        }
+      }
       LoopConfig: {
         payload: Prisma.$LoopConfigPayload<ExtArgs>
         fields: Prisma.LoopConfigFieldRefs
@@ -2369,6 +2549,8 @@ export namespace Prisma {
     councilSession?: CouncilSessionOmit
     councilMessage?: CouncilMessageOmit
     runtimeInstance?: RuntimeInstanceOmit
+    previewRoute?: PreviewRouteOmit
+    previewAccessLog?: PreviewAccessLogOmit
     loopConfig?: LoopConfigOmit
     loopRun?: LoopRunOmit
   }
@@ -19390,6 +19572,2095 @@ export namespace Prisma {
 
 
   /**
+   * Model PreviewRoute
+   */
+
+  export type AggregatePreviewRoute = {
+    _count: PreviewRouteCountAggregateOutputType | null
+    _min: PreviewRouteMinAggregateOutputType | null
+    _max: PreviewRouteMaxAggregateOutputType | null
+  }
+
+  export type PreviewRouteMinAggregateOutputType = {
+    id: string | null
+    runtimeId: string | null
+    slug: string | null
+    visibility: $Enums.RuntimeVisibility | null
+    passwordHash: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PreviewRouteMaxAggregateOutputType = {
+    id: string | null
+    runtimeId: string | null
+    slug: string | null
+    visibility: $Enums.RuntimeVisibility | null
+    passwordHash: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PreviewRouteCountAggregateOutputType = {
+    id: number
+    runtimeId: number
+    slug: number
+    visibility: number
+    passwordHash: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PreviewRouteMinAggregateInputType = {
+    id?: true
+    runtimeId?: true
+    slug?: true
+    visibility?: true
+    passwordHash?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PreviewRouteMaxAggregateInputType = {
+    id?: true
+    runtimeId?: true
+    slug?: true
+    visibility?: true
+    passwordHash?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PreviewRouteCountAggregateInputType = {
+    id?: true
+    runtimeId?: true
+    slug?: true
+    visibility?: true
+    passwordHash?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PreviewRouteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PreviewRoute to aggregate.
+     */
+    where?: PreviewRouteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreviewRoutes to fetch.
+     */
+    orderBy?: PreviewRouteOrderByWithRelationInput | PreviewRouteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PreviewRouteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreviewRoutes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreviewRoutes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PreviewRoutes
+    **/
+    _count?: true | PreviewRouteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PreviewRouteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PreviewRouteMaxAggregateInputType
+  }
+
+  export type GetPreviewRouteAggregateType<T extends PreviewRouteAggregateArgs> = {
+        [P in keyof T & keyof AggregatePreviewRoute]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePreviewRoute[P]>
+      : GetScalarType<T[P], AggregatePreviewRoute[P]>
+  }
+
+
+
+
+  export type PreviewRouteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PreviewRouteWhereInput
+    orderBy?: PreviewRouteOrderByWithAggregationInput | PreviewRouteOrderByWithAggregationInput[]
+    by: PreviewRouteScalarFieldEnum[] | PreviewRouteScalarFieldEnum
+    having?: PreviewRouteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PreviewRouteCountAggregateInputType | true
+    _min?: PreviewRouteMinAggregateInputType
+    _max?: PreviewRouteMaxAggregateInputType
+  }
+
+  export type PreviewRouteGroupByOutputType = {
+    id: string
+    runtimeId: string
+    slug: string
+    visibility: $Enums.RuntimeVisibility
+    passwordHash: string | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: PreviewRouteCountAggregateOutputType | null
+    _min: PreviewRouteMinAggregateOutputType | null
+    _max: PreviewRouteMaxAggregateOutputType | null
+  }
+
+  type GetPreviewRouteGroupByPayload<T extends PreviewRouteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PreviewRouteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PreviewRouteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PreviewRouteGroupByOutputType[P]>
+            : GetScalarType<T[P], PreviewRouteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PreviewRouteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    runtimeId?: boolean
+    slug?: boolean
+    visibility?: boolean
+    passwordHash?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["previewRoute"]>
+
+  export type PreviewRouteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    runtimeId?: boolean
+    slug?: boolean
+    visibility?: boolean
+    passwordHash?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["previewRoute"]>
+
+  export type PreviewRouteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    runtimeId?: boolean
+    slug?: boolean
+    visibility?: boolean
+    passwordHash?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["previewRoute"]>
+
+  export type PreviewRouteSelectScalar = {
+    id?: boolean
+    runtimeId?: boolean
+    slug?: boolean
+    visibility?: boolean
+    passwordHash?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PreviewRouteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "runtimeId" | "slug" | "visibility" | "passwordHash" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["previewRoute"]>
+
+  export type $PreviewRoutePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PreviewRoute"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      runtimeId: string
+      slug: string
+      visibility: $Enums.RuntimeVisibility
+      passwordHash: string | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["previewRoute"]>
+    composites: {}
+  }
+
+  type PreviewRouteGetPayload<S extends boolean | null | undefined | PreviewRouteDefaultArgs> = $Result.GetResult<Prisma.$PreviewRoutePayload, S>
+
+  type PreviewRouteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PreviewRouteFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PreviewRouteCountAggregateInputType | true
+    }
+
+  export interface PreviewRouteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PreviewRoute'], meta: { name: 'PreviewRoute' } }
+    /**
+     * Find zero or one PreviewRoute that matches the filter.
+     * @param {PreviewRouteFindUniqueArgs} args - Arguments to find a PreviewRoute
+     * @example
+     * // Get one PreviewRoute
+     * const previewRoute = await prisma.previewRoute.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PreviewRouteFindUniqueArgs>(args: SelectSubset<T, PreviewRouteFindUniqueArgs<ExtArgs>>): Prisma__PreviewRouteClient<$Result.GetResult<Prisma.$PreviewRoutePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PreviewRoute that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PreviewRouteFindUniqueOrThrowArgs} args - Arguments to find a PreviewRoute
+     * @example
+     * // Get one PreviewRoute
+     * const previewRoute = await prisma.previewRoute.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PreviewRouteFindUniqueOrThrowArgs>(args: SelectSubset<T, PreviewRouteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PreviewRouteClient<$Result.GetResult<Prisma.$PreviewRoutePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PreviewRoute that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewRouteFindFirstArgs} args - Arguments to find a PreviewRoute
+     * @example
+     * // Get one PreviewRoute
+     * const previewRoute = await prisma.previewRoute.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PreviewRouteFindFirstArgs>(args?: SelectSubset<T, PreviewRouteFindFirstArgs<ExtArgs>>): Prisma__PreviewRouteClient<$Result.GetResult<Prisma.$PreviewRoutePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PreviewRoute that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewRouteFindFirstOrThrowArgs} args - Arguments to find a PreviewRoute
+     * @example
+     * // Get one PreviewRoute
+     * const previewRoute = await prisma.previewRoute.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PreviewRouteFindFirstOrThrowArgs>(args?: SelectSubset<T, PreviewRouteFindFirstOrThrowArgs<ExtArgs>>): Prisma__PreviewRouteClient<$Result.GetResult<Prisma.$PreviewRoutePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PreviewRoutes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewRouteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PreviewRoutes
+     * const previewRoutes = await prisma.previewRoute.findMany()
+     * 
+     * // Get first 10 PreviewRoutes
+     * const previewRoutes = await prisma.previewRoute.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const previewRouteWithIdOnly = await prisma.previewRoute.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PreviewRouteFindManyArgs>(args?: SelectSubset<T, PreviewRouteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreviewRoutePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PreviewRoute.
+     * @param {PreviewRouteCreateArgs} args - Arguments to create a PreviewRoute.
+     * @example
+     * // Create one PreviewRoute
+     * const PreviewRoute = await prisma.previewRoute.create({
+     *   data: {
+     *     // ... data to create a PreviewRoute
+     *   }
+     * })
+     * 
+     */
+    create<T extends PreviewRouteCreateArgs>(args: SelectSubset<T, PreviewRouteCreateArgs<ExtArgs>>): Prisma__PreviewRouteClient<$Result.GetResult<Prisma.$PreviewRoutePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PreviewRoutes.
+     * @param {PreviewRouteCreateManyArgs} args - Arguments to create many PreviewRoutes.
+     * @example
+     * // Create many PreviewRoutes
+     * const previewRoute = await prisma.previewRoute.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PreviewRouteCreateManyArgs>(args?: SelectSubset<T, PreviewRouteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PreviewRoutes and returns the data saved in the database.
+     * @param {PreviewRouteCreateManyAndReturnArgs} args - Arguments to create many PreviewRoutes.
+     * @example
+     * // Create many PreviewRoutes
+     * const previewRoute = await prisma.previewRoute.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PreviewRoutes and only return the `id`
+     * const previewRouteWithIdOnly = await prisma.previewRoute.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PreviewRouteCreateManyAndReturnArgs>(args?: SelectSubset<T, PreviewRouteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreviewRoutePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PreviewRoute.
+     * @param {PreviewRouteDeleteArgs} args - Arguments to delete one PreviewRoute.
+     * @example
+     * // Delete one PreviewRoute
+     * const PreviewRoute = await prisma.previewRoute.delete({
+     *   where: {
+     *     // ... filter to delete one PreviewRoute
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PreviewRouteDeleteArgs>(args: SelectSubset<T, PreviewRouteDeleteArgs<ExtArgs>>): Prisma__PreviewRouteClient<$Result.GetResult<Prisma.$PreviewRoutePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PreviewRoute.
+     * @param {PreviewRouteUpdateArgs} args - Arguments to update one PreviewRoute.
+     * @example
+     * // Update one PreviewRoute
+     * const previewRoute = await prisma.previewRoute.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PreviewRouteUpdateArgs>(args: SelectSubset<T, PreviewRouteUpdateArgs<ExtArgs>>): Prisma__PreviewRouteClient<$Result.GetResult<Prisma.$PreviewRoutePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PreviewRoutes.
+     * @param {PreviewRouteDeleteManyArgs} args - Arguments to filter PreviewRoutes to delete.
+     * @example
+     * // Delete a few PreviewRoutes
+     * const { count } = await prisma.previewRoute.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PreviewRouteDeleteManyArgs>(args?: SelectSubset<T, PreviewRouteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PreviewRoutes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewRouteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PreviewRoutes
+     * const previewRoute = await prisma.previewRoute.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PreviewRouteUpdateManyArgs>(args: SelectSubset<T, PreviewRouteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PreviewRoutes and returns the data updated in the database.
+     * @param {PreviewRouteUpdateManyAndReturnArgs} args - Arguments to update many PreviewRoutes.
+     * @example
+     * // Update many PreviewRoutes
+     * const previewRoute = await prisma.previewRoute.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PreviewRoutes and only return the `id`
+     * const previewRouteWithIdOnly = await prisma.previewRoute.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PreviewRouteUpdateManyAndReturnArgs>(args: SelectSubset<T, PreviewRouteUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreviewRoutePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PreviewRoute.
+     * @param {PreviewRouteUpsertArgs} args - Arguments to update or create a PreviewRoute.
+     * @example
+     * // Update or create a PreviewRoute
+     * const previewRoute = await prisma.previewRoute.upsert({
+     *   create: {
+     *     // ... data to create a PreviewRoute
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PreviewRoute we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PreviewRouteUpsertArgs>(args: SelectSubset<T, PreviewRouteUpsertArgs<ExtArgs>>): Prisma__PreviewRouteClient<$Result.GetResult<Prisma.$PreviewRoutePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PreviewRoutes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewRouteCountArgs} args - Arguments to filter PreviewRoutes to count.
+     * @example
+     * // Count the number of PreviewRoutes
+     * const count = await prisma.previewRoute.count({
+     *   where: {
+     *     // ... the filter for the PreviewRoutes we want to count
+     *   }
+     * })
+    **/
+    count<T extends PreviewRouteCountArgs>(
+      args?: Subset<T, PreviewRouteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PreviewRouteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PreviewRoute.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewRouteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PreviewRouteAggregateArgs>(args: Subset<T, PreviewRouteAggregateArgs>): Prisma.PrismaPromise<GetPreviewRouteAggregateType<T>>
+
+    /**
+     * Group by PreviewRoute.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewRouteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PreviewRouteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PreviewRouteGroupByArgs['orderBy'] }
+        : { orderBy?: PreviewRouteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PreviewRouteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPreviewRouteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PreviewRoute model
+   */
+  readonly fields: PreviewRouteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PreviewRoute.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PreviewRouteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PreviewRoute model
+   */
+  interface PreviewRouteFieldRefs {
+    readonly id: FieldRef<"PreviewRoute", 'String'>
+    readonly runtimeId: FieldRef<"PreviewRoute", 'String'>
+    readonly slug: FieldRef<"PreviewRoute", 'String'>
+    readonly visibility: FieldRef<"PreviewRoute", 'RuntimeVisibility'>
+    readonly passwordHash: FieldRef<"PreviewRoute", 'String'>
+    readonly isActive: FieldRef<"PreviewRoute", 'Boolean'>
+    readonly createdAt: FieldRef<"PreviewRoute", 'DateTime'>
+    readonly updatedAt: FieldRef<"PreviewRoute", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PreviewRoute findUnique
+   */
+  export type PreviewRouteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewRoute
+     */
+    select?: PreviewRouteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewRoute
+     */
+    omit?: PreviewRouteOmit<ExtArgs> | null
+    /**
+     * Filter, which PreviewRoute to fetch.
+     */
+    where: PreviewRouteWhereUniqueInput
+  }
+
+  /**
+   * PreviewRoute findUniqueOrThrow
+   */
+  export type PreviewRouteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewRoute
+     */
+    select?: PreviewRouteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewRoute
+     */
+    omit?: PreviewRouteOmit<ExtArgs> | null
+    /**
+     * Filter, which PreviewRoute to fetch.
+     */
+    where: PreviewRouteWhereUniqueInput
+  }
+
+  /**
+   * PreviewRoute findFirst
+   */
+  export type PreviewRouteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewRoute
+     */
+    select?: PreviewRouteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewRoute
+     */
+    omit?: PreviewRouteOmit<ExtArgs> | null
+    /**
+     * Filter, which PreviewRoute to fetch.
+     */
+    where?: PreviewRouteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreviewRoutes to fetch.
+     */
+    orderBy?: PreviewRouteOrderByWithRelationInput | PreviewRouteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PreviewRoutes.
+     */
+    cursor?: PreviewRouteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreviewRoutes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreviewRoutes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PreviewRoutes.
+     */
+    distinct?: PreviewRouteScalarFieldEnum | PreviewRouteScalarFieldEnum[]
+  }
+
+  /**
+   * PreviewRoute findFirstOrThrow
+   */
+  export type PreviewRouteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewRoute
+     */
+    select?: PreviewRouteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewRoute
+     */
+    omit?: PreviewRouteOmit<ExtArgs> | null
+    /**
+     * Filter, which PreviewRoute to fetch.
+     */
+    where?: PreviewRouteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreviewRoutes to fetch.
+     */
+    orderBy?: PreviewRouteOrderByWithRelationInput | PreviewRouteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PreviewRoutes.
+     */
+    cursor?: PreviewRouteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreviewRoutes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreviewRoutes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PreviewRoutes.
+     */
+    distinct?: PreviewRouteScalarFieldEnum | PreviewRouteScalarFieldEnum[]
+  }
+
+  /**
+   * PreviewRoute findMany
+   */
+  export type PreviewRouteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewRoute
+     */
+    select?: PreviewRouteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewRoute
+     */
+    omit?: PreviewRouteOmit<ExtArgs> | null
+    /**
+     * Filter, which PreviewRoutes to fetch.
+     */
+    where?: PreviewRouteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreviewRoutes to fetch.
+     */
+    orderBy?: PreviewRouteOrderByWithRelationInput | PreviewRouteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PreviewRoutes.
+     */
+    cursor?: PreviewRouteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreviewRoutes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreviewRoutes.
+     */
+    skip?: number
+    distinct?: PreviewRouteScalarFieldEnum | PreviewRouteScalarFieldEnum[]
+  }
+
+  /**
+   * PreviewRoute create
+   */
+  export type PreviewRouteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewRoute
+     */
+    select?: PreviewRouteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewRoute
+     */
+    omit?: PreviewRouteOmit<ExtArgs> | null
+    /**
+     * The data needed to create a PreviewRoute.
+     */
+    data: XOR<PreviewRouteCreateInput, PreviewRouteUncheckedCreateInput>
+  }
+
+  /**
+   * PreviewRoute createMany
+   */
+  export type PreviewRouteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PreviewRoutes.
+     */
+    data: PreviewRouteCreateManyInput | PreviewRouteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PreviewRoute createManyAndReturn
+   */
+  export type PreviewRouteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewRoute
+     */
+    select?: PreviewRouteSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewRoute
+     */
+    omit?: PreviewRouteOmit<ExtArgs> | null
+    /**
+     * The data used to create many PreviewRoutes.
+     */
+    data: PreviewRouteCreateManyInput | PreviewRouteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PreviewRoute update
+   */
+  export type PreviewRouteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewRoute
+     */
+    select?: PreviewRouteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewRoute
+     */
+    omit?: PreviewRouteOmit<ExtArgs> | null
+    /**
+     * The data needed to update a PreviewRoute.
+     */
+    data: XOR<PreviewRouteUpdateInput, PreviewRouteUncheckedUpdateInput>
+    /**
+     * Choose, which PreviewRoute to update.
+     */
+    where: PreviewRouteWhereUniqueInput
+  }
+
+  /**
+   * PreviewRoute updateMany
+   */
+  export type PreviewRouteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PreviewRoutes.
+     */
+    data: XOR<PreviewRouteUpdateManyMutationInput, PreviewRouteUncheckedUpdateManyInput>
+    /**
+     * Filter which PreviewRoutes to update
+     */
+    where?: PreviewRouteWhereInput
+    /**
+     * Limit how many PreviewRoutes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PreviewRoute updateManyAndReturn
+   */
+  export type PreviewRouteUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewRoute
+     */
+    select?: PreviewRouteSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewRoute
+     */
+    omit?: PreviewRouteOmit<ExtArgs> | null
+    /**
+     * The data used to update PreviewRoutes.
+     */
+    data: XOR<PreviewRouteUpdateManyMutationInput, PreviewRouteUncheckedUpdateManyInput>
+    /**
+     * Filter which PreviewRoutes to update
+     */
+    where?: PreviewRouteWhereInput
+    /**
+     * Limit how many PreviewRoutes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PreviewRoute upsert
+   */
+  export type PreviewRouteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewRoute
+     */
+    select?: PreviewRouteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewRoute
+     */
+    omit?: PreviewRouteOmit<ExtArgs> | null
+    /**
+     * The filter to search for the PreviewRoute to update in case it exists.
+     */
+    where: PreviewRouteWhereUniqueInput
+    /**
+     * In case the PreviewRoute found by the `where` argument doesn't exist, create a new PreviewRoute with this data.
+     */
+    create: XOR<PreviewRouteCreateInput, PreviewRouteUncheckedCreateInput>
+    /**
+     * In case the PreviewRoute was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PreviewRouteUpdateInput, PreviewRouteUncheckedUpdateInput>
+  }
+
+  /**
+   * PreviewRoute delete
+   */
+  export type PreviewRouteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewRoute
+     */
+    select?: PreviewRouteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewRoute
+     */
+    omit?: PreviewRouteOmit<ExtArgs> | null
+    /**
+     * Filter which PreviewRoute to delete.
+     */
+    where: PreviewRouteWhereUniqueInput
+  }
+
+  /**
+   * PreviewRoute deleteMany
+   */
+  export type PreviewRouteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PreviewRoutes to delete
+     */
+    where?: PreviewRouteWhereInput
+    /**
+     * Limit how many PreviewRoutes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PreviewRoute without action
+   */
+  export type PreviewRouteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewRoute
+     */
+    select?: PreviewRouteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewRoute
+     */
+    omit?: PreviewRouteOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PreviewAccessLog
+   */
+
+  export type AggregatePreviewAccessLog = {
+    _count: PreviewAccessLogCountAggregateOutputType | null
+    _avg: PreviewAccessLogAvgAggregateOutputType | null
+    _sum: PreviewAccessLogSumAggregateOutputType | null
+    _min: PreviewAccessLogMinAggregateOutputType | null
+    _max: PreviewAccessLogMaxAggregateOutputType | null
+  }
+
+  export type PreviewAccessLogAvgAggregateOutputType = {
+    statusCode: number | null
+  }
+
+  export type PreviewAccessLogSumAggregateOutputType = {
+    statusCode: number | null
+  }
+
+  export type PreviewAccessLogMinAggregateOutputType = {
+    id: string | null
+    runtimeId: string | null
+    ipHash: string | null
+    uaHash: string | null
+    path: string | null
+    statusCode: number | null
+    createdAt: Date | null
+  }
+
+  export type PreviewAccessLogMaxAggregateOutputType = {
+    id: string | null
+    runtimeId: string | null
+    ipHash: string | null
+    uaHash: string | null
+    path: string | null
+    statusCode: number | null
+    createdAt: Date | null
+  }
+
+  export type PreviewAccessLogCountAggregateOutputType = {
+    id: number
+    runtimeId: number
+    ipHash: number
+    uaHash: number
+    path: number
+    statusCode: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type PreviewAccessLogAvgAggregateInputType = {
+    statusCode?: true
+  }
+
+  export type PreviewAccessLogSumAggregateInputType = {
+    statusCode?: true
+  }
+
+  export type PreviewAccessLogMinAggregateInputType = {
+    id?: true
+    runtimeId?: true
+    ipHash?: true
+    uaHash?: true
+    path?: true
+    statusCode?: true
+    createdAt?: true
+  }
+
+  export type PreviewAccessLogMaxAggregateInputType = {
+    id?: true
+    runtimeId?: true
+    ipHash?: true
+    uaHash?: true
+    path?: true
+    statusCode?: true
+    createdAt?: true
+  }
+
+  export type PreviewAccessLogCountAggregateInputType = {
+    id?: true
+    runtimeId?: true
+    ipHash?: true
+    uaHash?: true
+    path?: true
+    statusCode?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type PreviewAccessLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PreviewAccessLog to aggregate.
+     */
+    where?: PreviewAccessLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreviewAccessLogs to fetch.
+     */
+    orderBy?: PreviewAccessLogOrderByWithRelationInput | PreviewAccessLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PreviewAccessLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreviewAccessLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreviewAccessLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PreviewAccessLogs
+    **/
+    _count?: true | PreviewAccessLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PreviewAccessLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PreviewAccessLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PreviewAccessLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PreviewAccessLogMaxAggregateInputType
+  }
+
+  export type GetPreviewAccessLogAggregateType<T extends PreviewAccessLogAggregateArgs> = {
+        [P in keyof T & keyof AggregatePreviewAccessLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePreviewAccessLog[P]>
+      : GetScalarType<T[P], AggregatePreviewAccessLog[P]>
+  }
+
+
+
+
+  export type PreviewAccessLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PreviewAccessLogWhereInput
+    orderBy?: PreviewAccessLogOrderByWithAggregationInput | PreviewAccessLogOrderByWithAggregationInput[]
+    by: PreviewAccessLogScalarFieldEnum[] | PreviewAccessLogScalarFieldEnum
+    having?: PreviewAccessLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PreviewAccessLogCountAggregateInputType | true
+    _avg?: PreviewAccessLogAvgAggregateInputType
+    _sum?: PreviewAccessLogSumAggregateInputType
+    _min?: PreviewAccessLogMinAggregateInputType
+    _max?: PreviewAccessLogMaxAggregateInputType
+  }
+
+  export type PreviewAccessLogGroupByOutputType = {
+    id: string
+    runtimeId: string
+    ipHash: string
+    uaHash: string
+    path: string
+    statusCode: number
+    createdAt: Date
+    _count: PreviewAccessLogCountAggregateOutputType | null
+    _avg: PreviewAccessLogAvgAggregateOutputType | null
+    _sum: PreviewAccessLogSumAggregateOutputType | null
+    _min: PreviewAccessLogMinAggregateOutputType | null
+    _max: PreviewAccessLogMaxAggregateOutputType | null
+  }
+
+  type GetPreviewAccessLogGroupByPayload<T extends PreviewAccessLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PreviewAccessLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PreviewAccessLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PreviewAccessLogGroupByOutputType[P]>
+            : GetScalarType<T[P], PreviewAccessLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PreviewAccessLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    runtimeId?: boolean
+    ipHash?: boolean
+    uaHash?: boolean
+    path?: boolean
+    statusCode?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["previewAccessLog"]>
+
+  export type PreviewAccessLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    runtimeId?: boolean
+    ipHash?: boolean
+    uaHash?: boolean
+    path?: boolean
+    statusCode?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["previewAccessLog"]>
+
+  export type PreviewAccessLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    runtimeId?: boolean
+    ipHash?: boolean
+    uaHash?: boolean
+    path?: boolean
+    statusCode?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["previewAccessLog"]>
+
+  export type PreviewAccessLogSelectScalar = {
+    id?: boolean
+    runtimeId?: boolean
+    ipHash?: boolean
+    uaHash?: boolean
+    path?: boolean
+    statusCode?: boolean
+    createdAt?: boolean
+  }
+
+  export type PreviewAccessLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "runtimeId" | "ipHash" | "uaHash" | "path" | "statusCode" | "createdAt", ExtArgs["result"]["previewAccessLog"]>
+
+  export type $PreviewAccessLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PreviewAccessLog"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      runtimeId: string
+      ipHash: string
+      uaHash: string
+      path: string
+      statusCode: number
+      createdAt: Date
+    }, ExtArgs["result"]["previewAccessLog"]>
+    composites: {}
+  }
+
+  type PreviewAccessLogGetPayload<S extends boolean | null | undefined | PreviewAccessLogDefaultArgs> = $Result.GetResult<Prisma.$PreviewAccessLogPayload, S>
+
+  type PreviewAccessLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PreviewAccessLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PreviewAccessLogCountAggregateInputType | true
+    }
+
+  export interface PreviewAccessLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PreviewAccessLog'], meta: { name: 'PreviewAccessLog' } }
+    /**
+     * Find zero or one PreviewAccessLog that matches the filter.
+     * @param {PreviewAccessLogFindUniqueArgs} args - Arguments to find a PreviewAccessLog
+     * @example
+     * // Get one PreviewAccessLog
+     * const previewAccessLog = await prisma.previewAccessLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PreviewAccessLogFindUniqueArgs>(args: SelectSubset<T, PreviewAccessLogFindUniqueArgs<ExtArgs>>): Prisma__PreviewAccessLogClient<$Result.GetResult<Prisma.$PreviewAccessLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PreviewAccessLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PreviewAccessLogFindUniqueOrThrowArgs} args - Arguments to find a PreviewAccessLog
+     * @example
+     * // Get one PreviewAccessLog
+     * const previewAccessLog = await prisma.previewAccessLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PreviewAccessLogFindUniqueOrThrowArgs>(args: SelectSubset<T, PreviewAccessLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PreviewAccessLogClient<$Result.GetResult<Prisma.$PreviewAccessLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PreviewAccessLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewAccessLogFindFirstArgs} args - Arguments to find a PreviewAccessLog
+     * @example
+     * // Get one PreviewAccessLog
+     * const previewAccessLog = await prisma.previewAccessLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PreviewAccessLogFindFirstArgs>(args?: SelectSubset<T, PreviewAccessLogFindFirstArgs<ExtArgs>>): Prisma__PreviewAccessLogClient<$Result.GetResult<Prisma.$PreviewAccessLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PreviewAccessLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewAccessLogFindFirstOrThrowArgs} args - Arguments to find a PreviewAccessLog
+     * @example
+     * // Get one PreviewAccessLog
+     * const previewAccessLog = await prisma.previewAccessLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PreviewAccessLogFindFirstOrThrowArgs>(args?: SelectSubset<T, PreviewAccessLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__PreviewAccessLogClient<$Result.GetResult<Prisma.$PreviewAccessLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PreviewAccessLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewAccessLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PreviewAccessLogs
+     * const previewAccessLogs = await prisma.previewAccessLog.findMany()
+     * 
+     * // Get first 10 PreviewAccessLogs
+     * const previewAccessLogs = await prisma.previewAccessLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const previewAccessLogWithIdOnly = await prisma.previewAccessLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PreviewAccessLogFindManyArgs>(args?: SelectSubset<T, PreviewAccessLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreviewAccessLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PreviewAccessLog.
+     * @param {PreviewAccessLogCreateArgs} args - Arguments to create a PreviewAccessLog.
+     * @example
+     * // Create one PreviewAccessLog
+     * const PreviewAccessLog = await prisma.previewAccessLog.create({
+     *   data: {
+     *     // ... data to create a PreviewAccessLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends PreviewAccessLogCreateArgs>(args: SelectSubset<T, PreviewAccessLogCreateArgs<ExtArgs>>): Prisma__PreviewAccessLogClient<$Result.GetResult<Prisma.$PreviewAccessLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PreviewAccessLogs.
+     * @param {PreviewAccessLogCreateManyArgs} args - Arguments to create many PreviewAccessLogs.
+     * @example
+     * // Create many PreviewAccessLogs
+     * const previewAccessLog = await prisma.previewAccessLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PreviewAccessLogCreateManyArgs>(args?: SelectSubset<T, PreviewAccessLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PreviewAccessLogs and returns the data saved in the database.
+     * @param {PreviewAccessLogCreateManyAndReturnArgs} args - Arguments to create many PreviewAccessLogs.
+     * @example
+     * // Create many PreviewAccessLogs
+     * const previewAccessLog = await prisma.previewAccessLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PreviewAccessLogs and only return the `id`
+     * const previewAccessLogWithIdOnly = await prisma.previewAccessLog.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PreviewAccessLogCreateManyAndReturnArgs>(args?: SelectSubset<T, PreviewAccessLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreviewAccessLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PreviewAccessLog.
+     * @param {PreviewAccessLogDeleteArgs} args - Arguments to delete one PreviewAccessLog.
+     * @example
+     * // Delete one PreviewAccessLog
+     * const PreviewAccessLog = await prisma.previewAccessLog.delete({
+     *   where: {
+     *     // ... filter to delete one PreviewAccessLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PreviewAccessLogDeleteArgs>(args: SelectSubset<T, PreviewAccessLogDeleteArgs<ExtArgs>>): Prisma__PreviewAccessLogClient<$Result.GetResult<Prisma.$PreviewAccessLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PreviewAccessLog.
+     * @param {PreviewAccessLogUpdateArgs} args - Arguments to update one PreviewAccessLog.
+     * @example
+     * // Update one PreviewAccessLog
+     * const previewAccessLog = await prisma.previewAccessLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PreviewAccessLogUpdateArgs>(args: SelectSubset<T, PreviewAccessLogUpdateArgs<ExtArgs>>): Prisma__PreviewAccessLogClient<$Result.GetResult<Prisma.$PreviewAccessLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PreviewAccessLogs.
+     * @param {PreviewAccessLogDeleteManyArgs} args - Arguments to filter PreviewAccessLogs to delete.
+     * @example
+     * // Delete a few PreviewAccessLogs
+     * const { count } = await prisma.previewAccessLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PreviewAccessLogDeleteManyArgs>(args?: SelectSubset<T, PreviewAccessLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PreviewAccessLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewAccessLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PreviewAccessLogs
+     * const previewAccessLog = await prisma.previewAccessLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PreviewAccessLogUpdateManyArgs>(args: SelectSubset<T, PreviewAccessLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PreviewAccessLogs and returns the data updated in the database.
+     * @param {PreviewAccessLogUpdateManyAndReturnArgs} args - Arguments to update many PreviewAccessLogs.
+     * @example
+     * // Update many PreviewAccessLogs
+     * const previewAccessLog = await prisma.previewAccessLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PreviewAccessLogs and only return the `id`
+     * const previewAccessLogWithIdOnly = await prisma.previewAccessLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PreviewAccessLogUpdateManyAndReturnArgs>(args: SelectSubset<T, PreviewAccessLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreviewAccessLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PreviewAccessLog.
+     * @param {PreviewAccessLogUpsertArgs} args - Arguments to update or create a PreviewAccessLog.
+     * @example
+     * // Update or create a PreviewAccessLog
+     * const previewAccessLog = await prisma.previewAccessLog.upsert({
+     *   create: {
+     *     // ... data to create a PreviewAccessLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PreviewAccessLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PreviewAccessLogUpsertArgs>(args: SelectSubset<T, PreviewAccessLogUpsertArgs<ExtArgs>>): Prisma__PreviewAccessLogClient<$Result.GetResult<Prisma.$PreviewAccessLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PreviewAccessLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewAccessLogCountArgs} args - Arguments to filter PreviewAccessLogs to count.
+     * @example
+     * // Count the number of PreviewAccessLogs
+     * const count = await prisma.previewAccessLog.count({
+     *   where: {
+     *     // ... the filter for the PreviewAccessLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends PreviewAccessLogCountArgs>(
+      args?: Subset<T, PreviewAccessLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PreviewAccessLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PreviewAccessLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewAccessLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PreviewAccessLogAggregateArgs>(args: Subset<T, PreviewAccessLogAggregateArgs>): Prisma.PrismaPromise<GetPreviewAccessLogAggregateType<T>>
+
+    /**
+     * Group by PreviewAccessLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreviewAccessLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PreviewAccessLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PreviewAccessLogGroupByArgs['orderBy'] }
+        : { orderBy?: PreviewAccessLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PreviewAccessLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPreviewAccessLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PreviewAccessLog model
+   */
+  readonly fields: PreviewAccessLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PreviewAccessLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PreviewAccessLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PreviewAccessLog model
+   */
+  interface PreviewAccessLogFieldRefs {
+    readonly id: FieldRef<"PreviewAccessLog", 'String'>
+    readonly runtimeId: FieldRef<"PreviewAccessLog", 'String'>
+    readonly ipHash: FieldRef<"PreviewAccessLog", 'String'>
+    readonly uaHash: FieldRef<"PreviewAccessLog", 'String'>
+    readonly path: FieldRef<"PreviewAccessLog", 'String'>
+    readonly statusCode: FieldRef<"PreviewAccessLog", 'Int'>
+    readonly createdAt: FieldRef<"PreviewAccessLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PreviewAccessLog findUnique
+   */
+  export type PreviewAccessLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAccessLog
+     */
+    select?: PreviewAccessLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAccessLog
+     */
+    omit?: PreviewAccessLogOmit<ExtArgs> | null
+    /**
+     * Filter, which PreviewAccessLog to fetch.
+     */
+    where: PreviewAccessLogWhereUniqueInput
+  }
+
+  /**
+   * PreviewAccessLog findUniqueOrThrow
+   */
+  export type PreviewAccessLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAccessLog
+     */
+    select?: PreviewAccessLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAccessLog
+     */
+    omit?: PreviewAccessLogOmit<ExtArgs> | null
+    /**
+     * Filter, which PreviewAccessLog to fetch.
+     */
+    where: PreviewAccessLogWhereUniqueInput
+  }
+
+  /**
+   * PreviewAccessLog findFirst
+   */
+  export type PreviewAccessLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAccessLog
+     */
+    select?: PreviewAccessLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAccessLog
+     */
+    omit?: PreviewAccessLogOmit<ExtArgs> | null
+    /**
+     * Filter, which PreviewAccessLog to fetch.
+     */
+    where?: PreviewAccessLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreviewAccessLogs to fetch.
+     */
+    orderBy?: PreviewAccessLogOrderByWithRelationInput | PreviewAccessLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PreviewAccessLogs.
+     */
+    cursor?: PreviewAccessLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreviewAccessLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreviewAccessLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PreviewAccessLogs.
+     */
+    distinct?: PreviewAccessLogScalarFieldEnum | PreviewAccessLogScalarFieldEnum[]
+  }
+
+  /**
+   * PreviewAccessLog findFirstOrThrow
+   */
+  export type PreviewAccessLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAccessLog
+     */
+    select?: PreviewAccessLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAccessLog
+     */
+    omit?: PreviewAccessLogOmit<ExtArgs> | null
+    /**
+     * Filter, which PreviewAccessLog to fetch.
+     */
+    where?: PreviewAccessLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreviewAccessLogs to fetch.
+     */
+    orderBy?: PreviewAccessLogOrderByWithRelationInput | PreviewAccessLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PreviewAccessLogs.
+     */
+    cursor?: PreviewAccessLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreviewAccessLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreviewAccessLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PreviewAccessLogs.
+     */
+    distinct?: PreviewAccessLogScalarFieldEnum | PreviewAccessLogScalarFieldEnum[]
+  }
+
+  /**
+   * PreviewAccessLog findMany
+   */
+  export type PreviewAccessLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAccessLog
+     */
+    select?: PreviewAccessLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAccessLog
+     */
+    omit?: PreviewAccessLogOmit<ExtArgs> | null
+    /**
+     * Filter, which PreviewAccessLogs to fetch.
+     */
+    where?: PreviewAccessLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreviewAccessLogs to fetch.
+     */
+    orderBy?: PreviewAccessLogOrderByWithRelationInput | PreviewAccessLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PreviewAccessLogs.
+     */
+    cursor?: PreviewAccessLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreviewAccessLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreviewAccessLogs.
+     */
+    skip?: number
+    distinct?: PreviewAccessLogScalarFieldEnum | PreviewAccessLogScalarFieldEnum[]
+  }
+
+  /**
+   * PreviewAccessLog create
+   */
+  export type PreviewAccessLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAccessLog
+     */
+    select?: PreviewAccessLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAccessLog
+     */
+    omit?: PreviewAccessLogOmit<ExtArgs> | null
+    /**
+     * The data needed to create a PreviewAccessLog.
+     */
+    data: XOR<PreviewAccessLogCreateInput, PreviewAccessLogUncheckedCreateInput>
+  }
+
+  /**
+   * PreviewAccessLog createMany
+   */
+  export type PreviewAccessLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PreviewAccessLogs.
+     */
+    data: PreviewAccessLogCreateManyInput | PreviewAccessLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PreviewAccessLog createManyAndReturn
+   */
+  export type PreviewAccessLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAccessLog
+     */
+    select?: PreviewAccessLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAccessLog
+     */
+    omit?: PreviewAccessLogOmit<ExtArgs> | null
+    /**
+     * The data used to create many PreviewAccessLogs.
+     */
+    data: PreviewAccessLogCreateManyInput | PreviewAccessLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PreviewAccessLog update
+   */
+  export type PreviewAccessLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAccessLog
+     */
+    select?: PreviewAccessLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAccessLog
+     */
+    omit?: PreviewAccessLogOmit<ExtArgs> | null
+    /**
+     * The data needed to update a PreviewAccessLog.
+     */
+    data: XOR<PreviewAccessLogUpdateInput, PreviewAccessLogUncheckedUpdateInput>
+    /**
+     * Choose, which PreviewAccessLog to update.
+     */
+    where: PreviewAccessLogWhereUniqueInput
+  }
+
+  /**
+   * PreviewAccessLog updateMany
+   */
+  export type PreviewAccessLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PreviewAccessLogs.
+     */
+    data: XOR<PreviewAccessLogUpdateManyMutationInput, PreviewAccessLogUncheckedUpdateManyInput>
+    /**
+     * Filter which PreviewAccessLogs to update
+     */
+    where?: PreviewAccessLogWhereInput
+    /**
+     * Limit how many PreviewAccessLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PreviewAccessLog updateManyAndReturn
+   */
+  export type PreviewAccessLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAccessLog
+     */
+    select?: PreviewAccessLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAccessLog
+     */
+    omit?: PreviewAccessLogOmit<ExtArgs> | null
+    /**
+     * The data used to update PreviewAccessLogs.
+     */
+    data: XOR<PreviewAccessLogUpdateManyMutationInput, PreviewAccessLogUncheckedUpdateManyInput>
+    /**
+     * Filter which PreviewAccessLogs to update
+     */
+    where?: PreviewAccessLogWhereInput
+    /**
+     * Limit how many PreviewAccessLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PreviewAccessLog upsert
+   */
+  export type PreviewAccessLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAccessLog
+     */
+    select?: PreviewAccessLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAccessLog
+     */
+    omit?: PreviewAccessLogOmit<ExtArgs> | null
+    /**
+     * The filter to search for the PreviewAccessLog to update in case it exists.
+     */
+    where: PreviewAccessLogWhereUniqueInput
+    /**
+     * In case the PreviewAccessLog found by the `where` argument doesn't exist, create a new PreviewAccessLog with this data.
+     */
+    create: XOR<PreviewAccessLogCreateInput, PreviewAccessLogUncheckedCreateInput>
+    /**
+     * In case the PreviewAccessLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PreviewAccessLogUpdateInput, PreviewAccessLogUncheckedUpdateInput>
+  }
+
+  /**
+   * PreviewAccessLog delete
+   */
+  export type PreviewAccessLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAccessLog
+     */
+    select?: PreviewAccessLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAccessLog
+     */
+    omit?: PreviewAccessLogOmit<ExtArgs> | null
+    /**
+     * Filter which PreviewAccessLog to delete.
+     */
+    where: PreviewAccessLogWhereUniqueInput
+  }
+
+  /**
+   * PreviewAccessLog deleteMany
+   */
+  export type PreviewAccessLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PreviewAccessLogs to delete
+     */
+    where?: PreviewAccessLogWhereInput
+    /**
+     * Limit how many PreviewAccessLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PreviewAccessLog without action
+   */
+  export type PreviewAccessLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreviewAccessLog
+     */
+    select?: PreviewAccessLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PreviewAccessLog
+     */
+    omit?: PreviewAccessLogOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model LoopConfig
    */
 
@@ -21981,6 +24252,33 @@ export namespace Prisma {
   export type RuntimeInstanceScalarFieldEnum = (typeof RuntimeInstanceScalarFieldEnum)[keyof typeof RuntimeInstanceScalarFieldEnum]
 
 
+  export const PreviewRouteScalarFieldEnum: {
+    id: 'id',
+    runtimeId: 'runtimeId',
+    slug: 'slug',
+    visibility: 'visibility',
+    passwordHash: 'passwordHash',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PreviewRouteScalarFieldEnum = (typeof PreviewRouteScalarFieldEnum)[keyof typeof PreviewRouteScalarFieldEnum]
+
+
+  export const PreviewAccessLogScalarFieldEnum: {
+    id: 'id',
+    runtimeId: 'runtimeId',
+    ipHash: 'ipHash',
+    uaHash: 'uaHash',
+    path: 'path',
+    statusCode: 'statusCode',
+    createdAt: 'createdAt'
+  };
+
+  export type PreviewAccessLogScalarFieldEnum = (typeof PreviewAccessLogScalarFieldEnum)[keyof typeof PreviewAccessLogScalarFieldEnum]
+
+
   export const LoopConfigScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -23340,6 +25638,137 @@ export namespace Prisma {
     lastAccessAt?: DateTimeNullableWithAggregatesFilter<"RuntimeInstance"> | Date | string | null
     lastHeartbeatAt?: DateTimeNullableWithAggregatesFilter<"RuntimeInstance"> | Date | string | null
     expiresAt?: DateTimeNullableWithAggregatesFilter<"RuntimeInstance"> | Date | string | null
+  }
+
+  export type PreviewRouteWhereInput = {
+    AND?: PreviewRouteWhereInput | PreviewRouteWhereInput[]
+    OR?: PreviewRouteWhereInput[]
+    NOT?: PreviewRouteWhereInput | PreviewRouteWhereInput[]
+    id?: StringFilter<"PreviewRoute"> | string
+    runtimeId?: StringFilter<"PreviewRoute"> | string
+    slug?: StringFilter<"PreviewRoute"> | string
+    visibility?: EnumRuntimeVisibilityFilter<"PreviewRoute"> | $Enums.RuntimeVisibility
+    passwordHash?: StringNullableFilter<"PreviewRoute"> | string | null
+    isActive?: BoolFilter<"PreviewRoute"> | boolean
+    createdAt?: DateTimeFilter<"PreviewRoute"> | Date | string
+    updatedAt?: DateTimeFilter<"PreviewRoute"> | Date | string
+  }
+
+  export type PreviewRouteOrderByWithRelationInput = {
+    id?: SortOrder
+    runtimeId?: SortOrder
+    slug?: SortOrder
+    visibility?: SortOrder
+    passwordHash?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PreviewRouteWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    slug?: string
+    AND?: PreviewRouteWhereInput | PreviewRouteWhereInput[]
+    OR?: PreviewRouteWhereInput[]
+    NOT?: PreviewRouteWhereInput | PreviewRouteWhereInput[]
+    runtimeId?: StringFilter<"PreviewRoute"> | string
+    visibility?: EnumRuntimeVisibilityFilter<"PreviewRoute"> | $Enums.RuntimeVisibility
+    passwordHash?: StringNullableFilter<"PreviewRoute"> | string | null
+    isActive?: BoolFilter<"PreviewRoute"> | boolean
+    createdAt?: DateTimeFilter<"PreviewRoute"> | Date | string
+    updatedAt?: DateTimeFilter<"PreviewRoute"> | Date | string
+  }, "id" | "slug">
+
+  export type PreviewRouteOrderByWithAggregationInput = {
+    id?: SortOrder
+    runtimeId?: SortOrder
+    slug?: SortOrder
+    visibility?: SortOrder
+    passwordHash?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PreviewRouteCountOrderByAggregateInput
+    _max?: PreviewRouteMaxOrderByAggregateInput
+    _min?: PreviewRouteMinOrderByAggregateInput
+  }
+
+  export type PreviewRouteScalarWhereWithAggregatesInput = {
+    AND?: PreviewRouteScalarWhereWithAggregatesInput | PreviewRouteScalarWhereWithAggregatesInput[]
+    OR?: PreviewRouteScalarWhereWithAggregatesInput[]
+    NOT?: PreviewRouteScalarWhereWithAggregatesInput | PreviewRouteScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PreviewRoute"> | string
+    runtimeId?: StringWithAggregatesFilter<"PreviewRoute"> | string
+    slug?: StringWithAggregatesFilter<"PreviewRoute"> | string
+    visibility?: EnumRuntimeVisibilityWithAggregatesFilter<"PreviewRoute"> | $Enums.RuntimeVisibility
+    passwordHash?: StringNullableWithAggregatesFilter<"PreviewRoute"> | string | null
+    isActive?: BoolWithAggregatesFilter<"PreviewRoute"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"PreviewRoute"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PreviewRoute"> | Date | string
+  }
+
+  export type PreviewAccessLogWhereInput = {
+    AND?: PreviewAccessLogWhereInput | PreviewAccessLogWhereInput[]
+    OR?: PreviewAccessLogWhereInput[]
+    NOT?: PreviewAccessLogWhereInput | PreviewAccessLogWhereInput[]
+    id?: StringFilter<"PreviewAccessLog"> | string
+    runtimeId?: StringFilter<"PreviewAccessLog"> | string
+    ipHash?: StringFilter<"PreviewAccessLog"> | string
+    uaHash?: StringFilter<"PreviewAccessLog"> | string
+    path?: StringFilter<"PreviewAccessLog"> | string
+    statusCode?: IntFilter<"PreviewAccessLog"> | number
+    createdAt?: DateTimeFilter<"PreviewAccessLog"> | Date | string
+  }
+
+  export type PreviewAccessLogOrderByWithRelationInput = {
+    id?: SortOrder
+    runtimeId?: SortOrder
+    ipHash?: SortOrder
+    uaHash?: SortOrder
+    path?: SortOrder
+    statusCode?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PreviewAccessLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PreviewAccessLogWhereInput | PreviewAccessLogWhereInput[]
+    OR?: PreviewAccessLogWhereInput[]
+    NOT?: PreviewAccessLogWhereInput | PreviewAccessLogWhereInput[]
+    runtimeId?: StringFilter<"PreviewAccessLog"> | string
+    ipHash?: StringFilter<"PreviewAccessLog"> | string
+    uaHash?: StringFilter<"PreviewAccessLog"> | string
+    path?: StringFilter<"PreviewAccessLog"> | string
+    statusCode?: IntFilter<"PreviewAccessLog"> | number
+    createdAt?: DateTimeFilter<"PreviewAccessLog"> | Date | string
+  }, "id">
+
+  export type PreviewAccessLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    runtimeId?: SortOrder
+    ipHash?: SortOrder
+    uaHash?: SortOrder
+    path?: SortOrder
+    statusCode?: SortOrder
+    createdAt?: SortOrder
+    _count?: PreviewAccessLogCountOrderByAggregateInput
+    _avg?: PreviewAccessLogAvgOrderByAggregateInput
+    _max?: PreviewAccessLogMaxOrderByAggregateInput
+    _min?: PreviewAccessLogMinOrderByAggregateInput
+    _sum?: PreviewAccessLogSumOrderByAggregateInput
+  }
+
+  export type PreviewAccessLogScalarWhereWithAggregatesInput = {
+    AND?: PreviewAccessLogScalarWhereWithAggregatesInput | PreviewAccessLogScalarWhereWithAggregatesInput[]
+    OR?: PreviewAccessLogScalarWhereWithAggregatesInput[]
+    NOT?: PreviewAccessLogScalarWhereWithAggregatesInput | PreviewAccessLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PreviewAccessLog"> | string
+    runtimeId?: StringWithAggregatesFilter<"PreviewAccessLog"> | string
+    ipHash?: StringWithAggregatesFilter<"PreviewAccessLog"> | string
+    uaHash?: StringWithAggregatesFilter<"PreviewAccessLog"> | string
+    path?: StringWithAggregatesFilter<"PreviewAccessLog"> | string
+    statusCode?: IntWithAggregatesFilter<"PreviewAccessLog"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"PreviewAccessLog"> | Date | string
   }
 
   export type LoopConfigWhereInput = {
@@ -24749,6 +27178,153 @@ export namespace Prisma {
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type PreviewRouteCreateInput = {
+    id?: string
+    runtimeId: string
+    slug: string
+    visibility?: $Enums.RuntimeVisibility
+    passwordHash?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PreviewRouteUncheckedCreateInput = {
+    id?: string
+    runtimeId: string
+    slug: string
+    visibility?: $Enums.RuntimeVisibility
+    passwordHash?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PreviewRouteUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    runtimeId?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    visibility?: EnumRuntimeVisibilityFieldUpdateOperationsInput | $Enums.RuntimeVisibility
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PreviewRouteUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    runtimeId?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    visibility?: EnumRuntimeVisibilityFieldUpdateOperationsInput | $Enums.RuntimeVisibility
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PreviewRouteCreateManyInput = {
+    id?: string
+    runtimeId: string
+    slug: string
+    visibility?: $Enums.RuntimeVisibility
+    passwordHash?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PreviewRouteUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    runtimeId?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    visibility?: EnumRuntimeVisibilityFieldUpdateOperationsInput | $Enums.RuntimeVisibility
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PreviewRouteUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    runtimeId?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    visibility?: EnumRuntimeVisibilityFieldUpdateOperationsInput | $Enums.RuntimeVisibility
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PreviewAccessLogCreateInput = {
+    id?: string
+    runtimeId: string
+    ipHash: string
+    uaHash: string
+    path?: string
+    statusCode?: number
+    createdAt?: Date | string
+  }
+
+  export type PreviewAccessLogUncheckedCreateInput = {
+    id?: string
+    runtimeId: string
+    ipHash: string
+    uaHash: string
+    path?: string
+    statusCode?: number
+    createdAt?: Date | string
+  }
+
+  export type PreviewAccessLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    runtimeId?: StringFieldUpdateOperationsInput | string
+    ipHash?: StringFieldUpdateOperationsInput | string
+    uaHash?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    statusCode?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PreviewAccessLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    runtimeId?: StringFieldUpdateOperationsInput | string
+    ipHash?: StringFieldUpdateOperationsInput | string
+    uaHash?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    statusCode?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PreviewAccessLogCreateManyInput = {
+    id?: string
+    runtimeId: string
+    ipHash: string
+    uaHash: string
+    path?: string
+    statusCode?: number
+    createdAt?: Date | string
+  }
+
+  export type PreviewAccessLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    runtimeId?: StringFieldUpdateOperationsInput | string
+    ipHash?: StringFieldUpdateOperationsInput | string
+    uaHash?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    statusCode?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PreviewAccessLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    runtimeId?: StringFieldUpdateOperationsInput | string
+    ipHash?: StringFieldUpdateOperationsInput | string
+    uaHash?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    statusCode?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type LoopConfigCreateInput = {
     id?: string
     name: string
@@ -25985,6 +28561,77 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumSleepStateFilter<$PrismaModel>
     _max?: NestedEnumSleepStateFilter<$PrismaModel>
+  }
+
+  export type PreviewRouteCountOrderByAggregateInput = {
+    id?: SortOrder
+    runtimeId?: SortOrder
+    slug?: SortOrder
+    visibility?: SortOrder
+    passwordHash?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PreviewRouteMaxOrderByAggregateInput = {
+    id?: SortOrder
+    runtimeId?: SortOrder
+    slug?: SortOrder
+    visibility?: SortOrder
+    passwordHash?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PreviewRouteMinOrderByAggregateInput = {
+    id?: SortOrder
+    runtimeId?: SortOrder
+    slug?: SortOrder
+    visibility?: SortOrder
+    passwordHash?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PreviewAccessLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    runtimeId?: SortOrder
+    ipHash?: SortOrder
+    uaHash?: SortOrder
+    path?: SortOrder
+    statusCode?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PreviewAccessLogAvgOrderByAggregateInput = {
+    statusCode?: SortOrder
+  }
+
+  export type PreviewAccessLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    runtimeId?: SortOrder
+    ipHash?: SortOrder
+    uaHash?: SortOrder
+    path?: SortOrder
+    statusCode?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PreviewAccessLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    runtimeId?: SortOrder
+    ipHash?: SortOrder
+    uaHash?: SortOrder
+    path?: SortOrder
+    statusCode?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PreviewAccessLogSumOrderByAggregateInput = {
+    statusCode?: SortOrder
   }
 
   export type LoopRunListRelationFilter = {

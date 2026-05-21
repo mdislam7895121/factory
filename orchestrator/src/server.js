@@ -1,6 +1,7 @@
 import express from 'express';
 import { WebSocketServer } from 'ws';
 import { createServer } from 'node:http';
+import { createConnection } from 'node:net';
 import { spawn } from 'node:child_process';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
@@ -508,42 +509,67 @@ app.use('/v1/preview/:id', async (req, res) => {
 server.on('upgrade', async (request, socket, head) => {
   try {
     const url = new URL(request.url || '', `http://${request.headers.host}`);
-    const match = url.pathname.match(/^\/v1\/ws\/projects\/([^/]+)\/logs$/);
-    if (!match) {
-      socket.destroy();
+
+    // Existing: log streaming for project containers
+    const logMatch = url.pathname.match(/^\/v1\/ws\/projects\/([^/]+)\/logs$/);
+    if (logMatch) {
+      const projectId = logMatch[1];
+      const projects = await readProjects();
+      const project = findProject(projects, projectId);
+      if (!project) { socket.destroy(); return; }
+
+      wss.handleUpgrade(request, socket, head, (ws) => {
+        const proc = spawn('docker', ['logs', '-f', '--tail', '50', project.containerName]);
+        ws.send(`[orchestrator] streaming logs for ${project.id}`);
+        proc.stdout.on('data', (chunk) => { ws.send(chunk.toString()); });
+        proc.stderr.on('data', (chunk) => { ws.send(chunk.toString()); });
+        proc.on('close', (code) => {
+          if (ws.readyState === ws.OPEN) {
+            ws.send(`[orchestrator] log stream closed (exit=${code})`);
+            ws.close();
+          }
+        });
+        ws.on('close', () => { proc.kill('SIGTERM'); });
+      });
       return;
     }
 
-    const projectId = match[1];
-    const projects = await readProjects();
-    const project = findProject(projects, projectId);
-    if (!project) {
-      socket.destroy();
+    // 05-06: WebSocket proxy to runtime container preview port
+    const previewMatch = url.pathname.match(/^\/v1\/ws\/preview\/([^/]+)(\/.*)?$/);
+    if (previewMatch) {
+      const projectId = decodeURIComponent(previewMatch[1]);
+      const subPath   = previewMatch[2] || '/';
+      const projects  = await readProjects();
+      const project   = findProject(projects, projectId);
+      if (!project || !project.port) { socket.destroy(); return; }
+
+      // Tunnel WS to the container on host.docker.internal
+      const upstream = createConnection(project.port, 'host.docker.internal');
+      upstream.once('connect', () => {
+        const targetPath = `${subPath}${url.search}`;
+        const secKey  = request.headers['sec-websocket-key']  || '';
+        const secVer  = request.headers['sec-websocket-version'] || '13';
+        const upgradeReq = [
+          `GET ${targetPath} HTTP/1.1`,
+          `Host: localhost:${project.port}`,
+          `Upgrade: websocket`,
+          `Connection: Upgrade`,
+          `Sec-WebSocket-Key: ${secKey}`,
+          `Sec-WebSocket-Version: ${secVer}`,
+        ].join('\r\n') + '\r\n\r\n';
+
+        upstream.write(upgradeReq);
+        if (head.length) upstream.write(head);
+        socket.pipe(upstream);
+        upstream.pipe(socket);
+      });
+      upstream.on('error', () => { try { socket.destroy(); } catch { /**/ } });
+      socket.on('error', () => { try { upstream.destroy(); } catch { /**/ } });
+      socket.on('close', () => { try { upstream.destroy(); } catch { /**/ } });
       return;
     }
 
-    wss.handleUpgrade(request, socket, head, (ws) => {
-      const proc = spawn('docker', ['logs', '-f', '--tail', '50', project.containerName]);
-
-      ws.send(`[orchestrator] streaming logs for ${project.id}`);
-
-      proc.stdout.on('data', (chunk) => {
-        ws.send(chunk.toString());
-      });
-      proc.stderr.on('data', (chunk) => {
-        ws.send(chunk.toString());
-      });
-      proc.on('close', (code) => {
-        if (ws.readyState === ws.OPEN) {
-          ws.send(`[orchestrator] log stream closed (exit=${code})`);
-          ws.close();
-        }
-      });
-
-      ws.on('close', () => {
-        proc.kill('SIGTERM');
-      });
-    });
+    socket.destroy();
   } catch {
     socket.destroy();
   }

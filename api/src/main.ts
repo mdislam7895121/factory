@@ -1,8 +1,15 @@
 import 'dotenv/config';
 import { timingSafeEqual } from 'node:crypto';
+import { createConnection } from 'node:net';
+import type { IncomingMessage } from 'node:http';
+import type { Duplex } from 'node:stream';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { RedisService } from './lib/redis/redis.service';
+import { PreviewService } from './preview/preview.service';
+import { PreviewLogService } from './preview/preview-log.service';
+import { PreviewTokenService } from './preview/preview-token.service';
+import { RuntimeService } from './sandbox/runtime/runtime.service';
 import {
   assertRequiredRuntimeEnv,
   resolveAndNormalizeNodeEnvironment,
@@ -407,6 +414,116 @@ function createRateLimitMiddleware(redis: RedisService): RequestHandler {
   };
 }
 
+// ── SERIAL 05: Preview Gateway middleware ─────────────────────────────────────
+
+function createPreviewMiddleware(
+  previewService: PreviewService,
+  logService:     PreviewLogService,
+): RequestHandler {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    // Mounted at /p — req.url is /:id[/subpath][?query]
+    const m = (req.url || '').match(/^\/([^/?]+)(.*)?$/);
+    if (!m) { next(); return; }
+    const [, runtimeId, upstream = '/'] = m;
+
+    void (async () => {
+      try {
+        const runtime = await previewService.resolve(runtimeId);
+
+        const token       = extractPreviewToken(req);
+        const password    = req.headers['x-preview-password'] as string | undefined;
+        const requesterId = (req as Request & { userId?: string }).userId;
+        const allowed     = await previewService.checkAccess(runtime, {
+          requesterId,
+          password,
+          token,
+        });
+        if (!allowed) {
+          void logService.record({
+            runtimeId:  runtime.id,
+            ip:         previewService.extractIp(req),
+            ua:         (req.headers['user-agent'] as string) || '',
+            path:       req.path,
+            statusCode: 401,
+          });
+          res.status(401).json({ ok: false, error: 'access denied' });
+          return;
+        }
+
+        // 05-07: Auto-wake if sleeping
+        if (
+          runtime.status === 'SLEEPING' ||
+          runtime.status === 'PROVISIONING'
+        ) {
+          await previewService.wakeIfNeeded(runtime.id);
+        }
+
+        const rawPath = upstream || '/';
+        const statusCode = await previewService.proxyHttp(runtime, rawPath, req, res);
+        void logService.record({
+          runtimeId:  runtime.id,
+          ip:         previewService.extractIp(req),
+          ua:         (req.headers['user-agent'] as string) || '',
+          path:       req.path,
+          statusCode,
+        });
+      } catch (err) {
+        if (err instanceof Error && 'getStatus' in err) {
+          const httpErr = err as Error & { getStatus: () => number; message: string };
+          if (!res.headersSent) {
+            res.status(httpErr.getStatus()).json({ ok: false, error: httpErr.message });
+          }
+          return;
+        }
+        if (!res.headersSent) {
+          res.status(500).json({ ok: false, error: 'internal error' });
+        }
+      }
+    })();
+  };
+}
+
+// 05-06: WebSocket upgrade handler for /p/:id[/*]
+function handlePreviewWsUpgrade(
+  previewService:  PreviewService,
+  tokenService:    PreviewTokenService,
+  runtimeService:  RuntimeService,
+) {
+  return (req: IncomingMessage, socket: Duplex, head: Buffer): void => {
+    const url = new URL(req.url || '', 'http://localhost');
+    const m   = url.pathname.match(/^\/p\/([^/]+)(\/.*)?$/);
+    if (!m) { socket.destroy(); return; }
+    const [, runtimeId, subPath = '/'] = m;
+
+    void (async () => {
+      try {
+        const runtime = await runtimeService.get(runtimeId);
+        if (!runtime || runtime.status === 'TERMINATED') { socket.destroy(); return; }
+
+        // Access check via token (WS can't send custom headers easily — use query param)
+        const token = url.searchParams.get('token') ?? undefined;
+        if (runtime.visibility !== 'PUBLIC') {
+          if (!token) { socket.destroy(); return; }
+          try { tokenService.verify(token); }
+          catch { socket.destroy(); return; }
+        }
+
+        previewService.proxyWs(runtime, subPath, url.search, req, socket, head);
+      } catch {
+        try { socket.destroy(); } catch { /* ignore */ }
+      }
+    })();
+  };
+}
+
+function extractPreviewToken(req: Request): string | undefined {
+  const q = req.query['token'];
+  if (typeof q === 'string') return q;
+  const auth = req.headers.authorization;
+  if (auth?.startsWith('Bearer ')) return auth.slice(7);
+  return undefined;
+}
+
 async function bootstrap() {
   const nodeEnvironment = validateEnvironmentOrThrow();
   const app = await NestFactory.create(AppModule, { rawBody: true });
@@ -443,7 +560,20 @@ async function bootstrap() {
 
   app.use(createRateLimitMiddleware(app.get(RedisService)));
 
+  // 05-01 / 05-02 / 05-03 / 05-04 / 05-07 / 05-08 / 05-09: Preview gateway
+  const previewService = app.get(PreviewService);
+  const previewLogService = app.get(PreviewLogService);
+  const previewTokenService = app.get(PreviewTokenService);
+  const runtimeService = app.get(RuntimeService);
   const expressApp = app.getHttpAdapter().getInstance() as unknown as Express;
+  expressApp.use('/p', createPreviewMiddleware(previewService, previewLogService));
+
+  // 05-06: WebSocket upgrade proxy for /p/:id[/*]
+  const httpServer = app.getHttpServer() as import('node:http').Server;
+  httpServer.on(
+    'upgrade',
+    handlePreviewWsUpgrade(previewService, previewTokenService, runtimeService),
+  );
   expressApp.get('/debug-sentry', function (req: Request, res: Response) {
     if (nodeEnvironment === 'production') {
       const debugToken = (process.env.DEBUG_TOKEN || '').trim();

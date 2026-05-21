@@ -1,0 +1,15 @@
+import { Module } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { RuntimeModule } from '../sandbox/runtime/runtime.module';
+import { PreviewTokenService } from './preview-token.service';
+import { PreviewLogService } from './preview-log.service';
+import { PreviewService } from './preview.service';
+import { PreviewController } from './preview.controller';
+
+@Module({
+  imports:     [RuntimeModule],
+  controllers: [PreviewController],
+  providers:   [PrismaService, PreviewTokenService, PreviewLogService, PreviewService],
+  exports:     [PreviewService, PreviewTokenService, PreviewLogService],
+})
+export class PreviewModule {}
