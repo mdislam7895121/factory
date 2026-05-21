@@ -118,8 +118,18 @@ export class SandboxService {
       data: { status: 'READY' },
     });
 
-    // Record usage
-    const billedAmount = Math.max(0, durationSecs - FREE_SECONDS_PER_DAY) * PRICE_PER_SECOND;
+    // Record usage — free tier is cumulative per day, not per-run
+    const todayStart = new Date();
+    todayStart.setUTCHours(0, 0, 0, 0);
+    const todayAgg = await this.prisma.usageLog.aggregate({
+      where: { userId, createdAt: { gte: todayStart } },
+      _sum: { durationSecs: true },
+    });
+    const usedTodaySecs = todayAgg._sum.durationSecs ?? 0;
+    const freeRemaining = Math.max(0, FREE_SECONDS_PER_DAY - usedTodaySecs);
+    const billableSecs = Math.max(0, durationSecs - freeRemaining);
+    const billedAmount = billableSecs * PRICE_PER_SECOND;
+
     await this.prisma.usageLog.create({
       data: {
         sandboxId,

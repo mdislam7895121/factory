@@ -414,7 +414,7 @@ function createRateLimitMiddleware(): RequestHandler {
 
 async function bootstrap() {
   const nodeEnvironment = validateEnvironmentOrThrow();
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { rawBody: true });
   applyGlobalValidationBoundary(app);
 
   const bodyLimit = (process.env.BODY_LIMIT || '1mb').trim() || '1mb';

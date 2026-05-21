@@ -191,6 +191,40 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ApiKeyScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  keyHash: 'keyHash',
+  keyPrefix: 'keyPrefix',
+  name: 'name',
+  isActive: 'isActive',
+  lastUsedAt: 'lastUsedAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SandboxScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  language: 'language',
+  status: 'status',
+  containerId: 'containerId',
+  port: 'port',
+  timeoutSecs: 'timeoutSecs',
+  startedAt: 'startedAt',
+  terminatedAt: 'terminatedAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.UsageLogScalarFieldEnum = {
+  id: 'id',
+  sandboxId: 'sandboxId',
+  userId: 'userId',
+  durationSecs: 'durationSecs',
+  billedAmount: 'billedAmount',
+  language: 'language',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -218,6 +252,20 @@ exports.ProvisioningRunStatus = exports.$Enums.ProvisioningRunStatus = {
   FAILED: 'FAILED'
 };
 
+exports.SandboxLanguage = exports.$Enums.SandboxLanguage = {
+  python: 'python',
+  nodejs: 'nodejs',
+  bash: 'bash'
+};
+
+exports.SandboxStatus = exports.$Enums.SandboxStatus = {
+  CREATING: 'CREATING',
+  READY: 'READY',
+  RUNNING: 'RUNNING',
+  TERMINATED: 'TERMINATED',
+  FAILED: 'FAILED'
+};
+
 exports.Prisma.ModelName = {
   HealthCheck: 'HealthCheck',
   Template: 'Template',
@@ -225,7 +273,10 @@ exports.Prisma.ModelName = {
   Project: 'Project',
   ProvisioningRun: 'ProvisioningRun',
   PublicProject: 'PublicProject',
-  User: 'User'
+  User: 'User',
+  ApiKey: 'ApiKey',
+  Sandbox: 'Sandbox',
+  UsageLog: 'UsageLog'
 };
 
 /**

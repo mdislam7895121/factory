@@ -48,6 +48,21 @@ export type PublicProject = $Result.DefaultSelection<Prisma.$PublicProjectPayloa
  * 
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
+/**
+ * Model ApiKey
+ * 
+ */
+export type ApiKey = $Result.DefaultSelection<Prisma.$ApiKeyPayload>
+/**
+ * Model Sandbox
+ * 
+ */
+export type Sandbox = $Result.DefaultSelection<Prisma.$SandboxPayload>
+/**
+ * Model UsageLog
+ * 
+ */
+export type UsageLog = $Result.DefaultSelection<Prisma.$UsageLogPayload>
 
 /**
  * Enums
@@ -71,6 +86,26 @@ export const ProvisioningRunStatus: {
 
 export type ProvisioningRunStatus = (typeof ProvisioningRunStatus)[keyof typeof ProvisioningRunStatus]
 
+
+export const SandboxLanguage: {
+  python: 'python',
+  nodejs: 'nodejs',
+  bash: 'bash'
+};
+
+export type SandboxLanguage = (typeof SandboxLanguage)[keyof typeof SandboxLanguage]
+
+
+export const SandboxStatus: {
+  CREATING: 'CREATING',
+  READY: 'READY',
+  RUNNING: 'RUNNING',
+  TERMINATED: 'TERMINATED',
+  FAILED: 'FAILED'
+};
+
+export type SandboxStatus = (typeof SandboxStatus)[keyof typeof SandboxStatus]
+
 }
 
 export type ProjectStatus = $Enums.ProjectStatus
@@ -80,6 +115,14 @@ export const ProjectStatus: typeof $Enums.ProjectStatus
 export type ProvisioningRunStatus = $Enums.ProvisioningRunStatus
 
 export const ProvisioningRunStatus: typeof $Enums.ProvisioningRunStatus
+
+export type SandboxLanguage = $Enums.SandboxLanguage
+
+export const SandboxLanguage: typeof $Enums.SandboxLanguage
+
+export type SandboxStatus = $Enums.SandboxStatus
+
+export const SandboxStatus: typeof $Enums.SandboxStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -267,6 +310,36 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.apiKey`: Exposes CRUD operations for the **ApiKey** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ApiKeys
+    * const apiKeys = await prisma.apiKey.findMany()
+    * ```
+    */
+  get apiKey(): Prisma.ApiKeyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.sandbox`: Exposes CRUD operations for the **Sandbox** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Sandboxes
+    * const sandboxes = await prisma.sandbox.findMany()
+    * ```
+    */
+  get sandbox(): Prisma.SandboxDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.usageLog`: Exposes CRUD operations for the **UsageLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UsageLogs
+    * const usageLogs = await prisma.usageLog.findMany()
+    * ```
+    */
+  get usageLog(): Prisma.UsageLogDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -707,7 +780,10 @@ export namespace Prisma {
     Project: 'Project',
     ProvisioningRun: 'ProvisioningRun',
     PublicProject: 'PublicProject',
-    User: 'User'
+    User: 'User',
+    ApiKey: 'ApiKey',
+    Sandbox: 'Sandbox',
+    UsageLog: 'UsageLog'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -723,7 +799,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user"
+      modelProps: "healthCheck" | "template" | "workspace" | "project" | "provisioningRun" | "publicProject" | "user" | "apiKey" | "sandbox" | "usageLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1245,6 +1321,228 @@ export namespace Prisma {
           }
         }
       }
+      ApiKey: {
+        payload: Prisma.$ApiKeyPayload<ExtArgs>
+        fields: Prisma.ApiKeyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ApiKeyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ApiKeyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
+          }
+          findFirst: {
+            args: Prisma.ApiKeyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ApiKeyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
+          }
+          findMany: {
+            args: Prisma.ApiKeyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>[]
+          }
+          create: {
+            args: Prisma.ApiKeyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
+          }
+          createMany: {
+            args: Prisma.ApiKeyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ApiKeyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>[]
+          }
+          delete: {
+            args: Prisma.ApiKeyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
+          }
+          update: {
+            args: Prisma.ApiKeyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
+          }
+          deleteMany: {
+            args: Prisma.ApiKeyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ApiKeyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ApiKeyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>[]
+          }
+          upsert: {
+            args: Prisma.ApiKeyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>
+          }
+          aggregate: {
+            args: Prisma.ApiKeyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateApiKey>
+          }
+          groupBy: {
+            args: Prisma.ApiKeyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ApiKeyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ApiKeyCountArgs<ExtArgs>
+            result: $Utils.Optional<ApiKeyCountAggregateOutputType> | number
+          }
+        }
+      }
+      Sandbox: {
+        payload: Prisma.$SandboxPayload<ExtArgs>
+        fields: Prisma.SandboxFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SandboxFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SandboxPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SandboxFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SandboxPayload>
+          }
+          findFirst: {
+            args: Prisma.SandboxFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SandboxPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SandboxFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SandboxPayload>
+          }
+          findMany: {
+            args: Prisma.SandboxFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SandboxPayload>[]
+          }
+          create: {
+            args: Prisma.SandboxCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SandboxPayload>
+          }
+          createMany: {
+            args: Prisma.SandboxCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SandboxCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SandboxPayload>[]
+          }
+          delete: {
+            args: Prisma.SandboxDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SandboxPayload>
+          }
+          update: {
+            args: Prisma.SandboxUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SandboxPayload>
+          }
+          deleteMany: {
+            args: Prisma.SandboxDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SandboxUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SandboxUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SandboxPayload>[]
+          }
+          upsert: {
+            args: Prisma.SandboxUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SandboxPayload>
+          }
+          aggregate: {
+            args: Prisma.SandboxAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSandbox>
+          }
+          groupBy: {
+            args: Prisma.SandboxGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SandboxGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SandboxCountArgs<ExtArgs>
+            result: $Utils.Optional<SandboxCountAggregateOutputType> | number
+          }
+        }
+      }
+      UsageLog: {
+        payload: Prisma.$UsageLogPayload<ExtArgs>
+        fields: Prisma.UsageLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UsageLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UsageLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageLogPayload>
+          }
+          findFirst: {
+            args: Prisma.UsageLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UsageLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageLogPayload>
+          }
+          findMany: {
+            args: Prisma.UsageLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageLogPayload>[]
+          }
+          create: {
+            args: Prisma.UsageLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageLogPayload>
+          }
+          createMany: {
+            args: Prisma.UsageLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UsageLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageLogPayload>[]
+          }
+          delete: {
+            args: Prisma.UsageLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageLogPayload>
+          }
+          update: {
+            args: Prisma.UsageLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.UsageLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UsageLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UsageLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageLogPayload>[]
+          }
+          upsert: {
+            args: Prisma.UsageLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageLogPayload>
+          }
+          aggregate: {
+            args: Prisma.UsageLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUsageLog>
+          }
+          groupBy: {
+            args: Prisma.UsageLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UsageLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UsageLogCountArgs<ExtArgs>
+            result: $Utils.Optional<UsageLogCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1360,6 +1658,9 @@ export namespace Prisma {
     provisioningRun?: ProvisioningRunOmit
     publicProject?: PublicProjectOmit
     user?: UserOmit
+    apiKey?: ApiKeyOmit
+    sandbox?: SandboxOmit
+    usageLog?: UsageLogOmit
   }
 
   /* Types for Logging */
@@ -1494,6 +1795,77 @@ export namespace Prisma {
    */
   export type ProjectCountOutputTypeCountProvisioningRunsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProvisioningRunWhereInput
+  }
+
+
+  /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    apiKeys: number
+    sandboxes: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    apiKeys?: boolean | UserCountOutputTypeCountApiKeysArgs
+    sandboxes?: boolean | UserCountOutputTypeCountSandboxesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountApiKeysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ApiKeyWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSandboxesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SandboxWhereInput
+  }
+
+
+  /**
+   * Count Type SandboxCountOutputType
+   */
+
+  export type SandboxCountOutputType = {
+    usageLogs: number
+  }
+
+  export type SandboxCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usageLogs?: boolean | SandboxCountOutputTypeCountUsageLogsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SandboxCountOutputType without action
+   */
+  export type SandboxCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SandboxCountOutputType
+     */
+    select?: SandboxCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SandboxCountOutputType without action
+   */
+  export type SandboxCountOutputTypeCountUsageLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UsageLogWhereInput
   }
 
 
@@ -8061,6 +8433,9 @@ export namespace Prisma {
     passwordHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    apiKeys?: boolean | User$apiKeysArgs<ExtArgs>
+    sandboxes?: boolean | User$sandboxesArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -8088,10 +8463,20 @@ export namespace Prisma {
   }
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    apiKeys?: boolean | User$apiKeysArgs<ExtArgs>
+    sandboxes?: boolean | User$sandboxesArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
-    objects: {}
+    objects: {
+      apiKeys: Prisma.$ApiKeyPayload<ExtArgs>[]
+      sandboxes: Prisma.$SandboxPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       email: string
@@ -8492,6 +8877,8 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    apiKeys<T extends User$apiKeysArgs<ExtArgs> = {}>(args?: Subset<T, User$apiKeysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sandboxes<T extends User$sandboxesArgs<ExtArgs> = {}>(args?: Subset<T, User$sandboxesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SandboxPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8543,6 +8930,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -8561,6 +8952,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -8578,6 +8973,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -8627,6 +9026,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where?: UserWhereInput
@@ -8675,6 +9078,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which Users to fetch.
      */
     where?: UserWhereInput
@@ -8717,6 +9124,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to create a User.
      */
@@ -8765,6 +9176,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to update a User.
      */
@@ -8832,6 +9247,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The filter to search for the User to update in case it exists.
      */
     where: UserWhereUniqueInput
@@ -8858,6 +9277,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
@@ -8878,6 +9301,54 @@ export namespace Prisma {
   }
 
   /**
+   * User.apiKeys
+   */
+  export type User$apiKeysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    where?: ApiKeyWhereInput
+    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
+    cursor?: ApiKeyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ApiKeyScalarFieldEnum | ApiKeyScalarFieldEnum[]
+  }
+
+  /**
+   * User.sandboxes
+   */
+  export type User$sandboxesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sandbox
+     */
+    select?: SandboxSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Sandbox
+     */
+    omit?: SandboxOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SandboxInclude<ExtArgs> | null
+    where?: SandboxWhereInput
+    orderBy?: SandboxOrderByWithRelationInput | SandboxOrderByWithRelationInput[]
+    cursor?: SandboxWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SandboxScalarFieldEnum | SandboxScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8889,6 +9360,3420 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ApiKey
+   */
+
+  export type AggregateApiKey = {
+    _count: ApiKeyCountAggregateOutputType | null
+    _min: ApiKeyMinAggregateOutputType | null
+    _max: ApiKeyMaxAggregateOutputType | null
+  }
+
+  export type ApiKeyMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    keyHash: string | null
+    keyPrefix: string | null
+    name: string | null
+    isActive: boolean | null
+    lastUsedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type ApiKeyMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    keyHash: string | null
+    keyPrefix: string | null
+    name: string | null
+    isActive: boolean | null
+    lastUsedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type ApiKeyCountAggregateOutputType = {
+    id: number
+    userId: number
+    keyHash: number
+    keyPrefix: number
+    name: number
+    isActive: number
+    lastUsedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ApiKeyMinAggregateInputType = {
+    id?: true
+    userId?: true
+    keyHash?: true
+    keyPrefix?: true
+    name?: true
+    isActive?: true
+    lastUsedAt?: true
+    createdAt?: true
+  }
+
+  export type ApiKeyMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    keyHash?: true
+    keyPrefix?: true
+    name?: true
+    isActive?: true
+    lastUsedAt?: true
+    createdAt?: true
+  }
+
+  export type ApiKeyCountAggregateInputType = {
+    id?: true
+    userId?: true
+    keyHash?: true
+    keyPrefix?: true
+    name?: true
+    isActive?: true
+    lastUsedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ApiKeyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ApiKey to aggregate.
+     */
+    where?: ApiKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ApiKeys to fetch.
+     */
+    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ApiKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ApiKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ApiKeys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ApiKeys
+    **/
+    _count?: true | ApiKeyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ApiKeyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ApiKeyMaxAggregateInputType
+  }
+
+  export type GetApiKeyAggregateType<T extends ApiKeyAggregateArgs> = {
+        [P in keyof T & keyof AggregateApiKey]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateApiKey[P]>
+      : GetScalarType<T[P], AggregateApiKey[P]>
+  }
+
+
+
+
+  export type ApiKeyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ApiKeyWhereInput
+    orderBy?: ApiKeyOrderByWithAggregationInput | ApiKeyOrderByWithAggregationInput[]
+    by: ApiKeyScalarFieldEnum[] | ApiKeyScalarFieldEnum
+    having?: ApiKeyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ApiKeyCountAggregateInputType | true
+    _min?: ApiKeyMinAggregateInputType
+    _max?: ApiKeyMaxAggregateInputType
+  }
+
+  export type ApiKeyGroupByOutputType = {
+    id: string
+    userId: string
+    keyHash: string
+    keyPrefix: string
+    name: string
+    isActive: boolean
+    lastUsedAt: Date | null
+    createdAt: Date
+    _count: ApiKeyCountAggregateOutputType | null
+    _min: ApiKeyMinAggregateOutputType | null
+    _max: ApiKeyMaxAggregateOutputType | null
+  }
+
+  type GetApiKeyGroupByPayload<T extends ApiKeyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ApiKeyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ApiKeyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ApiKeyGroupByOutputType[P]>
+            : GetScalarType<T[P], ApiKeyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ApiKeySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    keyHash?: boolean
+    keyPrefix?: boolean
+    name?: boolean
+    isActive?: boolean
+    lastUsedAt?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["apiKey"]>
+
+  export type ApiKeySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    keyHash?: boolean
+    keyPrefix?: boolean
+    name?: boolean
+    isActive?: boolean
+    lastUsedAt?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["apiKey"]>
+
+  export type ApiKeySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    keyHash?: boolean
+    keyPrefix?: boolean
+    name?: boolean
+    isActive?: boolean
+    lastUsedAt?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["apiKey"]>
+
+  export type ApiKeySelectScalar = {
+    id?: boolean
+    userId?: boolean
+    keyHash?: boolean
+    keyPrefix?: boolean
+    name?: boolean
+    isActive?: boolean
+    lastUsedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type ApiKeyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "keyHash" | "keyPrefix" | "name" | "isActive" | "lastUsedAt" | "createdAt", ExtArgs["result"]["apiKey"]>
+  export type ApiKeyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ApiKeyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ApiKeyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ApiKeyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ApiKey"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      keyHash: string
+      keyPrefix: string
+      name: string
+      isActive: boolean
+      lastUsedAt: Date | null
+      createdAt: Date
+    }, ExtArgs["result"]["apiKey"]>
+    composites: {}
+  }
+
+  type ApiKeyGetPayload<S extends boolean | null | undefined | ApiKeyDefaultArgs> = $Result.GetResult<Prisma.$ApiKeyPayload, S>
+
+  type ApiKeyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ApiKeyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ApiKeyCountAggregateInputType | true
+    }
+
+  export interface ApiKeyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ApiKey'], meta: { name: 'ApiKey' } }
+    /**
+     * Find zero or one ApiKey that matches the filter.
+     * @param {ApiKeyFindUniqueArgs} args - Arguments to find a ApiKey
+     * @example
+     * // Get one ApiKey
+     * const apiKey = await prisma.apiKey.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ApiKeyFindUniqueArgs>(args: SelectSubset<T, ApiKeyFindUniqueArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ApiKey that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ApiKeyFindUniqueOrThrowArgs} args - Arguments to find a ApiKey
+     * @example
+     * // Get one ApiKey
+     * const apiKey = await prisma.apiKey.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ApiKeyFindUniqueOrThrowArgs>(args: SelectSubset<T, ApiKeyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ApiKey that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApiKeyFindFirstArgs} args - Arguments to find a ApiKey
+     * @example
+     * // Get one ApiKey
+     * const apiKey = await prisma.apiKey.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ApiKeyFindFirstArgs>(args?: SelectSubset<T, ApiKeyFindFirstArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ApiKey that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApiKeyFindFirstOrThrowArgs} args - Arguments to find a ApiKey
+     * @example
+     * // Get one ApiKey
+     * const apiKey = await prisma.apiKey.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ApiKeyFindFirstOrThrowArgs>(args?: SelectSubset<T, ApiKeyFindFirstOrThrowArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ApiKeys that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApiKeyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ApiKeys
+     * const apiKeys = await prisma.apiKey.findMany()
+     * 
+     * // Get first 10 ApiKeys
+     * const apiKeys = await prisma.apiKey.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const apiKeyWithIdOnly = await prisma.apiKey.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ApiKeyFindManyArgs>(args?: SelectSubset<T, ApiKeyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ApiKey.
+     * @param {ApiKeyCreateArgs} args - Arguments to create a ApiKey.
+     * @example
+     * // Create one ApiKey
+     * const ApiKey = await prisma.apiKey.create({
+     *   data: {
+     *     // ... data to create a ApiKey
+     *   }
+     * })
+     * 
+     */
+    create<T extends ApiKeyCreateArgs>(args: SelectSubset<T, ApiKeyCreateArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ApiKeys.
+     * @param {ApiKeyCreateManyArgs} args - Arguments to create many ApiKeys.
+     * @example
+     * // Create many ApiKeys
+     * const apiKey = await prisma.apiKey.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ApiKeyCreateManyArgs>(args?: SelectSubset<T, ApiKeyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ApiKeys and returns the data saved in the database.
+     * @param {ApiKeyCreateManyAndReturnArgs} args - Arguments to create many ApiKeys.
+     * @example
+     * // Create many ApiKeys
+     * const apiKey = await prisma.apiKey.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ApiKeys and only return the `id`
+     * const apiKeyWithIdOnly = await prisma.apiKey.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ApiKeyCreateManyAndReturnArgs>(args?: SelectSubset<T, ApiKeyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ApiKey.
+     * @param {ApiKeyDeleteArgs} args - Arguments to delete one ApiKey.
+     * @example
+     * // Delete one ApiKey
+     * const ApiKey = await prisma.apiKey.delete({
+     *   where: {
+     *     // ... filter to delete one ApiKey
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ApiKeyDeleteArgs>(args: SelectSubset<T, ApiKeyDeleteArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ApiKey.
+     * @param {ApiKeyUpdateArgs} args - Arguments to update one ApiKey.
+     * @example
+     * // Update one ApiKey
+     * const apiKey = await prisma.apiKey.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ApiKeyUpdateArgs>(args: SelectSubset<T, ApiKeyUpdateArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ApiKeys.
+     * @param {ApiKeyDeleteManyArgs} args - Arguments to filter ApiKeys to delete.
+     * @example
+     * // Delete a few ApiKeys
+     * const { count } = await prisma.apiKey.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ApiKeyDeleteManyArgs>(args?: SelectSubset<T, ApiKeyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ApiKeys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApiKeyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ApiKeys
+     * const apiKey = await prisma.apiKey.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ApiKeyUpdateManyArgs>(args: SelectSubset<T, ApiKeyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ApiKeys and returns the data updated in the database.
+     * @param {ApiKeyUpdateManyAndReturnArgs} args - Arguments to update many ApiKeys.
+     * @example
+     * // Update many ApiKeys
+     * const apiKey = await prisma.apiKey.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ApiKeys and only return the `id`
+     * const apiKeyWithIdOnly = await prisma.apiKey.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ApiKeyUpdateManyAndReturnArgs>(args: SelectSubset<T, ApiKeyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ApiKey.
+     * @param {ApiKeyUpsertArgs} args - Arguments to update or create a ApiKey.
+     * @example
+     * // Update or create a ApiKey
+     * const apiKey = await prisma.apiKey.upsert({
+     *   create: {
+     *     // ... data to create a ApiKey
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ApiKey we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ApiKeyUpsertArgs>(args: SelectSubset<T, ApiKeyUpsertArgs<ExtArgs>>): Prisma__ApiKeyClient<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ApiKeys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApiKeyCountArgs} args - Arguments to filter ApiKeys to count.
+     * @example
+     * // Count the number of ApiKeys
+     * const count = await prisma.apiKey.count({
+     *   where: {
+     *     // ... the filter for the ApiKeys we want to count
+     *   }
+     * })
+    **/
+    count<T extends ApiKeyCountArgs>(
+      args?: Subset<T, ApiKeyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ApiKeyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ApiKey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApiKeyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ApiKeyAggregateArgs>(args: Subset<T, ApiKeyAggregateArgs>): Prisma.PrismaPromise<GetApiKeyAggregateType<T>>
+
+    /**
+     * Group by ApiKey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ApiKeyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ApiKeyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ApiKeyGroupByArgs['orderBy'] }
+        : { orderBy?: ApiKeyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ApiKeyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetApiKeyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ApiKey model
+   */
+  readonly fields: ApiKeyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ApiKey.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ApiKeyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ApiKey model
+   */
+  interface ApiKeyFieldRefs {
+    readonly id: FieldRef<"ApiKey", 'String'>
+    readonly userId: FieldRef<"ApiKey", 'String'>
+    readonly keyHash: FieldRef<"ApiKey", 'String'>
+    readonly keyPrefix: FieldRef<"ApiKey", 'String'>
+    readonly name: FieldRef<"ApiKey", 'String'>
+    readonly isActive: FieldRef<"ApiKey", 'Boolean'>
+    readonly lastUsedAt: FieldRef<"ApiKey", 'DateTime'>
+    readonly createdAt: FieldRef<"ApiKey", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ApiKey findUnique
+   */
+  export type ApiKeyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which ApiKey to fetch.
+     */
+    where: ApiKeyWhereUniqueInput
+  }
+
+  /**
+   * ApiKey findUniqueOrThrow
+   */
+  export type ApiKeyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which ApiKey to fetch.
+     */
+    where: ApiKeyWhereUniqueInput
+  }
+
+  /**
+   * ApiKey findFirst
+   */
+  export type ApiKeyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which ApiKey to fetch.
+     */
+    where?: ApiKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ApiKeys to fetch.
+     */
+    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ApiKeys.
+     */
+    cursor?: ApiKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ApiKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ApiKeys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ApiKeys.
+     */
+    distinct?: ApiKeyScalarFieldEnum | ApiKeyScalarFieldEnum[]
+  }
+
+  /**
+   * ApiKey findFirstOrThrow
+   */
+  export type ApiKeyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which ApiKey to fetch.
+     */
+    where?: ApiKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ApiKeys to fetch.
+     */
+    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ApiKeys.
+     */
+    cursor?: ApiKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ApiKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ApiKeys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ApiKeys.
+     */
+    distinct?: ApiKeyScalarFieldEnum | ApiKeyScalarFieldEnum[]
+  }
+
+  /**
+   * ApiKey findMany
+   */
+  export type ApiKeyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter, which ApiKeys to fetch.
+     */
+    where?: ApiKeyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ApiKeys to fetch.
+     */
+    orderBy?: ApiKeyOrderByWithRelationInput | ApiKeyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ApiKeys.
+     */
+    cursor?: ApiKeyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ApiKeys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ApiKeys.
+     */
+    skip?: number
+    distinct?: ApiKeyScalarFieldEnum | ApiKeyScalarFieldEnum[]
+  }
+
+  /**
+   * ApiKey create
+   */
+  export type ApiKeyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ApiKey.
+     */
+    data: XOR<ApiKeyCreateInput, ApiKeyUncheckedCreateInput>
+  }
+
+  /**
+   * ApiKey createMany
+   */
+  export type ApiKeyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ApiKeys.
+     */
+    data: ApiKeyCreateManyInput | ApiKeyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ApiKey createManyAndReturn
+   */
+  export type ApiKeyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * The data used to create many ApiKeys.
+     */
+    data: ApiKeyCreateManyInput | ApiKeyCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ApiKey update
+   */
+  export type ApiKeyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ApiKey.
+     */
+    data: XOR<ApiKeyUpdateInput, ApiKeyUncheckedUpdateInput>
+    /**
+     * Choose, which ApiKey to update.
+     */
+    where: ApiKeyWhereUniqueInput
+  }
+
+  /**
+   * ApiKey updateMany
+   */
+  export type ApiKeyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ApiKeys.
+     */
+    data: XOR<ApiKeyUpdateManyMutationInput, ApiKeyUncheckedUpdateManyInput>
+    /**
+     * Filter which ApiKeys to update
+     */
+    where?: ApiKeyWhereInput
+    /**
+     * Limit how many ApiKeys to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ApiKey updateManyAndReturn
+   */
+  export type ApiKeyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * The data used to update ApiKeys.
+     */
+    data: XOR<ApiKeyUpdateManyMutationInput, ApiKeyUncheckedUpdateManyInput>
+    /**
+     * Filter which ApiKeys to update
+     */
+    where?: ApiKeyWhereInput
+    /**
+     * Limit how many ApiKeys to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ApiKey upsert
+   */
+  export type ApiKeyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ApiKey to update in case it exists.
+     */
+    where: ApiKeyWhereUniqueInput
+    /**
+     * In case the ApiKey found by the `where` argument doesn't exist, create a new ApiKey with this data.
+     */
+    create: XOR<ApiKeyCreateInput, ApiKeyUncheckedCreateInput>
+    /**
+     * In case the ApiKey was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ApiKeyUpdateInput, ApiKeyUncheckedUpdateInput>
+  }
+
+  /**
+   * ApiKey delete
+   */
+  export type ApiKeyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+    /**
+     * Filter which ApiKey to delete.
+     */
+    where: ApiKeyWhereUniqueInput
+  }
+
+  /**
+   * ApiKey deleteMany
+   */
+  export type ApiKeyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ApiKeys to delete
+     */
+    where?: ApiKeyWhereInput
+    /**
+     * Limit how many ApiKeys to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ApiKey without action
+   */
+  export type ApiKeyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ApiKey
+     */
+    omit?: ApiKeyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Sandbox
+   */
+
+  export type AggregateSandbox = {
+    _count: SandboxCountAggregateOutputType | null
+    _avg: SandboxAvgAggregateOutputType | null
+    _sum: SandboxSumAggregateOutputType | null
+    _min: SandboxMinAggregateOutputType | null
+    _max: SandboxMaxAggregateOutputType | null
+  }
+
+  export type SandboxAvgAggregateOutputType = {
+    port: number | null
+    timeoutSecs: number | null
+  }
+
+  export type SandboxSumAggregateOutputType = {
+    port: number | null
+    timeoutSecs: number | null
+  }
+
+  export type SandboxMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    language: $Enums.SandboxLanguage | null
+    status: $Enums.SandboxStatus | null
+    containerId: string | null
+    port: number | null
+    timeoutSecs: number | null
+    startedAt: Date | null
+    terminatedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type SandboxMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    language: $Enums.SandboxLanguage | null
+    status: $Enums.SandboxStatus | null
+    containerId: string | null
+    port: number | null
+    timeoutSecs: number | null
+    startedAt: Date | null
+    terminatedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type SandboxCountAggregateOutputType = {
+    id: number
+    userId: number
+    language: number
+    status: number
+    containerId: number
+    port: number
+    timeoutSecs: number
+    startedAt: number
+    terminatedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SandboxAvgAggregateInputType = {
+    port?: true
+    timeoutSecs?: true
+  }
+
+  export type SandboxSumAggregateInputType = {
+    port?: true
+    timeoutSecs?: true
+  }
+
+  export type SandboxMinAggregateInputType = {
+    id?: true
+    userId?: true
+    language?: true
+    status?: true
+    containerId?: true
+    port?: true
+    timeoutSecs?: true
+    startedAt?: true
+    terminatedAt?: true
+    createdAt?: true
+  }
+
+  export type SandboxMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    language?: true
+    status?: true
+    containerId?: true
+    port?: true
+    timeoutSecs?: true
+    startedAt?: true
+    terminatedAt?: true
+    createdAt?: true
+  }
+
+  export type SandboxCountAggregateInputType = {
+    id?: true
+    userId?: true
+    language?: true
+    status?: true
+    containerId?: true
+    port?: true
+    timeoutSecs?: true
+    startedAt?: true
+    terminatedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SandboxAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Sandbox to aggregate.
+     */
+    where?: SandboxWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sandboxes to fetch.
+     */
+    orderBy?: SandboxOrderByWithRelationInput | SandboxOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SandboxWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sandboxes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sandboxes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Sandboxes
+    **/
+    _count?: true | SandboxCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SandboxAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SandboxSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SandboxMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SandboxMaxAggregateInputType
+  }
+
+  export type GetSandboxAggregateType<T extends SandboxAggregateArgs> = {
+        [P in keyof T & keyof AggregateSandbox]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSandbox[P]>
+      : GetScalarType<T[P], AggregateSandbox[P]>
+  }
+
+
+
+
+  export type SandboxGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SandboxWhereInput
+    orderBy?: SandboxOrderByWithAggregationInput | SandboxOrderByWithAggregationInput[]
+    by: SandboxScalarFieldEnum[] | SandboxScalarFieldEnum
+    having?: SandboxScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SandboxCountAggregateInputType | true
+    _avg?: SandboxAvgAggregateInputType
+    _sum?: SandboxSumAggregateInputType
+    _min?: SandboxMinAggregateInputType
+    _max?: SandboxMaxAggregateInputType
+  }
+
+  export type SandboxGroupByOutputType = {
+    id: string
+    userId: string
+    language: $Enums.SandboxLanguage
+    status: $Enums.SandboxStatus
+    containerId: string | null
+    port: number | null
+    timeoutSecs: number
+    startedAt: Date | null
+    terminatedAt: Date | null
+    createdAt: Date
+    _count: SandboxCountAggregateOutputType | null
+    _avg: SandboxAvgAggregateOutputType | null
+    _sum: SandboxSumAggregateOutputType | null
+    _min: SandboxMinAggregateOutputType | null
+    _max: SandboxMaxAggregateOutputType | null
+  }
+
+  type GetSandboxGroupByPayload<T extends SandboxGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SandboxGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SandboxGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SandboxGroupByOutputType[P]>
+            : GetScalarType<T[P], SandboxGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SandboxSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    language?: boolean
+    status?: boolean
+    containerId?: boolean
+    port?: boolean
+    timeoutSecs?: boolean
+    startedAt?: boolean
+    terminatedAt?: boolean
+    createdAt?: boolean
+    usageLogs?: boolean | Sandbox$usageLogsArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    _count?: boolean | SandboxCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sandbox"]>
+
+  export type SandboxSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    language?: boolean
+    status?: boolean
+    containerId?: boolean
+    port?: boolean
+    timeoutSecs?: boolean
+    startedAt?: boolean
+    terminatedAt?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sandbox"]>
+
+  export type SandboxSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    language?: boolean
+    status?: boolean
+    containerId?: boolean
+    port?: boolean
+    timeoutSecs?: boolean
+    startedAt?: boolean
+    terminatedAt?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sandbox"]>
+
+  export type SandboxSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    language?: boolean
+    status?: boolean
+    containerId?: boolean
+    port?: boolean
+    timeoutSecs?: boolean
+    startedAt?: boolean
+    terminatedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type SandboxOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "language" | "status" | "containerId" | "port" | "timeoutSecs" | "startedAt" | "terminatedAt" | "createdAt", ExtArgs["result"]["sandbox"]>
+  export type SandboxInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usageLogs?: boolean | Sandbox$usageLogsArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    _count?: boolean | SandboxCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SandboxIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SandboxIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $SandboxPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Sandbox"
+    objects: {
+      usageLogs: Prisma.$UsageLogPayload<ExtArgs>[]
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      language: $Enums.SandboxLanguage
+      status: $Enums.SandboxStatus
+      containerId: string | null
+      port: number | null
+      timeoutSecs: number
+      startedAt: Date | null
+      terminatedAt: Date | null
+      createdAt: Date
+    }, ExtArgs["result"]["sandbox"]>
+    composites: {}
+  }
+
+  type SandboxGetPayload<S extends boolean | null | undefined | SandboxDefaultArgs> = $Result.GetResult<Prisma.$SandboxPayload, S>
+
+  type SandboxCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SandboxFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SandboxCountAggregateInputType | true
+    }
+
+  export interface SandboxDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Sandbox'], meta: { name: 'Sandbox' } }
+    /**
+     * Find zero or one Sandbox that matches the filter.
+     * @param {SandboxFindUniqueArgs} args - Arguments to find a Sandbox
+     * @example
+     * // Get one Sandbox
+     * const sandbox = await prisma.sandbox.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SandboxFindUniqueArgs>(args: SelectSubset<T, SandboxFindUniqueArgs<ExtArgs>>): Prisma__SandboxClient<$Result.GetResult<Prisma.$SandboxPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Sandbox that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SandboxFindUniqueOrThrowArgs} args - Arguments to find a Sandbox
+     * @example
+     * // Get one Sandbox
+     * const sandbox = await prisma.sandbox.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SandboxFindUniqueOrThrowArgs>(args: SelectSubset<T, SandboxFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SandboxClient<$Result.GetResult<Prisma.$SandboxPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Sandbox that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SandboxFindFirstArgs} args - Arguments to find a Sandbox
+     * @example
+     * // Get one Sandbox
+     * const sandbox = await prisma.sandbox.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SandboxFindFirstArgs>(args?: SelectSubset<T, SandboxFindFirstArgs<ExtArgs>>): Prisma__SandboxClient<$Result.GetResult<Prisma.$SandboxPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Sandbox that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SandboxFindFirstOrThrowArgs} args - Arguments to find a Sandbox
+     * @example
+     * // Get one Sandbox
+     * const sandbox = await prisma.sandbox.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SandboxFindFirstOrThrowArgs>(args?: SelectSubset<T, SandboxFindFirstOrThrowArgs<ExtArgs>>): Prisma__SandboxClient<$Result.GetResult<Prisma.$SandboxPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Sandboxes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SandboxFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Sandboxes
+     * const sandboxes = await prisma.sandbox.findMany()
+     * 
+     * // Get first 10 Sandboxes
+     * const sandboxes = await prisma.sandbox.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sandboxWithIdOnly = await prisma.sandbox.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SandboxFindManyArgs>(args?: SelectSubset<T, SandboxFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SandboxPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Sandbox.
+     * @param {SandboxCreateArgs} args - Arguments to create a Sandbox.
+     * @example
+     * // Create one Sandbox
+     * const Sandbox = await prisma.sandbox.create({
+     *   data: {
+     *     // ... data to create a Sandbox
+     *   }
+     * })
+     * 
+     */
+    create<T extends SandboxCreateArgs>(args: SelectSubset<T, SandboxCreateArgs<ExtArgs>>): Prisma__SandboxClient<$Result.GetResult<Prisma.$SandboxPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Sandboxes.
+     * @param {SandboxCreateManyArgs} args - Arguments to create many Sandboxes.
+     * @example
+     * // Create many Sandboxes
+     * const sandbox = await prisma.sandbox.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SandboxCreateManyArgs>(args?: SelectSubset<T, SandboxCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Sandboxes and returns the data saved in the database.
+     * @param {SandboxCreateManyAndReturnArgs} args - Arguments to create many Sandboxes.
+     * @example
+     * // Create many Sandboxes
+     * const sandbox = await prisma.sandbox.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Sandboxes and only return the `id`
+     * const sandboxWithIdOnly = await prisma.sandbox.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SandboxCreateManyAndReturnArgs>(args?: SelectSubset<T, SandboxCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SandboxPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Sandbox.
+     * @param {SandboxDeleteArgs} args - Arguments to delete one Sandbox.
+     * @example
+     * // Delete one Sandbox
+     * const Sandbox = await prisma.sandbox.delete({
+     *   where: {
+     *     // ... filter to delete one Sandbox
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SandboxDeleteArgs>(args: SelectSubset<T, SandboxDeleteArgs<ExtArgs>>): Prisma__SandboxClient<$Result.GetResult<Prisma.$SandboxPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Sandbox.
+     * @param {SandboxUpdateArgs} args - Arguments to update one Sandbox.
+     * @example
+     * // Update one Sandbox
+     * const sandbox = await prisma.sandbox.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SandboxUpdateArgs>(args: SelectSubset<T, SandboxUpdateArgs<ExtArgs>>): Prisma__SandboxClient<$Result.GetResult<Prisma.$SandboxPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Sandboxes.
+     * @param {SandboxDeleteManyArgs} args - Arguments to filter Sandboxes to delete.
+     * @example
+     * // Delete a few Sandboxes
+     * const { count } = await prisma.sandbox.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SandboxDeleteManyArgs>(args?: SelectSubset<T, SandboxDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Sandboxes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SandboxUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Sandboxes
+     * const sandbox = await prisma.sandbox.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SandboxUpdateManyArgs>(args: SelectSubset<T, SandboxUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Sandboxes and returns the data updated in the database.
+     * @param {SandboxUpdateManyAndReturnArgs} args - Arguments to update many Sandboxes.
+     * @example
+     * // Update many Sandboxes
+     * const sandbox = await prisma.sandbox.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Sandboxes and only return the `id`
+     * const sandboxWithIdOnly = await prisma.sandbox.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SandboxUpdateManyAndReturnArgs>(args: SelectSubset<T, SandboxUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SandboxPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Sandbox.
+     * @param {SandboxUpsertArgs} args - Arguments to update or create a Sandbox.
+     * @example
+     * // Update or create a Sandbox
+     * const sandbox = await prisma.sandbox.upsert({
+     *   create: {
+     *     // ... data to create a Sandbox
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Sandbox we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SandboxUpsertArgs>(args: SelectSubset<T, SandboxUpsertArgs<ExtArgs>>): Prisma__SandboxClient<$Result.GetResult<Prisma.$SandboxPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Sandboxes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SandboxCountArgs} args - Arguments to filter Sandboxes to count.
+     * @example
+     * // Count the number of Sandboxes
+     * const count = await prisma.sandbox.count({
+     *   where: {
+     *     // ... the filter for the Sandboxes we want to count
+     *   }
+     * })
+    **/
+    count<T extends SandboxCountArgs>(
+      args?: Subset<T, SandboxCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SandboxCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Sandbox.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SandboxAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SandboxAggregateArgs>(args: Subset<T, SandboxAggregateArgs>): Prisma.PrismaPromise<GetSandboxAggregateType<T>>
+
+    /**
+     * Group by Sandbox.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SandboxGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SandboxGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SandboxGroupByArgs['orderBy'] }
+        : { orderBy?: SandboxGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SandboxGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSandboxGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Sandbox model
+   */
+  readonly fields: SandboxFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Sandbox.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SandboxClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    usageLogs<T extends Sandbox$usageLogsArgs<ExtArgs> = {}>(args?: Subset<T, Sandbox$usageLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Sandbox model
+   */
+  interface SandboxFieldRefs {
+    readonly id: FieldRef<"Sandbox", 'String'>
+    readonly userId: FieldRef<"Sandbox", 'String'>
+    readonly language: FieldRef<"Sandbox", 'SandboxLanguage'>
+    readonly status: FieldRef<"Sandbox", 'SandboxStatus'>
+    readonly containerId: FieldRef<"Sandbox", 'String'>
+    readonly port: FieldRef<"Sandbox", 'Int'>
+    readonly timeoutSecs: FieldRef<"Sandbox", 'Int'>
+    readonly startedAt: FieldRef<"Sandbox", 'DateTime'>
+    readonly terminatedAt: FieldRef<"Sandbox", 'DateTime'>
+    readonly createdAt: FieldRef<"Sandbox", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Sandbox findUnique
+   */
+  export type SandboxFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sandbox
+     */
+    select?: SandboxSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Sandbox
+     */
+    omit?: SandboxOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SandboxInclude<ExtArgs> | null
+    /**
+     * Filter, which Sandbox to fetch.
+     */
+    where: SandboxWhereUniqueInput
+  }
+
+  /**
+   * Sandbox findUniqueOrThrow
+   */
+  export type SandboxFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sandbox
+     */
+    select?: SandboxSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Sandbox
+     */
+    omit?: SandboxOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SandboxInclude<ExtArgs> | null
+    /**
+     * Filter, which Sandbox to fetch.
+     */
+    where: SandboxWhereUniqueInput
+  }
+
+  /**
+   * Sandbox findFirst
+   */
+  export type SandboxFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sandbox
+     */
+    select?: SandboxSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Sandbox
+     */
+    omit?: SandboxOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SandboxInclude<ExtArgs> | null
+    /**
+     * Filter, which Sandbox to fetch.
+     */
+    where?: SandboxWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sandboxes to fetch.
+     */
+    orderBy?: SandboxOrderByWithRelationInput | SandboxOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Sandboxes.
+     */
+    cursor?: SandboxWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sandboxes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sandboxes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Sandboxes.
+     */
+    distinct?: SandboxScalarFieldEnum | SandboxScalarFieldEnum[]
+  }
+
+  /**
+   * Sandbox findFirstOrThrow
+   */
+  export type SandboxFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sandbox
+     */
+    select?: SandboxSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Sandbox
+     */
+    omit?: SandboxOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SandboxInclude<ExtArgs> | null
+    /**
+     * Filter, which Sandbox to fetch.
+     */
+    where?: SandboxWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sandboxes to fetch.
+     */
+    orderBy?: SandboxOrderByWithRelationInput | SandboxOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Sandboxes.
+     */
+    cursor?: SandboxWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sandboxes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sandboxes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Sandboxes.
+     */
+    distinct?: SandboxScalarFieldEnum | SandboxScalarFieldEnum[]
+  }
+
+  /**
+   * Sandbox findMany
+   */
+  export type SandboxFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sandbox
+     */
+    select?: SandboxSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Sandbox
+     */
+    omit?: SandboxOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SandboxInclude<ExtArgs> | null
+    /**
+     * Filter, which Sandboxes to fetch.
+     */
+    where?: SandboxWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sandboxes to fetch.
+     */
+    orderBy?: SandboxOrderByWithRelationInput | SandboxOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Sandboxes.
+     */
+    cursor?: SandboxWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sandboxes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sandboxes.
+     */
+    skip?: number
+    distinct?: SandboxScalarFieldEnum | SandboxScalarFieldEnum[]
+  }
+
+  /**
+   * Sandbox create
+   */
+  export type SandboxCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sandbox
+     */
+    select?: SandboxSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Sandbox
+     */
+    omit?: SandboxOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SandboxInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Sandbox.
+     */
+    data: XOR<SandboxCreateInput, SandboxUncheckedCreateInput>
+  }
+
+  /**
+   * Sandbox createMany
+   */
+  export type SandboxCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Sandboxes.
+     */
+    data: SandboxCreateManyInput | SandboxCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Sandbox createManyAndReturn
+   */
+  export type SandboxCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sandbox
+     */
+    select?: SandboxSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Sandbox
+     */
+    omit?: SandboxOmit<ExtArgs> | null
+    /**
+     * The data used to create many Sandboxes.
+     */
+    data: SandboxCreateManyInput | SandboxCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SandboxIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Sandbox update
+   */
+  export type SandboxUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sandbox
+     */
+    select?: SandboxSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Sandbox
+     */
+    omit?: SandboxOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SandboxInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Sandbox.
+     */
+    data: XOR<SandboxUpdateInput, SandboxUncheckedUpdateInput>
+    /**
+     * Choose, which Sandbox to update.
+     */
+    where: SandboxWhereUniqueInput
+  }
+
+  /**
+   * Sandbox updateMany
+   */
+  export type SandboxUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Sandboxes.
+     */
+    data: XOR<SandboxUpdateManyMutationInput, SandboxUncheckedUpdateManyInput>
+    /**
+     * Filter which Sandboxes to update
+     */
+    where?: SandboxWhereInput
+    /**
+     * Limit how many Sandboxes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Sandbox updateManyAndReturn
+   */
+  export type SandboxUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sandbox
+     */
+    select?: SandboxSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Sandbox
+     */
+    omit?: SandboxOmit<ExtArgs> | null
+    /**
+     * The data used to update Sandboxes.
+     */
+    data: XOR<SandboxUpdateManyMutationInput, SandboxUncheckedUpdateManyInput>
+    /**
+     * Filter which Sandboxes to update
+     */
+    where?: SandboxWhereInput
+    /**
+     * Limit how many Sandboxes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SandboxIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Sandbox upsert
+   */
+  export type SandboxUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sandbox
+     */
+    select?: SandboxSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Sandbox
+     */
+    omit?: SandboxOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SandboxInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Sandbox to update in case it exists.
+     */
+    where: SandboxWhereUniqueInput
+    /**
+     * In case the Sandbox found by the `where` argument doesn't exist, create a new Sandbox with this data.
+     */
+    create: XOR<SandboxCreateInput, SandboxUncheckedCreateInput>
+    /**
+     * In case the Sandbox was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SandboxUpdateInput, SandboxUncheckedUpdateInput>
+  }
+
+  /**
+   * Sandbox delete
+   */
+  export type SandboxDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sandbox
+     */
+    select?: SandboxSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Sandbox
+     */
+    omit?: SandboxOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SandboxInclude<ExtArgs> | null
+    /**
+     * Filter which Sandbox to delete.
+     */
+    where: SandboxWhereUniqueInput
+  }
+
+  /**
+   * Sandbox deleteMany
+   */
+  export type SandboxDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Sandboxes to delete
+     */
+    where?: SandboxWhereInput
+    /**
+     * Limit how many Sandboxes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Sandbox.usageLogs
+   */
+  export type Sandbox$usageLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageLog
+     */
+    select?: UsageLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageLog
+     */
+    omit?: UsageLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageLogInclude<ExtArgs> | null
+    where?: UsageLogWhereInput
+    orderBy?: UsageLogOrderByWithRelationInput | UsageLogOrderByWithRelationInput[]
+    cursor?: UsageLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UsageLogScalarFieldEnum | UsageLogScalarFieldEnum[]
+  }
+
+  /**
+   * Sandbox without action
+   */
+  export type SandboxDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sandbox
+     */
+    select?: SandboxSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Sandbox
+     */
+    omit?: SandboxOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SandboxInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UsageLog
+   */
+
+  export type AggregateUsageLog = {
+    _count: UsageLogCountAggregateOutputType | null
+    _avg: UsageLogAvgAggregateOutputType | null
+    _sum: UsageLogSumAggregateOutputType | null
+    _min: UsageLogMinAggregateOutputType | null
+    _max: UsageLogMaxAggregateOutputType | null
+  }
+
+  export type UsageLogAvgAggregateOutputType = {
+    durationSecs: number | null
+    billedAmount: number | null
+  }
+
+  export type UsageLogSumAggregateOutputType = {
+    durationSecs: number | null
+    billedAmount: number | null
+  }
+
+  export type UsageLogMinAggregateOutputType = {
+    id: string | null
+    sandboxId: string | null
+    userId: string | null
+    durationSecs: number | null
+    billedAmount: number | null
+    language: string | null
+    createdAt: Date | null
+  }
+
+  export type UsageLogMaxAggregateOutputType = {
+    id: string | null
+    sandboxId: string | null
+    userId: string | null
+    durationSecs: number | null
+    billedAmount: number | null
+    language: string | null
+    createdAt: Date | null
+  }
+
+  export type UsageLogCountAggregateOutputType = {
+    id: number
+    sandboxId: number
+    userId: number
+    durationSecs: number
+    billedAmount: number
+    language: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type UsageLogAvgAggregateInputType = {
+    durationSecs?: true
+    billedAmount?: true
+  }
+
+  export type UsageLogSumAggregateInputType = {
+    durationSecs?: true
+    billedAmount?: true
+  }
+
+  export type UsageLogMinAggregateInputType = {
+    id?: true
+    sandboxId?: true
+    userId?: true
+    durationSecs?: true
+    billedAmount?: true
+    language?: true
+    createdAt?: true
+  }
+
+  export type UsageLogMaxAggregateInputType = {
+    id?: true
+    sandboxId?: true
+    userId?: true
+    durationSecs?: true
+    billedAmount?: true
+    language?: true
+    createdAt?: true
+  }
+
+  export type UsageLogCountAggregateInputType = {
+    id?: true
+    sandboxId?: true
+    userId?: true
+    durationSecs?: true
+    billedAmount?: true
+    language?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type UsageLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UsageLog to aggregate.
+     */
+    where?: UsageLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UsageLogs to fetch.
+     */
+    orderBy?: UsageLogOrderByWithRelationInput | UsageLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UsageLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UsageLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UsageLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UsageLogs
+    **/
+    _count?: true | UsageLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UsageLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UsageLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UsageLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UsageLogMaxAggregateInputType
+  }
+
+  export type GetUsageLogAggregateType<T extends UsageLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateUsageLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUsageLog[P]>
+      : GetScalarType<T[P], AggregateUsageLog[P]>
+  }
+
+
+
+
+  export type UsageLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UsageLogWhereInput
+    orderBy?: UsageLogOrderByWithAggregationInput | UsageLogOrderByWithAggregationInput[]
+    by: UsageLogScalarFieldEnum[] | UsageLogScalarFieldEnum
+    having?: UsageLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UsageLogCountAggregateInputType | true
+    _avg?: UsageLogAvgAggregateInputType
+    _sum?: UsageLogSumAggregateInputType
+    _min?: UsageLogMinAggregateInputType
+    _max?: UsageLogMaxAggregateInputType
+  }
+
+  export type UsageLogGroupByOutputType = {
+    id: string
+    sandboxId: string
+    userId: string
+    durationSecs: number
+    billedAmount: number
+    language: string
+    createdAt: Date
+    _count: UsageLogCountAggregateOutputType | null
+    _avg: UsageLogAvgAggregateOutputType | null
+    _sum: UsageLogSumAggregateOutputType | null
+    _min: UsageLogMinAggregateOutputType | null
+    _max: UsageLogMaxAggregateOutputType | null
+  }
+
+  type GetUsageLogGroupByPayload<T extends UsageLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UsageLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UsageLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UsageLogGroupByOutputType[P]>
+            : GetScalarType<T[P], UsageLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UsageLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sandboxId?: boolean
+    userId?: boolean
+    durationSecs?: boolean
+    billedAmount?: boolean
+    language?: boolean
+    createdAt?: boolean
+    sandbox?: boolean | SandboxDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["usageLog"]>
+
+  export type UsageLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sandboxId?: boolean
+    userId?: boolean
+    durationSecs?: boolean
+    billedAmount?: boolean
+    language?: boolean
+    createdAt?: boolean
+    sandbox?: boolean | SandboxDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["usageLog"]>
+
+  export type UsageLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sandboxId?: boolean
+    userId?: boolean
+    durationSecs?: boolean
+    billedAmount?: boolean
+    language?: boolean
+    createdAt?: boolean
+    sandbox?: boolean | SandboxDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["usageLog"]>
+
+  export type UsageLogSelectScalar = {
+    id?: boolean
+    sandboxId?: boolean
+    userId?: boolean
+    durationSecs?: boolean
+    billedAmount?: boolean
+    language?: boolean
+    createdAt?: boolean
+  }
+
+  export type UsageLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sandboxId" | "userId" | "durationSecs" | "billedAmount" | "language" | "createdAt", ExtArgs["result"]["usageLog"]>
+  export type UsageLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sandbox?: boolean | SandboxDefaultArgs<ExtArgs>
+  }
+  export type UsageLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sandbox?: boolean | SandboxDefaultArgs<ExtArgs>
+  }
+  export type UsageLogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sandbox?: boolean | SandboxDefaultArgs<ExtArgs>
+  }
+
+  export type $UsageLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UsageLog"
+    objects: {
+      sandbox: Prisma.$SandboxPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      sandboxId: string
+      userId: string
+      durationSecs: number
+      billedAmount: number
+      language: string
+      createdAt: Date
+    }, ExtArgs["result"]["usageLog"]>
+    composites: {}
+  }
+
+  type UsageLogGetPayload<S extends boolean | null | undefined | UsageLogDefaultArgs> = $Result.GetResult<Prisma.$UsageLogPayload, S>
+
+  type UsageLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UsageLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UsageLogCountAggregateInputType | true
+    }
+
+  export interface UsageLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UsageLog'], meta: { name: 'UsageLog' } }
+    /**
+     * Find zero or one UsageLog that matches the filter.
+     * @param {UsageLogFindUniqueArgs} args - Arguments to find a UsageLog
+     * @example
+     * // Get one UsageLog
+     * const usageLog = await prisma.usageLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UsageLogFindUniqueArgs>(args: SelectSubset<T, UsageLogFindUniqueArgs<ExtArgs>>): Prisma__UsageLogClient<$Result.GetResult<Prisma.$UsageLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UsageLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UsageLogFindUniqueOrThrowArgs} args - Arguments to find a UsageLog
+     * @example
+     * // Get one UsageLog
+     * const usageLog = await prisma.usageLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UsageLogFindUniqueOrThrowArgs>(args: SelectSubset<T, UsageLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UsageLogClient<$Result.GetResult<Prisma.$UsageLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UsageLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageLogFindFirstArgs} args - Arguments to find a UsageLog
+     * @example
+     * // Get one UsageLog
+     * const usageLog = await prisma.usageLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UsageLogFindFirstArgs>(args?: SelectSubset<T, UsageLogFindFirstArgs<ExtArgs>>): Prisma__UsageLogClient<$Result.GetResult<Prisma.$UsageLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UsageLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageLogFindFirstOrThrowArgs} args - Arguments to find a UsageLog
+     * @example
+     * // Get one UsageLog
+     * const usageLog = await prisma.usageLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UsageLogFindFirstOrThrowArgs>(args?: SelectSubset<T, UsageLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__UsageLogClient<$Result.GetResult<Prisma.$UsageLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UsageLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UsageLogs
+     * const usageLogs = await prisma.usageLog.findMany()
+     * 
+     * // Get first 10 UsageLogs
+     * const usageLogs = await prisma.usageLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const usageLogWithIdOnly = await prisma.usageLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UsageLogFindManyArgs>(args?: SelectSubset<T, UsageLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UsageLog.
+     * @param {UsageLogCreateArgs} args - Arguments to create a UsageLog.
+     * @example
+     * // Create one UsageLog
+     * const UsageLog = await prisma.usageLog.create({
+     *   data: {
+     *     // ... data to create a UsageLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends UsageLogCreateArgs>(args: SelectSubset<T, UsageLogCreateArgs<ExtArgs>>): Prisma__UsageLogClient<$Result.GetResult<Prisma.$UsageLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UsageLogs.
+     * @param {UsageLogCreateManyArgs} args - Arguments to create many UsageLogs.
+     * @example
+     * // Create many UsageLogs
+     * const usageLog = await prisma.usageLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UsageLogCreateManyArgs>(args?: SelectSubset<T, UsageLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UsageLogs and returns the data saved in the database.
+     * @param {UsageLogCreateManyAndReturnArgs} args - Arguments to create many UsageLogs.
+     * @example
+     * // Create many UsageLogs
+     * const usageLog = await prisma.usageLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UsageLogs and only return the `id`
+     * const usageLogWithIdOnly = await prisma.usageLog.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UsageLogCreateManyAndReturnArgs>(args?: SelectSubset<T, UsageLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UsageLog.
+     * @param {UsageLogDeleteArgs} args - Arguments to delete one UsageLog.
+     * @example
+     * // Delete one UsageLog
+     * const UsageLog = await prisma.usageLog.delete({
+     *   where: {
+     *     // ... filter to delete one UsageLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UsageLogDeleteArgs>(args: SelectSubset<T, UsageLogDeleteArgs<ExtArgs>>): Prisma__UsageLogClient<$Result.GetResult<Prisma.$UsageLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UsageLog.
+     * @param {UsageLogUpdateArgs} args - Arguments to update one UsageLog.
+     * @example
+     * // Update one UsageLog
+     * const usageLog = await prisma.usageLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UsageLogUpdateArgs>(args: SelectSubset<T, UsageLogUpdateArgs<ExtArgs>>): Prisma__UsageLogClient<$Result.GetResult<Prisma.$UsageLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UsageLogs.
+     * @param {UsageLogDeleteManyArgs} args - Arguments to filter UsageLogs to delete.
+     * @example
+     * // Delete a few UsageLogs
+     * const { count } = await prisma.usageLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UsageLogDeleteManyArgs>(args?: SelectSubset<T, UsageLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UsageLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UsageLogs
+     * const usageLog = await prisma.usageLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UsageLogUpdateManyArgs>(args: SelectSubset<T, UsageLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UsageLogs and returns the data updated in the database.
+     * @param {UsageLogUpdateManyAndReturnArgs} args - Arguments to update many UsageLogs.
+     * @example
+     * // Update many UsageLogs
+     * const usageLog = await prisma.usageLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UsageLogs and only return the `id`
+     * const usageLogWithIdOnly = await prisma.usageLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UsageLogUpdateManyAndReturnArgs>(args: SelectSubset<T, UsageLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UsageLog.
+     * @param {UsageLogUpsertArgs} args - Arguments to update or create a UsageLog.
+     * @example
+     * // Update or create a UsageLog
+     * const usageLog = await prisma.usageLog.upsert({
+     *   create: {
+     *     // ... data to create a UsageLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UsageLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UsageLogUpsertArgs>(args: SelectSubset<T, UsageLogUpsertArgs<ExtArgs>>): Prisma__UsageLogClient<$Result.GetResult<Prisma.$UsageLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UsageLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageLogCountArgs} args - Arguments to filter UsageLogs to count.
+     * @example
+     * // Count the number of UsageLogs
+     * const count = await prisma.usageLog.count({
+     *   where: {
+     *     // ... the filter for the UsageLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends UsageLogCountArgs>(
+      args?: Subset<T, UsageLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UsageLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UsageLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UsageLogAggregateArgs>(args: Subset<T, UsageLogAggregateArgs>): Prisma.PrismaPromise<GetUsageLogAggregateType<T>>
+
+    /**
+     * Group by UsageLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UsageLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UsageLogGroupByArgs['orderBy'] }
+        : { orderBy?: UsageLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UsageLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUsageLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UsageLog model
+   */
+  readonly fields: UsageLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UsageLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UsageLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sandbox<T extends SandboxDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SandboxDefaultArgs<ExtArgs>>): Prisma__SandboxClient<$Result.GetResult<Prisma.$SandboxPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UsageLog model
+   */
+  interface UsageLogFieldRefs {
+    readonly id: FieldRef<"UsageLog", 'String'>
+    readonly sandboxId: FieldRef<"UsageLog", 'String'>
+    readonly userId: FieldRef<"UsageLog", 'String'>
+    readonly durationSecs: FieldRef<"UsageLog", 'Int'>
+    readonly billedAmount: FieldRef<"UsageLog", 'Float'>
+    readonly language: FieldRef<"UsageLog", 'String'>
+    readonly createdAt: FieldRef<"UsageLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UsageLog findUnique
+   */
+  export type UsageLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageLog
+     */
+    select?: UsageLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageLog
+     */
+    omit?: UsageLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UsageLog to fetch.
+     */
+    where: UsageLogWhereUniqueInput
+  }
+
+  /**
+   * UsageLog findUniqueOrThrow
+   */
+  export type UsageLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageLog
+     */
+    select?: UsageLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageLog
+     */
+    omit?: UsageLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UsageLog to fetch.
+     */
+    where: UsageLogWhereUniqueInput
+  }
+
+  /**
+   * UsageLog findFirst
+   */
+  export type UsageLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageLog
+     */
+    select?: UsageLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageLog
+     */
+    omit?: UsageLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UsageLog to fetch.
+     */
+    where?: UsageLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UsageLogs to fetch.
+     */
+    orderBy?: UsageLogOrderByWithRelationInput | UsageLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UsageLogs.
+     */
+    cursor?: UsageLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UsageLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UsageLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UsageLogs.
+     */
+    distinct?: UsageLogScalarFieldEnum | UsageLogScalarFieldEnum[]
+  }
+
+  /**
+   * UsageLog findFirstOrThrow
+   */
+  export type UsageLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageLog
+     */
+    select?: UsageLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageLog
+     */
+    omit?: UsageLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UsageLog to fetch.
+     */
+    where?: UsageLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UsageLogs to fetch.
+     */
+    orderBy?: UsageLogOrderByWithRelationInput | UsageLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UsageLogs.
+     */
+    cursor?: UsageLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UsageLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UsageLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UsageLogs.
+     */
+    distinct?: UsageLogScalarFieldEnum | UsageLogScalarFieldEnum[]
+  }
+
+  /**
+   * UsageLog findMany
+   */
+  export type UsageLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageLog
+     */
+    select?: UsageLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageLog
+     */
+    omit?: UsageLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UsageLogs to fetch.
+     */
+    where?: UsageLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UsageLogs to fetch.
+     */
+    orderBy?: UsageLogOrderByWithRelationInput | UsageLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UsageLogs.
+     */
+    cursor?: UsageLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UsageLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UsageLogs.
+     */
+    skip?: number
+    distinct?: UsageLogScalarFieldEnum | UsageLogScalarFieldEnum[]
+  }
+
+  /**
+   * UsageLog create
+   */
+  export type UsageLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageLog
+     */
+    select?: UsageLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageLog
+     */
+    omit?: UsageLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UsageLog.
+     */
+    data: XOR<UsageLogCreateInput, UsageLogUncheckedCreateInput>
+  }
+
+  /**
+   * UsageLog createMany
+   */
+  export type UsageLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UsageLogs.
+     */
+    data: UsageLogCreateManyInput | UsageLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UsageLog createManyAndReturn
+   */
+  export type UsageLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageLog
+     */
+    select?: UsageLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageLog
+     */
+    omit?: UsageLogOmit<ExtArgs> | null
+    /**
+     * The data used to create many UsageLogs.
+     */
+    data: UsageLogCreateManyInput | UsageLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UsageLog update
+   */
+  export type UsageLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageLog
+     */
+    select?: UsageLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageLog
+     */
+    omit?: UsageLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UsageLog.
+     */
+    data: XOR<UsageLogUpdateInput, UsageLogUncheckedUpdateInput>
+    /**
+     * Choose, which UsageLog to update.
+     */
+    where: UsageLogWhereUniqueInput
+  }
+
+  /**
+   * UsageLog updateMany
+   */
+  export type UsageLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UsageLogs.
+     */
+    data: XOR<UsageLogUpdateManyMutationInput, UsageLogUncheckedUpdateManyInput>
+    /**
+     * Filter which UsageLogs to update
+     */
+    where?: UsageLogWhereInput
+    /**
+     * Limit how many UsageLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UsageLog updateManyAndReturn
+   */
+  export type UsageLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageLog
+     */
+    select?: UsageLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageLog
+     */
+    omit?: UsageLogOmit<ExtArgs> | null
+    /**
+     * The data used to update UsageLogs.
+     */
+    data: XOR<UsageLogUpdateManyMutationInput, UsageLogUncheckedUpdateManyInput>
+    /**
+     * Filter which UsageLogs to update
+     */
+    where?: UsageLogWhereInput
+    /**
+     * Limit how many UsageLogs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageLogIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UsageLog upsert
+   */
+  export type UsageLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageLog
+     */
+    select?: UsageLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageLog
+     */
+    omit?: UsageLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UsageLog to update in case it exists.
+     */
+    where: UsageLogWhereUniqueInput
+    /**
+     * In case the UsageLog found by the `where` argument doesn't exist, create a new UsageLog with this data.
+     */
+    create: XOR<UsageLogCreateInput, UsageLogUncheckedCreateInput>
+    /**
+     * In case the UsageLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UsageLogUpdateInput, UsageLogUncheckedUpdateInput>
+  }
+
+  /**
+   * UsageLog delete
+   */
+  export type UsageLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageLog
+     */
+    select?: UsageLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageLog
+     */
+    omit?: UsageLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageLogInclude<ExtArgs> | null
+    /**
+     * Filter which UsageLog to delete.
+     */
+    where: UsageLogWhereUniqueInput
+  }
+
+  /**
+   * UsageLog deleteMany
+   */
+  export type UsageLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UsageLogs to delete
+     */
+    where?: UsageLogWhereInput
+    /**
+     * Limit how many UsageLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UsageLog without action
+   */
+  export type UsageLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageLog
+     */
+    select?: UsageLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageLog
+     */
+    omit?: UsageLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageLogInclude<ExtArgs> | null
   }
 
 
@@ -8998,6 +12883,49 @@ export namespace Prisma {
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const ApiKeyScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    keyHash: 'keyHash',
+    keyPrefix: 'keyPrefix',
+    name: 'name',
+    isActive: 'isActive',
+    lastUsedAt: 'lastUsedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type ApiKeyScalarFieldEnum = (typeof ApiKeyScalarFieldEnum)[keyof typeof ApiKeyScalarFieldEnum]
+
+
+  export const SandboxScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    language: 'language',
+    status: 'status',
+    containerId: 'containerId',
+    port: 'port',
+    timeoutSecs: 'timeoutSecs',
+    startedAt: 'startedAt',
+    terminatedAt: 'terminatedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type SandboxScalarFieldEnum = (typeof SandboxScalarFieldEnum)[keyof typeof SandboxScalarFieldEnum]
+
+
+  export const UsageLogScalarFieldEnum: {
+    id: 'id',
+    sandboxId: 'sandboxId',
+    userId: 'userId',
+    durationSecs: 'durationSecs',
+    billedAmount: 'billedAmount',
+    language: 'language',
+    createdAt: 'createdAt'
+  };
+
+  export type UsageLogScalarFieldEnum = (typeof UsageLogScalarFieldEnum)[keyof typeof UsageLogScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -9091,6 +13019,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'SandboxLanguage'
+   */
+  export type EnumSandboxLanguageFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SandboxLanguage'>
+    
+
+
+  /**
+   * Reference to a field of type 'SandboxLanguage[]'
+   */
+  export type ListEnumSandboxLanguageFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SandboxLanguage[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SandboxStatus'
+   */
+  export type EnumSandboxStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SandboxStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SandboxStatus[]'
+   */
+  export type ListEnumSandboxStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SandboxStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -9101,6 +13057,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -9516,6 +13486,8 @@ export namespace Prisma {
     passwordHash?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    apiKeys?: ApiKeyListRelationFilter
+    sandboxes?: SandboxListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -9524,6 +13496,8 @@ export namespace Prisma {
     passwordHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    apiKeys?: ApiKeyOrderByRelationAggregateInput
+    sandboxes?: SandboxOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -9535,6 +13509,8 @@ export namespace Prisma {
     passwordHash?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    apiKeys?: ApiKeyListRelationFilter
+    sandboxes?: SandboxListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -9557,6 +13533,228 @@ export namespace Prisma {
     passwordHash?: StringWithAggregatesFilter<"User"> | string
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type ApiKeyWhereInput = {
+    AND?: ApiKeyWhereInput | ApiKeyWhereInput[]
+    OR?: ApiKeyWhereInput[]
+    NOT?: ApiKeyWhereInput | ApiKeyWhereInput[]
+    id?: StringFilter<"ApiKey"> | string
+    userId?: StringFilter<"ApiKey"> | string
+    keyHash?: StringFilter<"ApiKey"> | string
+    keyPrefix?: StringFilter<"ApiKey"> | string
+    name?: StringFilter<"ApiKey"> | string
+    isActive?: BoolFilter<"ApiKey"> | boolean
+    lastUsedAt?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
+    createdAt?: DateTimeFilter<"ApiKey"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ApiKeyOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    keyHash?: SortOrder
+    keyPrefix?: SortOrder
+    name?: SortOrder
+    isActive?: SortOrder
+    lastUsedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type ApiKeyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    keyHash?: string
+    AND?: ApiKeyWhereInput | ApiKeyWhereInput[]
+    OR?: ApiKeyWhereInput[]
+    NOT?: ApiKeyWhereInput | ApiKeyWhereInput[]
+    userId?: StringFilter<"ApiKey"> | string
+    keyPrefix?: StringFilter<"ApiKey"> | string
+    name?: StringFilter<"ApiKey"> | string
+    isActive?: BoolFilter<"ApiKey"> | boolean
+    lastUsedAt?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
+    createdAt?: DateTimeFilter<"ApiKey"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "keyHash">
+
+  export type ApiKeyOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    keyHash?: SortOrder
+    keyPrefix?: SortOrder
+    name?: SortOrder
+    isActive?: SortOrder
+    lastUsedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: ApiKeyCountOrderByAggregateInput
+    _max?: ApiKeyMaxOrderByAggregateInput
+    _min?: ApiKeyMinOrderByAggregateInput
+  }
+
+  export type ApiKeyScalarWhereWithAggregatesInput = {
+    AND?: ApiKeyScalarWhereWithAggregatesInput | ApiKeyScalarWhereWithAggregatesInput[]
+    OR?: ApiKeyScalarWhereWithAggregatesInput[]
+    NOT?: ApiKeyScalarWhereWithAggregatesInput | ApiKeyScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ApiKey"> | string
+    userId?: StringWithAggregatesFilter<"ApiKey"> | string
+    keyHash?: StringWithAggregatesFilter<"ApiKey"> | string
+    keyPrefix?: StringWithAggregatesFilter<"ApiKey"> | string
+    name?: StringWithAggregatesFilter<"ApiKey"> | string
+    isActive?: BoolWithAggregatesFilter<"ApiKey"> | boolean
+    lastUsedAt?: DateTimeNullableWithAggregatesFilter<"ApiKey"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ApiKey"> | Date | string
+  }
+
+  export type SandboxWhereInput = {
+    AND?: SandboxWhereInput | SandboxWhereInput[]
+    OR?: SandboxWhereInput[]
+    NOT?: SandboxWhereInput | SandboxWhereInput[]
+    id?: StringFilter<"Sandbox"> | string
+    userId?: StringFilter<"Sandbox"> | string
+    language?: EnumSandboxLanguageFilter<"Sandbox"> | $Enums.SandboxLanguage
+    status?: EnumSandboxStatusFilter<"Sandbox"> | $Enums.SandboxStatus
+    containerId?: StringNullableFilter<"Sandbox"> | string | null
+    port?: IntNullableFilter<"Sandbox"> | number | null
+    timeoutSecs?: IntFilter<"Sandbox"> | number
+    startedAt?: DateTimeNullableFilter<"Sandbox"> | Date | string | null
+    terminatedAt?: DateTimeNullableFilter<"Sandbox"> | Date | string | null
+    createdAt?: DateTimeFilter<"Sandbox"> | Date | string
+    usageLogs?: UsageLogListRelationFilter
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type SandboxOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    language?: SortOrder
+    status?: SortOrder
+    containerId?: SortOrderInput | SortOrder
+    port?: SortOrderInput | SortOrder
+    timeoutSecs?: SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    terminatedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    usageLogs?: UsageLogOrderByRelationAggregateInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type SandboxWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SandboxWhereInput | SandboxWhereInput[]
+    OR?: SandboxWhereInput[]
+    NOT?: SandboxWhereInput | SandboxWhereInput[]
+    userId?: StringFilter<"Sandbox"> | string
+    language?: EnumSandboxLanguageFilter<"Sandbox"> | $Enums.SandboxLanguage
+    status?: EnumSandboxStatusFilter<"Sandbox"> | $Enums.SandboxStatus
+    containerId?: StringNullableFilter<"Sandbox"> | string | null
+    port?: IntNullableFilter<"Sandbox"> | number | null
+    timeoutSecs?: IntFilter<"Sandbox"> | number
+    startedAt?: DateTimeNullableFilter<"Sandbox"> | Date | string | null
+    terminatedAt?: DateTimeNullableFilter<"Sandbox"> | Date | string | null
+    createdAt?: DateTimeFilter<"Sandbox"> | Date | string
+    usageLogs?: UsageLogListRelationFilter
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type SandboxOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    language?: SortOrder
+    status?: SortOrder
+    containerId?: SortOrderInput | SortOrder
+    port?: SortOrderInput | SortOrder
+    timeoutSecs?: SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    terminatedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: SandboxCountOrderByAggregateInput
+    _avg?: SandboxAvgOrderByAggregateInput
+    _max?: SandboxMaxOrderByAggregateInput
+    _min?: SandboxMinOrderByAggregateInput
+    _sum?: SandboxSumOrderByAggregateInput
+  }
+
+  export type SandboxScalarWhereWithAggregatesInput = {
+    AND?: SandboxScalarWhereWithAggregatesInput | SandboxScalarWhereWithAggregatesInput[]
+    OR?: SandboxScalarWhereWithAggregatesInput[]
+    NOT?: SandboxScalarWhereWithAggregatesInput | SandboxScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Sandbox"> | string
+    userId?: StringWithAggregatesFilter<"Sandbox"> | string
+    language?: EnumSandboxLanguageWithAggregatesFilter<"Sandbox"> | $Enums.SandboxLanguage
+    status?: EnumSandboxStatusWithAggregatesFilter<"Sandbox"> | $Enums.SandboxStatus
+    containerId?: StringNullableWithAggregatesFilter<"Sandbox"> | string | null
+    port?: IntNullableWithAggregatesFilter<"Sandbox"> | number | null
+    timeoutSecs?: IntWithAggregatesFilter<"Sandbox"> | number
+    startedAt?: DateTimeNullableWithAggregatesFilter<"Sandbox"> | Date | string | null
+    terminatedAt?: DateTimeNullableWithAggregatesFilter<"Sandbox"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Sandbox"> | Date | string
+  }
+
+  export type UsageLogWhereInput = {
+    AND?: UsageLogWhereInput | UsageLogWhereInput[]
+    OR?: UsageLogWhereInput[]
+    NOT?: UsageLogWhereInput | UsageLogWhereInput[]
+    id?: StringFilter<"UsageLog"> | string
+    sandboxId?: StringFilter<"UsageLog"> | string
+    userId?: StringFilter<"UsageLog"> | string
+    durationSecs?: IntFilter<"UsageLog"> | number
+    billedAmount?: FloatFilter<"UsageLog"> | number
+    language?: StringFilter<"UsageLog"> | string
+    createdAt?: DateTimeFilter<"UsageLog"> | Date | string
+    sandbox?: XOR<SandboxScalarRelationFilter, SandboxWhereInput>
+  }
+
+  export type UsageLogOrderByWithRelationInput = {
+    id?: SortOrder
+    sandboxId?: SortOrder
+    userId?: SortOrder
+    durationSecs?: SortOrder
+    billedAmount?: SortOrder
+    language?: SortOrder
+    createdAt?: SortOrder
+    sandbox?: SandboxOrderByWithRelationInput
+  }
+
+  export type UsageLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: UsageLogWhereInput | UsageLogWhereInput[]
+    OR?: UsageLogWhereInput[]
+    NOT?: UsageLogWhereInput | UsageLogWhereInput[]
+    sandboxId?: StringFilter<"UsageLog"> | string
+    userId?: StringFilter<"UsageLog"> | string
+    durationSecs?: IntFilter<"UsageLog"> | number
+    billedAmount?: FloatFilter<"UsageLog"> | number
+    language?: StringFilter<"UsageLog"> | string
+    createdAt?: DateTimeFilter<"UsageLog"> | Date | string
+    sandbox?: XOR<SandboxScalarRelationFilter, SandboxWhereInput>
+  }, "id">
+
+  export type UsageLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    sandboxId?: SortOrder
+    userId?: SortOrder
+    durationSecs?: SortOrder
+    billedAmount?: SortOrder
+    language?: SortOrder
+    createdAt?: SortOrder
+    _count?: UsageLogCountOrderByAggregateInput
+    _avg?: UsageLogAvgOrderByAggregateInput
+    _max?: UsageLogMaxOrderByAggregateInput
+    _min?: UsageLogMinOrderByAggregateInput
+    _sum?: UsageLogSumOrderByAggregateInput
+  }
+
+  export type UsageLogScalarWhereWithAggregatesInput = {
+    AND?: UsageLogScalarWhereWithAggregatesInput | UsageLogScalarWhereWithAggregatesInput[]
+    OR?: UsageLogScalarWhereWithAggregatesInput[]
+    NOT?: UsageLogScalarWhereWithAggregatesInput | UsageLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UsageLog"> | string
+    sandboxId?: StringWithAggregatesFilter<"UsageLog"> | string
+    userId?: StringWithAggregatesFilter<"UsageLog"> | string
+    durationSecs?: IntWithAggregatesFilter<"UsageLog"> | number
+    billedAmount?: FloatWithAggregatesFilter<"UsageLog"> | number
+    language?: StringWithAggregatesFilter<"UsageLog"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"UsageLog"> | Date | string
   }
 
   export type HealthCheckCreateInput = {
@@ -10012,6 +14210,8 @@ export namespace Prisma {
     passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
+    sandboxes?: SandboxCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -10020,6 +14220,8 @@ export namespace Prisma {
     passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
+    sandboxes?: SandboxUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -10028,6 +14230,8 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
+    sandboxes?: SandboxUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -10036,6 +14240,8 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+    sandboxes?: SandboxUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -10060,6 +14266,245 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApiKeyCreateInput = {
+    id?: string
+    keyHash: string
+    keyPrefix: string
+    name: string
+    isActive?: boolean
+    lastUsedAt?: Date | string | null
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutApiKeysInput
+  }
+
+  export type ApiKeyUncheckedCreateInput = {
+    id?: string
+    userId: string
+    keyHash: string
+    keyPrefix: string
+    name: string
+    isActive?: boolean
+    lastUsedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type ApiKeyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keyHash?: StringFieldUpdateOperationsInput | string
+    keyPrefix?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutApiKeysNestedInput
+  }
+
+  export type ApiKeyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    keyHash?: StringFieldUpdateOperationsInput | string
+    keyPrefix?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApiKeyCreateManyInput = {
+    id?: string
+    userId: string
+    keyHash: string
+    keyPrefix: string
+    name: string
+    isActive?: boolean
+    lastUsedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type ApiKeyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keyHash?: StringFieldUpdateOperationsInput | string
+    keyPrefix?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApiKeyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    keyHash?: StringFieldUpdateOperationsInput | string
+    keyPrefix?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SandboxCreateInput = {
+    id?: string
+    language: $Enums.SandboxLanguage
+    status?: $Enums.SandboxStatus
+    containerId?: string | null
+    port?: number | null
+    timeoutSecs?: number
+    startedAt?: Date | string | null
+    terminatedAt?: Date | string | null
+    createdAt?: Date | string
+    usageLogs?: UsageLogCreateNestedManyWithoutSandboxInput
+    user: UserCreateNestedOneWithoutSandboxesInput
+  }
+
+  export type SandboxUncheckedCreateInput = {
+    id?: string
+    userId: string
+    language: $Enums.SandboxLanguage
+    status?: $Enums.SandboxStatus
+    containerId?: string | null
+    port?: number | null
+    timeoutSecs?: number
+    startedAt?: Date | string | null
+    terminatedAt?: Date | string | null
+    createdAt?: Date | string
+    usageLogs?: UsageLogUncheckedCreateNestedManyWithoutSandboxInput
+  }
+
+  export type SandboxUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumSandboxLanguageFieldUpdateOperationsInput | $Enums.SandboxLanguage
+    status?: EnumSandboxStatusFieldUpdateOperationsInput | $Enums.SandboxStatus
+    containerId?: NullableStringFieldUpdateOperationsInput | string | null
+    port?: NullableIntFieldUpdateOperationsInput | number | null
+    timeoutSecs?: IntFieldUpdateOperationsInput | number
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    terminatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usageLogs?: UsageLogUpdateManyWithoutSandboxNestedInput
+    user?: UserUpdateOneRequiredWithoutSandboxesNestedInput
+  }
+
+  export type SandboxUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    language?: EnumSandboxLanguageFieldUpdateOperationsInput | $Enums.SandboxLanguage
+    status?: EnumSandboxStatusFieldUpdateOperationsInput | $Enums.SandboxStatus
+    containerId?: NullableStringFieldUpdateOperationsInput | string | null
+    port?: NullableIntFieldUpdateOperationsInput | number | null
+    timeoutSecs?: IntFieldUpdateOperationsInput | number
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    terminatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usageLogs?: UsageLogUncheckedUpdateManyWithoutSandboxNestedInput
+  }
+
+  export type SandboxCreateManyInput = {
+    id?: string
+    userId: string
+    language: $Enums.SandboxLanguage
+    status?: $Enums.SandboxStatus
+    containerId?: string | null
+    port?: number | null
+    timeoutSecs?: number
+    startedAt?: Date | string | null
+    terminatedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type SandboxUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumSandboxLanguageFieldUpdateOperationsInput | $Enums.SandboxLanguage
+    status?: EnumSandboxStatusFieldUpdateOperationsInput | $Enums.SandboxStatus
+    containerId?: NullableStringFieldUpdateOperationsInput | string | null
+    port?: NullableIntFieldUpdateOperationsInput | number | null
+    timeoutSecs?: IntFieldUpdateOperationsInput | number
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    terminatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SandboxUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    language?: EnumSandboxLanguageFieldUpdateOperationsInput | $Enums.SandboxLanguage
+    status?: EnumSandboxStatusFieldUpdateOperationsInput | $Enums.SandboxStatus
+    containerId?: NullableStringFieldUpdateOperationsInput | string | null
+    port?: NullableIntFieldUpdateOperationsInput | number | null
+    timeoutSecs?: IntFieldUpdateOperationsInput | number
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    terminatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageLogCreateInput = {
+    id?: string
+    userId: string
+    durationSecs: number
+    billedAmount: number
+    language: string
+    createdAt?: Date | string
+    sandbox: SandboxCreateNestedOneWithoutUsageLogsInput
+  }
+
+  export type UsageLogUncheckedCreateInput = {
+    id?: string
+    sandboxId: string
+    userId: string
+    durationSecs: number
+    billedAmount: number
+    language: string
+    createdAt?: Date | string
+  }
+
+  export type UsageLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    durationSecs?: IntFieldUpdateOperationsInput | number
+    billedAmount?: FloatFieldUpdateOperationsInput | number
+    language?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sandbox?: SandboxUpdateOneRequiredWithoutUsageLogsNestedInput
+  }
+
+  export type UsageLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sandboxId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    durationSecs?: IntFieldUpdateOperationsInput | number
+    billedAmount?: FloatFieldUpdateOperationsInput | number
+    language?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageLogCreateManyInput = {
+    id?: string
+    sandboxId: string
+    userId: string
+    durationSecs: number
+    billedAmount: number
+    language: string
+    createdAt?: Date | string
+  }
+
+  export type UsageLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    durationSecs?: IntFieldUpdateOperationsInput | number
+    billedAmount?: FloatFieldUpdateOperationsInput | number
+    language?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sandboxId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    durationSecs?: IntFieldUpdateOperationsInput | number
+    billedAmount?: FloatFieldUpdateOperationsInput | number
+    language?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -10454,6 +14899,26 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type ApiKeyListRelationFilter = {
+    every?: ApiKeyWhereInput
+    some?: ApiKeyWhereInput
+    none?: ApiKeyWhereInput
+  }
+
+  export type SandboxListRelationFilter = {
+    every?: SandboxWhereInput
+    some?: SandboxWhereInput
+    none?: SandboxWhereInput
+  }
+
+  export type ApiKeyOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SandboxOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
@@ -10476,6 +14941,263 @@ export namespace Prisma {
     passwordHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type ApiKeyCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    keyHash?: SortOrder
+    keyPrefix?: SortOrder
+    name?: SortOrder
+    isActive?: SortOrder
+    lastUsedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ApiKeyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    keyHash?: SortOrder
+    keyPrefix?: SortOrder
+    name?: SortOrder
+    isActive?: SortOrder
+    lastUsedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ApiKeyMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    keyHash?: SortOrder
+    keyPrefix?: SortOrder
+    name?: SortOrder
+    isActive?: SortOrder
+    lastUsedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type EnumSandboxLanguageFilter<$PrismaModel = never> = {
+    equals?: $Enums.SandboxLanguage | EnumSandboxLanguageFieldRefInput<$PrismaModel>
+    in?: $Enums.SandboxLanguage[] | ListEnumSandboxLanguageFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SandboxLanguage[] | ListEnumSandboxLanguageFieldRefInput<$PrismaModel>
+    not?: NestedEnumSandboxLanguageFilter<$PrismaModel> | $Enums.SandboxLanguage
+  }
+
+  export type EnumSandboxStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SandboxStatus | EnumSandboxStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SandboxStatus[] | ListEnumSandboxStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SandboxStatus[] | ListEnumSandboxStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSandboxStatusFilter<$PrismaModel> | $Enums.SandboxStatus
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type UsageLogListRelationFilter = {
+    every?: UsageLogWhereInput
+    some?: UsageLogWhereInput
+    none?: UsageLogWhereInput
+  }
+
+  export type UsageLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SandboxCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    language?: SortOrder
+    status?: SortOrder
+    containerId?: SortOrder
+    port?: SortOrder
+    timeoutSecs?: SortOrder
+    startedAt?: SortOrder
+    terminatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SandboxAvgOrderByAggregateInput = {
+    port?: SortOrder
+    timeoutSecs?: SortOrder
+  }
+
+  export type SandboxMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    language?: SortOrder
+    status?: SortOrder
+    containerId?: SortOrder
+    port?: SortOrder
+    timeoutSecs?: SortOrder
+    startedAt?: SortOrder
+    terminatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SandboxMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    language?: SortOrder
+    status?: SortOrder
+    containerId?: SortOrder
+    port?: SortOrder
+    timeoutSecs?: SortOrder
+    startedAt?: SortOrder
+    terminatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SandboxSumOrderByAggregateInput = {
+    port?: SortOrder
+    timeoutSecs?: SortOrder
+  }
+
+  export type EnumSandboxLanguageWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SandboxLanguage | EnumSandboxLanguageFieldRefInput<$PrismaModel>
+    in?: $Enums.SandboxLanguage[] | ListEnumSandboxLanguageFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SandboxLanguage[] | ListEnumSandboxLanguageFieldRefInput<$PrismaModel>
+    not?: NestedEnumSandboxLanguageWithAggregatesFilter<$PrismaModel> | $Enums.SandboxLanguage
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSandboxLanguageFilter<$PrismaModel>
+    _max?: NestedEnumSandboxLanguageFilter<$PrismaModel>
+  }
+
+  export type EnumSandboxStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SandboxStatus | EnumSandboxStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SandboxStatus[] | ListEnumSandboxStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SandboxStatus[] | ListEnumSandboxStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSandboxStatusWithAggregatesFilter<$PrismaModel> | $Enums.SandboxStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSandboxStatusFilter<$PrismaModel>
+    _max?: NestedEnumSandboxStatusFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type SandboxScalarRelationFilter = {
+    is?: SandboxWhereInput
+    isNot?: SandboxWhereInput
+  }
+
+  export type UsageLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    sandboxId?: SortOrder
+    userId?: SortOrder
+    durationSecs?: SortOrder
+    billedAmount?: SortOrder
+    language?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UsageLogAvgOrderByAggregateInput = {
+    durationSecs?: SortOrder
+    billedAmount?: SortOrder
+  }
+
+  export type UsageLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    sandboxId?: SortOrder
+    userId?: SortOrder
+    durationSecs?: SortOrder
+    billedAmount?: SortOrder
+    language?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UsageLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    sandboxId?: SortOrder
+    userId?: SortOrder
+    durationSecs?: SortOrder
+    billedAmount?: SortOrder
+    language?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UsageLogSumOrderByAggregateInput = {
+    durationSecs?: SortOrder
+    billedAmount?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -10616,6 +15338,206 @@ export namespace Prisma {
     upsert?: ProjectUpsertWithoutProvisioningRunsInput
     connect?: ProjectWhereUniqueInput
     update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutProvisioningRunsInput, ProjectUpdateWithoutProvisioningRunsInput>, ProjectUncheckedUpdateWithoutProvisioningRunsInput>
+  }
+
+  export type ApiKeyCreateNestedManyWithoutUserInput = {
+    create?: XOR<ApiKeyCreateWithoutUserInput, ApiKeyUncheckedCreateWithoutUserInput> | ApiKeyCreateWithoutUserInput[] | ApiKeyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ApiKeyCreateOrConnectWithoutUserInput | ApiKeyCreateOrConnectWithoutUserInput[]
+    createMany?: ApiKeyCreateManyUserInputEnvelope
+    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+  }
+
+  export type SandboxCreateNestedManyWithoutUserInput = {
+    create?: XOR<SandboxCreateWithoutUserInput, SandboxUncheckedCreateWithoutUserInput> | SandboxCreateWithoutUserInput[] | SandboxUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SandboxCreateOrConnectWithoutUserInput | SandboxCreateOrConnectWithoutUserInput[]
+    createMany?: SandboxCreateManyUserInputEnvelope
+    connect?: SandboxWhereUniqueInput | SandboxWhereUniqueInput[]
+  }
+
+  export type ApiKeyUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ApiKeyCreateWithoutUserInput, ApiKeyUncheckedCreateWithoutUserInput> | ApiKeyCreateWithoutUserInput[] | ApiKeyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ApiKeyCreateOrConnectWithoutUserInput | ApiKeyCreateOrConnectWithoutUserInput[]
+    createMany?: ApiKeyCreateManyUserInputEnvelope
+    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+  }
+
+  export type SandboxUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SandboxCreateWithoutUserInput, SandboxUncheckedCreateWithoutUserInput> | SandboxCreateWithoutUserInput[] | SandboxUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SandboxCreateOrConnectWithoutUserInput | SandboxCreateOrConnectWithoutUserInput[]
+    createMany?: SandboxCreateManyUserInputEnvelope
+    connect?: SandboxWhereUniqueInput | SandboxWhereUniqueInput[]
+  }
+
+  export type ApiKeyUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ApiKeyCreateWithoutUserInput, ApiKeyUncheckedCreateWithoutUserInput> | ApiKeyCreateWithoutUserInput[] | ApiKeyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ApiKeyCreateOrConnectWithoutUserInput | ApiKeyCreateOrConnectWithoutUserInput[]
+    upsert?: ApiKeyUpsertWithWhereUniqueWithoutUserInput | ApiKeyUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ApiKeyCreateManyUserInputEnvelope
+    set?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    disconnect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    delete?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    update?: ApiKeyUpdateWithWhereUniqueWithoutUserInput | ApiKeyUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ApiKeyUpdateManyWithWhereWithoutUserInput | ApiKeyUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
+  }
+
+  export type SandboxUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SandboxCreateWithoutUserInput, SandboxUncheckedCreateWithoutUserInput> | SandboxCreateWithoutUserInput[] | SandboxUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SandboxCreateOrConnectWithoutUserInput | SandboxCreateOrConnectWithoutUserInput[]
+    upsert?: SandboxUpsertWithWhereUniqueWithoutUserInput | SandboxUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SandboxCreateManyUserInputEnvelope
+    set?: SandboxWhereUniqueInput | SandboxWhereUniqueInput[]
+    disconnect?: SandboxWhereUniqueInput | SandboxWhereUniqueInput[]
+    delete?: SandboxWhereUniqueInput | SandboxWhereUniqueInput[]
+    connect?: SandboxWhereUniqueInput | SandboxWhereUniqueInput[]
+    update?: SandboxUpdateWithWhereUniqueWithoutUserInput | SandboxUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SandboxUpdateManyWithWhereWithoutUserInput | SandboxUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SandboxScalarWhereInput | SandboxScalarWhereInput[]
+  }
+
+  export type ApiKeyUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ApiKeyCreateWithoutUserInput, ApiKeyUncheckedCreateWithoutUserInput> | ApiKeyCreateWithoutUserInput[] | ApiKeyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ApiKeyCreateOrConnectWithoutUserInput | ApiKeyCreateOrConnectWithoutUserInput[]
+    upsert?: ApiKeyUpsertWithWhereUniqueWithoutUserInput | ApiKeyUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ApiKeyCreateManyUserInputEnvelope
+    set?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    disconnect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    delete?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    connect?: ApiKeyWhereUniqueInput | ApiKeyWhereUniqueInput[]
+    update?: ApiKeyUpdateWithWhereUniqueWithoutUserInput | ApiKeyUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ApiKeyUpdateManyWithWhereWithoutUserInput | ApiKeyUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
+  }
+
+  export type SandboxUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SandboxCreateWithoutUserInput, SandboxUncheckedCreateWithoutUserInput> | SandboxCreateWithoutUserInput[] | SandboxUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SandboxCreateOrConnectWithoutUserInput | SandboxCreateOrConnectWithoutUserInput[]
+    upsert?: SandboxUpsertWithWhereUniqueWithoutUserInput | SandboxUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SandboxCreateManyUserInputEnvelope
+    set?: SandboxWhereUniqueInput | SandboxWhereUniqueInput[]
+    disconnect?: SandboxWhereUniqueInput | SandboxWhereUniqueInput[]
+    delete?: SandboxWhereUniqueInput | SandboxWhereUniqueInput[]
+    connect?: SandboxWhereUniqueInput | SandboxWhereUniqueInput[]
+    update?: SandboxUpdateWithWhereUniqueWithoutUserInput | SandboxUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SandboxUpdateManyWithWhereWithoutUserInput | SandboxUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SandboxScalarWhereInput | SandboxScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutApiKeysInput = {
+    create?: XOR<UserCreateWithoutApiKeysInput, UserUncheckedCreateWithoutApiKeysInput>
+    connectOrCreate?: UserCreateOrConnectWithoutApiKeysInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutApiKeysNestedInput = {
+    create?: XOR<UserCreateWithoutApiKeysInput, UserUncheckedCreateWithoutApiKeysInput>
+    connectOrCreate?: UserCreateOrConnectWithoutApiKeysInput
+    upsert?: UserUpsertWithoutApiKeysInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutApiKeysInput, UserUpdateWithoutApiKeysInput>, UserUncheckedUpdateWithoutApiKeysInput>
+  }
+
+  export type UsageLogCreateNestedManyWithoutSandboxInput = {
+    create?: XOR<UsageLogCreateWithoutSandboxInput, UsageLogUncheckedCreateWithoutSandboxInput> | UsageLogCreateWithoutSandboxInput[] | UsageLogUncheckedCreateWithoutSandboxInput[]
+    connectOrCreate?: UsageLogCreateOrConnectWithoutSandboxInput | UsageLogCreateOrConnectWithoutSandboxInput[]
+    createMany?: UsageLogCreateManySandboxInputEnvelope
+    connect?: UsageLogWhereUniqueInput | UsageLogWhereUniqueInput[]
+  }
+
+  export type UserCreateNestedOneWithoutSandboxesInput = {
+    create?: XOR<UserCreateWithoutSandboxesInput, UserUncheckedCreateWithoutSandboxesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSandboxesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UsageLogUncheckedCreateNestedManyWithoutSandboxInput = {
+    create?: XOR<UsageLogCreateWithoutSandboxInput, UsageLogUncheckedCreateWithoutSandboxInput> | UsageLogCreateWithoutSandboxInput[] | UsageLogUncheckedCreateWithoutSandboxInput[]
+    connectOrCreate?: UsageLogCreateOrConnectWithoutSandboxInput | UsageLogCreateOrConnectWithoutSandboxInput[]
+    createMany?: UsageLogCreateManySandboxInputEnvelope
+    connect?: UsageLogWhereUniqueInput | UsageLogWhereUniqueInput[]
+  }
+
+  export type EnumSandboxLanguageFieldUpdateOperationsInput = {
+    set?: $Enums.SandboxLanguage
+  }
+
+  export type EnumSandboxStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SandboxStatus
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type UsageLogUpdateManyWithoutSandboxNestedInput = {
+    create?: XOR<UsageLogCreateWithoutSandboxInput, UsageLogUncheckedCreateWithoutSandboxInput> | UsageLogCreateWithoutSandboxInput[] | UsageLogUncheckedCreateWithoutSandboxInput[]
+    connectOrCreate?: UsageLogCreateOrConnectWithoutSandboxInput | UsageLogCreateOrConnectWithoutSandboxInput[]
+    upsert?: UsageLogUpsertWithWhereUniqueWithoutSandboxInput | UsageLogUpsertWithWhereUniqueWithoutSandboxInput[]
+    createMany?: UsageLogCreateManySandboxInputEnvelope
+    set?: UsageLogWhereUniqueInput | UsageLogWhereUniqueInput[]
+    disconnect?: UsageLogWhereUniqueInput | UsageLogWhereUniqueInput[]
+    delete?: UsageLogWhereUniqueInput | UsageLogWhereUniqueInput[]
+    connect?: UsageLogWhereUniqueInput | UsageLogWhereUniqueInput[]
+    update?: UsageLogUpdateWithWhereUniqueWithoutSandboxInput | UsageLogUpdateWithWhereUniqueWithoutSandboxInput[]
+    updateMany?: UsageLogUpdateManyWithWhereWithoutSandboxInput | UsageLogUpdateManyWithWhereWithoutSandboxInput[]
+    deleteMany?: UsageLogScalarWhereInput | UsageLogScalarWhereInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutSandboxesNestedInput = {
+    create?: XOR<UserCreateWithoutSandboxesInput, UserUncheckedCreateWithoutSandboxesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSandboxesInput
+    upsert?: UserUpsertWithoutSandboxesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSandboxesInput, UserUpdateWithoutSandboxesInput>, UserUncheckedUpdateWithoutSandboxesInput>
+  }
+
+  export type UsageLogUncheckedUpdateManyWithoutSandboxNestedInput = {
+    create?: XOR<UsageLogCreateWithoutSandboxInput, UsageLogUncheckedCreateWithoutSandboxInput> | UsageLogCreateWithoutSandboxInput[] | UsageLogUncheckedCreateWithoutSandboxInput[]
+    connectOrCreate?: UsageLogCreateOrConnectWithoutSandboxInput | UsageLogCreateOrConnectWithoutSandboxInput[]
+    upsert?: UsageLogUpsertWithWhereUniqueWithoutSandboxInput | UsageLogUpsertWithWhereUniqueWithoutSandboxInput[]
+    createMany?: UsageLogCreateManySandboxInputEnvelope
+    set?: UsageLogWhereUniqueInput | UsageLogWhereUniqueInput[]
+    disconnect?: UsageLogWhereUniqueInput | UsageLogWhereUniqueInput[]
+    delete?: UsageLogWhereUniqueInput | UsageLogWhereUniqueInput[]
+    connect?: UsageLogWhereUniqueInput | UsageLogWhereUniqueInput[]
+    update?: UsageLogUpdateWithWhereUniqueWithoutSandboxInput | UsageLogUpdateWithWhereUniqueWithoutSandboxInput[]
+    updateMany?: UsageLogUpdateManyWithWhereWithoutSandboxInput | UsageLogUpdateManyWithWhereWithoutSandboxInput[]
+    deleteMany?: UsageLogScalarWhereInput | UsageLogScalarWhereInput[]
+  }
+
+  export type SandboxCreateNestedOneWithoutUsageLogsInput = {
+    create?: XOR<SandboxCreateWithoutUsageLogsInput, SandboxUncheckedCreateWithoutUsageLogsInput>
+    connectOrCreate?: SandboxCreateOrConnectWithoutUsageLogsInput
+    connect?: SandboxWhereUniqueInput
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type SandboxUpdateOneRequiredWithoutUsageLogsNestedInput = {
+    create?: XOR<SandboxCreateWithoutUsageLogsInput, SandboxUncheckedCreateWithoutUsageLogsInput>
+    connectOrCreate?: SandboxCreateOrConnectWithoutUsageLogsInput
+    upsert?: SandboxUpsertWithoutUsageLogsInput
+    connect?: SandboxWhereUniqueInput
+    update?: XOR<XOR<SandboxUpdateToOneWithWhereWithoutUsageLogsInput, SandboxUpdateWithoutUsageLogsInput>, SandboxUncheckedUpdateWithoutUsageLogsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -10797,6 +15719,110 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSandboxLanguageFilter<$PrismaModel = never> = {
+    equals?: $Enums.SandboxLanguage | EnumSandboxLanguageFieldRefInput<$PrismaModel>
+    in?: $Enums.SandboxLanguage[] | ListEnumSandboxLanguageFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SandboxLanguage[] | ListEnumSandboxLanguageFieldRefInput<$PrismaModel>
+    not?: NestedEnumSandboxLanguageFilter<$PrismaModel> | $Enums.SandboxLanguage
+  }
+
+  export type NestedEnumSandboxStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SandboxStatus | EnumSandboxStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SandboxStatus[] | ListEnumSandboxStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SandboxStatus[] | ListEnumSandboxStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSandboxStatusFilter<$PrismaModel> | $Enums.SandboxStatus
+  }
+
+  export type NestedEnumSandboxLanguageWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SandboxLanguage | EnumSandboxLanguageFieldRefInput<$PrismaModel>
+    in?: $Enums.SandboxLanguage[] | ListEnumSandboxLanguageFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SandboxLanguage[] | ListEnumSandboxLanguageFieldRefInput<$PrismaModel>
+    not?: NestedEnumSandboxLanguageWithAggregatesFilter<$PrismaModel> | $Enums.SandboxLanguage
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSandboxLanguageFilter<$PrismaModel>
+    _max?: NestedEnumSandboxLanguageFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSandboxStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SandboxStatus | EnumSandboxStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SandboxStatus[] | ListEnumSandboxStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SandboxStatus[] | ListEnumSandboxStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSandboxStatusWithAggregatesFilter<$PrismaModel> | $Enums.SandboxStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSandboxStatusFilter<$PrismaModel>
+    _max?: NestedEnumSandboxStatusFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type ProjectCreateWithoutWorkspaceInput = {
@@ -11069,6 +16095,363 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ApiKeyCreateWithoutUserInput = {
+    id?: string
+    keyHash: string
+    keyPrefix: string
+    name: string
+    isActive?: boolean
+    lastUsedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type ApiKeyUncheckedCreateWithoutUserInput = {
+    id?: string
+    keyHash: string
+    keyPrefix: string
+    name: string
+    isActive?: boolean
+    lastUsedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type ApiKeyCreateOrConnectWithoutUserInput = {
+    where: ApiKeyWhereUniqueInput
+    create: XOR<ApiKeyCreateWithoutUserInput, ApiKeyUncheckedCreateWithoutUserInput>
+  }
+
+  export type ApiKeyCreateManyUserInputEnvelope = {
+    data: ApiKeyCreateManyUserInput | ApiKeyCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SandboxCreateWithoutUserInput = {
+    id?: string
+    language: $Enums.SandboxLanguage
+    status?: $Enums.SandboxStatus
+    containerId?: string | null
+    port?: number | null
+    timeoutSecs?: number
+    startedAt?: Date | string | null
+    terminatedAt?: Date | string | null
+    createdAt?: Date | string
+    usageLogs?: UsageLogCreateNestedManyWithoutSandboxInput
+  }
+
+  export type SandboxUncheckedCreateWithoutUserInput = {
+    id?: string
+    language: $Enums.SandboxLanguage
+    status?: $Enums.SandboxStatus
+    containerId?: string | null
+    port?: number | null
+    timeoutSecs?: number
+    startedAt?: Date | string | null
+    terminatedAt?: Date | string | null
+    createdAt?: Date | string
+    usageLogs?: UsageLogUncheckedCreateNestedManyWithoutSandboxInput
+  }
+
+  export type SandboxCreateOrConnectWithoutUserInput = {
+    where: SandboxWhereUniqueInput
+    create: XOR<SandboxCreateWithoutUserInput, SandboxUncheckedCreateWithoutUserInput>
+  }
+
+  export type SandboxCreateManyUserInputEnvelope = {
+    data: SandboxCreateManyUserInput | SandboxCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ApiKeyUpsertWithWhereUniqueWithoutUserInput = {
+    where: ApiKeyWhereUniqueInput
+    update: XOR<ApiKeyUpdateWithoutUserInput, ApiKeyUncheckedUpdateWithoutUserInput>
+    create: XOR<ApiKeyCreateWithoutUserInput, ApiKeyUncheckedCreateWithoutUserInput>
+  }
+
+  export type ApiKeyUpdateWithWhereUniqueWithoutUserInput = {
+    where: ApiKeyWhereUniqueInput
+    data: XOR<ApiKeyUpdateWithoutUserInput, ApiKeyUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ApiKeyUpdateManyWithWhereWithoutUserInput = {
+    where: ApiKeyScalarWhereInput
+    data: XOR<ApiKeyUpdateManyMutationInput, ApiKeyUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ApiKeyScalarWhereInput = {
+    AND?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
+    OR?: ApiKeyScalarWhereInput[]
+    NOT?: ApiKeyScalarWhereInput | ApiKeyScalarWhereInput[]
+    id?: StringFilter<"ApiKey"> | string
+    userId?: StringFilter<"ApiKey"> | string
+    keyHash?: StringFilter<"ApiKey"> | string
+    keyPrefix?: StringFilter<"ApiKey"> | string
+    name?: StringFilter<"ApiKey"> | string
+    isActive?: BoolFilter<"ApiKey"> | boolean
+    lastUsedAt?: DateTimeNullableFilter<"ApiKey"> | Date | string | null
+    createdAt?: DateTimeFilter<"ApiKey"> | Date | string
+  }
+
+  export type SandboxUpsertWithWhereUniqueWithoutUserInput = {
+    where: SandboxWhereUniqueInput
+    update: XOR<SandboxUpdateWithoutUserInput, SandboxUncheckedUpdateWithoutUserInput>
+    create: XOR<SandboxCreateWithoutUserInput, SandboxUncheckedCreateWithoutUserInput>
+  }
+
+  export type SandboxUpdateWithWhereUniqueWithoutUserInput = {
+    where: SandboxWhereUniqueInput
+    data: XOR<SandboxUpdateWithoutUserInput, SandboxUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SandboxUpdateManyWithWhereWithoutUserInput = {
+    where: SandboxScalarWhereInput
+    data: XOR<SandboxUpdateManyMutationInput, SandboxUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SandboxScalarWhereInput = {
+    AND?: SandboxScalarWhereInput | SandboxScalarWhereInput[]
+    OR?: SandboxScalarWhereInput[]
+    NOT?: SandboxScalarWhereInput | SandboxScalarWhereInput[]
+    id?: StringFilter<"Sandbox"> | string
+    userId?: StringFilter<"Sandbox"> | string
+    language?: EnumSandboxLanguageFilter<"Sandbox"> | $Enums.SandboxLanguage
+    status?: EnumSandboxStatusFilter<"Sandbox"> | $Enums.SandboxStatus
+    containerId?: StringNullableFilter<"Sandbox"> | string | null
+    port?: IntNullableFilter<"Sandbox"> | number | null
+    timeoutSecs?: IntFilter<"Sandbox"> | number
+    startedAt?: DateTimeNullableFilter<"Sandbox"> | Date | string | null
+    terminatedAt?: DateTimeNullableFilter<"Sandbox"> | Date | string | null
+    createdAt?: DateTimeFilter<"Sandbox"> | Date | string
+  }
+
+  export type UserCreateWithoutApiKeysInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sandboxes?: SandboxCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutApiKeysInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sandboxes?: SandboxUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutApiKeysInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutApiKeysInput, UserUncheckedCreateWithoutApiKeysInput>
+  }
+
+  export type UserUpsertWithoutApiKeysInput = {
+    update: XOR<UserUpdateWithoutApiKeysInput, UserUncheckedUpdateWithoutApiKeysInput>
+    create: XOR<UserCreateWithoutApiKeysInput, UserUncheckedCreateWithoutApiKeysInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutApiKeysInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutApiKeysInput, UserUncheckedUpdateWithoutApiKeysInput>
+  }
+
+  export type UserUpdateWithoutApiKeysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sandboxes?: SandboxUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutApiKeysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sandboxes?: SandboxUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UsageLogCreateWithoutSandboxInput = {
+    id?: string
+    userId: string
+    durationSecs: number
+    billedAmount: number
+    language: string
+    createdAt?: Date | string
+  }
+
+  export type UsageLogUncheckedCreateWithoutSandboxInput = {
+    id?: string
+    userId: string
+    durationSecs: number
+    billedAmount: number
+    language: string
+    createdAt?: Date | string
+  }
+
+  export type UsageLogCreateOrConnectWithoutSandboxInput = {
+    where: UsageLogWhereUniqueInput
+    create: XOR<UsageLogCreateWithoutSandboxInput, UsageLogUncheckedCreateWithoutSandboxInput>
+  }
+
+  export type UsageLogCreateManySandboxInputEnvelope = {
+    data: UsageLogCreateManySandboxInput | UsageLogCreateManySandboxInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserCreateWithoutSandboxesInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutSandboxesInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutSandboxesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSandboxesInput, UserUncheckedCreateWithoutSandboxesInput>
+  }
+
+  export type UsageLogUpsertWithWhereUniqueWithoutSandboxInput = {
+    where: UsageLogWhereUniqueInput
+    update: XOR<UsageLogUpdateWithoutSandboxInput, UsageLogUncheckedUpdateWithoutSandboxInput>
+    create: XOR<UsageLogCreateWithoutSandboxInput, UsageLogUncheckedCreateWithoutSandboxInput>
+  }
+
+  export type UsageLogUpdateWithWhereUniqueWithoutSandboxInput = {
+    where: UsageLogWhereUniqueInput
+    data: XOR<UsageLogUpdateWithoutSandboxInput, UsageLogUncheckedUpdateWithoutSandboxInput>
+  }
+
+  export type UsageLogUpdateManyWithWhereWithoutSandboxInput = {
+    where: UsageLogScalarWhereInput
+    data: XOR<UsageLogUpdateManyMutationInput, UsageLogUncheckedUpdateManyWithoutSandboxInput>
+  }
+
+  export type UsageLogScalarWhereInput = {
+    AND?: UsageLogScalarWhereInput | UsageLogScalarWhereInput[]
+    OR?: UsageLogScalarWhereInput[]
+    NOT?: UsageLogScalarWhereInput | UsageLogScalarWhereInput[]
+    id?: StringFilter<"UsageLog"> | string
+    sandboxId?: StringFilter<"UsageLog"> | string
+    userId?: StringFilter<"UsageLog"> | string
+    durationSecs?: IntFilter<"UsageLog"> | number
+    billedAmount?: FloatFilter<"UsageLog"> | number
+    language?: StringFilter<"UsageLog"> | string
+    createdAt?: DateTimeFilter<"UsageLog"> | Date | string
+  }
+
+  export type UserUpsertWithoutSandboxesInput = {
+    update: XOR<UserUpdateWithoutSandboxesInput, UserUncheckedUpdateWithoutSandboxesInput>
+    create: XOR<UserCreateWithoutSandboxesInput, UserUncheckedCreateWithoutSandboxesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSandboxesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSandboxesInput, UserUncheckedUpdateWithoutSandboxesInput>
+  }
+
+  export type UserUpdateWithoutSandboxesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSandboxesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type SandboxCreateWithoutUsageLogsInput = {
+    id?: string
+    language: $Enums.SandboxLanguage
+    status?: $Enums.SandboxStatus
+    containerId?: string | null
+    port?: number | null
+    timeoutSecs?: number
+    startedAt?: Date | string | null
+    terminatedAt?: Date | string | null
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutSandboxesInput
+  }
+
+  export type SandboxUncheckedCreateWithoutUsageLogsInput = {
+    id?: string
+    userId: string
+    language: $Enums.SandboxLanguage
+    status?: $Enums.SandboxStatus
+    containerId?: string | null
+    port?: number | null
+    timeoutSecs?: number
+    startedAt?: Date | string | null
+    terminatedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type SandboxCreateOrConnectWithoutUsageLogsInput = {
+    where: SandboxWhereUniqueInput
+    create: XOR<SandboxCreateWithoutUsageLogsInput, SandboxUncheckedCreateWithoutUsageLogsInput>
+  }
+
+  export type SandboxUpsertWithoutUsageLogsInput = {
+    update: XOR<SandboxUpdateWithoutUsageLogsInput, SandboxUncheckedUpdateWithoutUsageLogsInput>
+    create: XOR<SandboxCreateWithoutUsageLogsInput, SandboxUncheckedCreateWithoutUsageLogsInput>
+    where?: SandboxWhereInput
+  }
+
+  export type SandboxUpdateToOneWithWhereWithoutUsageLogsInput = {
+    where?: SandboxWhereInput
+    data: XOR<SandboxUpdateWithoutUsageLogsInput, SandboxUncheckedUpdateWithoutUsageLogsInput>
+  }
+
+  export type SandboxUpdateWithoutUsageLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumSandboxLanguageFieldUpdateOperationsInput | $Enums.SandboxLanguage
+    status?: EnumSandboxStatusFieldUpdateOperationsInput | $Enums.SandboxStatus
+    containerId?: NullableStringFieldUpdateOperationsInput | string | null
+    port?: NullableIntFieldUpdateOperationsInput | number | null
+    timeoutSecs?: IntFieldUpdateOperationsInput | number
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    terminatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutSandboxesNestedInput
+  }
+
+  export type SandboxUncheckedUpdateWithoutUsageLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    language?: EnumSandboxLanguageFieldUpdateOperationsInput | $Enums.SandboxLanguage
+    status?: EnumSandboxStatusFieldUpdateOperationsInput | $Enums.SandboxStatus
+    containerId?: NullableStringFieldUpdateOperationsInput | string | null
+    port?: NullableIntFieldUpdateOperationsInput | number | null
+    timeoutSecs?: IntFieldUpdateOperationsInput | number
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    terminatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ProjectCreateManyWorkspaceInput = {
     id?: string
     name: string
@@ -11165,6 +16548,132 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ApiKeyCreateManyUserInput = {
+    id?: string
+    keyHash: string
+    keyPrefix: string
+    name: string
+    isActive?: boolean
+    lastUsedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type SandboxCreateManyUserInput = {
+    id?: string
+    language: $Enums.SandboxLanguage
+    status?: $Enums.SandboxStatus
+    containerId?: string | null
+    port?: number | null
+    timeoutSecs?: number
+    startedAt?: Date | string | null
+    terminatedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type ApiKeyUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keyHash?: StringFieldUpdateOperationsInput | string
+    keyPrefix?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApiKeyUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keyHash?: StringFieldUpdateOperationsInput | string
+    keyPrefix?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApiKeyUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    keyHash?: StringFieldUpdateOperationsInput | string
+    keyPrefix?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SandboxUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumSandboxLanguageFieldUpdateOperationsInput | $Enums.SandboxLanguage
+    status?: EnumSandboxStatusFieldUpdateOperationsInput | $Enums.SandboxStatus
+    containerId?: NullableStringFieldUpdateOperationsInput | string | null
+    port?: NullableIntFieldUpdateOperationsInput | number | null
+    timeoutSecs?: IntFieldUpdateOperationsInput | number
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    terminatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usageLogs?: UsageLogUpdateManyWithoutSandboxNestedInput
+  }
+
+  export type SandboxUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumSandboxLanguageFieldUpdateOperationsInput | $Enums.SandboxLanguage
+    status?: EnumSandboxStatusFieldUpdateOperationsInput | $Enums.SandboxStatus
+    containerId?: NullableStringFieldUpdateOperationsInput | string | null
+    port?: NullableIntFieldUpdateOperationsInput | number | null
+    timeoutSecs?: IntFieldUpdateOperationsInput | number
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    terminatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usageLogs?: UsageLogUncheckedUpdateManyWithoutSandboxNestedInput
+  }
+
+  export type SandboxUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    language?: EnumSandboxLanguageFieldUpdateOperationsInput | $Enums.SandboxLanguage
+    status?: EnumSandboxStatusFieldUpdateOperationsInput | $Enums.SandboxStatus
+    containerId?: NullableStringFieldUpdateOperationsInput | string | null
+    port?: NullableIntFieldUpdateOperationsInput | number | null
+    timeoutSecs?: IntFieldUpdateOperationsInput | number
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    terminatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageLogCreateManySandboxInput = {
+    id?: string
+    userId: string
+    durationSecs: number
+    billedAmount: number
+    language: string
+    createdAt?: Date | string
+  }
+
+  export type UsageLogUpdateWithoutSandboxInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    durationSecs?: IntFieldUpdateOperationsInput | number
+    billedAmount?: FloatFieldUpdateOperationsInput | number
+    language?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageLogUncheckedUpdateWithoutSandboxInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    durationSecs?: IntFieldUpdateOperationsInput | number
+    billedAmount?: FloatFieldUpdateOperationsInput | number
+    language?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageLogUncheckedUpdateManyWithoutSandboxInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    durationSecs?: IntFieldUpdateOperationsInput | number
+    billedAmount?: FloatFieldUpdateOperationsInput | number
+    language?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
