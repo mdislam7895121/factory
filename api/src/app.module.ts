@@ -7,9 +7,10 @@ import { Serial11Service } from './serial11/serial11.service';
 import { AuthModule } from './lib/auth/auth.module';
 import { WorkspaceService } from './serial15/workspace.service';
 import { ProjectService } from './serial15/project.service';
+import { SandboxModule } from './sandbox/sandbox.module';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, SandboxModule],
   controllers: [AppController, Serial11Controller],
   providers: [
     AppService,

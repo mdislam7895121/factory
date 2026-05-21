@@ -100,9 +100,73 @@ model PublicProject {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
+  id           String     @id @default(uuid())
+  email        String     @unique
   passwordHash String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  apiKeys      ApiKey[]
+  sandboxes    Sandbox[]
+}
+
+enum SandboxLanguage {
+  python
+  nodejs
+  bash
+}
+
+enum SandboxStatus {
+  CREATING
+  READY
+  RUNNING
+  TERMINATED
+  FAILED
+}
+
+model ApiKey {
+  id          String    @id @default(uuid())
+  userId      String
+  keyHash     String    @unique
+  keyPrefix   String
+  name        String
+  isActive    Boolean   @default(true)
+  lastUsedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([keyHash])
+}
+
+model Sandbox {
+  id           String          @id @default(uuid())
+  userId       String
+  language     SandboxLanguage
+  status       SandboxStatus   @default(CREATING)
+  containerId  String?
+  port         Int?
+  timeoutSecs  Int             @default(300)
+  startedAt    DateTime?
+  terminatedAt DateTime?
+  createdAt    DateTime        @default(now())
+  usageLogs    UsageLog[]
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+}
+
+model UsageLog {
+  id            String   @id @default(uuid())
+  sandboxId     String
+  userId        String
+  durationSecs  Int
+  billedAmount  Float
+  language      String
+  createdAt     DateTime @default(now())
+  sandbox       Sandbox  @relation(fields: [sandboxId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([sandboxId])
+  @@index([createdAt])
 }
