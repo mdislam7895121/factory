@@ -3,20 +3,34 @@ import {
   Controller,
   Get,
   Header,
+  Headers,
   HttpCode,
   HttpStatus,
   Ip,
+  NotFoundException,
   Param,
   Patch,
   Post,
   Query,
   Res,
+  UnauthorizedException,
 } from '@nestjs/common';
-import { IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsBoolean, IsIn, IsOptional, IsString, MaxLength } from 'class-validator';
+import { Transform } from 'class-transformer';
 import type { Response } from 'express';
 import { CreatorProfileService } from './creator-profile.service';
 import { SocialSignalService } from './social-signal.service';
-import type { DiscoverParams, SocialSignalType } from './social.types';
+import type { CreatorTrustFlag, DiscoverParams, ModerationStatus, SocialSignalType } from './social.types';
+
+// 20C-11: Admin key check — simple bearer token, no raw secret in code
+const ADMIN_KEY_ENV = process.env.ADMIN_API_KEY ?? '';
+function requireAdmin(authHeader: string | undefined): void {
+  if (!ADMIN_KEY_ENV) return; // disabled when key not configured
+  const bearer = authHeader?.replace(/^Bearer\s+/i, '').trim() ?? '';
+  if (!bearer || bearer !== ADMIN_KEY_ENV) {
+    throw new UnauthorizedException('Admin key required');
+  }
+}
 
 // ── DTOs ─────────────────────────────────────────────────────────────────────
 
@@ -215,23 +229,81 @@ export class SocialController {
     return { ok: true };
   }
 
-  // ── 18-08: Discovery ──────────────────────────────────────────────────────────
+  // ── 18-08 / 20C-01: Discovery ────────────────────────────────────────────────
 
   @Get('v1/social/discover')
   discover(
     @Query('sortBy')              sortBy?:              string,
     @Query('domain')              domain?:              string,
+    @Query('category')            category?:            string,
     @Query('marketplacePackSlug') marketplacePackSlug?: string,
     @Query('creatorHandle')       creatorHandle?:       string,
+    @Query('remixableOnly')       remixableOnly?:       string,
+    @Query('cursor')              cursor?:              string,
+    @Query('limit')               limitRaw?:            string,
   ) {
     const params: DiscoverParams = {
       sortBy:              sortBy as DiscoverParams['sortBy'],
       domain,
+      category,
       marketplacePackSlug,
       creatorHandle,
+      remixableOnly:       remixableOnly === 'true',
+      cursor,
+      limit:               limitRaw ? Math.min(parseInt(limitRaw, 10) || 20, 100) : 20,
     };
     const result = this.signals.discover(params);
     return { ok: true, ...result };
+  }
+
+  // ── 20C-11: Admin moderation endpoints ───────────────────────────────────────
+
+  @Post('v1/admin/apps/:projectId/feature')
+  @HttpCode(HttpStatus.OK)
+  featureApp(
+    @Param('projectId') projectId: string,
+    @Headers('authorization') auth: string,
+    @Body() body: { featured?: boolean },
+  ) {
+    requireAdmin(auth);
+    this.signals.featureApp(projectId, body.featured !== false);
+    return { ok: true };
+  }
+
+  @Post('v1/admin/apps/:projectId/hide')
+  @HttpCode(HttpStatus.OK)
+  hideApp(
+    @Param('projectId') projectId: string,
+    @Headers('authorization') auth: string,
+    @Body() body: { hidden?: boolean },
+  ) {
+    requireAdmin(auth);
+    this.signals.hideApp(projectId, body.hidden !== false);
+    return { ok: true };
+  }
+
+  @Post('v1/admin/apps/:projectId/moderation')
+  @HttpCode(HttpStatus.OK)
+  setModeration(
+    @Param('projectId') projectId: string,
+    @Headers('authorization') auth: string,
+    @Body() body: { status: ModerationStatus },
+  ) {
+    requireAdmin(auth);
+    this.signals.setModerationStatus(projectId, body.status);
+    return { ok: true };
+  }
+
+  @Post('v1/admin/creators/:handle/trust')
+  @HttpCode(HttpStatus.OK)
+  setCreatorTrust(
+    @Param('handle') handle: string,
+    @Headers('authorization') auth: string,
+    @Body() body: { flag: CreatorTrustFlag },
+  ) {
+    requireAdmin(auth);
+    this.signals.setCreatorTrustFlag(handle, body.flag);
+    return { ok: true };
   }
 
   // ── 18-09: Report placeholder ────────────────────────────────────────────────

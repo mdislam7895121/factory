@@ -131,7 +131,7 @@ export default function Home() {
           Factory
         </div>
         <ul style={{ display: 'flex', alignItems: 'center', gap: 4, listStyle: 'none', margin: 0, padding: 0 }} className="hidden md:flex">
-          {[['#how','How it works'],['#discovery','Discover'],['#marketplace','Marketplace'],['#pricing','Pricing']].map(([href,label]) => (
+          {[['#how','How it works'],['/discover','Ecosystem'],['#marketplace','Marketplace'],['#pricing','Pricing']].map(([href,label]) => (
             <li key={href}><a href={href} style={{ padding: '6px 13px', borderRadius: 8, fontSize: 13, color: TEXT_MUTED, textDecoration: 'none', display: 'block', transition: 'color 0.15s' }} onMouseEnter={e=>(e.currentTarget.style.color='#f1f5f9')} onMouseLeave={e=>(e.currentTarget.style.color=TEXT_MUTED)}>{label}</a></li>
           ))}
         </ul>
@@ -420,6 +420,12 @@ export default function Home() {
                 </div>
               </div>
             ))}
+          </div>
+          <div style={{ textAlign: 'center', marginTop: 40 }}>
+            <Link href="/discover" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 28px', borderRadius: 10, border: `1px solid ${BORDER_DIM}`, color: '#f1f5f9', textDecoration: 'none', fontSize: 15, fontWeight: 600, background: 'rgba(99,102,241,0.08)', transition: 'all 0.2s' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.16)'; e.currentTarget.style.borderColor = ACCENT; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.08)'; e.currentTarget.style.borderColor = BORDER_DIM; }}
+            >Browse the full ecosystem →</Link>
           </div>
         </div>
       </div>

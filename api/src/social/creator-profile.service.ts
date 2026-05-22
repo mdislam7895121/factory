@@ -57,6 +57,7 @@ export class CreatorProfileService {
       skills:      (req.skills ?? []).slice(0, 20),
       verified:    false,
       visibility:  'PUBLIC',
+      trustFlag:   'NONE',
       createdAt:   new Date(),
       updatedAt:   new Date(),
     };

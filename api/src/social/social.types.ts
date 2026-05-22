@@ -3,6 +3,10 @@
 export type ProfileVisibility = 'PUBLIC' | 'PRIVATE';
 export type SocialSignalType  = 'LIKE' | 'SAVE' | 'SHARE' | 'VIEW' | 'REMIX';
 
+// 20C-11: Admin moderation foundations
+export type ModerationStatus = 'APPROVED' | 'PENDING' | 'HIDDEN' | 'FLAGGED';
+export type CreatorTrustFlag = 'NONE' | 'VERIFIED' | 'WARNED' | 'BANNED';
+
 export interface CreatorProfileData {
   id:          string;
   userId:      string;
@@ -16,6 +20,7 @@ export interface CreatorProfileData {
   skills:      string[];
   verified:    boolean;
   visibility:  ProfileVisibility;
+  trustFlag:   CreatorTrustFlag;
   createdAt:   Date;
   updatedAt:   Date;
 }
@@ -76,8 +81,12 @@ export interface PublishedApp {
   title:                string;
   description?:         string;
   domain?:              string;
+  category?:            string;
   marketplacePackSlug?: string;
   visibility:           'PUBLIC' | 'PRIVATE';
+  featured?:            boolean;
+  hidden?:              boolean;
+  moderationStatus?:    ModerationStatus;
   createdAt:            Date;
   signals:              AppSignalCounts;
 }
@@ -88,13 +97,31 @@ export interface RemixSource {
 }
 
 export interface DiscoverParams {
-  sortBy?:              'TRENDING' | 'NEWEST' | 'MOST_REMIXED' | 'MOST_VIEWED';
+  sortBy?:              'TRENDING' | 'NEWEST' | 'MOST_REMIXED' | 'MOST_VIEWED' | 'STAFF_PICKS';
   domain?:              string;
+  category?:            string;
   marketplacePackSlug?: string;
   creatorHandle?:       string;
+  cursor?:              string;
+  limit?:               number;
+  remixableOnly?:       boolean;
 }
 
 export interface DiscoverResult {
-  apps:  PublishedApp[];
-  total: number;
+  apps:    PublishedApp[];
+  total:   number;
+  cursor?: string;
+}
+
+// 20C-11: Admin moderation signal — never expose internal keys
+export interface ModerationSignal {
+  projectId:        string;
+  featured?:        boolean;
+  hidden?:          boolean;
+  moderationStatus?: ModerationStatus;
+}
+
+export interface CreatorModerationSignal {
+  handle:    string;
+  trustFlag: CreatorTrustFlag;
 }
