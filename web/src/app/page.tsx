@@ -1,7 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+
+function track(event: string, meta?: Record<string, unknown>): void {
+  console.debug('[factory:analytics]', { event, ts: Date.now(), ...meta });
+}
 
 // ─── Static data ──────────────────────────────────────────────────────────────
 
@@ -86,8 +91,16 @@ const ACCENT_GRN  = '#10b981';
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function Home() {
+  const router = useRouter();
   const [prompt, setPrompt] = useState('');
   const [counts, setCounts] = useState({ agents: 2847, runtimes: 1204, previews: 8391, remixes: 342 });
+
+  const handleBuild = useCallback(() => {
+    const p = prompt.trim();
+    if (!p) return;
+    track('build_cta_click', { prompt_length: p.length });
+    router.push('/demo?prompt=' + encodeURIComponent(p));
+  }, [prompt, router]);
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -208,6 +221,8 @@ export default function Home() {
                 <textarea
                   value={prompt}
                   onChange={e => setPrompt(e.target.value)}
+                  onFocus={() => track('landing_prompt_focus')}
+                  onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleBuild(); } }}
                   rows={3}
                   aria-label="Describe what you want to build"
                   style={{ width: '100%', background: 'transparent', border: 'none', outline: 'none', resize: 'none', color: '#f1f5f9', fontSize: 16, fontFamily: 'inherit', lineHeight: 1.6, caretColor: ACCENT, zIndex: 1, position: 'relative' }}
@@ -225,7 +240,7 @@ export default function Home() {
                 {EXAMPLES.map(ex => (
                   <button
                     key={ex}
-                    onClick={() => setPrompt(ex)}
+                    onClick={() => { setPrompt(ex); track('starter_prompt_click', { prompt_length: ex.length }); }}
                     style={{ padding: '4px 12px', borderRadius: 999, background: 'rgba(255,255,255,0.04)', border: `1px solid ${BORDER_DIM}`, fontSize: 12, color: TEXT_MUTED, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.15s' }}
                     onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#f1f5f9'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.35)'; }}
                     onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = TEXT_MUTED; e.currentTarget.style.borderColor = BORDER_DIM; }}
@@ -246,11 +261,13 @@ export default function Home() {
                   ))}
                 </div>
                 <button
-                  style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 20px', borderRadius: 10, background: `linear-gradient(135deg,${ACCENT},#4f46e5)`, border: 'none', color: 'white', fontSize: 14, fontWeight: 600, cursor: 'pointer', boxShadow: '0 0 22px rgba(99,102,241,0.38)', transition: 'all 0.15s' }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 0 36px rgba(99,102,241,0.58)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 0 22px rgba(99,102,241,0.38)'; }}
+                  onClick={handleBuild}
+                  disabled={!prompt.trim()}
+                  style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 20px', borderRadius: 10, background: prompt.trim() ? `linear-gradient(135deg,${ACCENT},#4f46e5)` : 'rgba(99,102,241,0.3)', border: 'none', color: 'white', fontSize: 14, fontWeight: 600, cursor: prompt.trim() ? 'pointer' : 'not-allowed', boxShadow: prompt.trim() ? '0 0 22px rgba(99,102,241,0.38)' : 'none', transition: 'all 0.15s' }}
+                  onMouseEnter={e => { if (prompt.trim()) { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 0 36px rgba(99,102,241,0.58)'; } }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = prompt.trim() ? '0 0 22px rgba(99,102,241,0.38)' : 'none'; }}
                 >
-                  <span>⚡</span> Build with AI
+                  <span>⚡</span> {prompt.trim() ? 'Generate live app' : 'Build with AI'}
                 </button>
               </div>
 
@@ -554,7 +571,7 @@ export default function Home() {
           </h2>
           <p style={{ fontSize: 18, color: TEXT_MUTED, marginBottom: 40, lineHeight: 1.6 }}>Type one sentence. An AI company wakes up and starts building.</p>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
-            <Link href="/dashboard"
+            <Link href="/demo"
               style={{ padding: '14px 32px', borderRadius: 12, fontSize: 16, fontWeight: 700, color: 'white', background: `linear-gradient(135deg,${ACCENT},#4f46e5)`, textDecoration: 'none', boxShadow: '0 0 40px rgba(99,102,241,0.38)', transition: 'all 0.15s', display: 'inline-block' }}
               onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 0 60px rgba(99,102,241,0.58)'; }}
               onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 0 40px rgba(99,102,241,0.38)'; }}
