@@ -286,6 +286,24 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
 .council-verdict.warnings{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);color:var(--yellow)}
 .council-verdict.blocked{background:rgba(255,79,79,.08);border:1px solid rgba(255,79,79,.3);color:#ff4f4f}
 .council-verdict.needs-input{background:rgba(108,108,255,.08);border:1px solid rgba(108,108,255,.3);color:var(--accent)}
+/* ---- 17-07: Marketplace packs ---- */
+.mkt-section{max-width:640px;margin:14px auto 0;padding:0 20px;display:none;animation:fadeIn .4s ease}
+.mkt-header{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.mkt-cards{display:flex;flex-direction:column;gap:8px}
+.mkt-card{background:var(--card-bg);border:1px solid var(--border);border-radius:9px;padding:10px 12px;display:flex;gap:10px;align-items:flex-start;animation:fadeIn .3s ease}
+.mkt-card-icon{font-size:20px;flex-shrink:0;line-height:1}
+.mkt-card-name{font-size:12px;font-weight:700;color:var(--fg)}
+.mkt-card-desc{font-size:11px;color:var(--muted);line-height:1.4;margin-top:2px}
+.mkt-badges{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap;align-items:center}
+.mkt-badge{font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+.mkt-badge.verified{background:rgba(76,175,80,.12);color:var(--green);border:1px solid rgba(76,175,80,.25)}
+.mkt-badge.official{background:rgba(108,108,255,.1);color:var(--accent);border:1px solid rgba(108,108,255,.2)}
+.mkt-badge.regulated{background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.25)}
+.mkt-badge.enterprise{background:rgba(100,100,100,.1);color:var(--muted);border:1px solid var(--border)}
+.mkt-badge.community{background:rgba(108,108,255,.06);color:var(--accent);border:1px solid rgba(108,108,255,.15)}
+.mkt-install-btn{margin-left:auto;font-size:10px;font-weight:600;background:var(--accent);color:#fff;border:none;border-radius:5px;padding:4px 9px;cursor:pointer;flex-shrink:0;line-height:1.4;align-self:center}
+.mkt-install-btn.installed{background:var(--green)}
+.mkt-built-with{margin-top:8px;padding:7px 10px;border-radius:7px;font-size:10px;color:var(--muted);background:rgba(108,108,255,.06);border:1px solid rgba(108,108,255,.15);display:flex;align-items:center;gap:5px}
 /* ---- Phase 2: Building ---- */
 .theater-header{padding:14px 16px;display:flex;align-items:center;gap:10px;max-width:900px;margin:0 auto;width:100%;flex-shrink:0}
 .theater-header h2{font-size:17px;font-weight:700;flex:1}
@@ -432,6 +450,12 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
     <div class="council-header">🧠 AI Council review</div>
     <div class="council-feed" id="council-feed"></div>
     <div id="council-verdict" class="council-verdict"></div>
+  </div>
+  <!-- 17-07: Marketplace packs -->
+  <div id="mkt-section" class="mkt-section">
+    <div class="mkt-header">📦 Suggested packs for your build</div>
+    <div class="mkt-cards" id="mkt-cards"></div>
+    <div id="mkt-built-with" class="mkt-built-with" style="display:none"></div>
   </div>
 </div>
 
@@ -592,6 +616,55 @@ function showCouncilTheater(prompt) {
   }).catch(function() {});
 }
 
+// 17-07: Marketplace pack cards
+var mktSection = document.getElementById('mkt-section');
+var mktCards = document.getElementById('mkt-cards');
+var mktBuiltWith = document.getElementById('mkt-built-with');
+var BADGE_CLS = { VERIFIED:'verified', OFFICIAL:'official', REGULATED:'regulated', ENTERPRISE_READY:'enterprise', COMMUNITY:'community' };
+function showMarketplacePacks(domainIds) {
+  if (!domainIds || !domainIds.length) return;
+  fetch('/v1/marketplace/packs?tags=' + encodeURIComponent(domainIds.join(',')))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (!d.ok || !d.packs || !d.packs.length) return;
+      var packs = d.packs.slice(0, 3);
+      mktCards.innerHTML = '';
+      packs.forEach(function(pack) {
+        var badges = (pack.trustBadges || []).map(function(b) {
+          return '<span class="mkt-badge ' + (BADGE_CLS[b] || '') + '">' + escHtml(b.replace(/_/g,' ').toLowerCase()) + '</span>';
+        }).join('');
+        var card = document.createElement('div');
+        card.className = 'mkt-card';
+        card.innerHTML = '<div class="mkt-card-icon">' + escHtml(pack.icon) + '</div>'
+          + '<div style="flex:1;min-width:0">'
+          + '<div class="mkt-card-name">' + escHtml(pack.name) + '</div>'
+          + '<div class="mkt-card-desc">' + escHtml((pack.description || '').slice(0, 80)) + '…</div>'
+          + '<div class="mkt-badges">' + badges + '</div>'
+          + '</div>'
+          + '<button class="mkt-install-btn" data-slug="' + escHtml(pack.slug) + '">Install</button>';
+        mktCards.appendChild(card);
+      });
+      mktSection.style.display = 'block';
+      var featured = packs.find(function(p) { return p.regulated || (p.trustBadges || []).includes('OFFICIAL'); }) || packs[0];
+      if (featured) {
+        mktBuiltWith.innerHTML = '🏗️ Built using <strong>' + escHtml(featured.name) + '</strong>';
+        mktBuiltWith.style.display = 'flex';
+      }
+      mktCards.addEventListener('click', function(e) {
+        var btn = e.target.closest ? e.target.closest('.mkt-install-btn') : null;
+        if (!btn || btn.classList.contains('installed')) return;
+        var slug = btn.dataset.slug;
+        fetch('/v1/marketplace/install', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ packSlug: slug, workspaceId: 'demo-ws', userId: 'demo-user' })
+        }).then(function(r) { return r.json(); }).then(function(res) {
+          if (res.ok) { btn.textContent = '✓ Installed'; btn.classList.add('installed'); }
+        }).catch(function() {});
+      });
+    }).catch(function() {});
+}
+
 // 13-04: Call /v1/agents/route for full team assembly with co-routing + risk
 function updateTeamPreview(prompt) {
   if (!prompt || prompt.trim().length < 8) { teamPreview.style.display = 'none'; return; }
@@ -680,6 +753,8 @@ function updateTeamPreview(prompt) {
         bpSection.style.display = 'block';
         // 16-06: Trigger council theater after blueprint appears
         showCouncilTheater(prompt);
+        // 17-07: Suggest marketplace packs for detected domains
+        showMarketplacePacks(domain.map(function(a) { return a.id; }));
       } else {
         bpSection.style.display = 'none';
       }
