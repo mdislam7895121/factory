@@ -14,6 +14,7 @@ import { AGENT_REGISTRY, getAgent, getCategories, type AgentCategory, type Agent
 import { AgentClassifierService } from './agent-classifier.service';
 import { PromptRouterService } from './prompt-router.service';
 import { GuardedExpertPolicyService } from './guarded-expert-policy.service';
+import { DomainTemplateService } from './domain-template.service';
 
 class PreviewSelectionDto {
   @IsString()
@@ -30,12 +31,19 @@ class GuardDto {
   context?: string;
 }
 
+class TemplateRecommendDto {
+  @IsString()
+  @MaxLength(500)
+  prompt!: string;
+}
+
 @Controller('v1/agents')
 export class AgentsController {
   constructor(
     private readonly classifier: AgentClassifierService,
     private readonly router: PromptRouterService,
     private readonly policyService: GuardedExpertPolicyService,
+    private readonly templateService: DomainTemplateService,
   ) {}
 
   // 12-04: GET /v1/agents — list all agents (optionally filtered)
@@ -104,5 +112,30 @@ export class AgentsController {
     const agentIds = Array.isArray(dto.agentIds) ? dto.agentIds : [];
     const result = this.policyService.guard(agentIds, dto.prompt ?? '', dto.context);
     return { ok: true, ...result };
+  }
+
+  // 15-04: GET /v1/agents/domain-templates — list all domain templates
+  // NOTE: declared BEFORE domain-templates/:id to prevent routing collision
+  @Get('domain-templates')
+  listDomainTemplates() {
+    return { ok: true, total: this.templateService.getAll().length, templates: this.templateService.getAll() };
+  }
+
+  // 15-04: POST /v1/agents/domain-templates/recommend — recommend templates from prompt
+  @Post('domain-templates/recommend')
+  @HttpCode(HttpStatus.OK)
+  recommendTemplates(@Body() dto: TemplateRecommendDto) {
+    const routeResult = this.router.route(dto.prompt ?? '');
+    const domainAgentIds = routeResult.domainAgents.map((a) => a.id);
+    const result = this.templateService.recommendFull(domainAgentIds, routeResult.suggestedTemplate);
+    return { ok: true, ...result };
+  }
+
+  // 15-04: GET /v1/agents/domain-templates/:id — single domain template
+  @Get('domain-templates/:id')
+  getDomainTemplate(@Param('id') id: string) {
+    const template = this.templateService.getById(id);
+    if (!template) throw new NotFoundException(`Domain template '${id}' not found`);
+    return { ok: true, template };
   }
 }

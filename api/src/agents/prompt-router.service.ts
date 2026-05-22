@@ -6,9 +6,11 @@ import {
   type SelectedAgent,
 } from './agent-classifier.service';
 import { GuardedExpertPolicyService } from './guarded-expert-policy.service';
+import { DomainTemplateService } from './domain-template.service';
 import { getAgent, type AgentCategory } from './agent-registry';
+import type { BlueprintSummaryItem } from './domain-template.types';
 
-// 13-03 / 14-04: Full routing result contract (guarded fields added additively)
+// 13-03 / 14-04 / 15-05: Full routing result contract (fields added additively)
 export interface RoutingResult {
   coreAgents: SelectedAgent[];
   domainAgents: SelectedAgent[];
@@ -23,6 +25,13 @@ export interface RoutingResult {
   blockedScopes: string[];
   safeRewrite: string;
   requiresProfessionalReview: boolean;
+  // 15-05: Domain template intelligence fields
+  recommendedTemplates: BlueprintSummaryItem[];
+  blueprintSummary: {
+    coreFeatures: string[];
+    complianceChecklist: string[];
+    riskWarnings: string[];
+  };
 }
 
 // 13-02: Co-routing rules — when agent X is matched, automatically include agents Y[]
@@ -109,6 +118,7 @@ export class PromptRouterService {
   constructor(
     private readonly classifier: AgentClassifierService,
     private readonly policyService: GuardedExpertPolicyService,
+    private readonly templateService: DomainTemplateService,
   ) {}
 
   // 13-01 / 13-03: Full agent routing from a prompt
@@ -206,6 +216,17 @@ export class PromptRouterService {
       requiresProfessionalReview = guard.requiresProfessionalReview;
     }
 
+    // Step 8: Domain template recommendation (15-05)
+    const allDomainAgentIds = allDomainAgents.map((a) => a.id);
+    const recommendedTemplatesFull = this.templateService.recommend(allDomainAgentIds, suggestedTemplate);
+    const recommendedTemplates = this.templateService.toSummaryItems(recommendedTemplatesFull);
+    const merged = this.templateService.mergeBlueprint(recommendedTemplatesFull);
+    const blueprintSummary = {
+      coreFeatures:        merged.coreFeatures.slice(0, 6),
+      complianceChecklist: merged.complianceChecklist,
+      riskWarnings:        merged.riskWarnings,
+    };
+
     return {
       coreAgents: base.coreAgents,
       domainAgents: allDomainAgents,
@@ -219,6 +240,8 @@ export class PromptRouterService {
       blockedScopes,
       safeRewrite,
       requiresProfessionalReview,
+      recommendedTemplates,
+      blueprintSummary,
     };
   }
 

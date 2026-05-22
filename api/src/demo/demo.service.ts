@@ -238,6 +238,20 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
 .tp-safe-rewrite{margin-top:7px;padding:7px 10px;background:rgba(96,165,250,.05);
   border:1px solid rgba(96,165,250,.15);border-radius:8px;font-size:11px;color:#93c5fd;line-height:1.5}
 @keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+/* ---- 15-06: Blueprint card ---- */
+.bp-section{max-width:640px;margin:10px auto 0;padding:0 20px;display:none;animation:fadeIn .4s ease}
+.bp-header{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.05em;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.bp-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:11px 13px}
+.bp-title{font-size:13px;font-weight:700;color:var(--fg);margin-bottom:7px}
+.bp-features{list-style:none;display:flex;flex-direction:column;gap:3px;margin-bottom:6px}
+.bp-features li{font-size:11px;color:var(--muted);display:flex;align-items:flex-start;gap:5px}
+.bp-feature-dot{color:var(--accent);flex-shrink:0;font-size:10px;margin-top:1px}
+.bp-warn-row{font-size:11px;color:var(--yellow);display:flex;align-items:flex-start;gap:5px;margin-top:5px}
+.bp-cta{display:inline-block;margin-top:9px;padding:6px 13px;background:rgba(108,108,255,.12);
+  border:1px solid rgba(108,108,255,.3);border-radius:7px;font-size:11px;font-weight:600;
+  color:var(--accent);cursor:pointer;transition:background .15s}
+.bp-cta:hover{background:rgba(108,108,255,.2)}
 /* ---- Phase 2: Building ---- */
 .theater-header{padding:14px 16px;display:flex;align-items:center;gap:10px;max-width:900px;margin:0 auto;width:100%;flex-shrink:0}
 .theater-header h2{font-size:17px;font-weight:700;flex:1}
@@ -358,6 +372,16 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
     <div class="tp-warnings" id="tp-warnings"></div>
     <div id="tp-safe-rewrite" style="display:none" class="tp-safe-rewrite"></div>
   </div>
+  <!-- 15-06: Blueprint card -->
+  <div id="blueprint-section" class="bp-section">
+    <div class="bp-header">📐 App blueprint</div>
+    <div class="bp-card">
+      <div class="bp-title" id="bp-title"></div>
+      <ul class="bp-features" id="bp-features"></ul>
+      <div id="bp-warn-row" style="display:none" class="bp-warn-row"></div>
+      <button class="bp-cta" id="bp-cta-build">Build with this blueprint →</button>
+    </div>
+  </div>
 </div>
 
 <!-- Phase 2: Building (AI Theater) -->
@@ -451,6 +475,12 @@ var tpGuardedBadge = document.getElementById('tp-guarded-badge');
 var tpProfReview = document.getElementById('tp-prof-review');
 var tpSafeRewrite = document.getElementById('tp-safe-rewrite');
 var tpDebounce = null;
+// 15-06: Blueprint section
+var bpSection = document.getElementById('blueprint-section');
+var bpTitle = document.getElementById('bp-title');
+var bpFeatures = document.getElementById('bp-features');
+var bpWarnRow = document.getElementById('bp-warn-row');
+var bpCtaBuild = document.getElementById('bp-cta-build');
 
 // 13-04: Call /v1/agents/route for full team assembly with co-routing + risk
 function updateTeamPreview(prompt) {
@@ -512,6 +542,28 @@ function updateTeamPreview(prompt) {
         tpSafeRewrite.style.display = 'block';
       } else {
         tpSafeRewrite.style.display = 'none';
+      }
+
+      // 15-06: Blueprint card
+      var templates = d.recommendedTemplates || [];
+      var blueprint = d.blueprintSummary || {};
+      if (templates.length > 0) {
+        var primary = templates[0];
+        bpTitle.textContent = primary.name + (primary.regulated ? ' ⚠️' : '');
+        var features = (blueprint.coreFeatures || []).slice(0, 4);
+        bpFeatures.innerHTML = features.map(function(f) {
+          return '<li><span class="bp-feature-dot">▸</span>' + escHtml(f) + '</li>';
+        }).join('');
+        var warnings = blueprint.riskWarnings || [];
+        if (warnings.length > 0) {
+          bpWarnRow.innerHTML = '⚠️ ' + escHtml(warnings[0]);
+          bpWarnRow.style.display = 'flex';
+        } else {
+          bpWarnRow.style.display = 'none';
+        }
+        bpSection.style.display = 'block';
+      } else {
+        bpSection.style.display = 'none';
       }
     }).catch(function() {});
   }, 400);
@@ -743,6 +795,15 @@ if (previewCtaLink) {
   previewCtaLink.addEventListener('click', function(e) {
     e.preventDefault();
     document.getElementById('btn-cta').click();
+  });
+}
+
+// 15-06: Blueprint CTA — same as pressing "Build it"
+if (bpCtaBuild) {
+  bpCtaBuild.addEventListener('click', function() {
+    var p = document.getElementById('prompt-input').value.trim();
+    if (p && p.length >= 10) kickOffBuild(p);
+    else document.getElementById('btn-build').click();
   });
 }
 
