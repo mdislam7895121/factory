@@ -16,6 +16,7 @@ import { PromptRouterService } from './prompt-router.service';
 import { GuardedExpertPolicyService } from './guarded-expert-policy.service';
 import { DomainTemplateService } from './domain-template.service';
 import { StartupIntelligenceService } from './startup-intelligence.service';
+import { CouncilService } from './council.service';
 
 class PreviewSelectionDto {
   @IsString()
@@ -47,6 +48,15 @@ class BlueprintDto {
   suggestedTemplateId?: string;
 }
 
+class CouncilDto {
+  @IsString()
+  @MaxLength(500)
+  prompt!: string;
+
+  domainAgentIds?: string[];
+  suggestedTemplateId?: string;
+}
+
 @Controller('v1/agents')
 export class AgentsController {
   constructor(
@@ -55,6 +65,7 @@ export class AgentsController {
     private readonly policyService: GuardedExpertPolicyService,
     private readonly templateService: DomainTemplateService,
     private readonly startupIntelligence: StartupIntelligenceService,
+    private readonly councilService: CouncilService,
   ) {}
 
   // 12-04: GET /v1/agents — list all agents (optionally filtered)
@@ -162,5 +173,19 @@ export class AgentsController {
     const suggestedId = dto.suggestedTemplateId ?? routeResult.suggestedTemplate;
     const blueprint = this.startupIntelligence.buildStartupBlueprint(prompt, agentIds, suggestedId);
     return { ok: true, blueprint };
+  }
+
+  // 16-01: POST /v1/agents/council — run full multi-agent council session
+  @Post('council')
+  @HttpCode(HttpStatus.OK)
+  runCouncil(@Body() dto: CouncilDto) {
+    const prompt = dto.prompt ?? '';
+    const routeResult = this.router.route(prompt);
+    const agentIds = Array.isArray(dto.domainAgentIds) && dto.domainAgentIds.length > 0
+      ? dto.domainAgentIds
+      : routeResult.domainAgents.map((a) => a.id);
+    const suggestedId = dto.suggestedTemplateId ?? routeResult.suggestedTemplate;
+    const session = this.councilService.runSession(prompt, agentIds, suggestedId);
+    return { ok: true, session };
   }
 }

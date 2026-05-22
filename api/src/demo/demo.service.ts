@@ -266,6 +266,26 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
 .st-label{font-size:9px;color:var(--muted);font-weight:500;transition:color .3s;white-space:nowrap}
 .st-step.active .st-label{color:var(--accent)}
 .st-step.done .st-label{color:var(--green)}
+/* ---- 16-06: Council theater ---- */
+.council-section{max-width:640px;margin:14px auto 0;padding:0 20px;display:none;animation:fadeIn .4s ease}
+.council-header{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.05em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.council-feed{display:flex;flex-direction:column;gap:6px}
+.council-msg{background:var(--card-bg);border:1px solid var(--border);border-radius:9px;
+  padding:9px 12px;display:flex;gap:9px;align-items:flex-start;animation:fadeIn .3s ease}
+.council-msg.obj{border-color:rgba(255,79,79,.35);background:rgba(255,79,79,.04)}
+.council-msg.ok{border-color:rgba(76,175,80,.35);background:rgba(76,175,80,.04)}
+.council-msg.tip{border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.04)}
+.council-icon{font-size:15px;flex-shrink:0;line-height:1;margin-top:2px}
+.council-agent-name{font-size:10px;font-weight:700;color:var(--fg)}
+.council-role-badge{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-left:5px}
+.council-summary{font-size:11px;color:var(--muted);line-height:1.5;margin-top:3px}
+.council-verdict{margin-top:10px;padding:9px 12px;border-radius:9px;font-size:12px;
+  font-weight:600;display:none;align-items:center;gap:6px}
+.council-verdict.approved{background:rgba(76,175,80,.1);border:1px solid rgba(76,175,80,.3);color:var(--green)}
+.council-verdict.warnings{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);color:var(--yellow)}
+.council-verdict.blocked{background:rgba(255,79,79,.08);border:1px solid rgba(255,79,79,.3);color:#ff4f4f}
+.council-verdict.needs-input{background:rgba(108,108,255,.08);border:1px solid rgba(108,108,255,.3);color:var(--accent)}
 /* ---- Phase 2: Building ---- */
 .theater-header{padding:14px 16px;display:flex;align-items:center;gap:10px;max-width:900px;margin:0 auto;width:100%;flex-shrink:0}
 .theater-header h2{font-size:17px;font-weight:700;flex:1}
@@ -407,6 +427,12 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
       <div class="st-step" id="st-build"><div class="st-icon">🚀</div><span class="st-label">Build</span></div>
     </div>
   </div>
+  <!-- 16-06: Council theater -->
+  <div id="council-section" class="council-section">
+    <div class="council-header">🧠 AI Council review</div>
+    <div class="council-feed" id="council-feed"></div>
+    <div id="council-verdict" class="council-verdict"></div>
+  </div>
 </div>
 
 <!-- Phase 2: Building (AI Theater) -->
@@ -516,6 +542,55 @@ var bpTitle = document.getElementById('bp-title');
 var bpFeatures = document.getElementById('bp-features');
 var bpWarnRow = document.getElementById('bp-warn-row');
 var bpCtaBuild = document.getElementById('bp-cta-build');
+// 16-06: Council theater
+var councilSection = document.getElementById('council-section');
+var councilFeed = document.getElementById('council-feed');
+var councilVerdict = document.getElementById('council-verdict');
+var ROLE_CLASS = { OBJECT:'obj', REJECT:'obj', APPROVE:'ok', SUGGEST:'tip', REQUEST_INPUT:'tip' };
+var ROLE_LABEL = { PROPOSE:'Proposing', OBJECT:'Objection', SUGGEST:'Suggestion',
+  REQUEST_INPUT:'Input needed', APPROVE:'Approved', REJECT:'Vetoed', DEFER:'Deferred' };
+function renderCouncilMsg(msg, delay) {
+  setTimeout(function() {
+    var cls = ROLE_CLASS[msg.role] || '';
+    var lbl = ROLE_LABEL[msg.role] || msg.role;
+    var div = document.createElement('div');
+    div.className = 'council-msg' + (cls ? ' ' + cls : '');
+    div.innerHTML = '<span class="council-icon">' + escHtml(msg.agentIcon) + '</span>'
+      + '<div><div><span class="council-agent-name">' + escHtml(msg.agentName) + '</span>'
+      + '<span class="council-role-badge">' + escHtml(lbl) + '</span></div>'
+      + '<div class="council-summary">' + escHtml(msg.summary) + '</div></div>';
+    councilFeed.appendChild(div);
+  }, delay);
+}
+function showCouncilTheater(prompt) {
+  if (!prompt || prompt.trim().length < 8) return;
+  fetch('/v1/agents/council', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ prompt: prompt })
+  }).then(function(r) { return r.json(); }).then(function(d) {
+    if (!d.ok || !d.session) return;
+    councilSection.style.display = 'block';
+    councilFeed.innerHTML = '';
+    councilVerdict.style.display = 'none';
+    var msgs = d.session.messages || [];
+    msgs.forEach(function(msg, i) { renderCouncilMsg(msg, i * 200); });
+    var totalDelay = msgs.length * 200 + 400;
+    setTimeout(function() {
+      var state = d.session.approvalState;
+      var stateMap = {
+        APPROVED:              { cls: 'approved',    icon: '✅', text: 'Council approved — ready to build' },
+        APPROVED_WITH_WARNINGS:{ cls: 'warnings',    icon: '⚠️', text: 'Approved with warnings — review risks before launch' },
+        BLOCKED:               { cls: 'blocked',     icon: '🚫', text: 'Build blocked — critical issues must be resolved first' },
+        NEEDS_INPUT:           { cls: 'needs-input', icon: '💬', text: 'Council needs additional input before approving' },
+      };
+      var s = stateMap[state] || stateMap['NEEDS_INPUT'];
+      councilVerdict.className = 'council-verdict ' + s.cls;
+      councilVerdict.innerHTML = s.icon + ' ' + escHtml(s.text);
+      councilVerdict.style.display = 'flex';
+    }, totalDelay);
+  }).catch(function() {});
+}
 
 // 13-04: Call /v1/agents/route for full team assembly with co-routing + risk
 function updateTeamPreview(prompt) {
@@ -603,6 +678,8 @@ function updateTeamPreview(prompt) {
           bpWarnRow.style.display = 'none';
         }
         bpSection.style.display = 'block';
+        // 16-06: Trigger council theater after blueprint appears
+        showCouncilTheater(prompt);
       } else {
         bpSection.style.display = 'none';
       }
