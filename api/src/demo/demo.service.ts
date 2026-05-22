@@ -252,6 +252,20 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
   border:1px solid rgba(108,108,255,.3);border-radius:7px;font-size:11px;font-weight:600;
   color:var(--accent);cursor:pointer;transition:background .15s}
 .bp-cta:hover{background:rgba(108,108,255,.2)}
+/* ---- 15-18: Startup steps strip ---- */
+.st-steps{display:none;max-width:640px;margin:10px auto 0;padding:0 20px;animation:fadeIn .4s ease}
+.st-steps-inner{display:flex;align-items:center;gap:0}
+.st-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
+.st-step:not(:last-child)::after{content:'';position:absolute;top:11px;left:50%;width:100%;height:1px;
+  background:var(--border);z-index:0;transition:background .3s}
+.st-step.done:not(:last-child)::after{background:var(--green)}
+.st-icon{width:22px;height:22px;border-radius:50%;background:var(--card-bg);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:10px;z-index:1;transition:border-color .3s,background .3s}
+.st-step.active .st-icon{border-color:var(--accent);background:rgba(108,108,255,.15)}
+.st-step.done .st-icon{border-color:var(--green);background:rgba(76,175,80,.1)}
+.st-label{font-size:9px;color:var(--muted);font-weight:500;transition:color .3s;white-space:nowrap}
+.st-step.active .st-label{color:var(--accent)}
+.st-step.done .st-label{color:var(--green)}
 /* ---- Phase 2: Building ---- */
 .theater-header{padding:14px 16px;display:flex;align-items:center;gap:10px;max-width:900px;margin:0 auto;width:100%;flex-shrink:0}
 .theater-header h2{font-size:17px;font-weight:700;flex:1}
@@ -382,6 +396,17 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
       <button class="bp-cta" id="bp-cta-build">Build with this blueprint →</button>
     </div>
   </div>
+  <!-- 15-18: Startup steps strip -->
+  <div id="startup-steps" class="st-steps">
+    <div class="st-steps-inner">
+      <div class="st-step" id="st-idea"><div class="st-icon">💡</div><span class="st-label">Idea</span></div>
+      <div class="st-step" id="st-demand"><div class="st-icon">📊</div><span class="st-label">Demand</span></div>
+      <div class="st-step" id="st-team"><div class="st-icon">👥</div><span class="st-label">Team</span></div>
+      <div class="st-step" id="st-brand"><div class="st-icon">🎨</div><span class="st-label">Brand</span></div>
+      <div class="st-step" id="st-blueprint"><div class="st-icon">📐</div><span class="st-label">Blueprint</span></div>
+      <div class="st-step" id="st-build"><div class="st-icon">🚀</div><span class="st-label">Build</span></div>
+    </div>
+  </div>
 </div>
 
 <!-- Phase 2: Building (AI Theater) -->
@@ -477,6 +502,16 @@ var tpSafeRewrite = document.getElementById('tp-safe-rewrite');
 var tpDebounce = null;
 // 15-06: Blueprint section
 var bpSection = document.getElementById('blueprint-section');
+// 15-18: Startup steps
+var stSteps = document.getElementById('startup-steps');
+var ST_IDS = ['st-idea','st-demand','st-team','st-brand','st-blueprint','st-build'];
+function advanceSteps(upTo) {
+  stSteps.style.display = 'block';
+  ST_IDS.forEach(function(id, i) {
+    var el = document.getElementById(id);
+    el.className = 'st-step' + (i < upTo ? ' done' : i === upTo ? ' active' : '');
+  });
+}
 var bpTitle = document.getElementById('bp-title');
 var bpFeatures = document.getElementById('bp-features');
 var bpWarnRow = document.getElementById('bp-warn-row');
@@ -487,6 +522,7 @@ function updateTeamPreview(prompt) {
   if (!prompt || prompt.trim().length < 8) { teamPreview.style.display = 'none'; return; }
   clearTimeout(tpDebounce);
   tpDebounce = setTimeout(function() {
+    advanceSteps(0); // 15-18: step 0 = Idea (typing)
     fetch('/v1/agents/route', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -495,8 +531,10 @@ function updateTeamPreview(prompt) {
       if (!d.ok) return;
       var domain = d.domainAgents || [];
       var warns = d.regulatedWarnings || [];
+      advanceSteps(1); // Demand analyzed
       if (!domain.length && !warns.length) { teamPreview.style.display = 'none'; return; }
       teamPreview.style.display = 'block';
+      advanceSteps(2); // Team assembled
 
       // Domain agent badges (blue = DOMAIN, yellow = REGULATED)
       tpBadges.innerHTML = domain.map(function(a) {
@@ -544,10 +582,13 @@ function updateTeamPreview(prompt) {
         tpSafeRewrite.style.display = 'none';
       }
 
+      // 15-18: Brand + blueprint steps
+      advanceSteps(3); // Brand generated
       // 15-06: Blueprint card
       var templates = d.recommendedTemplates || [];
       var blueprint = d.blueprintSummary || {};
       if (templates.length > 0) {
+        advanceSteps(4); // Blueprint selected
         var primary = templates[0];
         bpTitle.textContent = primary.name + (primary.regulated ? ' ⚠️' : '');
         var features = (blueprint.coreFeatures || []).slice(0, 4);
@@ -801,6 +842,7 @@ if (previewCtaLink) {
 // 15-06: Blueprint CTA — same as pressing "Build it"
 if (bpCtaBuild) {
   bpCtaBuild.addEventListener('click', function() {
+    advanceSteps(5); // 15-18: Build launched
     var p = document.getElementById('prompt-input').value.trim();
     if (p && p.length >= 10) kickOffBuild(p);
     else document.getElementById('btn-build').click();

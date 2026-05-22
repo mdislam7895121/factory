@@ -15,6 +15,7 @@ import { AgentClassifierService } from './agent-classifier.service';
 import { PromptRouterService } from './prompt-router.service';
 import { GuardedExpertPolicyService } from './guarded-expert-policy.service';
 import { DomainTemplateService } from './domain-template.service';
+import { StartupIntelligenceService } from './startup-intelligence.service';
 
 class PreviewSelectionDto {
   @IsString()
@@ -37,6 +38,15 @@ class TemplateRecommendDto {
   prompt!: string;
 }
 
+class BlueprintDto {
+  @IsString()
+  @MaxLength(500)
+  prompt!: string;
+
+  domainAgentIds?: string[];
+  suggestedTemplateId?: string;
+}
+
 @Controller('v1/agents')
 export class AgentsController {
   constructor(
@@ -44,6 +54,7 @@ export class AgentsController {
     private readonly router: PromptRouterService,
     private readonly policyService: GuardedExpertPolicyService,
     private readonly templateService: DomainTemplateService,
+    private readonly startupIntelligence: StartupIntelligenceService,
   ) {}
 
   // 12-04: GET /v1/agents — list all agents (optionally filtered)
@@ -137,5 +148,19 @@ export class AgentsController {
     const template = this.templateService.getById(id);
     if (!template) throw new NotFoundException(`Domain template '${id}' not found`);
     return { ok: true, template };
+  }
+
+  // 15-17: POST /v1/agents/blueprint — full startup intelligence blueprint
+  @Post('blueprint')
+  @HttpCode(HttpStatus.OK)
+  buildBlueprint(@Body() dto: BlueprintDto) {
+    const prompt = dto.prompt ?? '';
+    const routeResult = this.router.route(prompt);
+    const agentIds = Array.isArray(dto.domainAgentIds) && dto.domainAgentIds.length > 0
+      ? dto.domainAgentIds
+      : routeResult.domainAgents.map((a) => a.id);
+    const suggestedId = dto.suggestedTemplateId ?? routeResult.suggestedTemplate;
+    const blueprint = this.startupIntelligence.buildStartupBlueprint(prompt, agentIds, suggestedId);
+    return { ok: true, blueprint };
   }
 }
