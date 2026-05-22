@@ -136,4 +136,26 @@ export class AdminController {
     await this.audit.log({ action: 'ADMIN_ACTION', targetType: 'beta_invite', targetId: 'generated' });
     return { ok: true, code };
   }
+
+  // 20D-01: Platform stats for admin command center
+  @Get('stats')
+  async stats() {
+    const [total, running, sleeping, crashed] = await Promise.all([
+      this.prisma.runtimeInstance.count().catch(() => 0),
+      this.prisma.runtimeInstance.count({ where: { status: RuntimeStatus.RUNNING  } }).catch(() => 0),
+      this.prisma.runtimeInstance.count({ where: { status: RuntimeStatus.SLEEPING } }).catch(() => 0),
+      this.prisma.runtimeInstance.count({ where: { status: RuntimeStatus.CRASHED  } }).catch(() => 0),
+    ]);
+    const remixQueueDepth = await this.redis.client
+      .llen(`${this.redis.prefix}:remix:queue`)
+      .catch(() => 0);
+    const betaMode = this.betaService.getMode();
+    return {
+      ok: true,
+      runtimes: { total, running, sleeping, crashed },
+      remixQueue: remixQueueDepth,
+      betaMode,
+      timestamp: new Date().toISOString(),
+    };
+  }
 }
