@@ -34,7 +34,7 @@ const track = (event: string, meta?: object) =>
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type EditorMode    = 'visual' | 'branding' | 'content' | 'layout' | 'advanced' | 'code';
+type EditorMode    = 'visual' | 'branding' | 'content' | 'layout' | 'advanced' | 'code' | 'collaboration';
 type RiskLevel     = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 type SessionStatus = 'DRAFT' | 'PENDING_DIFF' | 'APPLIED' | 'REJECTED' | 'ROLLED_BACK';
 type ToneType      = 'PROFESSIONAL' | 'CASUAL' | 'BOLD' | 'MINIMAL';
@@ -160,7 +160,7 @@ function sessionCol(s: SessionStatus): string {
 
 function modeCol(m: EditorMode): string {
   const c: Record<EditorMode, string> = {
-    visual: ACCENT, branding: '#ec4899', content: SUCCESS, layout: WARN, advanced: TEXT_M, code: '#06b6d4',
+    visual: ACCENT, branding: '#ec4899', content: SUCCESS, layout: WARN, advanced: TEXT_M, code: '#06b6d4', collaboration: '#8b5cf6',
   };
   return c[m];
 }
@@ -1197,6 +1197,415 @@ function EditHistoryPanel({ workspaceId, projectId, open, onToggle, sessionStatu
   );
 }
 
+// ── Collaboration Mode ────────────────────────────────────────────────────────
+
+const COLLAB_API = process.env.NEXT_PUBLIC_API_URL ?? API_BASE ?? 'http://localhost:3001';
+
+const AVATAR_COLORS_FE = ['#6366f1','#ec4899','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ef4444','#06b6d4'];
+function avatarColor(userId: string): string {
+  let h = 0;
+  for (let i = 0; i < userId.length; i++) h = (h * 31 + userId.charCodeAt(i)) >>> 0;
+  return AVATAR_COLORS_FE[h % AVATAR_COLORS_FE.length];
+}
+
+interface PresenceFe {
+  userId: string; displayName: string; role: string;
+  currentPanel: string; isOnline: boolean; avatarColor: string;
+}
+interface CommentFe {
+  commentId: string; target: string; authorName: string;
+  content: string; resolved: boolean; createdAt: string;
+  replies: { replyId: string; authorName: string; content: string }[];
+}
+interface ReviewFe {
+  reviewId: string; title: string; status: string;
+  riskLevel: string; requesterName: string; requiresApproval: boolean;
+}
+interface TaskFe {
+  taskId: string; title: string; assigneeName: string;
+  assigneeType: string; status: string; priority: string;
+}
+interface ActivityFe {
+  eventId: string; type: string; actorName: string;
+  title: string; description: string; timestamp: string;
+}
+
+const REVIEW_STATUS_COLOR: Record<string, string> = {
+  OPEN: WARN, APPROVED: SUCCESS, REJECTED: DANGER,
+  CHANGES_REQUESTED: '#f97316', MERGED: ACCENT, CANCELLED: TEXT_M, DRAFT: TEXT_M,
+};
+const TASK_PRIORITY_COLOR: Record<string, string> = {
+  CRITICAL: DANGER, HIGH: '#f97316', MEDIUM: WARN, LOW: TEXT_M,
+};
+const TASK_STATUS_COLOR: Record<string, string> = {
+  PENDING: TEXT_M, IN_PROGRESS: ACCENT, DONE: SUCCESS, BLOCKED: DANGER, CANCELLED: TEXT_M,
+};
+
+// Seeded fallback data for when API is not reachable
+const SEEDED_PRESENCE: PresenceFe[] = [
+  { userId: 'user-alice', displayName: 'Alice', role: 'OWNER', currentPanel: 'collaboration', isOnline: true, avatarColor: avatarColor('user-alice') },
+  { userId: 'user-bob', displayName: 'Bob', role: 'EDITOR', currentPanel: 'code', isOnline: true, avatarColor: avatarColor('user-bob') },
+  { userId: 'agent-security', displayName: 'Security Agent', role: 'AI_AGENT', currentPanel: 'code', isOnline: false, avatarColor: avatarColor('agent-security') },
+];
+const SEEDED_REVIEWS_FE: ReviewFe[] = [
+  { reviewId: 'rev-001', title: 'Hero layout responsive patch', status: 'APPROVED', riskLevel: 'LOW', requesterName: 'Alice', requiresApproval: false },
+  { reviewId: 'rev-002', title: 'API route refactor — needs reviewer sign-off', status: 'OPEN', riskLevel: 'HIGH', requesterName: 'Bob', requiresApproval: true },
+];
+const SEEDED_TASKS_FE: TaskFe[] = [
+  { taskId: 'task-001', title: 'Security Agent: review payment flow', assigneeName: 'Security Agent', assigneeType: 'AGENT', status: 'IN_PROGRESS', priority: 'HIGH' },
+  { taskId: 'task-002', title: 'QA Agent: test mobile layout', assigneeName: 'QA Agent', assigneeType: 'AGENT', status: 'DONE', priority: 'MEDIUM' },
+  { taskId: 'task-003', title: 'Developer: approve HIGH-risk API patch', assigneeName: 'Alice', assigneeType: 'USER', status: 'PENDING', priority: 'HIGH' },
+];
+const SEEDED_ACTIVITY_FE: ActivityFe[] = [
+  { eventId: 'e-1', type: 'USER_JOINED', actorName: 'Alice', title: 'Alice joined the workspace', description: 'Role: OWNER', timestamp: new Date(Date.now() - 1800000).toISOString() },
+  { eventId: 'e-2', type: 'REVIEW_REQUESTED', actorName: 'Bob', title: 'Review requested: API route refactor', description: 'Risk: HIGH — Requires approval', timestamp: new Date(Date.now() - 1200000).toISOString() },
+  { eventId: 'e-3', type: 'TASK_ASSIGNED', actorName: 'Alice', title: 'Task assigned to Security Agent', description: 'Priority: HIGH | AGENT', timestamp: new Date(Date.now() - 900000).toISOString() },
+  { eventId: 'e-4', type: 'COMMENT_ADDED', actorName: 'Bob', title: 'Bob commented on patch', description: 'This patch looks good overall.', timestamp: new Date(Date.now() - 600000).toISOString() },
+  { eventId: 'e-5', type: 'AGENT_TASK_COMPLETED', actorName: 'QA Agent', title: 'QA Agent completed: test mobile layout', description: 'All mobile viewports passed.', timestamp: new Date(Date.now() - 300000).toISOString() },
+];
+
+function CollabLeft({ workspaceId, projectId }: { workspaceId: string; projectId: string }) {
+  const [presence, setPresence] = useState<PresenceFe[]>(SEEDED_PRESENCE);
+  const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [newTaskAssignee, setNewTaskAssignee] = useState('Security Agent');
+  const [taskCreated, setTaskCreated] = useState(false);
+  const [collabTab, setCollabTab] = useState<'presence' | 'tasks'>('presence');
+
+  useEffect(() => {
+    fetch(`${COLLAB_API}/v1/collaboration/${workspaceId}/${projectId}/presence`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (Array.isArray(d) && d.length > 0) setPresence(d); })
+      .catch(() => {});
+  }, [workspaceId, projectId]);
+
+  const createTask = async () => {
+    if (!newTaskTitle.trim()) return;
+    track('collab_task_create', { projectId, title: newTaskTitle });
+    try {
+      await fetch(`${COLLAB_API}/v1/collaboration/tasks`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          workspaceId, projectId,
+          title: newTaskTitle,
+          description: `Assigned via collaboration panel.`,
+          assigneeType: 'AGENT',
+          assigneeId: 'agent-ai',
+          assigneeName: newTaskAssignee,
+          priority: 'MEDIUM',
+          createdBy: 'user-current',
+        }),
+      });
+    } catch { /* no-op */ }
+    setTaskCreated(true);
+    setNewTaskTitle('');
+    setTimeout(() => setTaskCreated(false), 2000);
+  };
+
+  const TAB_BTN = (tab: 'presence' | 'tasks', label: string) => (
+    <button key={tab} onClick={() => setCollabTab(tab)}
+      style={{ flex: 1, padding: '7px 0', fontSize: 11, fontWeight: 700, fontFamily: FONT,
+        background: collabTab === tab ? ACCENT : 'transparent', color: collabTab === tab ? '#fff' : TEXT_M,
+        border: 'none', cursor: 'pointer', borderRadius: 6 }}>
+      {label}
+    </button>
+  );
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10, height: '100%', overflow: 'hidden' }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: TEXT_M, letterSpacing: '0.06em', marginBottom: 2 }}>
+        COLLABORATION
+      </div>
+      <div style={{ display: 'flex', background: 'rgba(255,255,255,0.04)', borderRadius: 8, padding: 3, gap: 2, flexShrink: 0 }}>
+        {TAB_BTN('presence', 'Online')}
+        {TAB_BTN('tasks', 'Tasks')}
+      </div>
+
+      {collabTab === 'presence' && (
+        <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {presence.map(p => (
+            <div key={p.userId} style={{ ...GLASS, padding: '8px 10px', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ width: 28, height: 28, borderRadius: '50%',
+                background: p.avatarColor, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 11, fontWeight: 700, color: '#fff', flexShrink: 0, position: 'relative' }}>
+                {p.displayName[0].toUpperCase()}
+                <span style={{ position: 'absolute', bottom: 0, right: 0, width: 8, height: 8, borderRadius: '50%',
+                  background: p.isOnline ? SUCCESS : TEXT_M, border: `1.5px solid ${BG}` }} />
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: TEXT, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {p.displayName}
+                </div>
+                <div style={{ fontSize: 10, color: TEXT_M }}>
+                  {p.role === 'AI_AGENT' ? '🤖 AI Agent' : p.role.toLowerCase()} · {p.currentPanel}
+                </div>
+              </div>
+              <span style={{ fontSize: 9, fontWeight: 700, color: p.isOnline ? SUCCESS : TEXT_M,
+                background: p.isOnline ? `${SUCCESS}18` : 'rgba(255,255,255,0.04)',
+                borderRadius: 4, padding: '2px 6px', flexShrink: 0 }}>
+                {p.isOnline ? 'ONLINE' : 'AWAY'}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {collabTab === 'tasks' && (
+        <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ fontSize: 10, color: TEXT_M, fontWeight: 600 }}>Assign to AI/Team:</div>
+          <input
+            value={newTaskTitle}
+            onChange={e => setNewTaskTitle(e.target.value)}
+            placeholder='e.g. Security Agent: review login flow'
+            style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${BORDER}`, borderRadius: 6,
+              padding: '6px 8px', fontSize: 11, color: TEXT, fontFamily: FONT, outline: 'none', width: '100%', boxSizing: 'border-box' }}
+          />
+          <input
+            value={newTaskAssignee}
+            onChange={e => setNewTaskAssignee(e.target.value)}
+            placeholder='Assignee name'
+            style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${BORDER}`, borderRadius: 6,
+              padding: '6px 8px', fontSize: 11, color: TEXT, fontFamily: FONT, outline: 'none', width: '100%', boxSizing: 'border-box' }}
+          />
+          <button onClick={createTask}
+            style={{ background: taskCreated ? SUCCESS : ACCENT, color: '#fff', border: 'none', borderRadius: 6,
+              padding: '7px', fontSize: 11, fontWeight: 700, fontFamily: FONT, cursor: 'pointer' }}>
+            {taskCreated ? '✓ Task Created' : '+ Create Task'}
+          </button>
+          {SEEDED_TASKS_FE.map(t => (
+            <div key={t.taskId} style={{ ...GLASS, padding: '8px 10px', display: 'flex', flexDirection: 'column', gap: 3 }}>
+              <div style={{ fontSize: 11, color: TEXT, fontWeight: 600, lineHeight: 1.3 }}>{t.title}</div>
+              <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 5px', borderRadius: 4,
+                  color: TASK_STATUS_COLOR[t.status] ?? TEXT_M, background: `${TASK_STATUS_COLOR[t.status] ?? TEXT_M}18` }}>
+                  {t.status}
+                </span>
+                <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 5px', borderRadius: 4,
+                  color: TASK_PRIORITY_COLOR[t.priority], background: `${TASK_PRIORITY_COLOR[t.priority]}18` }}>
+                  {t.priority}
+                </span>
+                <span style={{ fontSize: 9, color: TEXT_M }}>→ {t.assigneeName}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+type CollabRightTab = 'activity' | 'comments' | 'reviews';
+
+function CollabRight({ workspaceId, projectId }: { workspaceId: string; projectId: string }) {
+  const [tab, setTab] = useState<CollabRightTab>('activity');
+  const [activity, setActivity] = useState<ActivityFe[]>(SEEDED_ACTIVITY_FE);
+  const [reviews, setReviews] = useState<ReviewFe[]>(SEEDED_REVIEWS_FE);
+  const [comments, setComments] = useState<CommentFe[]>([]);
+  const [newComment, setNewComment] = useState('');
+  const [commentTarget, setCommentTarget] = useState('patch');
+  const [commentSent, setCommentSent] = useState(false);
+
+  useEffect(() => {
+    fetch(`${COLLAB_API}/v1/collaboration/${workspaceId}/${projectId}/activity?limit=20`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (Array.isArray(d) && d.length > 0) setActivity(d); })
+      .catch(() => {});
+    fetch(`${COLLAB_API}/v1/collaboration/${workspaceId}/${projectId}/reviews`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (Array.isArray(d)) setReviews(d); })
+      .catch(() => {});
+    fetch(`${COLLAB_API}/v1/collaboration/${workspaceId}/${projectId}/comments`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (Array.isArray(d)) setComments(d); })
+      .catch(() => {});
+  }, [workspaceId, projectId]);
+
+  const postComment = async () => {
+    if (!newComment.trim()) return;
+    track('collab_comment_post', { projectId, target: commentTarget });
+    try {
+      const r = await fetch(`${COLLAB_API}/v1/collaboration/comments`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          workspaceId, projectId,
+          target: commentTarget,
+          targetRef: commentTarget,
+          authorId: 'user-current',
+          authorName: 'You',
+          content: newComment,
+        }),
+      });
+      if (r.ok) {
+        const c = await r.json();
+        setComments(prev => [c, ...prev]);
+      }
+    } catch { /* no-op */ }
+    setCommentSent(true);
+    setNewComment('');
+    setTimeout(() => setCommentSent(false), 2000);
+  };
+
+  const approveReview = async (reviewId: string) => {
+    track('collab_review_approve', { projectId, reviewId });
+    try {
+      await fetch(`${COLLAB_API}/v1/collaboration/reviews/${reviewId}/decision`, {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reviewerId: 'user-current', reviewerName: 'You', decision: 'APPROVED', note: 'Approved via collaboration panel.' }),
+      });
+      setReviews(prev => prev.map(r => r.reviewId === reviewId ? { ...r, status: 'APPROVED' } : r));
+    } catch { /* no-op */ }
+  };
+
+  const EVENT_ICON: Record<string, string> = {
+    USER_JOINED: '👤', USER_LEFT: '👋', COMMENT_ADDED: '💬', COMMENT_RESOLVED: '✅',
+    REVIEW_REQUESTED: '🔍', REVIEW_APPROVED: '✅', REVIEW_REJECTED: '❌',
+    PATCH_APPROVED: '✅', PATCH_REJECTED: '❌', TASK_ASSIGNED: '📋',
+    TASK_COMPLETED: '✅', AGENT_TASK_COMPLETED: '🤖', SNAPSHOT_CREATED: '📸',
+    PRESENCE_UPDATED: '👁', REVIEW_CHANGES_REQUESTED: '🔄',
+  };
+
+  const TAB_BTN = (t: CollabRightTab, label: string) => (
+    <button key={t} onClick={() => setTab(t)}
+      style={{ flex: 1, padding: '7px 0', fontSize: 11, fontWeight: 700, fontFamily: FONT,
+        background: tab === t ? ACCENT : 'transparent', color: tab === t ? '#fff' : TEXT_M,
+        border: 'none', cursor: 'pointer', borderRadius: 6, transition: 'background 0.15s' }}>
+      {label}
+    </button>
+  );
+
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10, overflow: 'hidden', height: '100%' }}>
+      <div style={{ ...GLASS, padding: 12, display: 'flex', flexDirection: 'column', gap: 10, flex: 1, overflow: 'hidden' }}>
+        {/* Tab switcher */}
+        <div style={{ display: 'flex', background: 'rgba(255,255,255,0.04)', borderRadius: 8, padding: 3, gap: 2, flexShrink: 0 }}>
+          {TAB_BTN('activity', 'Timeline')}
+          {TAB_BTN('comments', 'Comments')}
+          {TAB_BTN('reviews', 'Reviews')}
+        </div>
+
+        {/* Activity Timeline */}
+        {tab === 'activity' && (
+          <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {activity.map(evt => (
+              <div key={evt.eventId} style={{ display: 'flex', gap: 10, alignItems: 'flex-start',
+                borderBottom: `1px solid ${BORDER}`, paddingBottom: 8 }}>
+                <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>{EVENT_ICON[evt.type] ?? '•'}</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 12, color: TEXT, fontWeight: 600, lineHeight: 1.3 }}>{evt.title}</div>
+                  {evt.description && (
+                    <div style={{ fontSize: 11, color: TEXT_M, lineHeight: 1.4, marginTop: 2 }}>{evt.description}</div>
+                  )}
+                  <div style={{ fontSize: 10, color: TEXT_M, marginTop: 3 }}>
+                    {evt.actorName} · {timeAgo(new Date(evt.timestamp).getTime())}
+                  </div>
+                </div>
+              </div>
+            ))}
+            {activity.length === 0 && (
+              <div style={{ color: TEXT_M, fontSize: 12, textAlign: 'center', paddingTop: 24 }}>No activity yet.</div>
+            )}
+          </div>
+        )}
+
+        {/* Comments */}
+        {tab === 'comments' && (
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8, overflow: 'hidden' }}>
+            <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {comments.length === 0 && (
+                <div style={{ color: TEXT_M, fontSize: 12, textAlign: 'center', paddingTop: 12 }}>No comments yet.</div>
+              )}
+              {comments.map(c => (
+                <div key={c.commentId} style={{ ...GLASS, padding: '8px 10px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: TEXT }}>{c.authorName}</span>
+                    <span style={{ fontSize: 9, color: c.resolved ? SUCCESS : TEXT_M, fontWeight: 700 }}>
+                      {c.resolved ? '✓ RESOLVED' : c.target.toUpperCase()}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 12, color: TEXT, lineHeight: 1.4 }}
+                    dangerouslySetInnerHTML={{ __html: c.content }} />
+                  {c.replies.length > 0 && (
+                    <div style={{ marginTop: 6, paddingLeft: 8, borderLeft: `2px solid ${BORDER}` }}>
+                      {c.replies.map(r => (
+                        <div key={r.replyId} style={{ fontSize: 11, color: TEXT_M, marginBottom: 2 }}>
+                          <strong style={{ color: TEXT }}>{r.authorName}:</strong> {r.content}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flexShrink: 0 }}>
+              <select value={commentTarget} onChange={e => setCommentTarget(e.target.value)}
+                style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${BORDER}`, borderRadius: 6,
+                  padding: '5px 8px', fontSize: 11, color: TEXT, fontFamily: FONT, outline: 'none' }}>
+                <option value="patch">On: Patch</option>
+                <option value="file">On: File</option>
+                <option value="quality_warning">On: Quality Warning</option>
+                <option value="preview">On: Preview</option>
+              </select>
+              <textarea value={newComment} onChange={e => setNewComment(e.target.value)}
+                placeholder="Add a comment…"
+                style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${BORDER}`, borderRadius: 6,
+                  padding: '7px 8px', fontSize: 12, color: TEXT, fontFamily: FONT, outline: 'none',
+                  resize: 'none', height: 60, lineHeight: 1.4 }} />
+              <button onClick={postComment}
+                style={{ background: commentSent ? SUCCESS : ACCENT, color: '#fff', border: 'none', borderRadius: 6,
+                  padding: '7px', fontSize: 12, fontWeight: 700, fontFamily: FONT, cursor: 'pointer' }}>
+                {commentSent ? '✓ Posted' : '+ Post Comment'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Reviews / Approval Queue */}
+        {tab === 'reviews' && (
+          <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {reviews.map(r => (
+              <div key={r.reviewId} style={{ ...GLASS, padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: TEXT, flex: 1 }}>{r.title}</div>
+                  <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 6px', borderRadius: 4, flexShrink: 0,
+                    color: REVIEW_STATUS_COLOR[r.status] ?? TEXT_M,
+                    background: `${REVIEW_STATUS_COLOR[r.status] ?? TEXT_M}18` }}>
+                    {r.status}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4,
+                    color: riskCol(r.riskLevel), background: `${riskCol(r.riskLevel)}18` }}>
+                    {r.riskLevel}
+                  </span>
+                  {r.requiresApproval && (
+                    <span style={{ fontSize: 10, color: WARN, fontWeight: 600 }}>⚠ Requires approval</span>
+                  )}
+                  <span style={{ fontSize: 10, color: TEXT_M }}>by {r.requesterName}</span>
+                </div>
+                {r.status === 'OPEN' && !r.requiresApproval && (
+                  <button onClick={() => approveReview(r.reviewId)}
+                    style={{ background: SUCCESS, color: '#fff', border: 'none', borderRadius: 6,
+                      padding: '5px 12px', fontSize: 11, fontWeight: 700, fontFamily: FONT,
+                      cursor: 'pointer', alignSelf: 'flex-start' }}>
+                    ✓ Approve
+                  </button>
+                )}
+                {r.status === 'OPEN' && r.requiresApproval && (
+                  <div style={{ fontSize: 10, color: WARN, fontStyle: 'italic' }}>
+                    Assign a reviewer before approving HIGH/CRITICAL risk changes.
+                  </div>
+                )}
+              </div>
+            ))}
+            {reviews.length === 0 && (
+              <div style={{ color: TEXT_M, fontSize: 12, textAlign: 'center', paddingTop: 24 }}>No reviews yet.</div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── Bottom Action Bar ─────────────────────────────────────────────────────────
 
 function BottomActionBar({ workspaceId, projectId, sessionStatus, setSessionStatus, currentPlan }: {
@@ -1321,6 +1730,7 @@ export default function EditorPage() {
   const handleModeSwitch = (m: EditorMode) => {
     setMode(m); track('mode_switch', { projectId, from: mode, to: m });
     if (m === 'code') track('code_mode_entry', { projectId });
+    if (m === 'collaboration') track('collaboration_mode_entry', { projectId });
   };
 
   const handlePlanChange = (plan: ChangePlan | null) => {
@@ -1328,12 +1738,13 @@ export default function EditorPage() {
   };
 
   const MODES: { key: EditorMode; label: string }[] = [
-    { key: 'visual',   label: 'Visual'   },
-    { key: 'branding', label: 'Branding' },
-    { key: 'content',  label: 'Content'  },
-    { key: 'layout',   label: 'Layout'   },
-    { key: 'advanced', label: 'Advanced' },
-    { key: 'code',     label: 'Code'     },
+    { key: 'visual',         label: 'Visual'       },
+    { key: 'branding',       label: 'Branding'     },
+    { key: 'content',        label: 'Content'      },
+    { key: 'layout',         label: 'Layout'       },
+    { key: 'advanced',       label: 'Advanced'     },
+    { key: 'code',           label: 'Code'         },
+    { key: 'collaboration',  label: 'Team'         },
   ];
 
   const isHighRisk = currentPlan?.riskLevel === 'HIGH' || currentPlan?.riskLevel === 'CRITICAL';
@@ -1411,7 +1822,8 @@ export default function EditorPage() {
           {mode === 'content'  && <ContentLeft  {...contentState} />}
           {mode === 'layout'   && <LayoutLeft   {...layoutState}  />}
           {mode === 'advanced' && <AdvancedLeft {...advancedState} />}
-          {mode === 'code'     && <CodeLeft     workspaceId={workspaceId} projectId={projectId} />}
+          {mode === 'code'          && <CodeLeft    workspaceId={workspaceId} projectId={projectId} />}
+          {mode === 'collaboration' && <CollabLeft  workspaceId={workspaceId} projectId={projectId} />}
         </div>
 
         {/* RIGHT PANEL — flex */}
@@ -1421,7 +1833,8 @@ export default function EditorPage() {
           {mode === 'content'  && <ContentRight  {...contentState} />}
           {mode === 'layout'   && <LayoutRight   blocks={layoutState.blocks} />}
           {mode === 'advanced' && <AdvancedRight {...advancedState} />}
-          {mode === 'code'     && <CodeRight     workspaceId={workspaceId} projectId={projectId} />}
+          {mode === 'code'          && <CodeRight  workspaceId={workspaceId} projectId={projectId} />}
+          {mode === 'collaboration' && <CollabRight workspaceId={workspaceId} projectId={projectId} />}
         </div>
       </div>
 
