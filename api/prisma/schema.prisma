@@ -629,3 +629,90 @@ model AppSocialSignal {
   @@index([signalType])
   @@index([createdAt])
 }
+
+// ── SERIAL 19: Monetization + Billing ────────────────────────────────────────
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  TRIALING
+  INCOMPLETE
+}
+
+enum BillingTier {
+  FREE
+  CREATOR
+  PRO
+  ENTERPRISE
+}
+
+enum UsageEventType {
+  RUNTIME_CREATED
+  AI_GENERATION
+  PREVIEW_VIEW
+  REMIX
+  PREMIUM_PACK_INSTALL
+  SNAPSHOT_CREATED
+}
+
+model BillingPlan {
+  id           String   @id @default(uuid())
+  slug         String   @unique
+  name         String
+  tier         BillingTier
+  monthlyPrice Int      // USD cents; -1 = custom
+  yearlyPrice  Int
+  currency     String   @default("USD")
+  features     String[]
+  limits       Json
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([slug])
+  @@index([tier])
+}
+
+model WorkspaceSubscription {
+  id                      String             @id @default(uuid())
+  workspaceId             String             @unique
+  userId                  String
+  planSlug                String             @default("free")
+  tier                    BillingTier        @default(FREE)
+  provider                String             @default("stripe")
+  providerCustomerId      String?
+  providerSubscriptionId  String?
+  status                  SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart      DateTime?
+  currentPeriodEnd        DateTime?
+  cancelAtPeriodEnd       Boolean            @default(false)
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @updatedAt
+
+  @@index([workspaceId])
+  @@index([userId])
+  @@index([status])
+}
+
+model UsageEvent {
+  id          String        @id @default(uuid())
+  workspaceId String
+  userId      String?
+  eventType   UsageEventType
+  quantity    Int           @default(1)
+  metadata    Json?
+  createdAt   DateTime      @default(now())
+
+  @@index([workspaceId, createdAt])
+  @@index([eventType, createdAt])
+}
+
+model CreditBalance {
+  id               String   @id @default(uuid())
+  workspaceId      String   @unique
+  creditsRemaining Int      @default(0)
+  updatedAt        DateTime @updatedAt
+
+  @@index([workspaceId])
+}

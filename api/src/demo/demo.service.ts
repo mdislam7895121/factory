@@ -404,6 +404,20 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
 .publish-card p{flex:1;font-size:12px;color:var(--muted);line-height:1.4}
 .btn-publish{font-size:11px;font-weight:600;background:var(--accent);color:#fff;
   border:none;border-radius:7px;padding:6px 12px;cursor:pointer;flex-shrink:0;white-space:nowrap}
+/* 19-10: Plan tier badge + upgrade nudge */
+.plan-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;
+  padding:2px 7px;border-radius:10px;text-transform:uppercase;letter-spacing:.05em}
+.plan-badge.free{background:rgba(128,128,128,.1);color:var(--muted);border:1px solid var(--border)}
+.plan-badge.creator{background:rgba(108,108,255,.1);color:var(--accent);border:1px solid rgba(108,108,255,.25)}
+.plan-badge.pro{background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.25)}
+.plan-badge.enterprise{background:rgba(76,175,80,.1);color:var(--green);border:1px solid rgba(76,175,80,.25)}
+.upgrade-nudge{max-width:640px;margin:10px auto 0;padding:0 14px;width:100%;display:none}
+.upgrade-nudge-inner{background:rgba(108,108,255,.06);border:1px solid rgba(108,108,255,.18);
+  border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.upgrade-nudge-inner p{flex:1;font-size:12px;color:var(--muted);line-height:1.4}
+.upgrade-nudge-inner p b{color:var(--fg)}
+.btn-upgrade-nudge{font-size:11px;font-weight:600;background:var(--accent);color:#fff;
+  border:none;border-radius:7px;padding:6px 12px;cursor:pointer;flex-shrink:0;white-space:nowrap}
 .cta-wrap{max-width:640px;margin:24px auto 0;padding:0 14px 40px;text-align:center;width:100%}
 .cta-wrap p{color:var(--muted);font-size:13px;margin-bottom:14px}
 .cta-btn{display:inline-block;padding:13px 28px;background:var(--accent);color:#fff;
@@ -543,6 +557,13 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
     <div class="publish-card">
       <p>Publish this app to your creator profile and get discovered by the community.</p>
       <button class="btn-publish" id="btn-publish-app">Publish app →</button>
+    </div>
+  </div>
+  <!-- 19-10: Upgrade nudge -->
+  <div class="upgrade-nudge" id="upgrade-nudge">
+    <div class="upgrade-nudge-inner">
+      <p>You're on the <b>Free</b> plan. <span id="upgrade-nudge-hint">Upgrade to Creator ($19/mo) to unlock private previews, more runtimes, and paid packs.</span></p>
+      <button class="btn-upgrade-nudge" onclick="window.open('/pricing','_blank')">Upgrade →</button>
     </div>
   </div>
   <div class="cta-wrap">
@@ -1017,6 +1038,23 @@ document.getElementById('btn-cta').addEventListener('click', function() {
   window.location.href = '/?ref=demo';
 });
 
+// 19-10: Show upgrade nudge for demo users (free tier)
+function showUpgradeNudge() {
+  var nudge = document.getElementById('upgrade-nudge');
+  if (nudge) {
+    nudge.style.display = 'block';
+    // Fetch real upgrade hint from billing API
+    fetch('/v1/billing/upgrade-prompt?workspaceId=demo-ws&feature=private+previews')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if (d.ok && d.hint) {
+          var hintEl = document.getElementById('upgrade-nudge-hint');
+          if (hintEl) hintEl.textContent = d.hint;
+        }
+      }).catch(function(){});
+  }
+}
+
 // 18-10: Creator card in reveal — shown after build completes
 function showCreatorCard(projectId) {
   var card = document.getElementById('creator-card');
@@ -1025,6 +1063,7 @@ function showCreatorCard(projectId) {
   // Show creator card with demo defaults
   card.style.display = 'block';
   publishPrompt.style.display = 'block';
+  showUpgradeNudge();
   // Load social signal counts if project is known
   if (projectId) {
     fetch('/v1/social/apps/' + encodeURIComponent(projectId) + '/stats')
