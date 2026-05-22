@@ -1,0 +1,2137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Factory — AI Operating System for Building Companies</title>
+<style>
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+/* ─── DESIGN TOKENS ─── */
+:root {
+  --bg:          #030712;
+  --bg-surface:  #060d1a;
+  --bg-raised:   #0a1628;
+  --glass:       rgba(255,255,255,0.03);
+  --glass-hover: rgba(255,255,255,0.06);
+  --border:      rgba(255,255,255,0.07);
+  --border-glow: rgba(99,102,241,0.45);
+  --text:        #f1f5f9;
+  --text-muted:  #64748b;
+  --text-dim:    #334155;
+  --accent:      #6366f1;
+  --accent-cyan: #06b6d4;
+  --accent-violet:#8b5cf6;
+  --accent-green: #10b981;
+  --glow-blue:   rgba(99,102,241,0.15);
+  --glow-cyan:   rgba(6,182,212,0.12);
+  --radius:      12px;
+  --radius-lg:   20px;
+  --shadow-glass: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+/* ─── BASE ─── */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, 'Inter', 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─── KEYFRAMES ─── */
+@keyframes breathe {
+  0%,100% { box-shadow: 0 0 0 1px var(--border), 0 0 30px var(--glow-blue), 0 20px 60px rgba(0,0,0,0.6); }
+  50%      { box-shadow: 0 0 0 1px rgba(99,102,241,0.3), 0 0 60px rgba(99,102,241,0.2), 0 20px 60px rgba(0,0,0,0.6); }
+}
+@keyframes glow-border {
+  0%,100% { border-color: rgba(99,102,241,0.2); }
+  50%      { border-color: rgba(99,102,241,0.6); }
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+@keyframes pulse-dot {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(0.8); }
+}
+@keyframes stream-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes cursor-blink {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+@keyframes particle-float {
+  0%         { transform: translateY(0) translateX(0) scale(1); opacity: 0.3; }
+  33%        { transform: translateY(-30px) translateX(15px) scale(1.1); opacity: 0.6; }
+  66%        { transform: translateY(-15px) translateX(-10px) scale(0.9); opacity: 0.4; }
+  100%       { transform: translateY(0) translateX(0) scale(1); opacity: 0.3; }
+}
+@keyframes scan-line {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(200%); }
+}
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(60px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(60px) rotate(-360deg); }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes live-tick {
+  0%,90%,100% { opacity: 1; }
+  95%         { opacity: 0.2; }
+}
+
+/* ─── NOISE OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 0 40px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(3,7,18,0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.nav-logo-mark {
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-cyan));
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 900; color: white;
+  box-shadow: 0 0 16px rgba(99,102,241,0.4);
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+}
+.nav-links a {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s, background 0.15s;
+}
+.nav-links a:hover { color: var(--text); background: var(--glass-hover); }
+.nav-cta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.btn-ghost {
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.15); background: var(--glass-hover); }
+.btn-primary {
+  padding: 7px 18px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, var(--accent) 0%, #4f46e5 100%);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(99,102,241,0.3);
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 0 30px rgba(99,102,241,0.5); }
+
+/* ─── LIVE BADGE ─── */
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.25);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-green);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.live-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  padding: 100px 24px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(99,102,241,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 60%, rgba(6,182,212,0.07) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 20% 70%, rgba(139,92,246,0.07) 0%, transparent 50%),
+    linear-gradient(180deg, #030712 0%, #060d1a 50%, #030712 100%);
+}
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 80%);
+}
+
+/* Particles */
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.particle {
+  position: absolute;
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: particle-float linear infinite;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 880px;
+  width: 100%;
+  gap: 28px;
+  animation: fade-up 0.8s ease both;
+}
+
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.eyebrow-text {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.hero-headline {
+  text-align: center;
+  font-size: clamp(42px, 7vw, 80px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+.hero-headline em {
+  font-style: normal;
+  background: linear-gradient(135deg, #a5b4fc 0%, #67e8f9 50%, #c4b5fd 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 4s ease infinite;
+}
+
+.hero-sub {
+  text-align: center;
+  font-size: clamp(16px, 2vw, 19px);
+  color: var(--text-muted);
+  max-width: 560px;
+  line-height: 1.65;
+}
+
+/* ─── PROMPT COMMAND CENTER ─── */
+.prompt-center {
+  width: 100%;
+  max-width: 760px;
+  position: relative;
+  animation: breathe 4s ease-in-out infinite;
+}
+.prompt-glass {
+  background: rgba(10,22,40,0.85);
+  backdrop-filter: blur(32px);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-glass);
+  animation: glow-border 4s ease-in-out infinite;
+}
+.prompt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 0;
+}
+.prompt-indicators {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.indicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.indicator-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+}
+.indicator-dot.active { background: var(--accent-green); animation: pulse-dot 2s infinite; }
+.indicator-dot.thinking { background: var(--accent-cyan); animation: pulse-dot 1s infinite; }
+.indicator-dot.idle { background: var(--text-dim); }
+
+.prompt-model-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.prompt-model-badge svg { width: 10px; height: 10px; color: var(--accent); }
+
+.prompt-textarea-wrap {
+  padding: 16px;
+  position: relative;
+}
+.prompt-textarea {
+  width: 100%;
+  min-height: 80px;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  color: var(--text);
+  font-size: 16px;
+  font-family: inherit;
+  line-height: 1.6;
+  caret-color: var(--accent);
+}
+.prompt-placeholder {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  pointer-events: none;
+  color: var(--text-dim);
+  font-size: 16px;
+  line-height: 1.6;
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+}
+.prompt-cursor {
+  display: inline-block;
+  width: 2px; height: 20px;
+  background: var(--accent);
+  border-radius: 1px;
+  margin-left: 1px;
+  animation: cursor-blink 1.1s step-end infinite;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.prompt-example-text {
+  color: var(--text-dim);
+}
+
+/* Example chips */
+.prompt-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 16px 12px;
+}
+.chip {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.chip:hover { background: var(--glass-hover); border-color: rgba(99,102,241,0.3); color: var(--text); }
+
+/* Controls row */
+.prompt-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 14px;
+  border-top: 1px solid var(--border);
+}
+.prompt-left-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.ctrl-btn {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--glass);
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: all 0.15s;
+}
+.ctrl-btn:hover { background: var(--glass-hover); color: var(--text); border-color: rgba(255,255,255,0.12); }
+
+.build-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent) 0%, #4f46e5 100%);
+  border: none;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 24px rgba(99,102,241,0.4);
+  transition: all 0.15s;
+}
+.build-btn:hover { transform: translateY(-1px); box-shadow: 0 0 36px rgba(99,102,241,0.6); }
+.build-btn-icon { font-size: 16px; }
+
+/* Runtime status strip */
+.runtime-strip {
+  display: flex;
+  align-items: center;
+  padding: 9px 16px;
+  background: rgba(6,182,212,0.04);
+  border-top: 1px solid rgba(6,182,212,0.1);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.runtime-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.runtime-val {
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+/* Council feed */
+.council-feed {
+  position: absolute;
+  right: -280px;
+  top: 0;
+  width: 260px;
+  background: rgba(10,22,40,0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-glass);
+}
+.council-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.council-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.council-items {
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.council-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 7px 14px;
+  font-size: 12px;
+  animation: stream-in 0.4s ease both;
+}
+.council-avatar {
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.council-item-text { line-height: 1.4; }
+.council-item-agent { font-weight: 600; color: var(--text); display: block; font-size: 11px; }
+.council-item-msg { color: var(--text-muted); font-size: 11.5px; }
+
+/* ─── LIVE STATUS BAR ─── */
+.live-status-bar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 12px 28px;
+  background: rgba(10,22,40,0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  animation: fade-up 0.8s 0.3s ease both;
+}
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+.status-num {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  animation: live-tick 3s ease-in-out infinite;
+}
+.status-sep { width: 1px; height: 16px; background: var(--border); }
+
+/* ─── SECTION BASE ─── */
+section {
+  padding: 100px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+section.full-width {
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.section-label::before {
+  content: '';
+  display: block;
+  width: 20px; height: 1px;
+  background: var(--accent);
+}
+.section-title {
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.section-sub {
+  font-size: 17px;
+  color: var(--text-muted);
+  max-width: 520px;
+  line-height: 1.65;
+  margin-bottom: 56px;
+}
+
+/* ─── SECTION 2 — HOW IT WORKS ─── */
+.how-section { background: var(--bg-surface); }
+.how-section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 24px;
+}
+.flow-steps {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  position: relative;
+}
+.flow-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 32px 28px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-right: none;
+  position: relative;
+  transition: background 0.2s;
+}
+.flow-step:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.flow-step:last-child  { border-right: 1px solid var(--border); border-radius: 0 var(--radius) var(--radius) 0; }
+.flow-step:hover { background: var(--glass-hover); }
+
+.flow-arrow {
+  position: absolute;
+  right: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  color: var(--accent);
+}
+.flow-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+.flow-icon {
+  font-size: 28px;
+  margin-bottom: 12px;
+  animation: float 4s ease-in-out infinite;
+}
+.flow-step:nth-child(3) .flow-icon { animation-delay: -1s; }
+.flow-step:nth-child(5) .flow-icon { animation-delay: -2s; }
+.flow-step:nth-child(7) .flow-icon { animation-delay: -0.5s; }
+.flow-step:nth-child(9) .flow-icon { animation-delay: -1.5s; }
+.flow-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.flow-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* ─── SECTION 3 — LIVE STREAM ─── */
+.stream-section {
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(99,102,241,0.06) 0%, transparent 70%),
+    var(--bg);
+}
+.stream-section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 24px;
+}
+.stream-theater {
+  background: rgba(10,22,40,0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-glass);
+}
+.theater-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(0,0,0,0.2);
+}
+.theater-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.theater-controls {
+  display: flex;
+  gap: 6px;
+}
+.dot-red, .dot-yellow, .dot-green {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.dot-red    { background: #ff5f57; }
+.dot-yellow { background: #febc2e; }
+.dot-green  { background: #28c840; }
+.stream-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 320px;
+}
+.stream-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--glass);
+  animation: stream-in 0.4s ease both;
+}
+.stream-entry:nth-child(1) { animation-delay: 0.0s; }
+.stream-entry:nth-child(2) { animation-delay: 0.15s; }
+.stream-entry:nth-child(3) { animation-delay: 0.30s; }
+.stream-entry:nth-child(4) { animation-delay: 0.45s; }
+.stream-entry:nth-child(5) { animation-delay: 0.60s; }
+.stream-entry:nth-child(6) { animation-delay: 0.75s; }
+.stream-agent-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.stream-info { flex: 1; }
+.stream-agent-name { font-size: 12px; font-weight: 600; color: var(--text); }
+.stream-action { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.stream-time { font-size: 11px; color: var(--text-dim); flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.stream-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  margin-left: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.badge-build  { background: rgba(99,102,241,0.15); color: #a5b4fc; }
+.badge-ai     { background: rgba(6,182,212,0.15); color: #67e8f9; }
+.badge-deploy { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+.badge-remix  { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+
+/* ─── SECTION 4 — APP DISCOVERY ─── */
+.discovery-section { background: var(--bg-surface); }
+.discovery-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 24px;
+}
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.app-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.app-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(99,102,241,0.3);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(99,102,241,0.1);
+}
+.app-preview {
+  height: 140px;
+  position: relative;
+  overflow: hidden;
+}
+.app-preview-bg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+}
+.app-scan-line {
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(99,102,241,0.6), transparent);
+  animation: scan-line 3s linear infinite;
+}
+.app-live-tag {
+  position: absolute;
+  top: 10px; left: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(16,185,129,0.15);
+  border: 1px solid rgba(16,185,129,0.3);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent-green);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.app-body { padding: 14px 16px; }
+.app-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.app-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px; }
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.app-creator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.creator-avi {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+.app-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11.5px;
+  color: var(--text-dim);
+}
+.remix-chain {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--accent-violet);
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(139,92,246,0.08);
+  border: 1px solid rgba(139,92,246,0.15);
+}
+
+/* ─── SECTION 5 — MARKETPLACE ─── */
+.marketplace-section {
+  background: var(--bg);
+}
+.marketplace-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 24px;
+}
+.pack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}
+.pack-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.2s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.pack-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.pack-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(99,102,241,0.25);
+}
+.pack-card.healthcare::before { background: linear-gradient(90deg, #ef4444, #f97316); }
+.pack-card.ecommerce::before  { background: linear-gradient(90deg, #3b82f6, #06b6d4); }
+.pack-card.logistics::before  { background: linear-gradient(90deg, #f59e0b, #eab308); }
+.pack-card.education::before  { background: linear-gradient(90deg, #10b981, #34d399); }
+.pack-card.finance::before    { background: linear-gradient(90deg, #6366f1, #8b5cf6); }
+.pack-card.creator::before    { background: linear-gradient(90deg, #ec4899, #f43f5e); }
+
+.pack-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.pack-icon-wrap {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  background: var(--glass-hover);
+  border: 1px solid var(--border);
+}
+.pack-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.pack-trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.badge-verified  { background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25); color: #a5b4fc; }
+.badge-official  { background: rgba(6,182,212,0.12); border: 1px solid rgba(6,182,212,0.25); color: #67e8f9; }
+.badge-regulated { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.25); color: #fca5a5; }
+.badge-enterprise-ready { background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.25); color: #c4b5fd; }
+
+.pack-name { font-size: 15px; font-weight: 700; color: var(--text); }
+.pack-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+.pack-agents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.pack-agent-chip {
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.pack-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.pack-installs { font-size: 12px; color: var(--text-muted); }
+.pack-installs strong { color: var(--text); }
+.btn-install {
+  padding: 6px 14px;
+  border-radius: 7px;
+  background: var(--glass-hover);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-install:hover { border-color: rgba(99,102,241,0.4); color: #a5b4fc; }
+
+/* ─── SECTION 6 — TRUST ─── */
+.trust-section {
+  background: var(--bg-surface);
+}
+.trust-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 24px;
+}
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+.trust-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.2s;
+}
+.trust-card:hover { border-color: rgba(99,102,241,0.25); }
+.trust-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+.trust-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+.trust-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+.trust-metric {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(16,185,129,0.08);
+  border: 1px solid rgba(16,185,129,0.15);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-green);
+  align-self: flex-start;
+}
+
+/* ─── SECTION 7 — PRICING ─── */
+.pricing-section { background: var(--bg); }
+.pricing-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 24px;
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.plan-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  transition: all 0.2s;
+}
+.plan-card:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-2px); }
+.plan-card.featured {
+  border-color: rgba(99,102,241,0.4);
+  background: rgba(99,102,241,0.05);
+  box-shadow: 0 0 0 1px rgba(99,102,241,0.15), 0 20px 60px rgba(99,102,241,0.1);
+}
+.plan-badge-wrap {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.plan-popular {
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), #4f46e5);
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 0 16px rgba(99,102,241,0.4);
+}
+.plan-name {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.plan-price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.plan-price-num {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  line-height: 1;
+}
+.plan-price-period {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+.plan-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.plan-divider { width: 100%; height: 1px; background: var(--border); }
+.plan-features {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.plan-feature {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.feature-check {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px;
+  flex-shrink: 0;
+}
+.feature-check.yes { background: rgba(16,185,129,0.15); color: var(--accent-green); }
+.feature-check.no  { background: rgba(100,116,139,0.1); color: var(--text-dim); }
+.plan-cta {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: none;
+  margin-top: auto;
+}
+.plan-cta.outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+.plan-cta.outline:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+.plan-cta.solid {
+  background: linear-gradient(135deg, var(--accent) 0%, #4f46e5 100%);
+  color: white;
+  box-shadow: 0 0 20px rgba(99,102,241,0.3);
+}
+.plan-cta.solid:hover { box-shadow: 0 0 30px rgba(99,102,241,0.5); transform: translateY(-1px); }
+.plan-cta.enterprise-cta {
+  background: var(--glass-hover);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+/* ─── SECTION 8 — FINAL CTA ─── */
+.cta-section {
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 50%, rgba(99,102,241,0.1) 0%, transparent 70%),
+    var(--bg);
+  padding: 140px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-section-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+.cta-headline {
+  font-size: clamp(44px, 7vw, 80px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.0;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+.cta-headline .highlight {
+  background: linear-gradient(135deg, #a5b4fc, #67e8f9, #c4b5fd);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 3s ease infinite;
+}
+.cta-sub {
+  font-size: 18px;
+  color: var(--text-muted);
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+.cta-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.btn-cta-primary {
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, var(--accent), #4f46e5);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 40px rgba(99,102,241,0.4);
+  transition: all 0.15s;
+}
+.btn-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(99,102,241,0.6); }
+.btn-cta-ghost {
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-cta-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.cta-note { margin-top: 20px; font-size: 13px; color: var(--text-dim); }
+
+/* ─── FOOTER ─── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 24px;
+  background: var(--bg);
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.footer-links a {
+  font-size: 13px;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.footer-links a:hover { color: var(--text-muted); }
+.footer-copy { font-size: 12px; color: var(--text-dim); }
+
+/* ─── MOCKUP LABEL ─── */
+.mockup-banner {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: rgba(99,102,241,0.15);
+  border: 1px solid rgba(99,102,241,0.3);
+  font-size: 11px;
+  font-weight: 700;
+  color: #a5b4fc;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1100px) {
+  .council-feed { display: none; }
+  .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .flow-steps { flex-direction: column; }
+  .flow-step { border-right: 1px solid var(--border); border-bottom: none; border-radius: var(--radius) !important; }
+  .flow-arrow { display: none; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .live-status-bar { gap: 14px; padding: 10px 20px; flex-wrap: wrap; justify-content: center; }
+  .status-sep { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav role="navigation" aria-label="Main navigation">
+  <div class="nav-logo">
+    <div class="nav-logo-mark">F</div>
+    Factory
+  </div>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#discovery">Discover</a></li>
+    <li><a href="#marketplace">Marketplace</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#docs">Docs</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="#" class="btn-ghost">Sign in</a>
+    <a href="#" class="btn-primary">Start building →</a>
+  </div>
+</nav>
+
+<!-- ─── SECTION 1 — HERO ─── -->
+<section class="hero" aria-labelledby="hero-heading">
+
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-grid" aria-hidden="true"></div>
+
+  <!-- Particles -->
+  <div class="particles" aria-hidden="true">
+    <div class="particle" style="left:10%;top:20%;width:2px;height:2px;opacity:.5;animation-duration:8s;animation-delay:-2s;"></div>
+    <div class="particle" style="left:80%;top:15%;background:var(--accent-cyan);animation-duration:11s;animation-delay:-4s;opacity:.4;"></div>
+    <div class="particle" style="left:60%;top:70%;background:var(--accent-violet);animation-duration:9s;animation-delay:-1s;opacity:.3;"></div>
+    <div class="particle" style="left:25%;top:65%;animation-duration:13s;animation-delay:-6s;opacity:.3;"></div>
+    <div class="particle" style="left:90%;top:50%;background:var(--accent-cyan);animation-duration:7s;animation-delay:-3s;opacity:.4;width:2px;height:2px;"></div>
+    <div class="particle" style="left:40%;top:85%;animation-duration:10s;animation-delay:-5s;opacity:.25;"></div>
+    <div class="particle" style="left:5%;top:55%;background:var(--accent-violet);animation-duration:12s;animation-delay:-7s;opacity:.35;"></div>
+    <div class="particle" style="left:70%;top:35%;animation-duration:6s;animation-delay:-1.5s;opacity:.4;"></div>
+  </div>
+
+  <div class="hero-content">
+
+    <!-- Eyebrow -->
+    <div class="hero-eyebrow">
+      <div class="live-badge"><div class="live-dot"></div>Live · 2,847 agents running</div>
+      <span class="eyebrow-text">AI Operating System</span>
+    </div>
+
+    <!-- Headline -->
+    <h1 class="hero-headline" id="hero-heading">
+      Type an idea.<br />
+      <em>Wake an AI company.</em>
+    </h1>
+
+    <!-- Sub -->
+    <p class="hero-sub">
+      Factory spins up an entire AI-powered organization — architects, engineers, reviewers, deployers — the moment you describe what you want to build.
+    </p>
+
+    <!-- PROMPT COMMAND CENTER -->
+    <div class="prompt-center" style="position:relative;">
+      <div class="prompt-glass">
+
+        <!-- Header indicators -->
+        <div class="prompt-header">
+          <div class="prompt-indicators">
+            <div class="indicator">
+              <div class="indicator-dot thinking"></div>
+              Council active
+            </div>
+            <div class="indicator">
+              <div class="indicator-dot active"></div>
+              3 agents ready
+            </div>
+          </div>
+          <div class="prompt-model-badge">
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="5" cy="5" r="4"/>
+              <path d="M5 2v3l2 1"/>
+            </svg>
+            Factory AI
+          </div>
+        </div>
+
+        <!-- Textarea -->
+        <div class="prompt-textarea-wrap">
+          <textarea class="prompt-textarea" rows="3" placeholder="" aria-label="Describe what you want to build"></textarea>
+          <div class="prompt-placeholder" aria-hidden="true">
+            <span class="prompt-example-text">Build me a healthcare appointment booking platform with AI triage</span>
+            <span class="prompt-cursor"></span>
+          </div>
+        </div>
+
+        <!-- Example chips -->
+        <div class="prompt-chips">
+          <button class="chip">🏥 Healthcare booking</button>
+          <button class="chip">🛒 E-commerce store</button>
+          <button class="chip">📊 Analytics dashboard</button>
+          <button class="chip">🚚 Logistics tracker</button>
+          <button class="chip">🎓 Learning platform</button>
+        </div>
+
+        <!-- Controls -->
+        <div class="prompt-controls">
+          <div class="prompt-left-controls">
+            <button class="ctrl-btn" aria-label="Voice input" title="Voice input">🎤</button>
+            <button class="ctrl-btn" aria-label="Attach file" title="Attach file">📎</button>
+            <button class="ctrl-btn" aria-label="Choose pack" title="Choose domain pack">📦</button>
+          </div>
+          <button class="build-btn" aria-label="Start building">
+            <span class="build-btn-icon">⚡</span>
+            Build with AI
+          </button>
+        </div>
+
+        <!-- Runtime status strip -->
+        <div class="runtime-strip">
+          <div class="runtime-item">🏃 <span class="runtime-val">12</span> active runtimes</div>
+          <div class="runtime-item">👁️ <span class="runtime-val">48</span> previews live</div>
+          <div class="runtime-item">🔀 <span class="runtime-val">7</span> remixes today</div>
+          <div class="runtime-item">📸 <span class="runtime-val">3</span> snapshots ready</div>
+        </div>
+
+      </div><!-- /prompt-glass -->
+
+      <!-- Council feed (decorative, floats right) -->
+      <div class="council-feed" aria-hidden="true">
+        <div class="council-header">
+          <span class="council-title">Council Stream</span>
+          <div class="live-badge"><div class="live-dot"></div></div>
+        </div>
+        <div class="council-items">
+          <div class="council-item" style="animation-delay:.1s;">
+            <div class="council-avatar" style="background:rgba(99,102,241,0.15);">🏛️</div>
+            <div class="council-item-text">
+              <span class="council-item-agent">Architect</span>
+              <span class="council-item-msg">Designing domain model for patient intake flow…</span>
+            </div>
+          </div>
+          <div class="council-item" style="animation-delay:.25s;">
+            <div class="council-avatar" style="background:rgba(6,182,212,0.15);">⚙️</div>
+            <div class="council-item-text">
+              <span class="council-item-agent">Backend Agent</span>
+              <span class="council-item-msg">Scaffolding NestJS modules — auth, booking, triage</span>
+            </div>
+          </div>
+          <div class="council-item" style="animation-delay:.4s;">
+            <div class="council-avatar" style="background:rgba(16,185,129,0.15);">🎨</div>
+            <div class="council-item-text">
+              <span class="council-item-agent">UI Agent</span>
+              <span class="council-item-msg">Building appointment calendar component…</span>
+            </div>
+          </div>
+          <div class="council-item" style="animation-delay:.55s;">
+            <div class="council-avatar" style="background:rgba(139,92,246,0.15);">🔍</div>
+            <div class="council-item-text">
+              <span class="council-item-agent">Review Agent</span>
+              <span class="council-item-msg">HIPAA compliance check in progress</span>
+            </div>
+          </div>
+          <div class="council-item" style="animation-delay:.7s;">
+            <div class="council-avatar" style="background:rgba(245,158,11,0.15);">🚀</div>
+            <div class="council-item-text">
+              <span class="council-item-agent">Deploy Agent</span>
+              <span class="council-item-msg">Preview environment warming up…</span>
+            </div>
+          </div>
+        </div>
+      </div><!-- /council-feed -->
+
+    </div><!-- /prompt-center wrapper -->
+
+    <!-- Live status bar -->
+    <div class="live-status-bar" role="status" aria-live="polite">
+      <div class="status-item">⚡ <span class="status-num">2,847</span> agents running</div>
+      <div class="status-sep" aria-hidden="true"></div>
+      <div class="status-item">🖥️ <span class="status-num">1,204</span> live runtimes</div>
+      <div class="status-sep" aria-hidden="true"></div>
+      <div class="status-item">👁️ <span class="status-num">8,391</span> previews today</div>
+      <div class="status-sep" aria-hidden="true"></div>
+      <div class="status-item">🔀 <span class="status-num">342</span> remixes</div>
+    </div>
+
+  </div><!-- /hero-content -->
+</section>
+
+<!-- ─── SECTION 2 — HOW IT WORKS ─── -->
+<div class="how-section" id="how">
+  <div class="how-section-inner">
+    <div class="section-label">How Factory works</div>
+    <h2 class="section-title">From idea to company in minutes</h2>
+    <p class="section-sub">An autonomous council of AI agents handles every layer — architecture, code, review, deployment, and iteration.</p>
+
+    <div class="flow-steps" role="list">
+      <div class="flow-step" role="listitem">
+        <div class="flow-num">01</div>
+        <div class="flow-icon">💡</div>
+        <div class="flow-name">Idea</div>
+        <div class="flow-desc">Describe what you want to build in plain language. No specs required.</div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+      </div>
+      <div class="flow-step" role="listitem">
+        <div class="flow-num">02</div>
+        <div class="flow-icon">🏛️</div>
+        <div class="flow-name">Council</div>
+        <div class="flow-desc">AI agents debate, plan architecture, and assign work across specialist roles.</div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+      </div>
+      <div class="flow-step" role="listitem">
+        <div class="flow-num">03</div>
+        <div class="flow-icon">⚙️</div>
+        <div class="flow-name">Build</div>
+        <div class="flow-desc">Full-stack code written, tested, and reviewed by agents working in parallel.</div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+      </div>
+      <div class="flow-step" role="listitem">
+        <div class="flow-num">04</div>
+        <div class="flow-icon">👁️</div>
+        <div class="flow-name">Preview</div>
+        <div class="flow-desc">Isolated live runtime spins up instantly. Share before you commit anything.</div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+      </div>
+      <div class="flow-step" role="listitem">
+        <div class="flow-num">05</div>
+        <div class="flow-icon">🔀</div>
+        <div class="flow-name">Remix</div>
+        <div class="flow-desc">Anyone can fork, iterate, and publish back to the discovery feed.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECTION 3 — LIVE STREAM ─── -->
+<div class="stream-section">
+  <div class="stream-section-inner">
+    <div class="section-label">Real-time activity</div>
+    <h2 class="section-title">Watch the factory floor</h2>
+    <p class="section-sub">Every build, deploy, and agent action streams live. Thousands of AI teams working right now.</p>
+
+    <div class="stream-theater" role="log" aria-label="Live activity stream" aria-live="polite">
+      <div class="theater-header">
+        <div class="theater-title">
+          <div class="theater-controls" aria-hidden="true">
+            <div class="dot-red"></div>
+            <div class="dot-yellow"></div>
+            <div class="dot-green"></div>
+          </div>
+          factory-activity-stream.live
+        </div>
+        <div class="live-badge"><div class="live-dot"></div>Live</div>
+      </div>
+      <div class="stream-body">
+        <div class="stream-entry">
+          <div class="stream-agent-icon" style="background:rgba(99,102,241,0.12);">🏛️</div>
+          <div class="stream-info">
+            <div class="stream-agent-name">Architect Agent <span class="stream-badge badge-build">Build</span></div>
+            <div class="stream-action">Generated domain model for <strong style="color:var(--text)">MediBook Pro</strong> — 14 entities, 6 services</div>
+          </div>
+          <div class="stream-time">0:02s</div>
+        </div>
+        <div class="stream-entry">
+          <div class="stream-agent-icon" style="background:rgba(6,182,212,0.12);">🤖</div>
+          <div class="stream-info">
+            <div class="stream-agent-name">AI Triage Agent <span class="stream-badge badge-ai">AI</span></div>
+            <div class="stream-action">Trained symptom classifier for <strong style="color:var(--text)">HealthFirst</strong> — 94.2% accuracy</div>
+          </div>
+          <div class="stream-time">0:18s</div>
+        </div>
+        <div class="stream-entry">
+          <div class="stream-agent-icon" style="background:rgba(16,185,129,0.12);">🚀</div>
+          <div class="stream-info">
+            <div class="stream-agent-name">Deploy Agent <span class="stream-badge badge-deploy">Deploy</span></div>
+            <div class="stream-action"><strong style="color:var(--text)">@jaya</strong>'s logistics dashboard is live at preview-k7x.factory.run</div>
+          </div>
+          <div class="stream-time">1:04s</div>
+        </div>
+        <div class="stream-entry">
+          <div class="stream-agent-icon" style="background:rgba(139,92,246,0.12);">🔀</div>
+          <div class="stream-info">
+            <div class="stream-agent-name">Remix Agent <span class="stream-badge badge-remix">Remix</span></div>
+            <div class="stream-action"><strong style="color:var(--text)">@marc</strong> remixed <strong style="color:var(--text)">ecommerce-starter</strong> → adding subscription billing</div>
+          </div>
+          <div class="stream-time">1:31s</div>
+        </div>
+        <div class="stream-entry">
+          <div class="stream-agent-icon" style="background:rgba(99,102,241,0.12);">⚙️</div>
+          <div class="stream-info">
+            <div class="stream-agent-name">Backend Agent <span class="stream-badge badge-build">Build</span></div>
+            <div class="stream-action">Completed 47 passing tests for <strong style="color:var(--text)">FinancePulse</strong> billing module</div>
+          </div>
+          <div class="stream-time">2:15s</div>
+        </div>
+        <div class="stream-entry">
+          <div class="stream-agent-icon" style="background:rgba(245,158,11,0.12);">📸</div>
+          <div class="stream-info">
+            <div class="stream-agent-name">Snapshot Agent <span class="stream-badge badge-deploy">Snapshot</span></div>
+            <div class="stream-action">Recovery snapshot created for <strong style="color:var(--text)">TutorAI</strong> — restore in &lt;30s</div>
+          </div>
+          <div class="stream-time">2:48s</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECTION 4 — APP DISCOVERY ─── -->
+<div class="discovery-section" id="discovery">
+  <div class="discovery-inner">
+    <div class="section-label">Public discovery</div>
+    <h2 class="section-title">Apps built by the community</h2>
+    <p class="section-sub">Browse, fork, and remix thousands of live apps. Every build is a starting point.</p>
+
+    <div class="app-grid">
+
+      <div class="app-card" tabindex="0">
+        <div class="app-preview" style="background: linear-gradient(135deg, #0a1628, #0f2040);">
+          <div class="app-preview-bg">🏥</div>
+          <div class="app-scan-line"></div>
+          <div class="app-live-tag">Live</div>
+        </div>
+        <div class="app-body">
+          <div class="app-name">MediBook Pro</div>
+          <div class="app-desc">AI-powered appointment booking with triage, insurance verification, and EHR integration.</div>
+          <div class="app-footer">
+            <div class="app-creator">
+              <div class="creator-avi" style="background:rgba(99,102,241,0.2);color:#a5b4fc;">S</div>
+              @sarah_builds
+            </div>
+            <div class="app-stats">
+              <span>❤️ 284</span>
+              <span class="remix-chain">🔀 12 remixes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-card" tabindex="0">
+        <div class="app-preview" style="background: linear-gradient(135deg, #0a1a28, #061828);">
+          <div class="app-preview-bg">🛒</div>
+          <div class="app-scan-line" style="animation-delay: -1s;"></div>
+          <div class="app-live-tag">Live</div>
+        </div>
+        <div class="app-body">
+          <div class="app-name">ShopForge</div>
+          <div class="app-desc">Full e-commerce platform with AI product recommendations, dynamic pricing, and inventory AI.</div>
+          <div class="app-footer">
+            <div class="app-creator">
+              <div class="creator-avi" style="background:rgba(6,182,212,0.2);color:#67e8f9;">M</div>
+              @marc_dev
+            </div>
+            <div class="app-stats">
+              <span>❤️ 1.2k</span>
+              <span class="remix-chain">🔀 89 remixes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-card" tabindex="0">
+        <div class="app-preview" style="background: linear-gradient(135deg, #0a1520, #081520);">
+          <div class="app-preview-bg">📊</div>
+          <div class="app-scan-line" style="animation-delay: -2s;"></div>
+          <div class="app-live-tag">Live</div>
+        </div>
+        <div class="app-body">
+          <div class="app-name">FinancePulse</div>
+          <div class="app-desc">Real-time financial analytics with AI forecasting, anomaly detection, and regulatory reporting.</div>
+          <div class="app-footer">
+            <div class="app-creator">
+              <div class="creator-avi" style="background:rgba(16,185,129,0.2);color:#6ee7b7;">J</div>
+              @jaya_k
+            </div>
+            <div class="app-stats">
+              <span>❤️ 456</span>
+              <span class="remix-chain">🔀 31 remixes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-card" tabindex="0">
+        <div class="app-preview" style="background: linear-gradient(135deg, #0d0a1e, #120a24);">
+          <div class="app-preview-bg">🎓</div>
+          <div class="app-scan-line" style="animation-delay: -0.5s;"></div>
+          <div class="app-live-tag">Live</div>
+        </div>
+        <div class="app-body">
+          <div class="app-name">TutorAI</div>
+          <div class="app-desc">Personalized learning platform with adaptive AI curriculum, assessments, and student analytics.</div>
+          <div class="app-footer">
+            <div class="app-creator">
+              <div class="creator-avi" style="background:rgba(139,92,246,0.2);color:#c4b5fd;">L</div>
+              @lena_edu
+            </div>
+            <div class="app-stats">
+              <span>❤️ 732</span>
+              <span class="remix-chain">🔀 47 remixes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-card" tabindex="0">
+        <div class="app-preview" style="background: linear-gradient(135deg, #0a1408, #081408);">
+          <div class="app-preview-bg">🚚</div>
+          <div class="app-scan-line" style="animation-delay: -1.5s;"></div>
+          <div class="app-live-tag">Live</div>
+        </div>
+        <div class="app-body">
+          <div class="app-name">RouteIQ</div>
+          <div class="app-desc">AI logistics optimizer with real-time fleet tracking, route optimization, and ETA prediction.</div>
+          <div class="app-footer">
+            <div class="app-creator">
+              <div class="creator-avi" style="background:rgba(245,158,11,0.2);color:#fcd34d;">K</div>
+              @kai_ops
+            </div>
+            <div class="app-stats">
+              <span>❤️ 318</span>
+              <span class="remix-chain">🔀 22 remixes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-card" tabindex="0">
+        <div class="app-preview" style="background: linear-gradient(135deg, #1a0a14, #1a0818);">
+          <div class="app-preview-bg">🎨</div>
+          <div class="app-scan-line" style="animation-delay: -2.5s;"></div>
+          <div class="app-live-tag">Live</div>
+        </div>
+        <div class="app-body">
+          <div class="app-name">CreatorOS</div>
+          <div class="app-desc">All-in-one creator monetization platform — subscriptions, digital products, AI content studio.</div>
+          <div class="app-footer">
+            <div class="app-creator">
+              <div class="creator-avi" style="background:rgba(236,72,153,0.2);color:#f9a8d4;">R</div>
+              @riya_creates
+            </div>
+            <div class="app-stats">
+              <span>❤️ 2.1k</span>
+              <span class="remix-chain">🔀 104 remixes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECTION 5 — MARKETPLACE ─── -->
+<div class="marketplace-section" id="marketplace">
+  <div class="marketplace-inner">
+    <div class="section-label">AI Marketplace</div>
+    <h2 class="section-title">Domain packs. Instant power.</h2>
+    <p class="section-sub">Install pre-built, domain-expert AI agent collections. One click adds a full team of specialists to your runtime.</p>
+
+    <div class="pack-grid">
+
+      <div class="pack-card healthcare" tabindex="0">
+        <div class="pack-top">
+          <div class="pack-icon-wrap">🏥</div>
+          <div class="pack-badges">
+            <span class="pack-trust-badge badge-regulated">⚖️ Regulated</span>
+            <span class="pack-trust-badge badge-verified">✓ Verified</span>
+          </div>
+        </div>
+        <div class="pack-name">Healthcare Suite</div>
+        <div class="pack-desc">HIPAA-compliant agents for patient intake, clinical triage, EHR integration, and compliance monitoring.</div>
+        <div class="pack-agents">
+          <span class="pack-agent-chip">🩺 Triage AI</span>
+          <span class="pack-agent-chip">📋 EHR Agent</span>
+          <span class="pack-agent-chip">🔒 Compliance</span>
+          <span class="pack-agent-chip">💊 Pharmacy</span>
+        </div>
+        <div class="pack-footer">
+          <span class="pack-installs">Installed by <strong>4,821</strong> teams</span>
+          <button class="btn-install">Install pack</button>
+        </div>
+      </div>
+
+      <div class="pack-card ecommerce" tabindex="0">
+        <div class="pack-top">
+          <div class="pack-icon-wrap">🛒</div>
+          <div class="pack-badges">
+            <span class="pack-trust-badge badge-official">⭐ Official</span>
+          </div>
+        </div>
+        <div class="pack-name">E-Commerce Pro</div>
+        <div class="pack-desc">Complete commerce agents — catalog management, pricing optimization, checkout flows, and post-purchase AI.</div>
+        <div class="pack-agents">
+          <span class="pack-agent-chip">💰 Pricing AI</span>
+          <span class="pack-agent-chip">🏷️ Catalog</span>
+          <span class="pack-agent-chip">🔄 Returns</span>
+          <span class="pack-agent-chip">📦 Fulfillment</span>
+        </div>
+        <div class="pack-footer">
+          <span class="pack-installs">Installed by <strong>12,440</strong> teams</span>
+          <button class="btn-install">Install pack</button>
+        </div>
+      </div>
+
+      <div class="pack-card logistics" tabindex="0">
+        <div class="pack-top">
+          <div class="pack-icon-wrap">🚚</div>
+          <div class="pack-badges">
+            <span class="pack-trust-badge badge-verified">✓ Verified</span>
+          </div>
+        </div>
+        <div class="pack-name">Logistics Intelligence</div>
+        <div class="pack-desc">Fleet optimization, route intelligence, last-mile delivery, carrier negotiation, and supply chain AI.</div>
+        <div class="pack-agents">
+          <span class="pack-agent-chip">🗺️ Route AI</span>
+          <span class="pack-agent-chip">🚛 Fleet</span>
+          <span class="pack-agent-chip">📡 Tracking</span>
+          <span class="pack-agent-chip">⚖️ Compliance</span>
+        </div>
+        <div class="pack-footer">
+          <span class="pack-installs">Installed by <strong>2,103</strong> teams</span>
+          <button class="btn-install">Install pack</button>
+        </div>
+      </div>
+
+      <div class="pack-card education" tabindex="0">
+        <div class="pack-top">
+          <div class="pack-icon-wrap">🎓</div>
+          <div class="pack-badges">
+            <span class="pack-trust-badge badge-official">⭐ Official</span>
+            <span class="pack-trust-badge badge-verified">✓ Verified</span>
+          </div>
+        </div>
+        <div class="pack-name">EdTech Suite</div>
+        <div class="pack-desc">Adaptive learning agents with curriculum design, assessment generation, progress tracking, and LMS integration.</div>
+        <div class="pack-agents">
+          <span class="pack-agent-chip">📚 Curriculum</span>
+          <span class="pack-agent-chip">📝 Assessment</span>
+          <span class="pack-agent-chip">🧑‍🏫 Tutor AI</span>
+          <span class="pack-agent-chip">📈 Analytics</span>
+        </div>
+        <div class="pack-footer">
+          <span class="pack-installs">Installed by <strong>6,728</strong> teams</span>
+          <button class="btn-install">Install pack</button>
+        </div>
+      </div>
+
+      <div class="pack-card finance" tabindex="0">
+        <div class="pack-top">
+          <div class="pack-icon-wrap">💰</div>
+          <div class="pack-badges">
+            <span class="pack-trust-badge badge-regulated">⚖️ Regulated</span>
+            <span class="pack-trust-badge badge-enterprise-ready">🏢 Enterprise</span>
+          </div>
+        </div>
+        <div class="pack-name">FinTech Core</div>
+        <div class="pack-desc">SOX/PCI-compliant agents for transaction processing, fraud detection, regulatory reporting, and risk modeling.</div>
+        <div class="pack-agents">
+          <span class="pack-agent-chip">🔍 Fraud AI</span>
+          <span class="pack-agent-chip">📊 Risk</span>
+          <span class="pack-agent-chip">⚖️ Compliance</span>
+          <span class="pack-agent-chip">💹 Trading</span>
+        </div>
+        <div class="pack-footer">
+          <span class="pack-installs">Installed by <strong>3,214</strong> teams</span>
+          <button class="btn-install">Install pack</button>
+        </div>
+      </div>
+
+      <div class="pack-card creator" tabindex="0">
+        <div class="pack-top">
+          <div class="pack-icon-wrap">🎨</div>
+          <div class="pack-badges">
+            <span class="pack-trust-badge badge-verified">✓ Verified</span>
+          </div>
+        </div>
+        <div class="pack-name">Creator Tools</div>
+        <div class="pack-desc">Monetization agents for creators — subscription management, digital product delivery, fan analytics, and content AI.</div>
+        <div class="pack-agents">
+          <span class="pack-agent-chip">💳 Billing</span>
+          <span class="pack-agent-chip">📢 Marketing</span>
+          <span class="pack-agent-chip">📹 Content AI</span>
+          <span class="pack-agent-chip">🌟 Community</span>
+        </div>
+        <div class="pack-footer">
+          <span class="pack-installs">Installed by <strong>8,932</strong> teams</span>
+          <button class="btn-install">Install pack</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECTION 6 — TRUST ─── -->
+<div class="trust-section">
+  <div class="trust-inner">
+    <div class="section-label">Trust infrastructure</div>
+    <h2 class="section-title">Built for production, not demos.</h2>
+    <p class="section-sub">Every runtime, snapshot, and deploy is backed by enterprise-grade reliability infrastructure.</p>
+
+    <div class="trust-grid">
+      <div class="trust-card">
+        <div class="trust-icon">📸</div>
+        <div class="trust-name">Atomic Snapshots</div>
+        <div class="trust-desc">Full runtime state captured before every AI operation. Roll back any change in seconds — not minutes.</div>
+        <div class="trust-metric">⚡ Restore &lt;30s</div>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">🔌</div>
+        <div class="trust-name">Detached Runtimes</div>
+        <div class="trust-desc">Each runtime runs in full isolation. One build never affects another. Kill switches per workspace.</div>
+        <div class="trust-metric">🛡️ Full isolation</div>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">🔒</div>
+        <div class="trust-name">Security Audit Layer</div>
+        <div class="trust-desc">Immutable audit trail for every agent action, API call, and code change. SOC 2 ready.</div>
+        <div class="trust-metric">📋 Full audit log</div>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">⚡</div>
+        <div class="trust-name">99.9% Uptime SLA</div>
+        <div class="trust-desc">Multi-region redundancy, automatic failover, and zero-downtime deployments included on Pro+.</div>
+        <div class="trust-metric">✅ 99.9% SLA</div>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">🌐</div>
+        <div class="trust-name">Global Preview CDN</div>
+        <div class="trust-desc">Every runtime preview served from edge nodes worldwide. Sub-100ms load for any collaborator.</div>
+        <div class="trust-metric">🌍 &lt;100ms global</div>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">🔑</div>
+        <div class="trust-name">Secrets Management</div>
+        <div class="trust-desc">Env vars, API keys, and credentials encrypted at rest. Never exposed in logs or agent output.</div>
+        <div class="trust-metric">🔐 AES-256 encrypted</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECTION 7 — PRICING ─── -->
+<div class="pricing-section" id="pricing">
+  <div class="pricing-inner">
+    <div class="section-label">Simple pricing</div>
+    <h2 class="section-title">Start free. Scale without limits.</h2>
+    <p class="section-sub">One plan for every stage — from solo experiment to funded company.</p>
+
+    <div class="pricing-grid">
+
+      <!-- FREE -->
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">
+          <span class="plan-price-num">$0</span>
+          <span class="plan-price-period">/month</span>
+        </div>
+        <div class="plan-desc">Everything you need to start building.</div>
+        <div class="plan-divider"></div>
+        <div class="plan-features">
+          <div class="plan-feature"><div class="feature-check yes">✓</div>3 runtimes</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>1 active at a time</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>10 AI generations/day</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>5 remixes/day</div>
+          <div class="plan-feature"><div class="feature-check no">✗</div>Private previews</div>
+          <div class="plan-feature"><div class="feature-check no">✗</div>Paid marketplace packs</div>
+        </div>
+        <button class="plan-cta outline">Get started free</button>
+      </div>
+
+      <!-- CREATOR -->
+      <div class="plan-card featured">
+        <div class="plan-badge-wrap"><span class="plan-popular">Most popular</span></div>
+        <div class="plan-name">Creator</div>
+        <div class="plan-price">
+          <span class="plan-price-num">$19</span>
+          <span class="plan-price-period">/month</span>
+        </div>
+        <div class="plan-desc">For builders shipping real products.</div>
+        <div class="plan-divider"></div>
+        <div class="plan-features">
+          <div class="plan-feature"><div class="feature-check yes">✓</div>10 runtimes</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>3 active at a time</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>100 AI generations/day</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>50 remixes/day</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>Private previews</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>Paid marketplace packs</div>
+        </div>
+        <button class="plan-cta solid">Start Creator</button>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan-card">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">
+          <span class="plan-price-num">$49</span>
+          <span class="plan-price-period">/month</span>
+        </div>
+        <div class="plan-desc">Unlimited power for serious teams.</div>
+        <div class="plan-divider"></div>
+        <div class="plan-features">
+          <div class="plan-feature"><div class="feature-check yes">✓</div>50 runtimes</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>10 active at a time</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>Unlimited AI generations</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>Unlimited remixes</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>Custom branding</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>Enterprise packs</div>
+        </div>
+        <button class="plan-cta outline">Start Pro</button>
+      </div>
+
+      <!-- ENTERPRISE -->
+      <div class="plan-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">
+          <span class="plan-price-num" style="font-size:28px;line-height:1.4;">Custom</span>
+        </div>
+        <div class="plan-desc">Dedicated infrastructure, SLAs, and compliance.</div>
+        <div class="plan-divider"></div>
+        <div class="plan-features">
+          <div class="plan-feature"><div class="feature-check yes">✓</div>Unlimited runtimes</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>Unlimited everything</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>SSO + SAML</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>Dedicated infra</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>99.9% SLA</div>
+          <div class="plan-feature"><div class="feature-check yes">✓</div>SOC 2 / HIPAA</div>
+        </div>
+        <button class="plan-cta enterprise-cta">Talk to sales →</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECTION 8 — FINAL CTA ─── -->
+<div class="cta-section">
+  <!-- Decorative orbiting rings -->
+  <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;overflow:hidden;" aria-hidden="true">
+    <div style="width:600px;height:600px;border-radius:50%;border:1px solid rgba(99,102,241,0.06);position:absolute;"></div>
+    <div style="width:900px;height:900px;border-radius:50%;border:1px solid rgba(99,102,241,0.04);position:absolute;"></div>
+    <div style="width:1200px;height:1200px;border-radius:50%;border:1px solid rgba(99,102,241,0.02);position:absolute;"></div>
+  </div>
+
+  <div class="cta-section-inner">
+    <div class="live-badge" style="margin:0 auto 28px;width:fit-content;"><div class="live-dot"></div>2,847 companies building right now</div>
+    <h2 class="cta-headline">
+      Build your<br />
+      <span class="highlight">company.</span>
+    </h2>
+    <p class="cta-sub">Type one sentence. An AI company wakes up and starts building.</p>
+    <div class="cta-buttons">
+      <button class="btn-cta-primary">Start building free →</button>
+      <button class="btn-cta-ghost">Watch a build live</button>
+    </div>
+    <p class="cta-note">No credit card. No setup. First runtime in &lt;60 seconds.</p>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="nav-logo-mark" style="width:22px;height:22px;font-size:11px;">F</div>
+      Factory
+    </div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="#">Product</a>
+      <a href="#">Docs</a>
+      <a href="#">Marketplace</a>
+      <a href="#">Pricing</a>
+      <a href="#">Blog</a>
+      <a href="#">Status</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </nav>
+    <div class="footer-copy">© 2025 Factory. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- Mockup label -->
+<div class="mockup-banner" aria-label="Design mockup indicator">SERIAL 20A · MOCKUP</div>
+
+<script>
+// Textarea clears placeholder on focus
+const ta = document.querySelector('.prompt-textarea');
+const ph = document.querySelector('.prompt-placeholder');
+if (ta && ph) {
+  ta.addEventListener('focus', () => { ph.style.opacity = '0'; });
+  ta.addEventListener('blur', () => { if (!ta.value) ph.style.opacity = '1'; });
+  ta.addEventListener('input', () => { ph.style.opacity = ta.value ? '0' : '1'; });
+}
+
+// Chip clicks populate textarea
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    if (ta) {
+      ta.value = chip.textContent.replace(/^[^\w]+/, '').trim();
+      ph.style.opacity = '0';
+      ta.focus();
+    }
+  });
+});
+
+// Animate counters subtly
+let ticks = 0;
+setInterval(() => {
+  ticks++;
+  const agents = document.querySelectorAll('.status-num');
+  if (agents[0]) agents[0].textContent = (2847 + Math.floor(Math.random()*3 - 1)).toLocaleString();
+  if (agents[1]) agents[1].textContent = (1204 + Math.floor(Math.random()*2 - 1)).toLocaleString();
+  if (ticks % 4 === 0 && agents[2]) agents[2].textContent = (8391 + ticks).toLocaleString();
+  if (ticks % 8 === 0 && agents[3]) agents[3].textContent = (342 + Math.floor(ticks/8)).toLocaleString();
+}, 3000);
+</script>
+
+</body>
+</html>
