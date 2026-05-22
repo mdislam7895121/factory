@@ -568,3 +568,64 @@ model LoopRun {
   @@index([loopId, createdAt])
   @@index([status])
 }
+
+// ── SERIAL 18: Creator Identity + Social Layer ────────────────────────────────
+
+enum ProfileVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum SocialSignalType {
+  LIKE
+  SAVE
+  SHARE
+  VIEW
+  REMIX
+}
+
+model CreatorProfile {
+  id           String            @id @default(uuid())
+  userId       String            @unique
+  handle       String            @unique
+  displayName  String
+  bio          String?
+  avatarUrl    String?
+  websiteUrl   String?
+  publicEmail  String?
+  country      String?
+  skills       String[]
+  verified     Boolean           @default(false)
+  visibility   ProfileVisibility @default(PUBLIC)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([handle])
+  @@index([userId])
+}
+
+model CreatorFollow {
+  id             String   @id @default(uuid())
+  followerUserId String
+  creatorUserId  String
+  createdAt      DateTime @default(now())
+
+  @@unique([followerUserId, creatorUserId])
+  @@index([creatorUserId])
+  @@index([followerUserId])
+}
+
+model AppSocialSignal {
+  id             String          @id @default(uuid())
+  projectId      String
+  runtimeId      String?
+  previewRouteId String?
+  userId         String?
+  signalType     SocialSignalType
+  ipHash         String?
+  createdAt      DateTime        @default(now())
+
+  @@index([projectId])
+  @@index([signalType])
+  @@index([createdAt])
+}

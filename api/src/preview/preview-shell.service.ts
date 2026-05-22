@@ -11,14 +11,22 @@ function esc(v: unknown): string {
 }
 
 export interface ShellContext {
-  runtimeId:  string;
-  previewId:  string;   // original URL param (slug or id)
-  visibility: string;
-  status:     string;
-  sleepState: string;
-  allowRemix: boolean;
-  projectId:  string | null;
-  previewUrl: string | null;
+  runtimeId:           string;
+  previewId:           string;   // original URL param (slug or id)
+  visibility:          string;
+  status:              string;
+  sleepState:          string;
+  allowRemix:          boolean;
+  projectId:           string | null;
+  previewUrl:          string | null;
+  // 18-06: Social metadata (public-safe; only set for PUBLIC previews)
+  creatorHandle?:      string;
+  creatorDisplayName?: string;
+  likeCount?:          number;
+  saveCount?:          number;
+  remixCount?:         number;
+  remixedFromHandle?:  string;
+  remixedFromSlug?:    string;
 }
 
 @Injectable()
@@ -31,6 +39,15 @@ export class PreviewShellService {
     const previewId = esc(ctx.previewId);
     const projectId = ctx.projectId ? esc(ctx.projectId) : '';
     const activityEndpoint = projectId ? `/v1/activity/${projectId}/public` : '';
+    // 18-06: Social context — only available for PUBLIC previews
+    const creatorHandle      = isPublic && ctx.creatorHandle      ? esc(ctx.creatorHandle)      : '';
+    const creatorDisplayName = isPublic && ctx.creatorDisplayName ? esc(ctx.creatorDisplayName) : '';
+    const likeCount          = isPublic ? (ctx.likeCount  ?? 0) : 0;
+    const saveCount          = isPublic ? (ctx.saveCount  ?? 0) : 0;
+    const remixCount         = isPublic ? (ctx.remixCount ?? 0) : 0;
+    const remixedFromHandle  = isPublic && ctx.remixedFromHandle ? esc(ctx.remixedFromHandle) : '';
+    const remixedFromSlug    = isPublic && ctx.remixedFromSlug   ? esc(ctx.remixedFromSlug)   : '';
+    const hasSocial          = isPublic && (creatorHandle || projectId);
 
     return `<!DOCTYPE html>
 <html lang="en">
@@ -104,6 +121,22 @@ ${isPublic ? `
   cursor:pointer;background:var(--accent);color:#fff}
 #modal-close{position:absolute;top:20px;right:16px;background:none;border:none;
   font-size:20px;cursor:pointer;color:var(--muted)}
+/* 18-06: Social bar */
+#social-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bar-bg);
+  border-top:1px solid var(--border);display:none;align-items:center;gap:10px;
+  padding:8px 14px;font-size:12px;z-index:18;flex-wrap:wrap}
+#social-bar.visible{display:flex}
+.soc-creator{display:flex;align-items:center;gap:5px;text-decoration:none;color:var(--fg);font-weight:600}
+.soc-creator-dot{width:22px;height:22px;border-radius:50%;background:var(--accent);
+  display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;flex-shrink:0}
+.soc-actions{display:flex;gap:8px;margin-left:auto;align-items:center}
+.soc-btn{background:none;border:1px solid var(--border);border-radius:6px;
+  color:var(--muted);font-size:11px;font-weight:600;padding:4px 9px;cursor:pointer;
+  display:flex;align-items:center;gap:4px;line-height:1}
+.soc-btn.liked{border-color:rgba(255,79,79,.4);color:#ff4f4f}
+.soc-btn.saved{border-color:rgba(76,175,80,.4);color:var(--green)}
+.soc-remix-source{font-size:10px;color:var(--muted);width:100%;padding-top:2px}
+.soc-remix-source a{color:var(--accent);text-decoration:none}
 #activity-panel{position:fixed;bottom:var(--bottom-h);left:0;right:0;max-height:220px;
   background:var(--bar-bg);border-top:1px solid rgba(128,128,128,.12);overflow-y:auto;
   transform:translateY(100%);transition:transform .3s;z-index:15}
@@ -146,6 +179,29 @@ ${isPublic ? `
 <div id="branding-bar">
   <span>Built with Factory</span>
   <a href="/p/${previewId}/shell">🔗 Share</a>
+</div>
+` : ''}
+${hasSocial ? `
+<div id="social-bar" class="visible">
+  ${creatorHandle
+    ? `<a class="soc-creator" href="/u/${creatorHandle}" rel="noopener">
+        <div class="soc-creator-dot">${creatorDisplayName ? creatorDisplayName.charAt(0).toUpperCase() : '?'}</div>
+        <span>${creatorDisplayName || '@' + creatorHandle}</span>
+      </a>`
+    : ''}
+  <div class="soc-actions">
+    ${projectId ? `
+    <button class="soc-btn" id="soc-like" title="Like">❤️ <span id="like-count">${likeCount}</span></button>
+    <button class="soc-btn" id="soc-save" title="Save">🔖 <span id="save-count">${saveCount}</span></button>
+    ` : ''}
+    ${creatorHandle ? `<a class="soc-btn" href="/u/${creatorHandle}">👤 View creator</a>` : ''}
+  </div>
+  ${remixedFromHandle
+    ? `<div class="soc-remix-source">🔀 Remixed from
+        <a href="${remixedFromSlug ? '/p/' + remixedFromSlug + '/shell' : '/u/' + remixedFromHandle}" rel="noopener">@${remixedFromHandle}</a>
+        — <a href="/p/${previewId}/remix">Remix this app</a>
+       </div>`
+    : ''}
 </div>
 ` : ''}
 
@@ -347,6 +403,36 @@ async function loadActivity() {
   }
 }
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+` : ''}
+
+// 18-06: Social signal buttons (like / save)
+${hasSocial && projectId ? `
+const likeBtn = document.getElementById('soc-like');
+const saveBtn = document.getElementById('soc-save');
+const PROJECT_ID = '${projectId}';
+
+function postSignal(signalType, btn, countId) {
+  fetch('/v1/social/apps/' + PROJECT_ID + '/signal', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ signalType })
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if (d.ok && d.recorded) {
+      btn.classList.add(signalType === 'LIKE' ? 'liked' : 'saved');
+      var el = document.getElementById(countId);
+      if (el) el.textContent = String(parseInt(el.textContent || '0', 10) + 1);
+    }
+  }).catch(function(){});
+}
+
+if (likeBtn) likeBtn.addEventListener('click', function() {
+  if (likeBtn.classList.contains('liked')) return;
+  postSignal('LIKE', likeBtn, 'like-count');
+});
+if (saveBtn) saveBtn.addEventListener('click', function() {
+  if (saveBtn.classList.contains('saved')) return;
+  postSignal('SAVE', saveBtn, 'save-count');
+});
 ` : ''}
 
 // Boot

@@ -20,13 +20,14 @@ import { LegalModule } from './legal/legal.module';
 import { DemoModule } from './demo/demo.module';
 import { AgentsModule } from './agents/agents.module';
 import { MarketplaceModule } from './agents/marketplace/marketplace.module';
+import { SocialModule } from './social/social.module';
 
 @Module({
   imports: [
     RedisModule, AuthModule, SandboxModule, PreviewModule, RemixModule,
     ActivityStreamModule, SnapshotModule,
     AdminModule, SecurityAuditModule, BetaModule, LegalModule, DemoModule, AgentsModule,
-    MarketplaceModule,
+    MarketplaceModule, SocialModule,
   ],
   controllers: [AppController, Serial11Controller],
   providers: [

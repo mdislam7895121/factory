@@ -384,6 +384,26 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
 .share-btn:hover{border-color:var(--accent);background:rgba(108,108,255,.05)}
 .share-btn:active{opacity:.7}
 .share-icon{font-size:18px}
+/* 18-10: Creator card in reveal */
+.creator-card{max-width:640px;margin:14px auto 0;padding:0 14px;width:100%}
+.creator-card-inner{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;display:flex;align-items:center;gap:12px}
+.creator-avatar{width:38px;height:38px;border-radius:50%;background:var(--accent);
+  display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;flex-shrink:0;font-weight:700}
+.creator-info{flex:1;min-width:0}
+.creator-name{font-size:13px;font-weight:700}
+.creator-handle{font-size:11px;color:var(--muted)}
+.creator-social-row{display:flex;gap:12px;margin-top:4px}
+.creator-stat{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:3px}
+.creator-stat b{color:var(--fg)}
+.btn-pub-profile{font-size:11px;font-weight:600;background:var(--accent);color:#fff;
+  border:none;border-radius:7px;padding:6px 12px;cursor:pointer;flex-shrink:0}
+.publish-prompt{max-width:640px;margin:10px auto 0;padding:0 14px;width:100%}
+.publish-card{background:rgba(108,108,255,.06);border:1px solid rgba(108,108,255,.18);
+  border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.publish-card p{flex:1;font-size:12px;color:var(--muted);line-height:1.4}
+.btn-publish{font-size:11px;font-weight:600;background:var(--accent);color:#fff;
+  border:none;border-radius:7px;padding:6px 12px;cursor:pointer;flex-shrink:0;white-space:nowrap}
 .cta-wrap{max-width:640px;margin:24px auto 0;padding:0 14px 40px;text-align:center;width:100%}
 .cta-wrap p{color:var(--muted);font-size:13px;margin-bottom:14px}
 .cta-btn{display:inline-block;padding:13px 28px;background:var(--accent);color:#fff;
@@ -501,6 +521,28 @@ html,body{min-height:100%;background:var(--bg);color:var(--fg);font-family:-appl
       <button class="share-btn" id="btn-phone"><span class="share-icon">📱</span>Open on Phone</button>
       <button class="share-btn" id="btn-native"><span class="share-icon">⬆️</span>Share</button>
       <button class="share-btn" id="btn-remix-reveal"><span class="share-icon">🔀</span>Remix</button>
+    </div>
+  </div>
+  <!-- 18-10: Creator card -->
+  <div class="creator-card" id="creator-card" style="display:none">
+    <div class="creator-card-inner">
+      <div class="creator-avatar" id="creator-avatar">?</div>
+      <div class="creator-info">
+        <div class="creator-name" id="creator-name">Anonymous builder</div>
+        <div class="creator-handle" id="creator-handle"></div>
+        <div class="creator-social-row">
+          <span class="creator-stat">❤️ <b id="reveal-likes">0</b> likes</span>
+          <span class="creator-stat">🔀 <b id="reveal-remixes">0</b> remixes</span>
+        </div>
+      </div>
+      <button class="btn-pub-profile" id="btn-view-creator" style="display:none">View profile</button>
+    </div>
+  </div>
+  <!-- 18-10: Publish to profile prompt -->
+  <div class="publish-prompt" id="publish-prompt" style="display:none">
+    <div class="publish-card">
+      <p>Publish this app to your creator profile and get discovered by the community.</p>
+      <button class="btn-publish" id="btn-publish-app">Publish app →</button>
     </div>
   </div>
   <div class="cta-wrap">
@@ -929,6 +971,8 @@ function finishBuild() {
   // 11-03: Cinematic transition to reveal
   setTimeout(function() {
     showPhase('reveal');
+    // 18-10: Show creator card after reveal
+    showCreatorCard(demoProjectId);
   }, RECORD_MODE ? 2800 : 1600);
 }
 
@@ -972,6 +1016,43 @@ document.getElementById('btn-remix-reveal').addEventListener('click', function()
 document.getElementById('btn-cta').addEventListener('click', function() {
   window.location.href = '/?ref=demo';
 });
+
+// 18-10: Creator card in reveal — shown after build completes
+function showCreatorCard(projectId) {
+  var card = document.getElementById('creator-card');
+  var publishPrompt = document.getElementById('publish-prompt');
+  if (!card) return;
+  // Show creator card with demo defaults
+  card.style.display = 'block';
+  publishPrompt.style.display = 'block';
+  // Load social signal counts if project is known
+  if (projectId) {
+    fetch('/v1/social/apps/' + encodeURIComponent(projectId) + '/stats')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if (!d.ok) return;
+        var s = d.stats || {};
+        var likes   = document.getElementById('reveal-likes');
+        var remixes = document.getElementById('reveal-remixes');
+        if (likes)   likes.textContent   = String(s.likes   || 0);
+        if (remixes) remixes.textContent = String(s.remixes || 0);
+      }).catch(function(){});
+  }
+  var btnPublish = document.getElementById('btn-publish-app');
+  if (btnPublish) {
+    btnPublish.addEventListener('click', function() {
+      btnPublish.textContent = '✓ Published';
+      btnPublish.disabled = true;
+      if (projectId) {
+        fetch('/v1/social/apps/publish', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ projectId: projectId, title: document.getElementById('reveal-prompt-echo').textContent || 'Demo app', visibility: 'PUBLIC' })
+        }).catch(function(){});
+      }
+    });
+  }
+}
 
 document.getElementById('qr-close').addEventListener('click', function() {
   document.getElementById('qr-modal-bg').classList.remove('open');
