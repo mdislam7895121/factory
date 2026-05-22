@@ -716,3 +716,142 @@ model CreditBalance {
 
   @@index([workspaceId])
 }
+
+// ── 20E: Project Memory Engine ────────────────────────────────────────────────
+
+enum MemoryVisibility {
+  PUBLIC
+  WORKSPACE
+  PRIVATE
+}
+
+enum MemoryPriority {
+  LOW
+  NORMAL
+  HIGH
+  CRITICAL
+}
+
+enum DecisionLockState {
+  UNLOCKED
+  SOFT_LOCKED
+  HARD_LOCKED
+}
+
+enum ContextCompressionLevel {
+  FULL
+  BALANCED
+  MINIMAL
+  EMERGENCY
+}
+
+model UserAgentProfile {
+  id             String            @id @default(uuid())
+  userId         String            @unique
+  workspaceId    String?
+  founderName    String?
+  company        String?
+  role           String?
+  country        String?
+  timezone       String?
+  preferredLang  String            @default("en")
+  techLevel      String            @default("intermediate")
+  commStyle      String            @default("balanced")
+  preferredStack String[]
+  goals          String[]
+  visibility     MemoryVisibility  @default(PRIVATE)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@index([workspaceId])
+}
+
+model ProjectMemory {
+  id          String          @id @default(uuid())
+  projectId   String
+  workspaceId String?
+  userId      String?
+  key         String
+  content     String          @db.Text
+  priority    MemoryPriority  @default(NORMAL)
+  pinned      Boolean         @default(false)
+  archived    Boolean         @default(false)
+  tags        String[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([projectId])
+  @@index([workspaceId])
+}
+
+model ProjectDecision {
+  id          String            @id @default(uuid())
+  projectId   String
+  workspaceId String?
+  title       String
+  description String?           @db.Text
+  lockState   DecisionLockState @default(UNLOCKED)
+  lockedAt    DateTime?
+  lockedBy    String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([projectId])
+  @@index([workspaceId])
+}
+
+model MemorySnapshot {
+  id          String   @id @default(uuid())
+  workspaceId String
+  projectId   String?
+  label       String
+  payload     String   @db.Text
+  createdAt   DateTime @default(now())
+
+  @@index([workspaceId])
+}
+
+model ContextPack {
+  id               String                  @id @default(uuid())
+  workspaceId      String
+  projectId        String?
+  label            String
+  content          String                  @db.Text
+  compressionLevel ContextCompressionLevel @default(BALANCED)
+  tokenEstimate    Int                     @default(0)
+  usageCount       Int                     @default(0)
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+
+  @@index([workspaceId])
+}
+
+model AgentInstructionSet {
+  id          String   @id @default(uuid())
+  workspaceId String
+  userId      String?
+  name        String
+  rules       String[]
+  active      Boolean  @default(true)
+  priority    MemoryPriority @default(NORMAL)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([workspaceId])
+}
+
+model MemoryAuditEvent {
+  id          String   @id @default(uuid())
+  workspaceId String?
+  projectId   String?
+  userId      String?
+  action      String
+  targetType  String
+  targetId    String
+  before      String?  @db.Text
+  after       String?  @db.Text
+  createdAt   DateTime @default(now())
+
+  @@index([workspaceId])
+  @@index([projectId])
+}

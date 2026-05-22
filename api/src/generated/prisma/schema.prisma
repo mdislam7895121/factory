@@ -568,3 +568,290 @@ model LoopRun {
   @@index([loopId, createdAt])
   @@index([status])
 }
+
+// ── SERIAL 18: Creator Identity + Social Layer ────────────────────────────────
+
+enum ProfileVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum SocialSignalType {
+  LIKE
+  SAVE
+  SHARE
+  VIEW
+  REMIX
+}
+
+model CreatorProfile {
+  id          String            @id @default(uuid())
+  userId      String            @unique
+  handle      String            @unique
+  displayName String
+  bio         String?
+  avatarUrl   String?
+  websiteUrl  String?
+  publicEmail String?
+  country     String?
+  skills      String[]
+  verified    Boolean           @default(false)
+  visibility  ProfileVisibility @default(PUBLIC)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([handle])
+  @@index([userId])
+}
+
+model CreatorFollow {
+  id             String   @id @default(uuid())
+  followerUserId String
+  creatorUserId  String
+  createdAt      DateTime @default(now())
+
+  @@unique([followerUserId, creatorUserId])
+  @@index([creatorUserId])
+  @@index([followerUserId])
+}
+
+model AppSocialSignal {
+  id             String           @id @default(uuid())
+  projectId      String
+  runtimeId      String?
+  previewRouteId String?
+  userId         String?
+  signalType     SocialSignalType
+  ipHash         String?
+  createdAt      DateTime         @default(now())
+
+  @@index([projectId])
+  @@index([signalType])
+  @@index([createdAt])
+}
+
+// ── SERIAL 19: Monetization + Billing ────────────────────────────────────────
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  TRIALING
+  INCOMPLETE
+}
+
+enum BillingTier {
+  FREE
+  CREATOR
+  PRO
+  ENTERPRISE
+}
+
+enum UsageEventType {
+  RUNTIME_CREATED
+  AI_GENERATION
+  PREVIEW_VIEW
+  REMIX
+  PREMIUM_PACK_INSTALL
+  SNAPSHOT_CREATED
+}
+
+model BillingPlan {
+  id           String      @id @default(uuid())
+  slug         String      @unique
+  name         String
+  tier         BillingTier
+  monthlyPrice Int // USD cents; -1 = custom
+  yearlyPrice  Int
+  currency     String      @default("USD")
+  features     String[]
+  limits       Json
+  active       Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([slug])
+  @@index([tier])
+}
+
+model WorkspaceSubscription {
+  id                     String             @id @default(uuid())
+  workspaceId            String             @unique
+  userId                 String
+  planSlug               String             @default("free")
+  tier                   BillingTier        @default(FREE)
+  provider               String             @default("stripe")
+  providerCustomerId     String?
+  providerSubscriptionId String?
+  status                 SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart     DateTime?
+  currentPeriodEnd       DateTime?
+  cancelAtPeriodEnd      Boolean            @default(false)
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+
+  @@index([workspaceId])
+  @@index([userId])
+  @@index([status])
+}
+
+model UsageEvent {
+  id          String         @id @default(uuid())
+  workspaceId String
+  userId      String?
+  eventType   UsageEventType
+  quantity    Int            @default(1)
+  metadata    Json?
+  createdAt   DateTime       @default(now())
+
+  @@index([workspaceId, createdAt])
+  @@index([eventType, createdAt])
+}
+
+model CreditBalance {
+  id               String   @id @default(uuid())
+  workspaceId      String   @unique
+  creditsRemaining Int      @default(0)
+  updatedAt        DateTime @updatedAt
+
+  @@index([workspaceId])
+}
+
+// ── 20E: Project Memory Engine ────────────────────────────────────────────────
+
+enum MemoryVisibility {
+  PUBLIC
+  WORKSPACE
+  PRIVATE
+}
+
+enum MemoryPriority {
+  LOW
+  NORMAL
+  HIGH
+  CRITICAL
+}
+
+enum DecisionLockState {
+  UNLOCKED
+  SOFT_LOCKED
+  HARD_LOCKED
+}
+
+enum ContextCompressionLevel {
+  FULL
+  BALANCED
+  MINIMAL
+  EMERGENCY
+}
+
+model UserAgentProfile {
+  id             String           @id @default(uuid())
+  userId         String           @unique
+  workspaceId    String?
+  founderName    String?
+  company        String?
+  role           String?
+  country        String?
+  timezone       String?
+  preferredLang  String           @default("en")
+  techLevel      String           @default("intermediate")
+  commStyle      String           @default("balanced")
+  preferredStack String[]
+  goals          String[]
+  visibility     MemoryVisibility @default(PRIVATE)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@index([workspaceId])
+}
+
+model ProjectMemory {
+  id          String         @id @default(uuid())
+  projectId   String
+  workspaceId String?
+  userId      String?
+  key         String
+  content     String         @db.Text
+  priority    MemoryPriority @default(NORMAL)
+  pinned      Boolean        @default(false)
+  archived    Boolean        @default(false)
+  tags        String[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([projectId])
+  @@index([workspaceId])
+}
+
+model ProjectDecision {
+  id          String            @id @default(uuid())
+  projectId   String
+  workspaceId String?
+  title       String
+  description String?           @db.Text
+  lockState   DecisionLockState @default(UNLOCKED)
+  lockedAt    DateTime?
+  lockedBy    String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([projectId])
+  @@index([workspaceId])
+}
+
+model MemorySnapshot {
+  id          String   @id @default(uuid())
+  workspaceId String
+  projectId   String?
+  label       String
+  payload     String   @db.Text
+  createdAt   DateTime @default(now())
+
+  @@index([workspaceId])
+}
+
+model ContextPack {
+  id               String                  @id @default(uuid())
+  workspaceId      String
+  projectId        String?
+  label            String
+  content          String                  @db.Text
+  compressionLevel ContextCompressionLevel @default(BALANCED)
+  tokenEstimate    Int                     @default(0)
+  usageCount       Int                     @default(0)
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+
+  @@index([workspaceId])
+}
+
+model AgentInstructionSet {
+  id          String         @id @default(uuid())
+  workspaceId String
+  userId      String?
+  name        String
+  rules       String[]
+  active      Boolean        @default(true)
+  priority    MemoryPriority @default(NORMAL)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([workspaceId])
+}
+
+model MemoryAuditEvent {
+  id          String   @id @default(uuid())
+  workspaceId String?
+  projectId   String?
+  userId      String?
+  action      String
+  targetType  String
+  targetId    String
+  before      String?  @db.Text
+  after       String?  @db.Text
+  createdAt   DateTime @default(now())
+
+  @@index([workspaceId])
+  @@index([projectId])
+}

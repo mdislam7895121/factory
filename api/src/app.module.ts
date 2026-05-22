@@ -22,13 +22,14 @@ import { AgentsModule } from './agents/agents.module';
 import { MarketplaceModule } from './agents/marketplace/marketplace.module';
 import { SocialModule } from './social/social.module';
 import { BillingModule } from './billing/billing.module';
+import { MemoryModule } from './memory/memory.module';
 
 @Module({
   imports: [
     RedisModule, AuthModule, SandboxModule, PreviewModule, RemixModule,
     ActivityStreamModule, SnapshotModule,
     AdminModule, SecurityAuditModule, BetaModule, LegalModule, DemoModule, AgentsModule,
-    MarketplaceModule, SocialModule, BillingModule,
+    MarketplaceModule, SocialModule, BillingModule, MemoryModule,
   ],
   controllers: [AppController, Serial11Controller],
   providers: [

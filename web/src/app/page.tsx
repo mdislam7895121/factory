@@ -131,7 +131,7 @@ export default function Home() {
           Factory
         </div>
         <ul style={{ display: 'flex', alignItems: 'center', gap: 4, listStyle: 'none', margin: 0, padding: 0 }} className="hidden md:flex">
-          {[['#how','How it works'],['/discover','Ecosystem'],['#marketplace','Marketplace'],['#pricing','Pricing']].map(([href,label]) => (
+          {[['#how','How it works'],['/discover','Ecosystem'],['#marketplace','Marketplace'],['#pricing','Pricing'],['/memory','Memory']].map(([href,label]) => (
             <li key={href}><a href={href} style={{ padding: '6px 13px', borderRadius: 8, fontSize: 13, color: TEXT_MUTED, textDecoration: 'none', display: 'block', transition: 'color 0.15s' }} onMouseEnter={e=>(e.currentTarget.style.color='#f1f5f9')} onMouseLeave={e=>(e.currentTarget.style.color=TEXT_MUTED)}>{label}</a></li>
           ))}
         </ul>

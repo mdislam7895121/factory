@@ -428,9 +428,196 @@ exports.Prisma.LoopRunScalarFieldEnum = {
   completedAt: 'completedAt'
 };
 
+exports.Prisma.CreatorProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  handle: 'handle',
+  displayName: 'displayName',
+  bio: 'bio',
+  avatarUrl: 'avatarUrl',
+  websiteUrl: 'websiteUrl',
+  publicEmail: 'publicEmail',
+  country: 'country',
+  skills: 'skills',
+  verified: 'verified',
+  visibility: 'visibility',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CreatorFollowScalarFieldEnum = {
+  id: 'id',
+  followerUserId: 'followerUserId',
+  creatorUserId: 'creatorUserId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.AppSocialSignalScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  runtimeId: 'runtimeId',
+  previewRouteId: 'previewRouteId',
+  userId: 'userId',
+  signalType: 'signalType',
+  ipHash: 'ipHash',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.BillingPlanScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  tier: 'tier',
+  monthlyPrice: 'monthlyPrice',
+  yearlyPrice: 'yearlyPrice',
+  currency: 'currency',
+  features: 'features',
+  limits: 'limits',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkspaceSubscriptionScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  userId: 'userId',
+  planSlug: 'planSlug',
+  tier: 'tier',
+  provider: 'provider',
+  providerCustomerId: 'providerCustomerId',
+  providerSubscriptionId: 'providerSubscriptionId',
+  status: 'status',
+  currentPeriodStart: 'currentPeriodStart',
+  currentPeriodEnd: 'currentPeriodEnd',
+  cancelAtPeriodEnd: 'cancelAtPeriodEnd',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UsageEventScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  userId: 'userId',
+  eventType: 'eventType',
+  quantity: 'quantity',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.CreditBalanceScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  creditsRemaining: 'creditsRemaining',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserAgentProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  workspaceId: 'workspaceId',
+  founderName: 'founderName',
+  company: 'company',
+  role: 'role',
+  country: 'country',
+  timezone: 'timezone',
+  preferredLang: 'preferredLang',
+  techLevel: 'techLevel',
+  commStyle: 'commStyle',
+  preferredStack: 'preferredStack',
+  goals: 'goals',
+  visibility: 'visibility',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProjectMemoryScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  workspaceId: 'workspaceId',
+  userId: 'userId',
+  key: 'key',
+  content: 'content',
+  priority: 'priority',
+  pinned: 'pinned',
+  archived: 'archived',
+  tags: 'tags',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProjectDecisionScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  workspaceId: 'workspaceId',
+  title: 'title',
+  description: 'description',
+  lockState: 'lockState',
+  lockedAt: 'lockedAt',
+  lockedBy: 'lockedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MemorySnapshotScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  projectId: 'projectId',
+  label: 'label',
+  payload: 'payload',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ContextPackScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  projectId: 'projectId',
+  label: 'label',
+  content: 'content',
+  compressionLevel: 'compressionLevel',
+  tokenEstimate: 'tokenEstimate',
+  usageCount: 'usageCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AgentInstructionSetScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  userId: 'userId',
+  name: 'name',
+  rules: 'rules',
+  active: 'active',
+  priority: 'priority',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MemoryAuditEventScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  projectId: 'projectId',
+  userId: 'userId',
+  action: 'action',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  before: 'before',
+  after: 'after',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -441,6 +628,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.ProjectStatus = exports.$Enums.ProjectStatus = {
   QUEUED: 'QUEUED',
@@ -561,6 +754,69 @@ exports.LoopRunStatus = exports.$Enums.LoopRunStatus = {
   FAILED: 'FAILED'
 };
 
+exports.ProfileVisibility = exports.$Enums.ProfileVisibility = {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE'
+};
+
+exports.SocialSignalType = exports.$Enums.SocialSignalType = {
+  LIKE: 'LIKE',
+  SAVE: 'SAVE',
+  SHARE: 'SHARE',
+  VIEW: 'VIEW',
+  REMIX: 'REMIX'
+};
+
+exports.BillingTier = exports.$Enums.BillingTier = {
+  FREE: 'FREE',
+  CREATOR: 'CREATOR',
+  PRO: 'PRO',
+  ENTERPRISE: 'ENTERPRISE'
+};
+
+exports.SubscriptionStatus = exports.$Enums.SubscriptionStatus = {
+  ACTIVE: 'ACTIVE',
+  PAST_DUE: 'PAST_DUE',
+  CANCELED: 'CANCELED',
+  TRIALING: 'TRIALING',
+  INCOMPLETE: 'INCOMPLETE'
+};
+
+exports.UsageEventType = exports.$Enums.UsageEventType = {
+  RUNTIME_CREATED: 'RUNTIME_CREATED',
+  AI_GENERATION: 'AI_GENERATION',
+  PREVIEW_VIEW: 'PREVIEW_VIEW',
+  REMIX: 'REMIX',
+  PREMIUM_PACK_INSTALL: 'PREMIUM_PACK_INSTALL',
+  SNAPSHOT_CREATED: 'SNAPSHOT_CREATED'
+};
+
+exports.MemoryVisibility = exports.$Enums.MemoryVisibility = {
+  PUBLIC: 'PUBLIC',
+  WORKSPACE: 'WORKSPACE',
+  PRIVATE: 'PRIVATE'
+};
+
+exports.MemoryPriority = exports.$Enums.MemoryPriority = {
+  LOW: 'LOW',
+  NORMAL: 'NORMAL',
+  HIGH: 'HIGH',
+  CRITICAL: 'CRITICAL'
+};
+
+exports.DecisionLockState = exports.$Enums.DecisionLockState = {
+  UNLOCKED: 'UNLOCKED',
+  SOFT_LOCKED: 'SOFT_LOCKED',
+  HARD_LOCKED: 'HARD_LOCKED'
+};
+
+exports.ContextCompressionLevel = exports.$Enums.ContextCompressionLevel = {
+  FULL: 'FULL',
+  BALANCED: 'BALANCED',
+  MINIMAL: 'MINIMAL',
+  EMERGENCY: 'EMERGENCY'
+};
+
 exports.Prisma.ModelName = {
   HealthCheck: 'HealthCheck',
   Template: 'Template',
@@ -586,7 +842,21 @@ exports.Prisma.ModelName = {
   PreviewRoute: 'PreviewRoute',
   PreviewAccessLog: 'PreviewAccessLog',
   LoopConfig: 'LoopConfig',
-  LoopRun: 'LoopRun'
+  LoopRun: 'LoopRun',
+  CreatorProfile: 'CreatorProfile',
+  CreatorFollow: 'CreatorFollow',
+  AppSocialSignal: 'AppSocialSignal',
+  BillingPlan: 'BillingPlan',
+  WorkspaceSubscription: 'WorkspaceSubscription',
+  UsageEvent: 'UsageEvent',
+  CreditBalance: 'CreditBalance',
+  UserAgentProfile: 'UserAgentProfile',
+  ProjectMemory: 'ProjectMemory',
+  ProjectDecision: 'ProjectDecision',
+  MemorySnapshot: 'MemorySnapshot',
+  ContextPack: 'ContextPack',
+  AgentInstructionSet: 'AgentInstructionSet',
+  MemoryAuditEvent: 'MemoryAuditEvent'
 };
 
 /**
