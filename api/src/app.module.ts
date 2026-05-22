@@ -28,6 +28,7 @@ import { WorkspaceModule } from './workspace/workspace.module';
 import { EditorModule } from './editor/editor.module';
 import { PairProgrammerModule } from './pair-programmer/pair-programmer.module';
 import { CollaborationModule } from './collaboration/collaboration.module';
+import { OrganizationModule } from './organization/organization.module';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { CollaborationModule } from './collaboration/collaboration.module';
     ActivityStreamModule, SnapshotModule,
     AdminModule, SecurityAuditModule, BetaModule, LegalModule, DemoModule, AgentsModule,
     MarketplaceModule, SocialModule, BillingModule, MemoryModule, QualityModule, WorkspaceModule,
-    EditorModule, PairProgrammerModule, CollaborationModule,
+    EditorModule, PairProgrammerModule, CollaborationModule, OrganizationModule,
   ],
   controllers: [AppController, Serial11Controller],
   providers: [

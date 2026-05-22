@@ -378,11 +378,21 @@ export default function WorkspaceOverviewPage() {
           </div>
         ) : (
           <>
-            <div style={{ marginBottom: 28 }}>
-              <h1 style={{ margin: 0, fontSize: 30, fontWeight: 800, color: TEXT }}>{data?.name}</h1>
-              {data?.description && (
-                <p style={{ margin: '6px 0 0', color: TEXT_M, fontSize: 15 }}>{data.description}</p>
-              )}
+            <div style={{ marginBottom: 28, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+              <div>
+                <h1 style={{ margin: 0, fontSize: 30, fontWeight: 800, color: TEXT }}>{data?.name}</h1>
+                {data?.description && (
+                  <p style={{ margin: '6px 0 0', color: TEXT_M, fontSize: 15 }}>{data.description}</p>
+                )}
+              </div>
+              <Link
+                href={`/workspace/${workspaceId}/team`}
+                onClick={() => track('team_settings_open', { workspaceId })}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px',
+                  background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.3)',
+                  borderRadius: 8, color: '#818cf8', textDecoration: 'none', fontSize: 13, fontWeight: 700 }}>
+                👥 Team Settings
+              </Link>
             </div>
 
             {/* ---- Stats bar ---- */}
