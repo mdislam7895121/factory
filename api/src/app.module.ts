@@ -25,6 +25,7 @@ import { BillingModule } from './billing/billing.module';
 import { MemoryModule } from './memory/memory.module';
 import { QualityModule } from './quality/quality.module';
 import { WorkspaceModule } from './workspace/workspace.module';
+import { EditorModule } from './editor/editor.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { WorkspaceModule } from './workspace/workspace.module';
     ActivityStreamModule, SnapshotModule,
     AdminModule, SecurityAuditModule, BetaModule, LegalModule, DemoModule, AgentsModule,
     MarketplaceModule, SocialModule, BillingModule, MemoryModule, QualityModule, WorkspaceModule,
+    EditorModule,
   ],
   controllers: [AppController, Serial11Controller],
   providers: [
