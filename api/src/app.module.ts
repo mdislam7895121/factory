@@ -32,6 +32,7 @@ import { OrganizationModule } from './organization/organization.module';
 import { PublicStatusModule } from './public-status/public-status.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { OnboardingModule } from './onboarding/onboarding.module';
+import { CustomerSuccessModule } from './customer-success/customer-success.module';
 
 @Module({
   imports: [
@@ -40,7 +41,7 @@ import { OnboardingModule } from './onboarding/onboarding.module';
     AdminModule, SecurityAuditModule, BetaModule, LegalModule, DemoModule, AgentsModule,
     MarketplaceModule, SocialModule, BillingModule, MemoryModule, QualityModule, WorkspaceModule,
     EditorModule, PairProgrammerModule, CollaborationModule, OrganizationModule,
-    PublicStatusModule, FeedbackModule, OnboardingModule,
+    PublicStatusModule, FeedbackModule, OnboardingModule, CustomerSuccessModule,
   ],
   controllers: [AppController, Serial11Controller],
   providers: [
