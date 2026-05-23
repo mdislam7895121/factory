@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { track } from '@/lib/analytics';
 import { FeedbackWidget } from '@/components/FeedbackWidget';
+import { ActivationChecklist } from '@/components/ActivationChecklist';
 
 const API_BASE = process.env.NEXT_PUBLIC_PROD_API_BASE ?? '';
 
@@ -463,6 +464,7 @@ export default function WorkspacePage() {
         </div>
       </div>
       <FeedbackWidget route="/workspace" />
+      <ActivationChecklist />
     </>
   );
 }

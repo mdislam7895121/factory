@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { track } from '@/lib/analytics';
 import { FeedbackWidget } from '@/components/FeedbackWidget';
+import { ActivationChecklist } from '@/components/ActivationChecklist';
 
 const API_BASE = process.env.NEXT_PUBLIC_PROD_API_BASE ?? '';
 
@@ -689,6 +690,7 @@ export default function DemoPage() {
         <DemoFlow />
       </Suspense>
       <FeedbackWidget route="/demo" />
+      <ActivationChecklist />
     </>
   );
 }
