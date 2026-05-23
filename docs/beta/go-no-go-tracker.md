@@ -1,9 +1,31 @@
 # Beta Go/No-Go Tracker — Factory
 
-**Last updated:** 2026-05-23  
+**Last updated:** 2026-05-23 (SERIAL 34 update)
 **Current verdict:** `NO_GO`
 
 Update this file each time an item changes state. Commit and push.
+
+---
+
+## Netlify Blocker Status (SERIAL 34 Review)
+
+| Field | Value |
+|-------|-------|
+| Status | ❌ BLOCKED — Netlify site not created |
+| Deploy URL | `[PLACEHOLDER — not yet assigned]` |
+| Blocker owner | Founder / operator |
+| Next action | Follow `docs/beta/netlify-site-creation-checklist.md` |
+| Date last checked | 2026-05-23 |
+| Estimated unblock time | 15–30 minutes once operator executes checklist |
+| Verdict | **NO_GO** — will remain until live URL + smoke pass confirmed |
+
+**Why this is still blocked:**  
+The Netlify MCP API confirmed no Factory site exists on account `md-tazizul-islam-c5abzm8`.
+Connecting a GitHub repo to Netlify requires a browser OAuth flow — this cannot be done
+programmatically. The operator (founder) must complete this manually.
+
+**Exact next step:**  
+Open `docs/beta/netlify-operator-action.md` → follow steps 1–10.
 
 ---
 
@@ -14,7 +36,7 @@ Update this file each time an item changes state. Commit and push.
 | 1 | Netlify site created | ❌ NOT DONE | Account: md-tazizul-islam-c5abzm8 |
 | 2 | GitHub repo connected to Netlify | ❌ NOT DONE | mdtazizulislam/factory |
 | 3 | Branch deployed | ❌ NOT DONE | Target: claude/code-audit-review-bERxc or main |
-| 4 | Live URL exists | ❌ NOT DONE | — |
+| 4 | Live URL exists | ❌ NOT DONE | Placeholder: `https://[site].netlify.app` |
 | 5 | Env vars set on Netlify | ❌ NOT DONE | See netlify-site-creation-checklist.md |
 | 6 | Railway API reachable from frontend | ❌ DEFERRED | No Railway URL available |
 | 7 | Preview gateway reachable | ❌ DEFERRED | Non-critical for Wave 1 |
