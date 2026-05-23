@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { track } from '@/lib/analytics';
 
 const BG = '#030712';
 const SURFACE = 'rgba(10,22,40,0.82)';
@@ -19,9 +20,6 @@ const GLASS: React.CSSProperties = {
   borderRadius: 16,
 };
 
-function track(event: string, meta?: Record<string, unknown>): void {
-  console.debug('[factory:analytics]', { event, ts: Date.now(), ...meta });
-}
 
 interface AppData {
   id: string;
@@ -84,7 +82,7 @@ export default function AppPage() {
 
   useEffect(() => {
     if (app) {
-      track('app_open', { appId: app.id, category: app.category });
+      track('app_page_opened', { appId: app.id, category: app.category });
     }
   }, [app]);
 

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { track } from '@/lib/analytics';
 
 const API_BASE = process.env.NEXT_PUBLIC_PROD_API_BASE ?? '';
 
@@ -31,10 +32,6 @@ const TIER_COLORS: Record<string, string> = {
   PREVIEW_READY:    '#f59e0b',
   EXPERIMENTAL:     '#ef4444',
 };
-
-function track(event: string, meta?: Record<string, unknown>) {
-  console.debug('[factory:workspace]', { event, ts: Date.now(), ...meta });
-}
 
 function fmt(iso: string): string {
   try {
@@ -329,7 +326,7 @@ export default function WorkspacePage() {
   const [showCreate, setShowCreate] = useState(false);
 
   useEffect(() => {
-    track('page_view');
+    track('workspace_opened');
     (async () => {
       try {
         const r = await fetch(`${API_BASE}/v1/workspace`);

@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { track } from '@/lib/analytics';
 
 const API_BASE   = process.env.NEXT_PUBLIC_PROD_API_BASE ?? '';
 const BG         = '#030712';
@@ -14,10 +15,6 @@ const TEXT_M     = '#64748b';
 const BORDER     = 'rgba(255,255,255,0.07)';
 const GLASS: React.CSSProperties = { background: SURFACE, backdropFilter: 'blur(20px)', border: `1px solid ${BORDER}`, borderRadius: 12 };
 const FONT       = "'Geist', 'Inter', system-ui, sans-serif";
-
-function track(event: string, meta?: Record<string, unknown>) {
-  console.debug('[factory:quality]', { event, ts: Date.now(), ...meta });
-}
 
 const TIER_COLORS: Record<string, string> = {
   PRODUCTION_READY: ACCENT_G,
@@ -579,9 +576,9 @@ function AnalyticsTab() {
   const [error, setError]   = useState('');
 
   useEffect(() => {
+    track('quality_opened');
     (async () => {
       setLoading(true);
-      track('quality_analytics_load');
       try {
         const r = await fetch(`${API_BASE}/v1/quality/analytics/summary`);
         if (r.ok) {

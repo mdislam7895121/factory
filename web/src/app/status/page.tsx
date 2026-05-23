@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { apiUrl } from '@/lib/env';
+import { track } from '@/lib/analytics';
 
 const BG      = '#030712';
 const SURFACE = 'rgba(10,22,40,0.82)';
@@ -20,9 +21,6 @@ const GLASS: React.CSSProperties = {
   borderRadius: 12,
 };
 
-function track(event: string, meta?: Record<string, unknown>) {
-  console.debug('[factory:status]', { event, ts: Date.now(), ...meta });
-}
 
 type ComponentStatus = 'ok' | 'degraded' | 'down';
 type OverallStatus   = 'ok' | 'degraded' | 'outage';
@@ -136,7 +134,7 @@ export default function StatusPage() {
   }, []);
 
   useEffect(() => {
-    track('status_page_open');
+    track('status_viewed');
     void load();
     const timer = setInterval(() => { void load(); }, 60_000);
     return () => clearInterval(timer);

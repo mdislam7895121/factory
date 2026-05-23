@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { track } from '@/lib/analytics';
 
 const API_BASE = process.env.NEXT_PUBLIC_PROD_API_BASE ?? '';
 
@@ -30,10 +31,6 @@ interface CouncilEvent { delay: number; icon: string; agent: string; msg: string
 interface Blueprint {
   targetUsers: string[]; features: string[]; roles: string[];
   pages: string[]; workflows: string[]; safeDefaults: string[];
-}
-
-function track(event: string, meta?: Record<string, unknown>): void {
-  console.debug('[factory:analytics]', { event, ts: Date.now(), ...meta });
 }
 
 const KEYWORD_MAP: Record<PromptCategory, string[]> = {
@@ -330,6 +327,7 @@ function DemoFlow() {
   }
 
   useEffect(() => {
+    track('demo_started', { prompt_length: prompt.trim().length });
     if (prompt.trim().length < 5) {
       const msg = prompt.trim().length === 0
         ? 'No prompt provided. Tell us what you want to build.'
@@ -390,7 +388,7 @@ function DemoFlow() {
 
   useEffect(() => {
     if (step !== 'council') return;
-    track('council_started', { prompt_category: analysis.category });
+    track('council_viewed', { prompt_category: analysis.category });
     setCouncilEvents([]);
     setCouncilDone(false);
     COUNCIL_SCRIPT.forEach(event => {

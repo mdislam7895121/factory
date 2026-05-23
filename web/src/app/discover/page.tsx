@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { track } from '@/lib/analytics';
 
 const BG = '#030712';
 const SURFACE = 'rgba(10,22,40,0.82)';
@@ -14,9 +15,6 @@ const TEXT_MUTED = '#64748b';
 const TEXT_DIM = '#334155';
 const GLASS: React.CSSProperties = { background: SURFACE, backdropFilter: 'blur(24px)', border: `1px solid ${BORDER}`, borderRadius: 16 };
 
-function track(event: string, meta?: Record<string, unknown>): void {
-  console.debug('[factory:analytics]', { event, ts: Date.now(), ...meta });
-}
 
 const SEEDED_APPS = [
   { id:'1',  emoji:'🏥', name:'MediBook Pro',   desc:'AI appointment booking with triage and EHR integration.',            creator:'sarah_builds', category:'healthcare', likes:284,  remixes:12,  views:4821,  guarded:true,  live:true,  bg:'linear-gradient(135deg,#0a1628,#0f2040)' },
@@ -258,6 +256,7 @@ export default function DiscoverPage() {
   const remixesTotal = useCountUp(89342);
 
   useEffect(() => {
+    track('discover_opened');
     const t = setInterval(() => setLiveCount(c => c >= 5 ? 2 : c + 1), 5000);
     return () => clearInterval(t);
   }, []);

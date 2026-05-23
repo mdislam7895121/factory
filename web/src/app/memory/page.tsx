@@ -1,6 +1,7 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { track } from '@/lib/analytics';
 
 const API_BASE  = process.env.NEXT_PUBLIC_PROD_API_BASE ?? '';
 const ACCENT    = '#6366f1';
@@ -15,10 +16,6 @@ const TEXT      = '#f1f5f9';
 const TEXT_M    = '#64748b';
 const TEXT_D    = '#334155';
 const GLASS: React.CSSProperties = { background: SURFACE, backdropFilter: 'blur(20px)', border: `1px solid ${BORDER}`, borderRadius: 12 };
-
-function track(event: string, meta?: Record<string, unknown>) {
-  console.debug('[factory:memory]', { event, ts: Date.now(), ...meta });
-}
 
 const TABS = ['Founder Profile', 'Project Rules', 'Locked Decisions', 'Agent Behavior', 'Context Packs', 'Snapshots', 'Audit History'];
 
@@ -446,6 +443,7 @@ function AuditHistory() {
   const [auditEvents, setAuditEvents] = useState(seed);
 
   useEffect(() => {
+    track('memory_opened');
     (async () => {
       try {
         const r = await fetch(`${API_BASE}/v1/memory/audit?limit=30`);

@@ -3,10 +3,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { track, pageView } from '@/lib/analytics';
 
-function track(event: string, meta?: Record<string, unknown>): void {
-  console.debug('[factory:analytics]', { event, ts: Date.now(), ...meta });
-}
+void pageView;
 
 // ─── Static data ──────────────────────────────────────────────────────────────
 
@@ -103,6 +102,7 @@ export default function Home() {
   }, [prompt, router]);
 
   useEffect(() => {
+    track('home_opened');
     const t = setInterval(() => {
       setCounts(c => ({
         agents:   Math.max(2800, c.agents   + Math.floor(Math.random() * 3 - 1)),
@@ -502,7 +502,7 @@ export default function Home() {
       </div>
 
       {/* ── SECTION 7 — PRICING ── */}
-      <div id="pricing" style={{ background: '#030712', padding: '100px 24px' }}>
+      <div id="pricing" style={{ background: '#030712', padding: '100px 24px' }} onMouseEnter={() => track('pricing_viewed')}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <SectionLabel>Simple pricing</SectionLabel>
           <SectionTitle>Start free. Scale without limits.</SectionTitle>

@@ -8,36 +8,48 @@ import "./globals.css";
 const geistSans  = GeistSans;
 const geistMono  = GeistMono;
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://factory-production-web.netlify.app';
+const SITE_NAME = 'Factory';
+const DEFAULT_DESCRIPTION = 'Build full-stack AI-powered apps with an autonomous multi-agent team. Describe your idea — Factory architects, codes, tests, and deploys it.';
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://factory-production-web.netlify.app"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Factory Platform",
-    template: "%s | Factory Platform",
+    default: `${SITE_NAME} — Build apps with AI agents`,
+    template: `%s | ${SITE_NAME}`,
   },
-  description: "Proof-first full-stack platform delivery workflow for reliable local-to-production releases.",
+  description: DEFAULT_DESCRIPTION,
   keywords: [
-    "Factory Platform",
-    "proof-first",
-    "Next.js",
-    "NestJS",
-    "Netlify",
-    "Railway",
-    "platform engineering",
+    'AI app builder',
+    'multi-agent development',
+    'full-stack generator',
+    'no-code AI',
+    'app marketplace',
+    'Factory platform',
+    'autonomous coding agents',
+    'AI software development',
   ],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
   alternates: {
-    canonical: "https://factory-production-web.netlify.app",
+    canonical: '/',
   },
   openGraph: {
-    title: "Factory Platform",
-    description: "Proof-first full-stack platform delivery workflow for reliable local-to-production releases.",
-    url: "https://factory-production-web.netlify.app",
-    siteName: "Factory Platform",
-    type: "website",
+    title: `${SITE_NAME} — Build apps with AI agents`,
+    description: DEFAULT_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    type: 'website',
+    locale: 'en_US',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Factory Platform",
-    description: "Proof-first full-stack platform delivery workflow for reliable local-to-production releases.",
+    card: 'summary_large_image',
+    title: `${SITE_NAME} — Build apps with AI agents`,
+    description: DEFAULT_DESCRIPTION,
+    creator: '@factory_build',
   },
 };
 
