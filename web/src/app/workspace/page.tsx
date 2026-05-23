@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { track } from '@/lib/analytics';
+import { FeedbackWidget } from '@/components/FeedbackWidget';
 
 const API_BASE = process.env.NEXT_PUBLIC_PROD_API_BASE ?? '';
 
@@ -461,6 +462,7 @@ export default function WorkspacePage() {
           Generated with Factory ✦
         </div>
       </div>
+      <FeedbackWidget route="/workspace" />
     </>
   );
 }

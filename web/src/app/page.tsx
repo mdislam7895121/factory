@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { track, pageView } from '@/lib/analytics';
+import { FeedbackWidget } from '@/components/FeedbackWidget';
 
 void pageView;
 
@@ -610,6 +611,7 @@ export default function Home() {
         </div>
       </footer>
 
+      <FeedbackWidget route="/" />
     </div>
   );
 }

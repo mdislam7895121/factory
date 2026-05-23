@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { track } from '@/lib/analytics';
+import { FeedbackWidget } from '@/components/FeedbackWidget';
 
 const BG = '#030712';
 const SURFACE = 'rgba(10,22,40,0.82)';
@@ -335,6 +336,7 @@ export default function AppPage() {
         body { margin: 0; }
         button:focus-visible { outline: 2px solid ${ACCENT}; outline-offset: 2px; }
       `}</style>
+      <FeedbackWidget route={`/apps/${slug}`} />
     </div>
   );
 }

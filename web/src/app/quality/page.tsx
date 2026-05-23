@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { track } from '@/lib/analytics';
+import { FeedbackWidget } from '@/components/FeedbackWidget';
 
 const API_BASE   = process.env.NEXT_PUBLIC_PROD_API_BASE ?? '';
 const BG         = '#030712';
@@ -729,6 +730,7 @@ export default function QualityPage() {
       <div style={{ textAlign: 'center', padding: '16px 0 24px', color: TEXT_M, fontSize: 13 }}>
         Generated with Factory ✦
       </div>
+      <FeedbackWidget route="/quality" />
     </div>
   );
 }
