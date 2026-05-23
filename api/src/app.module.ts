@@ -29,6 +29,7 @@ import { EditorModule } from './editor/editor.module';
 import { PairProgrammerModule } from './pair-programmer/pair-programmer.module';
 import { CollaborationModule } from './collaboration/collaboration.module';
 import { OrganizationModule } from './organization/organization.module';
+import { PublicStatusModule } from './public-status/public-status.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { OrganizationModule } from './organization/organization.module';
     AdminModule, SecurityAuditModule, BetaModule, LegalModule, DemoModule, AgentsModule,
     MarketplaceModule, SocialModule, BillingModule, MemoryModule, QualityModule, WorkspaceModule,
     EditorModule, PairProgrammerModule, CollaborationModule, OrganizationModule,
+    PublicStatusModule,
   ],
   controllers: [AppController, Serial11Controller],
   providers: [

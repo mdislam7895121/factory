@@ -2,6 +2,7 @@
 
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { AdminKeyCtx } from '../layout';
+import { apiUrl } from '@/lib/env';
 
 const API_BASE  = process.env.NEXT_PUBLIC_PROD_API_BASE ?? '';
 const ACCENT    = '#6366f1';
@@ -31,6 +32,16 @@ interface HealthData {
   recentAudit: Array<{ action: string; createdAt: string }>;
 }
 
+type ComponentStatus = 'ok' | 'degraded' | 'down';
+type OverallStatus   = 'ok' | 'degraded' | 'outage';
+
+interface PublicStatus {
+  status:           OverallStatus;
+  timestamp:        string;
+  components:       Array<{ name: string; status: ComponentStatus; latencyMs?: number }>;
+  incidentMessage?: string;
+}
+
 const MOCK_HEALTH: HealthData = {
   ok: true, timestamp: new Date().toISOString(),
   db: { ok: true }, redis: { ok: true },
@@ -47,6 +58,17 @@ const MOCK_HEALTH: HealthData = {
   recentAudit: [],
 };
 
+const MOCK_PUBLIC_STATUS: PublicStatus = {
+  status: 'ok',
+  timestamp: new Date().toISOString(),
+  components: [
+    { name: 'api',      status: 'ok' },
+    { name: 'database', status: 'ok' },
+    { name: 'cache',    status: 'ok' },
+    { name: 'frontend', status: 'ok' },
+  ],
+};
+
 function StatusBadge({ ok, label }: { ok: boolean; label: string }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -57,29 +79,69 @@ function StatusBadge({ ok, label }: { ok: boolean; label: string }) {
   );
 }
 
+function componentColor(s: ComponentStatus): string {
+  if (s === 'ok')      return ACCENT_GN;
+  if (s === 'degraded') return ACCENT_A;
+  return ACCENT_R;
+}
+
+function componentLabel(s: ComponentStatus | OverallStatus): string {
+  if (s === 'ok')      return 'Operational';
+  if (s === 'degraded') return 'Degraded';
+  if (s === 'outage')  return 'Outage';
+  return 'Down';
+}
+
+const COMP_LABELS: Record<string, string> = {
+  api:      'API',
+  database: 'Database',
+  cache:    'Cache (Redis)',
+  frontend: 'Frontend (CDN)',
+};
+
+const SMOKE_LINKS = [
+  { label: 'Home page', path: '/' },
+  { label: 'Status page', path: '/status' },
+  { label: 'Demo page', path: '/demo' },
+  { label: 'Discover', path: '/discover' },
+  { label: 'Public status API', path: '/v1/public/status', isApi: true },
+  { label: 'API health', path: '/health', isApi: true },
+];
+
 export default function HealthPage() {
   const adminKey = useContext(AdminKeyCtx);
-  const [data, setData]   = useState<HealthData | null>(null);
-  const [err, setErr]     = useState('');
+  const [data, setData]             = useState<HealthData | null>(null);
+  const [publicStatus, setPubStatus] = useState<PublicStatus | null>(null);
+  const [err, setErr]               = useState('');
   const [refreshing, setRefreshing] = useState(false);
 
   const load = useCallback(async () => {
     setRefreshing(true);
     try {
-      const res = await fetch(`${API_BASE}/admin/health`, {
-        headers: { Authorization: `Bearer ${adminKey}` },
-      });
-      if (res.ok) setData(await res.json());
-      else setErr(`API ${res.status}`);
+      const [adminRes, pubRes] = await Promise.allSettled([
+        fetch(`${API_BASE}/admin/health`, { headers: { Authorization: `Bearer ${adminKey}` } }),
+        fetch(apiUrl('/v1/public/status')),
+      ]);
+
+      if (adminRes.status === 'fulfilled' && adminRes.value.ok) {
+        setData(await adminRes.value.json() as HealthData);
+      } else {
+        setErr('Could not reach admin API — showing mock data.');
+      }
+
+      if (pubRes.status === 'fulfilled' && pubRes.value.ok) {
+        setPubStatus(await pubRes.value.json() as PublicStatus);
+      }
     } catch {
-      setErr('Could not reach admin API — showing mock data.');
+      setErr('Network error — showing mock data.');
     }
     setRefreshing(false);
   }, [adminKey]);
 
   useEffect(() => { track('admin_open', { page: 'health' }); void load(); }, [load]);
 
-  const h = data ?? MOCK_HEALTH;
+  const h   = data ?? MOCK_HEALTH;
+  const pub = publicStatus ?? MOCK_PUBLIC_STATUS;
   const runtimeEntries = Object.entries(h.runtimes);
 
   return (
@@ -89,10 +151,16 @@ export default function HealthPage() {
           <h1 style={{ fontSize: 24, fontWeight: 800, color: TEXT, margin: 0 }}>Platform Health</h1>
           <p style={{ color: TEXT_M, fontSize: 13, marginTop: 4 }}>Last check: {new Date(h.timestamp).toLocaleTimeString()}</p>
         </div>
-        <button onClick={() => void load()} disabled={refreshing}
-          style={{ padding: '8px 18px', borderRadius: 8, background: 'rgba(99,102,241,0.1)', border: `1px solid rgba(99,102,241,0.3)`, color: ACCENT, cursor: refreshing ? 'wait' : 'pointer', fontSize: 13, fontWeight: 600 }}>
-          {refreshing ? 'Refreshing…' : '↻ Refresh'}
-        </button>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <a href="/status" target="_blank" rel="noreferrer"
+            style={{ padding: '8px 16px', borderRadius: 8, background: 'rgba(16,185,129,0.1)', border: `1px solid rgba(16,185,129,0.3)`, color: ACCENT_GN, fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>
+            ↗ Public Status
+          </a>
+          <button onClick={() => void load()} disabled={refreshing}
+            style={{ padding: '8px 18px', borderRadius: 8, background: 'rgba(99,102,241,0.1)', border: `1px solid rgba(99,102,241,0.3)`, color: ACCENT, cursor: refreshing ? 'wait' : 'pointer', fontSize: 13, fontWeight: 600 }}>
+            {refreshing ? 'Refreshing…' : '↻ Refresh'}
+          </button>
+        </div>
       </div>
 
       {err && (
@@ -130,7 +198,7 @@ export default function HealthPage() {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 16, alignItems: 'start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 16, alignItems: 'start', marginBottom: 16 }}>
         {/* Runtime breakdown */}
         <div style={{ ...GLASS, padding: 20 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: TEXT, marginBottom: 14 }}>▶ Runtime Status Breakdown</div>
@@ -168,6 +236,78 @@ export default function HealthPage() {
           <div style={{ marginTop: 14, fontSize: 11, color: TEXT_M }}>
             Toggle kill switches from the <a href="/admin" style={{ color: ACCENT, textDecoration: 'none' }}>Command Center</a>.
           </div>
+        </div>
+      </div>
+
+      {/* ── Monitoring Section ── */}
+      <div style={{ ...GLASS, padding: 20, marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: TEXT }}>📡 Public Status — Live View</div>
+          <span style={{
+            fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 20,
+            background: pub.status === 'ok' ? 'rgba(16,185,129,0.15)' : pub.status === 'degraded' ? 'rgba(245,158,11,0.15)' : 'rgba(239,68,68,0.15)',
+            color: pub.status === 'ok' ? ACCENT_GN : pub.status === 'degraded' ? ACCENT_A : ACCENT_R,
+            border: `1px solid ${pub.status === 'ok' ? 'rgba(16,185,129,0.3)' : pub.status === 'degraded' ? 'rgba(245,158,11,0.3)' : 'rgba(239,68,68,0.3)'}`,
+          }}>
+            {componentLabel(pub.status).toUpperCase()}
+          </span>
+        </div>
+
+        {pub.incidentMessage && (
+          <div style={{ padding: '10px 14px', background: 'rgba(245,158,11,0.08)', border: `1px solid rgba(245,158,11,0.2)`, borderRadius: 8, marginBottom: 14, fontSize: 13, color: ACCENT_A }}>
+            ⚠️ {pub.incidentMessage}
+          </div>
+        )}
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 10 }}>
+          {pub.components.map(c => {
+            const color = componentColor(c.status);
+            return (
+              <div key={c.name} style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.03)', border: `1px solid ${BORDER}`, borderRadius: 8 }}>
+                <div style={{ fontSize: 11, color: TEXT_M, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  {COMP_LABELS[c.name] ?? c.name}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: color, display: 'inline-block', boxShadow: `0 0 6px ${color}` }} />
+                  <span style={{ fontSize: 12, fontWeight: 600, color }}>{componentLabel(c.status)}</span>
+                </div>
+                {c.latencyMs !== undefined && (
+                  <div style={{ fontSize: 11, color: TEXT_M, marginTop: 4 }}>{c.latencyMs}ms</div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <div style={{ marginTop: 12, fontSize: 11, color: TEXT_M }}>
+          Updated: {new Date(pub.timestamp).toLocaleTimeString()} ·{' '}
+          <a href="/status" target="_blank" rel="noreferrer" style={{ color: ACCENT, textDecoration: 'none' }}>Public status page ↗</a>
+        </div>
+      </div>
+
+      {/* ── Smoke Test Quick-Links ── */}
+      <div style={{ ...GLASS, padding: 20 }}>
+        <div style={{ fontSize: 13, fontWeight: 600, color: TEXT, marginBottom: 14 }}>🔍 Smoke Test Quick-Links</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8 }}>
+          {SMOKE_LINKS.map(lk => {
+            const href = lk.isApi ? `${API_BASE}${lk.path}` : lk.path;
+            return (
+              <a key={lk.path} href={href} target="_blank" rel="noreferrer"
+                style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', background: 'rgba(255,255,255,0.03)', border: `1px solid ${BORDER}`, borderRadius: 8, textDecoration: 'none' }}>
+                <span style={{ fontSize: 11, color: lk.isApi ? ACCENT_A : ACCENT }}>
+                  {lk.isApi ? 'API' : 'WEB'}
+                </span>
+                <span style={{ fontSize: 13, color: TEXT }}>{lk.label}</span>
+                <span style={{ marginLeft: 'auto', fontSize: 11, color: TEXT_M }}>↗</span>
+              </a>
+            );
+          })}
+        </div>
+        <div style={{ marginTop: 14, padding: '10px 14px', background: 'rgba(99,102,241,0.06)', border: `1px solid rgba(99,102,241,0.15)`, borderRadius: 8 }}>
+          <div style={{ fontSize: 12, color: TEXT_M, marginBottom: 6 }}>Run full smoke test locally (PowerShell):</div>
+          <code style={{ fontSize: 12, color: ACCENT, fontFamily: 'monospace' }}>
+            .\scripts\smoke-production.ps1 -BaseUrl $FRONTEND_URL -ApiUrl $API_URL
+          </code>
         </div>
       </div>
     </div>
