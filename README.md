@@ -1,146 +1,219 @@
-# Perpetual — Sandbox Infrastructure for AI Agents
+# Factory — AI Software Operating Platform
 
-Run isolated code. Coordinate multi-agent councils. Persist agent memory. Monitor continuously.
+Factory helps founders and teams go from idea → demo → workspace → deployment using AI-assisted workflows.
 
-> **E2B alternative** · Self-hostable · $0.001/second · 100 free seconds/day
-
----
-
-## What is this?
-
-Perpetual is a **Perpetual Software Engine** — a multi-agent infrastructure platform where:
-
-- **Sandboxes** execute arbitrary code in isolated Docker containers (Python, Node.js, Bash)
-- **Agent Memory** gives AI agents a persistent key-value brain across runs
-- **Agent Council** coordinates 6 specialized agents (Architect, Dev×3, QA, Security) to solve complex problems
-- **Continuous Loops** monitor your system and auto-heal issues every N minutes/hours
+> **Current phase:** PRE-PUBLIC-BETA · **Go/No-Go verdict:** NO\_GO · **Version:** 0.1.0
 
 ---
 
-## Quickstart (5 minutes)
+## What Factory Does
 
-### 1. Run code in an isolated sandbox
+Factory is a platform that lets non-technical founders and small teams build, preview, and iterate on software products using AI-assisted workflows — without writing code manually.
 
-```bash
-curl -X POST https://api.perpetual.dev/v1/sandbox/create \
-  -H "Authorization: Bearer sk-live-YOUR_KEY" \
-  -d '{"language": "python"}'
-
-curl -X POST https://api.perpetual.dev/v1/sandbox/SANDBOX_ID/run \
-  -H "Authorization: Bearer sk-live-YOUR_KEY" \
-  -d '{"code": "import math\nprint(math.pi)"}'
-# { "stdout": "3.141592653589793\n", "exit_code": 0, "duration_secs": 1 }
-```
-
-### 2. Python SDK
-
-```bash
-pip install perpetual
-```
-
-```python
-from perpetual import Perpetual
-client = Perpetual(api_key="sk-live-...")
-
-result = client.sandbox.run_once("python", "print(2 ** 32)")
-print(result.stdout)  # 4294967296
-
-session = client.council.run_and_wait("Design a rate limiter for a multi-tenant API")
-print(session.result["synthesis"])
-
-client.memory.set("architect", "last-decision", {"algo": "token-bucket"})
-loop = client.loops.create("prod-monitor", interval_secs=3600)
-```
-
-### 3. Node.js SDK
-
-```bash
-npm install perpetual
-```
-
-```typescript
-import { Perpetual } from 'perpetual';
-const client = new Perpetual({ apiKey: 'sk-live-...' });
-
-const result = await client.sandbox.runOnce('nodejs', 'console.log(process.version)');
-const session = await client.council.runAndWait({
-  task: 'Build a JWT auth system with refresh tokens',
-  context: { language: 'typescript', framework: 'NestJS' }
-});
-```
+| Capability | Description |
+|------------|-------------|
+| **AI-assisted product generation** | Describe your idea; Factory produces a structured product blueprint |
+| **Demo + preview workflows** | Watch AI agents build a working app preview from your description |
+| **Workspace IDE** | Inspect, iterate, and manage your generated project |
+| **Quality analysis** | AI council reviews the build for correctness, security, and completeness |
+| **Memory engine** | Persistent context across sessions — Factory remembers your product decisions |
+| **Collaboration** | Multi-user sessions with role-based access control |
+| **Deployment preparation** | Build artifacts and deployment workflows targeting live hosting |
+| **Customer feedback loops** | In-product feedback widget → support inbox → pain ranking → roadmap suggestions |
+| **Monitoring and admin** | Production health checks, activation analytics, customer success CRM |
 
 ---
 
-## API Reference
+## Platform Modules
 
-Full OpenAPI 3.1 spec: [`docs/openapi.yaml`](docs/openapi.yaml)
+### Frontend (Next.js App Router → Netlify)
 
-| Resource | Endpoints |
-|----------|-----------|
-| **Sandbox** | `POST /v1/sandbox/create` · `GET/DELETE /v1/sandbox/:id` · `POST /v1/sandbox/:id/run` |
-| **API Keys** | `POST/GET /v1/api-keys` · `DELETE /v1/api-keys/:id` |
-| **Usage** | `GET /v1/usage/today` · `GET /v1/usage/summary` |
-| **Memory** | `PUT/GET/DELETE /v1/memory/:ns/:key` · `POST/GET /v1/memory/:ns/events` |
-| **Council** | `POST /v1/council/run` · `GET /v1/council/:id` · `GET /v1/council/:id/messages` |
-| **Loops** | `POST /v1/loops` · `PATCH /v1/loops/:id/pause|resume` · `POST /v1/loops/:id/trigger` |
-| **Billing** | `POST /v1/billing/checkout` · `POST /v1/billing/webhook` |
+| Route | Module | Purpose |
+|-------|--------|---------|
+| `/` | Landing | Hero, value proposition, entry point |
+| `/demo` | Demo | AI-assisted idea → blueprint → preview flow |
+| `/discover` | Discovery | Browse and remix existing previews |
+| `/workspace` | Workspace IDE | Project management, editing, iteration |
+| `/quality` | Quality center | AI council review results and code analysis |
+| `/memory` | Memory center | Persistent project memory and context |
+| `/onboarding` | Beta onboarding | 4-step role/goal/path selection for new users |
+| `/status` | Public status | Live system health page |
+| `/admin` | Admin control tower | Support inbox, analytics, CRM, system health |
+
+### Backend (NestJS → Railway)
+
+| Module | Purpose |
+|--------|---------|
+| Demo | Blueprint generation, idea processing |
+| Preview | Working app preview generation and hosting |
+| Workspace | Project state, file management |
+| Collaboration | Real-time multi-user sessions |
+| Pair programmer | AI coding assistant integrated into workspace |
+| Memory | Key-value and event-based agent memory |
+| Quality | AI council review orchestration |
+| Onboarding | Activation state tracking, stuck detection, next-best-action |
+| Feedback | Feedback widget backend, pain ranking, roadmap suggestions |
+| Customer success | Beta cohort CRM, health scoring, follow-up task management |
+| RBAC / Organization | Role-based access, team management |
+| Public status | Synthetic health check endpoints |
+| Monitoring | Production watch scripts, alert hooks |
+| Billing | Subscription and quota management |
+| Audit | Activity log and security audit trail |
 
 ---
 
 ## Architecture
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│                    Perpetual Engine                      │
-│                                                          │
-│  ┌─────────────┐  ┌──────────────┐  ┌────────────────┐  │
-│  │  Sandbox    │  │ Agent Memory │  │  Agent Council │  │
-│  │  (Docker)   │  │  (Postgres)  │  │  (6 x Claude)  │  │
-│  └─────────────┘  └──────────────┘  └────────────────┘  │
-│                                                          │
-│  ┌─────────────────────────────────────────────────────┐ │
-│  │           Continuous Loop Scheduler                 │ │
-│  │   Monitor Agent → Healer Agent → Webhook notify    │ │
-│  └─────────────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                     Factory Platform                        │
+│                                                             │
+│  ┌────────────────────────────────────────────────────────┐ │
+│  │  Next.js App Router  (Netlify)                         │ │
+│  │  Landing · Demo · Workspace · Quality · Memory         │ │
+│  │  Onboarding · Admin · Status · Discover                │ │
+│  └──────────────────────┬─────────────────────────────────┘ │
+│                         │  NEXT_PUBLIC_API_BASE_URL          │
+│                         ▼                                   │
+│  ┌────────────────────────────────────────────────────────┐ │
+│  │  NestJS Control Plane  (Railway)                       │ │
+│  │  /v1/demo · /v1/onboarding · /v1/feedback              │ │
+│  │  /v1/memory · /v1/workspace · /v1/quality              │ │
+│  │  /v1/collaboration · /admin/*                          │ │
+│  └──────────────────────┬─────────────────────────────────┘ │
+│                         │                                   │
+│                         ▼                                   │
+│  ┌────────────────────────────────────────────────────────┐ │
+│  │  Runtime / Preview System  (Railway)                   │ │
+│  │  Isolated preview environments per project             │ │
+│  └────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### Agent Council (3-round protocol)
+**Key architectural decisions:**
 
-```
-POST /v1/council/run  →  Round 1: Architect plans
-                      →  Round 2: Dev×3 + QA + Security (parallel)
-                      →  Round 3: Architect synthesizes
-GET /v1/council/:id   →  { "status": "completed", "result": { ... } }
-```
-
-### Sandbox Security
-
-Each container: `--network none` · `--read-only` · `--memory 512m` · `--cpus 0.5` · `/tmp tmpfs 100m`
+- **Frontend:** Next.js 15 App Router. Inline styles only — no Tailwind. Server components for layouts (SEO metadata), client components for interactivity.
+- **Backend:** NestJS with in-memory data stores during beta phase. No Prisma migrations required for beta services.
+- **Hosting split:** Frontend on Netlify (static CDN + Next.js SSR). API and runtime on Railway (Node.js long-running processes).
+- **API surface:** Frontend calls Railway directly via `NEXT_PUBLIC_API_BASE_URL`. No open proxy on Netlify.
+- **Security headers:** Configured in `netlify.toml` — CSP, HSTS, X-Frame-Options, X-Content-Type-Options.
 
 ---
 
-## Self-Hosting
+## Current Status
+
+| Field | Value |
+|-------|-------|
+| Phase | PRE-PUBLIC-BETA |
+| Go/No-Go verdict | `NO_GO` |
+| Blocker | Netlify production site has not been created |
+| Account | `md-tazizul-islam-c5abzm8` (Netlify) |
+| Branch | `claude/code-audit-review-bERxc` |
+| Version | 0.1.0 |
+
+**No users have been invited.** The no-invite rule is active until the Go/No-Go verdict reaches `GO_PRIVATE_ALPHA`.
+
+See `docs/beta/go-no-go-tracker.md` for the live verdict and the 10-step path to `GO_FIRST_5_BETA`.
+
+**To unblock:** Follow `docs/beta/netlify-operator-action.md` (15–30 minutes, manual browser step).
+
+---
+
+## Deployment Status
+
+| Check | Status |
+|-------|--------|
+| Build passes locally | ✅ |
+| `netlify.toml` configured | ✅ |
+| Security headers configured | ✅ (pending live verification) |
+| Smoke script exists | ✅ `scripts/public-beta-smoke.ps1` |
+| Beta onboarding flow built | ✅ |
+| Customer success CRM built | ✅ |
+| Feedback widget built | ✅ |
+| Monitoring scripts built | ✅ |
+| SEO metadata configured | ✅ |
+| Netlify site created | ❌ Manual step required |
+| Live URL verified | ❌ Pending Netlify creation |
+| Smoke script run against live URL | ❌ Pending live URL |
+| Beta invites sent | ❌ Pending GO_PRIVATE_ALPHA verdict |
+
+---
+
+## Local Development
+
+### Prerequisites
+
+- Node.js 20+
+- npm 9+
+
+### Frontend
 
 ```bash
-git clone https://github.com/mdtazizulislam/factory && cd factory
-cp docker/.env.example docker/.env && cp api/.env.example api/.env
-# fill in DATABASE_URL, AUTH_SECRET, ANTHROPIC_API_KEY
-cd docker && docker compose -f docker-compose.dev.yml up -d
-cd ../api && npx prisma migrate deploy && npm run start:dev
+cd web
+npm install
+npm run dev
+# → http://localhost:3000
 ```
 
-**Required env vars:** `DATABASE_URL` · `AUTH_SECRET` · `ANTHROPIC_API_KEY`
-**Optional:** `STRIPE_SECRET_KEY` · `STRIPE_WEBHOOK_SECRET` · `SENTRY_DSN`
+### API
+
+```bash
+cd api
+npm install
+npm run start:dev
+# → http://localhost:3001
+```
+
+### Environment variables
+
+Frontend (`web/.env.local`):
+
+```
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3001
+```
+
+API (`api/.env`):
+
+```
+# Required
+AUTH_SECRET=your-secret-here
+ANTHROPIC_API_KEY=your-key-here
+
+# Optional
+STRIPE_SECRET_KEY=
+SENTRY_DSN=
+```
+
+Never commit `.env` or `.env.local` files. Never add backend secrets to Netlify environment variables.
 
 ---
 
-## Pricing
+## Engineering Principles
 
-| Tier | Amount | Cost |
-|------|--------|------|
-| Free | 100 sec/day/user | $0 |
-| Paid | After free tier | $0.001/sec |
+- **Proof-first workflow:** Every serial produces a proof document in `docs/proof/` before the commit is considered complete.
+- **Serial locking:** Work is delivered in named, locked serials. A serial is immutable once committed. New serials build on top; they do not rewrite previous ones.
+- **Minimal diffs:** Changes are scoped to what the serial requires. No incidental refactoring, no speculative abstractions.
+- **Non-breaking additive development:** New modules are added alongside existing ones. No destructive changes to working systems.
+- **Security-first rules:** No raw email in any data store or API response — only `emailHash` (FNV32) and `emailMasked`. No secrets in committed files. No open proxies.
+- **In-memory beta services:** Beta-phase services (feedback, onboarding, customer success) use in-memory Maps. No database migration required to add a beta feature.
+
+---
+
+## Repository Structure
+
+```
+factory/
+├── web/          Next.js App Router frontend
+├── api/          NestJS control plane
+├── mobile/       Mobile client (deprioritised during beta)
+├── docs/
+│   ├── beta/     Beta readiness docs, user tracking, interview findings
+│   ├── proof/    Serial proof documents
+│   └── launch/   Launch runbooks
+├── scripts/      Smoke tests, monitoring scripts
+├── docker/       Local development containers
+└── netlify.toml  Frontend build + security header config
+```
 
 ---
 
