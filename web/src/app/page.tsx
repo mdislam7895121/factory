@@ -137,7 +137,7 @@ export default function Home() {
           ))}
         </ul>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Link href="/dashboard" style={{ padding: '6px 14px', borderRadius: 8, fontSize: 13, color: TEXT_MUTED, border: `1px solid ${BORDER_DIM}`, textDecoration: 'none', transition: 'all 0.15s' }}
+          <Link href="/login" style={{ padding: '6px 14px', borderRadius: 8, fontSize: 13, color: TEXT_MUTED, border: `1px solid ${BORDER_DIM}`, textDecoration: 'none', transition: 'all 0.15s' }}
             onMouseEnter={e=>{e.currentTarget.style.color='#f1f5f9';e.currentTarget.style.borderColor='rgba(255,255,255,0.15)'}}
             onMouseLeave={e=>{e.currentTarget.style.color=TEXT_MUTED;e.currentTarget.style.borderColor=BORDER_DIM}}
           >Sign in</Link>
